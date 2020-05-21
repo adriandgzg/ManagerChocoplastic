@@ -1,0 +1,35 @@
+@import "~chartist/dist/scss/chartist.scss";
+
+/* Use this selector to override the line style on a given series */
+.ct-series-a .ct-line {
+  /* Set the colour of this series line */
+  stroke: #ffffffaa;
+  /* Control the thikness of your lines */
+  stroke-width: 5px;
+}
+
+/* This selector overrides the points style on line charts. Points on line charts are actually just very short strokes. This allows you to customize even the point size in CSS */
+.ct-series-a .ct-point {
+  /* Colour of your points */
+  stroke: #ffffffaa;
+  /* Size of your points */
+  stroke-width: 10px;
+  /* Make your points appear as squares */
+  stroke-linecap: round;
+}
+
+.ct-series-a .ct-bar {
+  /* Colour of your bars */
+  stroke: #ffffffaa;
+  /* The width of your bars */
+  stroke-width: 10px;
+  /* Maybe you like round corners on your bars? */
+  stroke-linecap: square;
+}
+.ct-grid {
+  stroke: #ffffff99;
+}
+
+.ct-labels span {
+  color: #ffffff99;
+}
