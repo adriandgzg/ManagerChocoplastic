@@ -9,12 +9,17 @@
 
           <v-list-item-title class="title">Chocoplastic</v-list-item-title>
         </v-list-item>
-
-        <v-list-item href="/sales">
+<v-list-item href="/sales">
           <v-list-item-action>
             <v-icon>mdi-cart</v-icon>
           </v-list-item-action>
-          <v-list-item-title>Venta</v-list-item-title>
+          <v-list-item-title>Ventas</v-list-item-title>
+        </v-list-item>
+        <v-list-item href="/pos">
+          <v-list-item-action>
+            <v-icon>mdi-cart</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>pos</v-list-item-title>
         </v-list-item>
 
         <v-list-item href="/logout">

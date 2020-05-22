@@ -82,6 +82,12 @@ export default [
     name: 'Usuarios',
     view: 'UserList'
   },
+
+  {
+    path: '/pos',
+    name: 'POS',
+    view: 'PointOfSale'
+  },
   {path: '/missions/:id/:idStore',
     name: 'Negocios', view: 'Missions'},
   
