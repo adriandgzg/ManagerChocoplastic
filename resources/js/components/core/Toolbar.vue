@@ -4,7 +4,7 @@
             app
     id="core-toolbar"
 
-    style="background: #300078;"
+    style="background: #F2436D;"
   >
     <div class="v-toolbar-title">
       <v-toolbar-title
