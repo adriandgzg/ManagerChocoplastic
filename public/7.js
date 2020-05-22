@@ -1,1 +1,732 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[7],{227:function(t,e,i){"use strict";i.r(e);var a={data:function(){return{headers:[{text:"ID",value:"id",width:"10%"},{text:"Nombre",value:"name",width:"20%"},{text:"Descripción",value:"description",width:"35%"},{text:"Image",value:"image",sortable:!1,width:"15%"},{text:"",value:"action",width:"20%"}],categories:[],subcategories:[],categoriesNode:[],errors:[],editingText:"",file:"",editingMode:!1,action:null,selectedModel:null,selectedRole:null,selectedUser:null,assignRole:!1,chosenFile:null,select:[],search:"",snackbar:!1,textSnack:"texto snackbar",dialog:!1,dialogSub:!1,dialogAddSub:!1,editedIndex:-1,editedSubIndex:-1,editedAddSubIndex:-1,imageUrl:"",image:"",editado:{id:"",name:"",description:"",imageUrl:this.imageUrl,file:"",select:""},editadoSub:{id:"",name:"",description:"",category_id:"",imageUrl:this.imageUrl,file:"",select:""},defaultItem:{id:"",name:"",description:"",file:"",imageUrl:""}}},created:function(){this.getCategories(),this.getCategoriesNode()},methods:{getCategories:function(){var t=this;axios.get("/categoriesList").then((function(e){t.categories=e.data.data})).catch((function(e){t.errors.push(e)}))},getSubcategories:function(){var t=this;axios.get("/subcategoriesList?id="+this.editado.id).then((function(e){t.subcategories=e.data.data})).catch((function(e){t.errors.push(e)}))},getCategoriesNode:function(){var t=this;axios.get("/categoriesNode").then((function(e){t.categoriesNode=e.data.data})).catch((function(e){t.errors.push(e)}))},cancelar:function(){this.dialog=!1,this.editado=Object.assign({},this.defaultItem),this.editedIndex=-1},cancelarSub:function(){this.dialogAddSub=!1,this.editadoSub=Object.assign({},this.defaultItem),this.editedAddSubIndex=-1},editar:function(t){this.editedIndex=this.categories.indexOf(t),this.editado=Object.assign({},t),this.dialog=!0},editarSub:function(t){this.editedSubIndex=this.subcategories.indexOf(t),this.editado=Object.assign({},t),this.dialogSub=!0,this.getSubcategories()},editarAddSub:function(t){console.log(t),this.editedAddSubIndex=this.subcategories.indexOf(t),this.editadoSub=Object.assign({},t),this.dialogAddSub=!0},borrar:function(t){var e=this.categories.indexOf(t);this.editado=Object.assign({},t),console.log(this.categories[e].id),1==confirm("¿Está seguro de borrar el registro?")?(this.deleteCat(),this.snackbar=!0,this.textSnack="Se eliminó el registro."):(this.snackbar=!0,this.textSnack="Operación cancelada.")},borrarSub:function(t){var e=this.subcategories.indexOf(t);this.editadoSub=Object.assign({},t),console.log(this.subcategories[e].id),1==confirm("¿Está seguro de borrar el registro?")?(this.deleteSubCat(),this.snackbar=!0,this.textSnack="Se eliminó el registro."):(this.snackbar=!0,this.textSnack="Operación cancelada.")},guardar:function(){this.editedIndex>-1?(this.textSnack="¡Actualización Exitosa!",this.editarCat()):""==this.editado.marca||""==this.editado.modelo||0==this.editado.stock?(this.snackbar=!0,this.textSnack="Datos incompletos."):(this.textSnack="¡Alta exitosa!",this.imageUrl="",this.altaMovil()),this.cancelar()},guardarSub:function(){console.log(this.editedAddSubIndex),this.editedAddSubIndex>-1?(this.textSnack="¡Actualización Exitosa!",this.imageUrl="",this.editarSubCat()):this.altaSubCat(),this.cancelarSub()},altaMovil:function(){var t=this;axios.post("/categories/add",this.editado).then((function(e){t.getCategories()})),this.name="",this.description=""},altaSubCat:function(){var t=this;console.log(this.editado.id),this.editadoSub.category_id=this.editado.id,axios.post("/categories/addSub",this.editadoSub).then((function(e){t.getSubcategories(),t.imageUrl=""})),this.name="",this.description=""},editarCat:function(){var t=this;axios.put("/categories/update",this.editado).then((function(e){t.getCategories(),t.imageUrl=""})),this.name="",this.description=""},editarSubCat:function(){var t=this;console.log(this.editado.id),this.editadoSub.category_id=this.editado.id,axios.put("/categories/updateSub",this.editadoSub).then((function(e){t.getSubcategories(),t.imageUrl=""})),this.name="",this.description=""},deleteCat:function(){var t=this;axios.put("/categories/delete",this.editado).then((function(e){t.getCategories()})),this.name="",this.description=""},deleteSubCat:function(){var t=this;console.log(this.editadoSub),axios.put("/categories/deleteSub",this.editadoSub).then((function(e){t.getSubcategories()})),this.name="",this.description=""},handleFileUpload:function(){this.file=this.$refs.file.files[0],this.editado.file=this.$refs.file.files[0],console.log(this.editado.file)},onPickFile:function(){this.$refs.fileInput.click()},onFilePicked:function(t){var e=this,i=t.target.files,a=(i[0].name,new FileReader);a.addEventListener("load",(function(){e.imageUrl=a.result,e.editado.imageUrl=a.result})),a.readAsDataURL(i[0]),this.image=i[0]}},computed:{formTitle:function(){return-1===this.editedIndex?"Nuevo Registro":"Editar Registro"},formTitleSub:function(){return-1===this.editedSubIndex?"Nuevo Registro":"Subcategorías"},formTitleAddSub:function(){return-1===this.editedSubIndex?"Nuevo Registro":"Subcategorías"}}},s=i(3),o=Object(s.a)(a,(function(){var t=this,e=t.$createElement,i=t._self._c||e;return i("v-container",[i("v-row",[i("v-col",[i("v-data-table",{staticClass:"elevation-3",attrs:{headers:t.headers,items:t.categories,search:t.search,"sort-by":"id"},scopedSlots:t._u([{key:"top",fn:function(){return[i("v-system-bar",{attrs:{color:"indigo darken-2",dark:""}}),t._v(" "),i("v-toolbar",{attrs:{flat:"",color:"indigo"},scopedSlots:t._u([{key:"extension",fn:function(){return[i("v-btn",{attrs:{fab:"",color:"cyan accent-2",bottom:"",left:"",absolute:""},on:{click:function(e){t.dialog=!t.dialog}}},[i("v-icon",[t._v("mdi-plus")])],1)]},proxy:!0}])},[t._v(" "),i("v-toolbar-title",{staticClass:"white--text"},[t._v("Categorías")]),t._v(" "),i("v-divider",{staticClass:"mx-4",attrs:{inset:"",vertical:""}}),t._v(" "),i("v-spacer"),t._v(" "),i("v-dialog",{attrs:{"max-width":"800px"},scopedSlots:t._u([{key:"activator",fn:function(t){t.on}}]),model:{value:t.dialogSub,callback:function(e){t.dialogSub=e},expression:"dialogSub"}},[t._v(" "),i("v-card",[i("v-card-title",{staticClass:"cyan white--text"},[i("span",{staticClass:"headline"},[t._v(t._s(t.formTitleSub))])]),t._v(" "),i("v-card-text",{staticStyle:{height:"40px",position:"relative"}},[i("v-btn",{attrs:{absolute:"",dark:"",fab:"",top:"",right:"",color:"green"},on:{click:function(e){t.dialogAddSub=!t.dialogAddSub}}},[i("v-icon",[t._v("mdi-plus")])],1)],1),t._v(" "),i("v-card-text",[i("v-container",[i("v-data-table",{staticClass:"elevation-3",attrs:{headers:t.headers,items:t.subcategories,search:t.search,"sort-by":"id"},scopedSlots:t._u([{key:"item.action",fn:function(e){var a=e.item;return[i("v-btn",{staticClass:"mr-2",attrs:{fab:"",dark:"",small:"",color:"cyan"},on:{click:function(e){return t.editarAddSub(a)}}},[i("v-icon",{attrs:{dark:""}},[t._v("mdi-pencil")])],1),t._v(" "),i("v-btn",{staticClass:"mr-2",attrs:{fab:"",dark:"",small:"",color:"error"},on:{click:function(e){return t.borrarSub(a)}}},[i("v-icon",{attrs:{dark:""}},[t._v("mdi-delete")])],1)]}}])})],1)],1)],1)],1),t._v(" "),i("v-dialog",{attrs:{"max-width":"500px"},scopedSlots:t._u([{key:"activator",fn:function(t){t.on}}]),model:{value:t.dialog,callback:function(e){t.dialog=e},expression:"dialog"}},[t._v(" "),i("v-card",[i("v-card-title",{staticClass:"cyan white--text"},[i("span",{staticClass:"headline"},[t._v(t._s(t.formTitle))])]),t._v(" "),i("v-card-text",[i("v-container",[i("v-text-field",{attrs:{label:"Nombre"},model:{value:t.editado.name,callback:function(e){t.$set(t.editado,"name",e)},expression:"editado.name"}}),t._v(" "),i("v-text-field",{attrs:{label:"Descripción"},model:{value:t.editado.description,callback:function(e){t.$set(t.editado,"description",e)},expression:"editado.description"}}),t._v(" "),i("v-card-text",[i("v-btn",{staticClass:"primary",attrs:{raised:""},on:{click:t.onPickFile}},[t._v("Subir imagen")]),t._v(" "),i("input",{ref:"fileInput",staticStyle:{display:"none"},attrs:{type:"file",accept:"image/jpeg"},on:{change:t.onFilePicked}})],1),t._v(" "),i("v-layout",[i("img",{attrs:{src:t.imageUrl,height:"150"}})])],1)],1),t._v(" "),i("v-card-actions",[i("v-spacer"),t._v(" "),i("v-btn",{staticClass:"ma-2 white--text",attrs:{color:"blue-grey"},on:{click:t.cancelar}},[t._v("Cancelar\n                                    ")]),t._v(" "),i("v-btn",{staticClass:"ma-2 white--text",attrs:{color:"teal accent-4"},on:{click:t.guardar}},[t._v("Guardar\n                                    ")])],1)],1)],1),t._v(" "),i("v-dialog",{attrs:{"max-width":"500px"},scopedSlots:t._u([{key:"activator",fn:function(t){t.on}}]),model:{value:t.dialogAddSub,callback:function(e){t.dialogAddSub=e},expression:"dialogAddSub"}},[t._v(" "),i("v-card",[i("v-card-title",{staticClass:"cyan white--text"},[i("span",{staticClass:"headline"},[t._v(t._s(t.formTitleAddSub))])]),t._v(" "),i("v-card-text",[i("v-container",[i("v-text-field",{attrs:{label:"Nombre"},model:{value:t.editadoSub.name,callback:function(e){t.$set(t.editadoSub,"name",e)},expression:"editadoSub.name"}}),t._v(" "),i("v-text-field",{attrs:{label:"Descripción"},model:{value:t.editadoSub.description,callback:function(e){t.$set(t.editadoSub,"description",e)},expression:"editadoSub.description"}}),t._v(" "),i("v-card-text",[i("v-btn",{staticClass:"primary",attrs:{raised:""},on:{click:t.onPickFile}},[t._v("Subir imagen")]),t._v(" "),i("input",{ref:"fileInput",staticStyle:{display:"none"},attrs:{type:"file",accept:"image/jpeg"},on:{change:t.onFilePicked}})],1),t._v(" "),i("v-layout",[i("img",{attrs:{src:t.imageUrl,height:"150"}})])],1)],1),t._v(" "),i("v-card-actions",[i("v-spacer"),t._v(" "),i("v-btn",{staticClass:"ma-2 white--text",attrs:{color:"blue-grey"},on:{click:t.cancelarSub}},[t._v("\n                                        Cancelar\n                                    ")]),t._v(" "),i("v-btn",{staticClass:"ma-2 white--text",attrs:{color:"teal accent-4"},on:{click:t.guardarSub}},[t._v("\n                                        Guardar\n                                    ")])],1)],1)],1)],1),t._v(" "),i("v-col",{attrs:{cols:"12",sm:"12"}},[i("v-text-field",{attrs:{"append-icon":"search",label:"Buscar","single-line":"","hide-details":""},model:{value:t.search,callback:function(e){t.search=e},expression:"search"}})],1)]},proxy:!0},{key:"item.image",fn:function(t){var e=t.item;return[i("div",{staticClass:"p-2"},[i("v-img",{attrs:{src:e.image,alt:e.name,"aspect-ratio":"1"}})],1)]}},{key:"item.action",fn:function(e){var a=e.item;return[i("v-btn",{staticClass:"mr-2",attrs:{fab:"",dark:"",small:"",color:"cyan"},on:{click:function(e){return t.editarSub(a)}}},[i("v-icon",{attrs:{dark:""}},[t._v("mdi-eye")])],1),t._v(" "),i("v-btn",{staticClass:"mr-2",attrs:{fab:"",dark:"",small:"",color:"cyan"},on:{click:function(e){return t.editar(a)}}},[i("v-icon",{attrs:{dark:""}},[t._v("mdi-pencil")])],1),t._v(" "),i("v-btn",{staticClass:"mr-2",attrs:{fab:"",dark:"",small:"",color:"error"},on:{click:function(e){return t.borrar(a)}}},[i("v-icon",{attrs:{dark:""}},[t._v("mdi-delete")])],1)]}}])})],1)],1)],1)}),[],!1,null,null,null);e.default=o.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[7],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      dailySalesChart: {
+        data: {
+          labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+          series: [[12, 17, 7, 17, 23, 18, 38]]
+        },
+        options: {
+          lineSmooth: this.$chartist.Interpolation.cardinal({
+            tension: 0
+          }),
+          low: 0,
+          high: 50,
+          // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          }
+        }
+      },
+      dataCompletedTasksChart: {
+        data: {
+          labels: ['12am', '3pm', '6pm', '9pm', '12pm', '3am', '6am', '9am'],
+          series: [[230, 750, 450, 300, 280, 240, 200, 190]]
+        },
+        options: {
+          lineSmooth: this.$chartist.Interpolation.cardinal({
+            tension: 0
+          }),
+          low: 0,
+          high: 1000,
+          // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          }
+        }
+      },
+      emailsSubscriptionChart: {
+        data: {
+          labels: ['Ja', 'Fe', 'Ma', 'Ap', 'Mai', 'Ju', 'Jul', 'Au', 'Se', 'Oc', 'No', 'De'],
+          series: [[542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]]
+        },
+        options: {
+          axisX: {
+            showGrid: false
+          },
+          low: 0,
+          high: 1000,
+          chartPadding: {
+            top: 0,
+            right: 5,
+            bottom: 0,
+            left: 0
+          }
+        },
+        responsiveOptions: [['screen and (max-width: 640px)', {
+          seriesBarDistance: 5,
+          axisX: {
+            labelInterpolationFnc: function labelInterpolationFnc(value) {
+              return value[0];
+            }
+          }
+        }]]
+      },
+      headers: [{
+        sortable: false,
+        text: 'ID',
+        value: 'id'
+      }, {
+        sortable: false,
+        text: 'Name',
+        value: 'name'
+      }, {
+        sortable: false,
+        text: 'Salary',
+        value: 'salary',
+        align: 'right'
+      }, {
+        sortable: false,
+        text: 'Country',
+        value: 'country',
+        align: 'right'
+      }, {
+        sortable: false,
+        text: 'City',
+        value: 'city',
+        align: 'right'
+      }],
+      items: [{
+        name: 'Dakota Rice',
+        country: 'Niger',
+        city: 'Oud-Tunrhout',
+        salary: '$35,738'
+      }, {
+        name: 'Minerva Hooper',
+        country: 'Curaçao',
+        city: 'Sinaai-Waas',
+        salary: '$23,738'
+      }, {
+        name: 'Sage Rodriguez',
+        country: 'Netherlands',
+        city: 'Overland Park',
+        salary: '$56,142'
+      }, {
+        name: 'Philip Chanley',
+        country: 'Korea, South',
+        city: 'Gloucester',
+        salary: '$38,735'
+      }, {
+        name: 'Doris Greene',
+        country: 'Malawi',
+        city: 'Feldkirchen in Kārnten',
+        salary: '$63,542'
+      }],
+      tabs: 0,
+      list: {
+        0: false,
+        1: false,
+        2: false
+      }
+    };
+  },
+  methods: {
+    complete: function complete(index) {
+      this.list[index] = !this.list[index];
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18&":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18& ***!
+  \******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-container",
+    { attrs: { "fill-height": "", fluid: "", "grid-list-xl": "" } },
+    [
+      _c(
+        "v-layout",
+        { attrs: { wrap: "" } },
+        [
+          _c(
+            "v-flex",
+            { attrs: { md4: "", sm12: "", lg4: "" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-card",
+                    { attrs: { color: "info", tile: "" } },
+                    [
+                      _c("chartist", {
+                        attrs: {
+                          ratio: "ct-major-second",
+                          data: _vm.dailySalesChart.data,
+                          options: _vm.dailySalesChart.options,
+                          type: "Line"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    { attrs: { tile: "" } },
+                    [
+                      _c("v-card-title", [_vm._v("Transacciones por días")]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        {
+                          staticClass:
+                            "category d-inline-flex font-weight-light"
+                        },
+                        [
+                          _c(
+                            "v-icon",
+                            { attrs: { color: "green", small: "" } },
+                            [_vm._v("\n             mdi-arrow-up\n           ")]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "green--text" }, [
+                            _vm._v("55%")
+                          ]),
+                          _vm._v(
+                            " \n           increase in today's sales\n         "
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-icon",
+                            { staticClass: "mr-2", attrs: { small: "" } },
+                            [
+                              _vm._v(
+                                "\n             mdi-clock-outline\n           "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass:
+                                "caption grey--text font-weight-light"
+                            },
+                            [_vm._v("updated 4 minutes ago")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-flex",
+            { attrs: { md4: "", sm12: "", lg4: "" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-card",
+                    { attrs: { color: "info" } },
+                    [
+                      _c("chartist", {
+                        attrs: {
+                          ratio: "ct-major-second",
+                          type: "Bar",
+                          data: _vm.emailsSubscriptionChart.data,
+                          options: _vm.emailsSubscriptionChart.options,
+                          "responsive-options":
+                            _vm.emailsSubscriptionChart.responsiveOptions
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    { attrs: { tile: "" } },
+                    [
+                      _c("v-card-title", [_vm._v("Transacciones por mes")]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        {
+                          staticClass:
+                            "category d-inline-flex font-weight-light"
+                        },
+                        [
+                          _vm._v(
+                            "\n            Resultados de ultima campaña\n          "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-icon",
+                            { staticClass: "mr-2", attrs: { small: "" } },
+                            [
+                              _vm._v(
+                                "\n              mdi-clock-outline\n            "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass:
+                                "caption grey--text font-weight-light"
+                            },
+                            [_vm._v("updated 14 minutes ago")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-flex",
+            { attrs: { md4: "", sm12: "", lg4: "" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-card",
+                    { attrs: { color: "info" } },
+                    [
+                      _c("chartist", {
+                        attrs: {
+                          ratio: "ct-major-second",
+                          data: _vm.dataCompletedTasksChart.data,
+                          options: _vm.dataCompletedTasksChart.options,
+                          type: "Line"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    { attrs: { tile: "" } },
+                    [
+                      _c("v-card-title", [_vm._v("Promedio por hora")]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        {
+                          staticClass:
+                            "category d-inline-flex font-weight-light"
+                        },
+                        [
+                          _vm._v(
+                            "\n            Resultados de ultima campaña\n          "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-icon",
+                            { staticClass: "mr-2", attrs: { small: "" } },
+                            [
+                              _vm._v(
+                                "\n              mdi-clock-outline\n            "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass:
+                                "caption grey--text font-weight-light"
+                            },
+                            [_vm._v("updated 14 minutes ago")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-flex",
+            { attrs: { sm6: "", xs6: "", md6: "", lg6: "" } },
+            [
+              _c("v-card", [
+                _c(
+                  "div",
+                  { staticClass: "d-flex flex-no-wrap justify-space-between" },
+                  [
+                    _c(
+                      "div",
+                      [
+                        _c("v-card-title", { staticClass: "headline" }, [
+                          _vm._v("$34,245.00")
+                        ]),
+                        _vm._v(" "),
+                        _c("v-card-subtitle", [_vm._v("Ultimas 24 hrs")])
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        staticClass: "ma-3",
+                        attrs: { color: "info", size: "60", tile: "" }
+                      },
+                      [_vm._v("mdi-currency-usd")]
+                    )
+                  ],
+                  1
+                )
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-flex",
+            { attrs: { sm6: "", xs6: "", md6: "", lg6: "" } },
+            [
+              _c("v-card", [
+                _c(
+                  "div",
+                  { staticClass: "d-flex flex-no-wrap justify-space-between" },
+                  [
+                    _c(
+                      "div",
+                      [
+                        _c("v-card-title", { staticClass: "headline" }, [
+                          _vm._v("$1,325.00")
+                        ]),
+                        _vm._v(" "),
+                        _c("v-card-subtitle", [
+                          _vm._v("Transacciones canceladas")
+                        ])
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        staticClass: "ma-3",
+                        attrs: { color: "info", size: "60", tile: "" }
+                      },
+                      [_vm._v("mdi-cancel")]
+                    )
+                  ],
+                  1
+                )
+              ])
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/views/Dashboard.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/views/Dashboard.vue ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Dashboard.vue?vue&type=template&id=5a2d3b18& */ "./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18&");
+/* harmony import */ var _Dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Dashboard.vue?vue&type=script&lang=js& */ "./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/views/Dashboard.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Dashboard.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18& ***!
+  \************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Dashboard.vue?vue&type=template&id=5a2d3b18& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);
