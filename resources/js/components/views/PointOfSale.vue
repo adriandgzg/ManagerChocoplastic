@@ -10,7 +10,15 @@
           <v-row>
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <span class="subheading font-weight-bold">Cliente:</span>&nbsp; Juan Pérez López
+                <v-select
+            :items="clientes"
+            label="Cliente"
+            item-text="name"
+            item-value="id"
+            filled
+            chips
+            placeholder="Seleccionar Cliente"
+          ></v-select>
               </v-card-text>
             </v-col>
             <v-col cols="4">
@@ -24,7 +32,6 @@
               </v-card-text>
             </v-col>
           </v-row>
-
         </v-card>
         <v-card justify="end">
           <v-btn dark color="danger" @click="dialog = !dialog">CANCELAR PEDIDO</v-btn>
@@ -137,9 +144,48 @@
 
     <v-dialog v-model="dialogcredito" max-width="500">
       <v-card>
-        <v-card-title>Comentario Crédito:</v-card-title>
+        <v-card-title>Crédito:</v-card-title>
         <v-card-text>
-          <v-text-field label="Ejemplo: Crédito al cliente..."></v-text-field>
+          <v-text-field label="Comentario:"></v-text-field>
+          <span class="subheading font-weight-bold">Forma de Pago:</span>
+          <v-text-field
+            label="Efectivo: "
+            required
+            :rules="minNumberRules"
+            prefix="$"
+            type="number"
+          ></v-text-field>
+          <v-text-field label="Tarjeta: " required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
+
+          <br />
+          <tr>
+            <td>Subtotal</td>
+            <td>$1, 540.00</td>
+            <td />
+          </tr>
+          <tr>
+            <td>Total Descuento</td>
+            <td>$0.00</td>
+            <td />
+          </tr>
+          <tr>
+            <td>Total I.E.P.S.</td>
+            <td>$0.00</td>
+            <td />
+          </tr>
+          <tr>
+            <td>Total I.V.A.</td>
+            <td>$246.4‬0</td>
+            <td />
+          </tr>
+          <tr>
+            <td>Total</td>
+            <td>$1,786.40</td>
+          </tr>
+          <tr>
+            <td>Total Crédito</td>
+            <td>$786.40</td>
+          </tr>
 
           <v-btn @click="dialogcredito = !dialogcredito">Cancelar</v-btn>
           <v-btn @click="dialogcredito = !dialogcredito" color="warning">Confirmar</v-btn>
@@ -150,17 +196,20 @@
     <v-dialog v-model="dialogcontado" max-width="500">
       <v-card>
         <v-card-title>Contado</v-card-title>
-        <v-card-text>
-          <v-select
-            :items="statuses"
-            item-text="name"
-            item-value="id"
-            filled
-            chips
-            label="Forma de Pago"
-            placeholder="Selecciona Forma de Pago"
-          ></v-select>
 
+        <v-card-text>
+          <span class="subheading font-weight-bold">Forma de Pago:</span>
+
+          <v-text-field
+            label="Efectivo: "
+            required
+            :rules="minNumberRules"
+            prefix="$"
+            type="number"
+          ></v-text-field>
+          <v-text-field label="Tarjeta: " required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
+
+          <br />
           <tr>
             <td>Subtotal</td>
             <td>$1, 540.00</td>
@@ -208,13 +257,28 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      money: {
+        decimal: ",",
+        thousands: ".",
+        prefix: "",
+        suffix: "",
+        precision: 2,
+        masked: false /* doesn't work with directive */
+      },
+      minNumberRules: [
+        value => !!value || "Requerido.",
+        value => value > 0 || "El número debe ser mayor o igual a cero"
+      ],
       dialog: false,
       dialogcredito: false,
       dialogcontado: false,
       dialogdelete: false,
-      statuses: [
-        { name: "Efectivo", id: 1 },
-        { name: "Tarjeta", id: 2 }
+      clientes: [
+        { name: "Cliente Generico", id: 1 },
+        { name: "Juan López Castellanos", id: 2 },
+        { name: "Fran Álvarez Alcaraz", id: 3 },
+        { name: "Armando Hernandez Torres", id: 4 },
+        { name: "Ximena Hernandez Torres", id: 5 }
       ],
       desserts: [
         {

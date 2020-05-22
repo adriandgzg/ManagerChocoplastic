@@ -215,20 +215,93 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      money: {
+        decimal: ",",
+        thousands: ".",
+        prefix: "",
+        suffix: "",
+        precision: 2,
+        masked: false
+        /* doesn't work with directive */
+
+      },
+      minNumberRules: [function (value) {
+        return !!value || "Requerido.";
+      }, function (value) {
+        return value > 0 || "El número debe ser mayor o igual a cero";
+      }],
       dialog: false,
       dialogcredito: false,
       dialogcontado: false,
       dialogdelete: false,
-      statuses: [{
-        name: "Efectivo",
+      clientes: [{
+        name: "Cliente Generico",
         id: 1
       }, {
-        name: "Tarjeta",
+        name: "Juan López Castellanos",
         id: 2
+      }, {
+        name: "Fran Álvarez Alcaraz",
+        id: 3
+      }, {
+        name: "Armando Hernandez Torres",
+        id: 4
+      }, {
+        name: "Ximena Hernandez Torres",
+        id: 5
       }],
       desserts: [{
         num: 1,
@@ -314,13 +387,19 @@ var render = function() {
                                 "category d-inline-flex font-weight-light"
                             },
                             [
-                              _c(
-                                "span",
-                                { staticClass: "subheading font-weight-bold" },
-                                [_vm._v("Cliente:")]
-                              ),
-                              _vm._v("  Juan Pérez López\n            ")
-                            ]
+                              _c("v-select", {
+                                attrs: {
+                                  items: _vm.clientes,
+                                  label: "Cliente",
+                                  "item-text": "name",
+                                  "item-value": "id",
+                                  filled: "",
+                                  chips: "",
+                                  placeholder: "Seleccionar Cliente"
+                                }
+                              })
+                            ],
+                            1
                           )
                         ],
                         1
@@ -714,14 +793,82 @@ var render = function() {
           _c(
             "v-card",
             [
-              _c("v-card-title", [_vm._v("Comentario Crédito:")]),
+              _c("v-card-title", [_vm._v("Crédito:")]),
               _vm._v(" "),
               _c(
                 "v-card-text",
                 [
+                  _c("v-text-field", { attrs: { label: "Comentario:" } }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "subheading font-weight-bold" }, [
+                    _vm._v("Forma de Pago:")
+                  ]),
+                  _vm._v(" "),
                   _c("v-text-field", {
-                    attrs: { label: "Ejemplo: Crédito al cliente..." }
+                    attrs: {
+                      label: "Efectivo: ",
+                      required: "",
+                      rules: _vm.minNumberRules,
+                      prefix: "$",
+                      type: "number"
+                    }
                   }),
+                  _vm._v(" "),
+                  _c("v-text-field", {
+                    attrs: {
+                      label: "Tarjeta: ",
+                      required: "",
+                      rules: _vm.minNumberRules,
+                      prefix: "$",
+                      type: "number"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("Subtotal")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("$1, 540.00")]),
+                    _vm._v(" "),
+                    _c("td")
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("Total Descuento")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("$0.00")]),
+                    _vm._v(" "),
+                    _c("td")
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("Total I.E.P.S.")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("$0.00")]),
+                    _vm._v(" "),
+                    _c("td")
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("Total I.V.A.")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("$246.4‬0")]),
+                    _vm._v(" "),
+                    _c("td")
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("Total")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("$1,786.40")])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [_vm._v("Total Crédito")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v("$786.40")])
+                  ]),
                   _vm._v(" "),
                   _c(
                     "v-btn",
@@ -778,17 +925,31 @@ var render = function() {
               _c(
                 "v-card-text",
                 [
-                  _c("v-select", {
+                  _c("span", { staticClass: "subheading font-weight-bold" }, [
+                    _vm._v("Forma de Pago:")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-text-field", {
                     attrs: {
-                      items: _vm.statuses,
-                      "item-text": "name",
-                      "item-value": "id",
-                      filled: "",
-                      chips: "",
-                      label: "Forma de Pago",
-                      placeholder: "Selecciona Forma de Pago"
+                      label: "Efectivo: ",
+                      required: "",
+                      rules: _vm.minNumberRules,
+                      prefix: "$",
+                      type: "number"
                     }
                   }),
+                  _vm._v(" "),
+                  _c("v-text-field", {
+                    attrs: {
+                      label: "Tarjeta: ",
+                      required: "",
+                      rules: _vm.minNumberRules,
+                      prefix: "$",
+                      type: "number"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("br"),
                   _vm._v(" "),
                   _c("tr", [
                     _c("td", [_vm._v("Subtotal")]),
