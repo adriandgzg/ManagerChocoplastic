@@ -10,19 +10,11 @@ class PaymentMethodController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         //
-        $payMethods=PaymentMethod::all();
-        return response()->json([
-            'success' => true,
-            'message' => 'Métodos de pago cargados'.
-                '',
-            'data' => $payMethods,
-        ], 200);
-
     }
 
     /**
