@@ -14,7 +14,7 @@ export default [{
         name: 'Dashboard',
         view: 'Dashboard'
     },
-    {
+    /*{
         path: '/admins',
         name: 'Administración',
         view: 'Administration'
@@ -41,11 +41,11 @@ export default [{
         name: 'Categorías',
         view: 'Categorie'
     },
-    /*{
+    {
       path: '/business',
       name: 'Negocios',
       view: 'Business'
-    },*/
+    },
     {
         path: '/stores',
         name: 'Tiendas',
@@ -91,6 +91,21 @@ export default [{
         path: '/missions/:id/:idStore',
         name: 'Negocios',
         view: 'Missions'
+    },*/
+    {
+        path: '/pos',
+        name: 'Venta (Cobro)',
+        view: 'PointOfSale'
+    },
+    {
+        path: '/proveedores',
+        name: 'Proveedores',
+        view: 'Proveedores'
+    },
+    {
+        path: '/clients',
+        name: 'Clientes',
+        view: 'Clients'
     },
 
 ]

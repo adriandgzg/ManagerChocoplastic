@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -19,6 +20,30 @@ class AdminController extends Controller
     public function index()
     {
         //
+    }
+
+    public function listUser()
+    {
+        $status =Auth::user();
+
+        $users=Admin::with(['permissions','role'])->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Users loaded',
+            'data' => $status,
+        ], 200);
+    }
+    public function rolUser($idUser)
+    {
+        $admin = collect(\DB::select("SELECT permission_id FROM admin_permission p  
+        where p.admin_id = " . $idUser . " and p.permission_id = 10 limit 1 "))->first(); 
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Users loaded',
+            'data' => $admin,
+        ], 200);
+
     }
 
     /**

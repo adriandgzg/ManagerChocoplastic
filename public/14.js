@@ -1,124 +1,23 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[14],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Stores.vue?vue&type=script&lang=js&":
-/*!***********************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Stores.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Sales.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Sales.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -351,557 +250,417 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    var _ref;
+    var _this = this;
 
-    return _ref = {
-      money: {
-        decimal: ',',
-        thousands: '.',
-        prefix: '',
-        suffix: '',
-        precision: 2,
-        masked: false
-        /* doesn't work with directive */
-
-      },
-      headersTime: [{
+    return {
+      headers: [{
         text: 'ID',
-        value: 'id',
-        width: '10%'
+        value: 'id'
       }, {
-        text: 'Horario',
-        value: 'time',
-        width: '60%'
+        text: 'Cliente',
+        value: 'user.name'
+      }, {
+        text: 'Tienda',
+        value: 'store.name'
+      }, {
+        text: 'Dirección',
+        value: 'address.address'
+      }, {
+        text: 'Pago',
+        value: 'payment_method.name'
+      }, {
+        text: 'Total',
+        value: 'total'
+      }, {
+        text: 'Efectivo',
+        value: 'cash_amount'
+      }, {
+        text: 'Ticket',
+        value: 'ticket'
+      }, {
+        text: 'Comentario',
+        value: 'comments'
+      }, {
+        text: 'Fecha Pedido',
+        value: 'created_at'
+      }, {
+        text: 'Estado',
+        value: 'status.name',
+        width: '100px',
+        filter: function filter(value) {
+          if (_this.status.length === 0) return true;
+          return _this.status.find(function (element) {
+            return element === value;
+          });
+        }
       }, {
         text: '',
         value: 'action',
-        width: '30%'
+        width: '60px'
       }],
-      headers: [{
-        text: 'ID',
-        value: 'id',
-        width: '10%'
-      }, {
-        text: 'Nombre',
-        value: 'name'
-      }, {
-        text: 'Dirección',
-        value: 'address'
-      }, {
-        text: 'Teléfono',
-        value: 'phone_number'
-      }, {
-        text: 'Hora Apertura',
-        value: 'opening_time'
-      }, {
-        text: 'Hora Cierre',
-        value: 'closing_time'
-      }, {
-        text: 'Mínimo Compra',
-        value: 'minimum_purchase'
-      }, {
-        text: 'Costo envío',
-        value: 'delivery_price'
-      }
-      /*,{
-      text: 'Latitud',
-      value: 'latitude'
-      },{
-      text: 'Longitud',
-      value: 'longitude'
-      }*/
-      , {
-        text: '',
-        value: 'action'
-      }],
-      headersNeg: [{
-        text: 'ID',
-        value: 'id',
-        width: '10%'
-      }, {
-        text: 'Nombre',
-        value: 'name'
-      }, {
-        text: 'Descripción',
-        value: 'description'
-      },, {
-        text: '',
-        value: 'action'
-      }],
-      nameRules: [function (value) {
-        return !!value || 'Requerido.';
-      }, function (value) {
-        return value && value.length >= 3 || 'Min 3 caracteres';
-      }],
-      phoneRules: [function (value) {
-        return !!value || 'Requerido.';
-      }, function (value) {
-        return value && value.length == 10 || 'Requiere 10 caracteres';
-      }],
-      unidadRules: [function (value) {
-        return !!value || 'Requerido.';
-      }, function (value) {
-        return value && value.length >= 1 || 'Min 1 caracter';
-      }],
-      numberRules: [function (value) {
-        return !!value || 'Requerido.';
-      }, function (value) {
-        return value > 0 || 'El número debe ser mayor a cero';
-      }],
-      minNumberRules: [function (value) {
-        return !!value || 'Requerido.';
-      }, function (value) {
-        return value > 0 || 'El número debe ser mayor o igual a cero';
-      }],
-      timeRules: [function (value) {
-        return !!value || 'Requerido.';
-      }, function (value) {
-        return value && value.length >= 1 || 'El campo no puede ser vacio';
-      }],
-      coordRules: [function (v) {
-        return !!v || 'Coordenada inválida';
-      }, function (v) {
-        return v <= Number.MAX_SAFE_INTEGER || 'Coordenada inválida';
-      }, function (v) {
-        return v >= Number.MIN_SAFE_INTEGER || 'Coordenada inválida';
-      }],
-      textMsg: '',
-      timeout: 2000,
-      stores: [],
-      pickupTimes: [],
-      businessNode: [],
-      business: [],
-      phoneNumber: null,
-      results: null,
-      aux_trans: "0,00",
-      min_salary: "0,00",
-      vSal_Base: 0,
-      errors: [],
-      editingText: '',
-      file: '',
-      editingMode: false,
-      action: null,
-      selectedModel: null,
-      selectedRole: null,
-      selectedUser: null,
-      assignRole: false,
-      chosenFile: null,
-      select: [],
+      valid: true,
+      sales: [],
+      categoriesNode: [],
       search: '',
       //para el cuadro de búsqueda de datatables
-      snackbar: false,
-      //para el mensaje del snackbar
-      textSnack: 'texto snackbar',
-      //texto que se ve en el snackbar
-      dialog: false,
+      detailForm: false,
       //para que la ventana de dialogo o modal no aparezca automáticamente
-      dialogNeg: false,
-      //para que la ventana de dialogo o modal no aparezca automáticamente
-      dialogTime: false,
-      dialogTimeAdd: false,
-      dialogForm: false,
-      editedIndex: -1,
-      editedIndexTime: -1,
-      editedIndexNeg: -1,
       imageUrl: '',
-      image: '',
-      editadoTime: {
-        id: '',
-        time: '',
-        idStore: ''
+      selectedSale: {
+        address: {},
+        user: {},
+        store: {},
+        status: {},
+        cancel_id: '',
+        payment_method: {},
+        delivery_time: {}
       },
-      defaultEditadoTime: {
-        id: '',
-        time: '',
-        idStore: ''
+      selectedProduct: {
+        idProduct: '',
+        idBusiness: '',
+        completed: false
       },
-      editado: {
-        id: '',
-        name: '',
-        address: '',
-        phone_number: '',
-        opening_time: '',
-        closing_time: '',
-        minimum_purchase: 0,
-        delivery_price: 0,
-        latitude: 0,
-        longitude: 0,
-        select: '',
-        business_id: 0
-      },
-      editadoNeg: {
-        id: '',
-        name: '',
-        description: '',
-        imageUrl: '',
-        file: '',
-        select: '',
-        store_id: '',
-        proportion: 0,
-        row: 0,
-        is_mod: false
-      },
-      defaultItem: {
-        id: '',
-        name: '',
-        address: '',
-        phone_number: '',
-        opening_time: '',
-        closing_time: '',
-        minimum_purchase: '',
-        delivery_price: '',
-        latitude: '',
-        longitude: ''
-      }
-    }, _defineProperty(_ref, "dialogTime", false), _defineProperty(_ref, "dialogOpeningTime", false), _defineProperty(_ref, "dialogClosingTime", false), _defineProperty(_ref, "user", []), _ref;
+      statuses: [],
+      status: [],
+      saleProducts: [],
+      deliveryMen: [],
+      deliveryMan: '',
+      motivosCancelacion: [],
+      motivoCancelacion: '',
+      deliveryForm: false,
+      cancelForm: false,
+      confirm: false,
+      confirm_text: '',
+      confirm_result: false,
+      resolve: null,
+      reject: null,
+      user: []
+    };
   },
   created: function created() {
-    this.getUser(); //this.getstores();
+    this.getUser(); //this.getProducts();
+
+    this.getStatusNode();
+    this.getDeliveryMen();
+    this.getMotivosCancelacion();
   },
   methods: {
-    getUser: function getUser() {
-      var _this = this;
-
-      axios.get('/listUser').then(function (response) {
-        _this.user = response.data.data;
-
-        _this.getstores(_this.user.store_id);
-      })["catch"](function (e) {
-        console.log(e);
-      });
+    formatPrice: function formatPrice(value) {
+      var val = (value / 1).toFixed(2).replace(',', '.');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
-    getstores: function getstores(idStore) {
+    getProducts: function getProducts(idStore) {
       var _this2 = this;
 
       if (!idStore) {
         idStore = 0;
       }
 
-      console.log('/storeList/' + idStore);
-      axios.get('/storeList/' + idStore).then(function (response) {
-        _this2.stores = response.data.data;
-        console.log(_this2.stores);
+      axios.get('/saleList/' + idStore).then(function (response) {
+        _this2.sales = response.data.data;
       })["catch"](function (e) {
-        _this2.errors.push(e);
+        console.log(e);
       });
     },
-    getbusinessNode: function getbusinessNode() {
+    getUser: function getUser() {
       var _this3 = this;
 
-      console.log("this.editado");
-      var idStore = this.user.store_id;
+      axios.get('/listUser').then(function (response) {
+        _this3.user = response.data.data;
 
-      if (!idStore) {
-        idStore = 0;
-      }
-
-      this.editado.business_id = idStore;
-      axios.post('/businessNode', this.editado).then(function (response) {
-        _this3.business = response.data.data;
-        console.log(_this3.business);
+        _this3.getProducts(_this3.user.store_id);
       })["catch"](function (e) {
-        _this3.errors.push(e);
+        console.log(e);
       });
     },
-    cancelar: function cancelar() {
-      this.dialog = false;
-      this.editado = Object.assign({}, this.defaultItem);
-      this.editedIndex = -1;
-    },
-    editar: function editar(item) {
-      this.editedIndex = this.stores.indexOf(item);
-      this.editado = Object.assign({}, item);
-      this.dialog = true;
-    },
-    editarNeg: function editarNeg(item) {
-      this.editedIndexNeg = this.business.indexOf(item);
-      this.editadoNeg = Object.assign({}, item);
-      this.dialogForm = true;
-      this.is_mod = false;
-    },
-    agregarNegocio: function agregarNegocio(item) {
-      this.editedIndexNeg = -1;
-      this.editado = Object.assign({}, item);
-      console.log(this.editado);
-      this.dialogNeg = true;
-      this.getbusinessNode();
-    },
-    agregaTime: function agregaTime(item) {
-      this.editado = Object.assign({}, item);
-      console.log(this.editado);
-      this.dialogTime = true;
-      this.getPickupTime(this.editado.id);
-    },
-    editaTime: function editaTime(item) {
-      this.editedIndexTime = this.pickupTimes.indexOf(item);
-      this.editadoTime = Object.assign({}, item);
-      this.dialogTimeAdd = true;
-    },
-    cancelarAddTime: function cancelarAddTime() {
-      this.dialogTimeAdd = false;
-      this.editadoTime = Object.assign({}, this.defaultEditadoTime);
-      this.editedIndexTime = -1;
-    },
-    guardarTime: function guardarTime() {
-      if (this.editedIndexTime > -1) {
-        //Guarda en caso de Edición
-        this.snackbar = true;
-        this.textMsg = '¡Actualización Exitosa!';
-        this.editarTime();
-      } else {
-        this.snackbar = true;
-        this.textMsg = '¡Alta exitosa!';
-        this.agregarTime();
-      }
-
-      this.cancelarAddTime();
-    },
-    getPickupTime: function getPickupTime(idStore) {
+    getDeliveryMen: function getDeliveryMen() {
       var _this4 = this;
 
-      if (!idStore) {
-        idStore = 0;
-      }
-
-      console.log('/listPickupTimes/' + idStore);
-      axios.get('/listPickupTimes/' + idStore).then(function (response) {
-        _this4.pickupTimes = response.data.data;
+      axios.get('/deliveryMen').then(function (response) {
+        _this4.deliveryMen = response.data.data;
       })["catch"](function (e) {
-        _this4.errors.push(e);
+        console.log(e);
       });
     },
-    borrar: function borrar(item) {
-      var index = this.stores.indexOf(item);
-      this.editado = Object.assign({}, item);
-      console.log(this.stores[index].id); //capturo el id de la fila seleccionada
-
-      var r = confirm("¿Está seguro de borrar el registro?");
-
-      if (r == true) {
-        this.deleteCat();
-        this.snackbar = true;
-        this.textSnack = 'Se eliminó el registro.';
-      } else {
-        this.snackbar = true;
-        this.textSnack = 'Operación cancelada.';
-      }
-    },
-    borrarNeg: function borrarNeg(item) {
-      var index = this.stores.indexOf(item);
-      this.editadoNeg = Object.assign({}, item);
-      var r = confirm("¿Está seguro de borrar el registro?");
-
-      if (r == true) {
-        this.deleteNeg();
-        this.snackbar = true;
-        this.textSnack = 'Se eliminó el registro.';
-      } else {
-        this.snackbar = true;
-        this.textSnack = 'Operación cancelada.';
-      }
-    },
-    guardar: function guardar() {
-      if (this.editedIndex > -1) {
-        //Guarda en caso de Edición
-        this.id = this.editado.id;
-        this.name = this.editado.name;
-        this.address = this.editado.address;
-        this.phone_number = this.editado.phone_number;
-        this.opening_time = this.editado.opening_time;
-        this.closing_time = this.editado.closing_time;
-        this.minimum_purchase = this.editado.minimum_purchase;
-        this.delivery_price = this.editado.delivery_price;
-        this.latitude = this.editado.latitude;
-        this.longitude = this.editado.longitude;
-        this.textSnack = '¡Actualización Exitosa!';
-        this.editarCat();
-      } else {
-        //Guarda el registro en caso de Alta
-        if (this.editado.marca == "" || this.editado.modelo == "" || this.editado.stock == 0) {
-          this.snackbar = true;
-          this.textSnack = 'Datos incompletos.';
-        } else {
-          this.name = this.editado.name;
-          this.description = this.editado.description;
-          this.snackbar = true;
-          this.textSnack = '¡Alta exitosa!';
-          this.altaMovil();
-        }
-      }
-
-      this.cancelar();
-    },
-    //Procedimiento Alta de moviles.
-    altaMovil: function altaMovil() {
+    getStatusNode: function getStatusNode() {
       var _this5 = this;
 
-      axios.post('/store/add', this.editado).then(function (response) {
-        _this5.getstores();
+      axios.get('/statusNode').then(function (response) {
+        _this5.statuses = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
       });
-      this.name = "", this.address = "";
     },
-    editarCat: function editarCat() {
+    getMotivosCancelacion: function getMotivosCancelacion() {
       var _this6 = this;
 
-      console.log(this.editado);
-      axios.put('/store/update', this.editado).then(function (response) {
-        _this6.getstores();
+      axios.get('/motivosCancelacion').then(function (response) {
+        _this6.motivosCancelacion = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
       });
-      this.name = "", this.address = "";
     },
-    deleteCat: function deleteCat() {
+    viewSale: function viewSale(sale) {
       var _this7 = this;
 
-      axios.put('/store/delete', this.editado).then(function (response) {
-        _this7.getstores();
-      });
-      this.name = "", this.description = "";
-    },
+      axios.get('/sales/' + sale.id + '/products').then(function (response) {
+        //this.selectedSale.status.id = 1;
+        //console.log(this.selectedSale);
+        _this7.saleProducts = response.data.data;
+        _this7.selectedSale = sale; //console.log(this.saleProducts);
 
-    /*********/
-    //Procedimiento Alta de moviles.
-    agregarTime: function agregarTime() {
+        _this7.detailForm = true;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    updateSaleStatus: function updateSaleStatus(status) {
       var _this8 = this;
 
-      this.editadoTime.idStore = this.editado.id;
-      axios.post('/store/addTime', this.editadoTime).then(function (response) {
-        _this8.getPickupTime(_this8.editado.id);
-      });
+      if (this.selectedSale.status.id >= status) {
+        return;
+      }
+
+      if (this.selectedSale.total > 0) {
+        this.selectedSale.status_id = status;
+        axios.put('/sale/updateStatus', this.selectedSale).then(function (response) {
+          var statusObj = _this8.statuses.find(function (item) {
+            return item.id === status;
+          });
+
+          _this8.sales.find(function (item) {
+            return item.id === _this8.selectedSale.id;
+          }).status = statusObj;
+          _this8.sales.find(function (item) {
+            return item.id === _this8.selectedSale.id;
+          }).status_id = status;
+        })["catch"](function (e) {
+          console.log(e);
+        });
+      } else {
+        alert("No se puede continuar, no cuenta con productos en el pedido");
+      }
     },
-    editarTime: function editarTime() {
+    updateSaleDelivery: function updateSaleDelivery() {
       var _this9 = this;
 
-      axios.put('/store/updateTime', this.editadoTime).then(function (response) {
-        _this9.getPickupTime(_this9.editado.id);
+      if (this.deliveryMan == '' || this.selectedSale.delivery_id != null) {
+        console.log('error');
+        return;
+      }
+
+      console.log(this.deliveryMan);
+      axios.post('/sale/delivery/update', {
+        id: this.selectedSale.id,
+        delivery_id: this.deliveryMan
+      }).then(function (response) {
+        _this9.deliveryForm = false;
+        _this9.selectedSale.delivery_id = _this9.deliveryMan.id;
+
+        _this9.updateSaleStatus(4);
+      })["catch"](function (e) {
+        console.log(e);
       });
     },
-    deleteTime: function deleteTime() {
+    updateCancelReason: function updateCancelReason(status) {
       var _this10 = this;
 
-      this.editadoTime.idStore = this.editado.id;
-      console.log('this.editadoTime');
-      console.log(this.editadoTime);
-      axios.put('/store/deleteTime', this.editadoTime).then(function (response) {
-        _this10.getPickupTime(_this10.editado.id);
+      console.log(this.motivoCancelacion + ' <--> ' + this.selectedSale.cancel_id);
+
+      if (this.motivoCancelacion == '') {
+        console.log('error');
+        return;
+      }
+
+      this.selectedSale.cancel_id = this.motivoCancelacion;
+      this.selectedSale.status_id = status;
+      console.log(this.selectedSale);
+      axios.put('/sale/updateStatusCancel', this.selectedSale).then(function (response) {
+        _this10.cancelForm = false;
+        alert("El pedido ha sido cancelado.");
+
+        var statusObj = _this10.statuses.find(function (item) {
+          return item.id === status;
+        });
+
+        _this10.sales.find(function (item) {
+          return item.id === _this10.selectedSale.id;
+        }).status = statusObj;
+        _this10.sales.find(function (item) {
+          return item.id === _this10.selectedSale.id;
+        }).status_id = status; //this.getProducts();
+      })["catch"](function (e) {
+        console.log(e);
       });
     },
-    borrarTime: function borrarTime(item) {
-      var index = this.pickupTimes.indexOf(item);
-      this.editadoTime = Object.assign({}, item);
-      var r = confirm("¿Está seguro de borrar el registro?");
-
-      if (r == true) {
-        this.deleteTime();
-        this.snackbar = true;
-        this.textMsg = 'Se eliminó el registro.';
-      } else {
-        this.snackbar = true;
-        this.textMsg = 'Operación cancelada.';
-      }
-    },
-
-    /*********/
-    handleFileUpload: function handleFileUpload() {
-      this.file = this.$refs.file.files[0];
-      this.editado.file = this.$refs.file.files[0];
-      console.log(this.editado.file);
-    },
-    onPickFile: function onPickFile() {
-      this.$refs.fileInput.click();
-    },
-    onFilePicked: function onFilePicked(event) {
+    cancelSale: function cancelSale(status) {
       var _this11 = this;
 
-      var files = event.target.files;
-      var filename = files[0].name;
-      var fileReader = new FileReader();
-      fileReader.addEventListener('load', function () {
-        _this11.imageUrl = fileReader.result;
-        _this11.editadoNeg.is_mod = true;
-        _this11.editadoNeg.imageUrl = fileReader.result;
-      });
-      fileReader.readAsDataURL(files[0]);
-      this.image = files[0];
-    },
-    cancelarNeg: function cancelarNeg() {
-      this.dialogForm = false;
-      this.editadoNeg = Object.assign({}, this.defaultItem);
-      this.editedIndexNeg = -1;
-    },
-    guardarNeg: function guardarNeg() {
-      this.editadoNeg.store_id = this.editado.id;
+      this.selectedSale.status_id = status;
+      axios.put('/sale/updateStatus', this.selectedSale).then(function (response) {
+        // this.selectedSale.status_id=status;
+        var statusObj = _this11.statuses.find(function (item) {
+          return item.id === status;
+        });
 
-      if (this.editedIndexNeg > -1) {
-        //Guarda en caso de Edición
-        this.textSnack = '¡Actualización. Exitosa!';
-        this.editarNegocio();
-      } else {
-        //Guarda el registro en caso de Alta
-        if (this.editado.marca == "" || this.editado.modelo == "" || this.editado.stock == 0) {
-          this.snackbar = true;
-          this.textSnack = 'Datos incompletos.';
-        } else {
-          this.snackbar = true;
-          this.textSnack = '¡Alta. exitosa!';
-          this.altaNeg();
-        }
+        _this11.sales.find(function (item) {
+          return item.id === _this11.selectedSale.id;
+        }).status = statusObj;
+        _this11.sales.find(function (item) {
+          return item.id === _this11.selectedSale.id;
+        }).status_id = status;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    cancelOrder: function () {
+      var _cancelOrder = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                /*if (! await this.ask('¿Seguro que desea cancelar esta orden?')) {
+                    return;
+                }*/
+                this.cancelForm = true; //this.updateSaleStatus(6)
+
+              case 1:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function cancelOrder() {
+        return _cancelOrder.apply(this, arguments);
       }
 
-      this.cancelarNeg();
-    },
-    irNeg: function irNeg(item) {
-      //this.$router.push({ name: 'products' })
-      //window.location.replace("/missions/1/edit/2");
-      axios.get("/missions/1/edit/2");
-    },
-    altaNeg: function altaNeg() {
-      var _this12 = this;
+      return cancelOrder;
+    }(),
+    deleteProduct: function () {
+      var _deleteProduct = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(product_id) {
+        var _this12 = this;
 
-      axios.post('/business/add', this.editadoNeg).then(function (response) {
-        _this12.getbusinessNode();
-      });
-      this.name = "", this.description = "";
-    },
-    editarNegocio: function editarNegocio() {
-      var _this13 = this;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this.ask('¿Desea borrar este producto?');
 
-      //console.log(this.editadoNeg)
-      axios.put('/business/update', this.editadoNeg).then(function (response) {
-        _this13.getbusinessNode();
-      });
-      this.name = "", this.description = "";
-    },
-    deleteNeg: function deleteNeg() {
+              case 2:
+                if (_context2.sent) {
+                  _context2.next = 4;
+                  break;
+                }
+
+                return _context2.abrupt("return");
+
+              case 4:
+                axios.get('/sales/' + this.selectedSale.id + '/products/' + product_id + '/delete').then(function (response) {
+                  _this12.selectedSale.total = response.data.data.total;
+
+                  if (_this12.selectedSale.total <= 0) {
+                    _this12.cancelSale(6);
+
+                    alert("El pedido ha sido cancelado por falta de productos.");
+                    _this12.detailForm = false;
+                  }
+
+                  _this12.saleProducts.splice(_this12.saleProducts.indexOf(_this12.saleProducts.find(function (item) {
+                    return item.id === product_id;
+                  })), 1);
+                })["catch"](function (e) {
+                  console.log(e);
+                });
+
+              case 5:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function deleteProduct(_x) {
+        return _deleteProduct.apply(this, arguments);
+      }
+
+      return deleteProduct;
+    }(),
+    completedProduct: function () {
+      var _completedProduct = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(product, estado) {
+        var _this13 = this;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                //console.log(product);
+                this.selectedProduct.idBusiness = this.selectedSale.id;
+                this.selectedProduct.idProduct = product.id;
+                this.selectedProduct.completed = estado; //console.log(this.selectedProduct)
+
+                axios.put('/sale/updateProductSale', this.selectedProduct).then(function (response) {
+                  //this.viewSale(this.selectedSale)
+                  //var statusObj=this.statuses.find(item => item.id === status);
+                  //this.sales.find(item => item.id === this.selectedSale.id).status=statusObj;
+                  //this.sales.find(item => item.id === this.selectedSale.id).status_id=status;                        
+                  _this13.saleProducts.find(function (item) {
+                    return item.id === product.id;
+                  }).completed = estado;
+                })["catch"](function (e) {
+                  console.log(e);
+                });
+
+              case 4:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function completedProduct(_x2, _x3) {
+        return _completedProduct.apply(this, arguments);
+      }
+
+      return completedProduct;
+    }(),
+    ask: function ask(text) {
       var _this14 = this;
 
-      axios.put('/business/delete', this.editadoNeg).then(function (response) {
-        _this14.getbusinessNode();
+      this.confirm = true;
+      this.confirm_text = text;
+      return new Promise(function (resolve, reject) {
+        _this14.resolve = resolve;
+        _this14.reject = reject;
       });
-      this.name = "", this.description = "";
-    }
-  },
-  computed: {
-    // ...mapGetters('auth', ['can'])
-    //Dependiendo si es Alta o Edición cambia el título del modal
-    formTitle: function formTitle() {
-      //operadores condicionales "condición ? expr1 : expr2"
-      // si <condicion> es true, devuelve <expr1>, de lo contrario devuelve <expr2>
-      return this.editedIndex === -1 ? 'Nuevo Registro' : 'Editar Registro';
     },
-    formTitleNeg: function formTitleNeg() {
-      //operadores condicionales "condición ? expr1 : expr2"
-      // si <condicion> es true, devuelve <expr1>, de lo contrario devuelve <expr2>
-      return this.editedIndexNeg === -1 ? 'Nuevo Registro' : 'Editar Registro';
+    agree: function agree() {
+      this.resolve(true);
+      this.confirm = false;
+    },
+    cancel: function cancel() {
+      this.resolve(false);
+      this.confirm = false;
     }
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Stores.vue?vue&type=template&id=3374e644&":
-/*!***************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Stores.vue?vue&type=template&id=3374e644& ***!
-  \***************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Sales.vue?vue&type=template&id=11197390&":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Sales.vue?vue&type=template&id=11197390& ***!
+  \**************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -914,280 +673,319 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-container",
+    "v-row",
     [
-      _c(
-        "v-snackbar",
-        {
-          attrs: { timeout: _vm.timeout },
-          model: {
-            value: _vm.snackbar,
-            callback: function($$v) {
-              _vm.snackbar = $$v
-            },
-            expression: "snackbar"
-          }
+      _c("v-data-table", {
+        staticClass: "elevation-3",
+        attrs: {
+          headers: _vm.headers,
+          items: _vm.sales,
+          search: _vm.search,
+          "sort-by": "id",
+          "sort-desc": [true]
         },
-        [
-          _vm._v("\n        " + _vm._s(_vm.textMsg) + "\n        "),
-          _c(
-            "v-btn",
-            {
-              attrs: { color: "blue", text: "" },
-              on: {
-                click: function($event) {
-                  _vm.snackbar = false
-                }
-              }
+        scopedSlots: _vm._u([
+          {
+            key: "top",
+            fn: function() {
+              return [
+                _c(
+                  "v-col",
+                  { attrs: { cols: "12", sm: "12" } },
+                  [
+                    _c("v-text-field", {
+                      attrs: {
+                        "append-icon": "search",
+                        label: "Buscar",
+                        "single-line": "",
+                        "hide-details": ""
+                      },
+                      model: {
+                        value: _vm.search,
+                        callback: function($$v) {
+                          _vm.search = $$v
+                        },
+                        expression: "search"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ]
             },
-            [_vm._v("\n            Cerrar\n        ")]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-row",
-        [
-          _c(
-            "v-col",
-            [
-              _c("v-data-table", {
-                staticClass: "elevation-3",
-                attrs: {
-                  headers: _vm.headers,
-                  items: _vm.stores,
-                  search: _vm.search,
-                  "sort-by": "id"
-                },
-                scopedSlots: _vm._u([
-                  {
-                    key: "top",
-                    fn: function() {
-                      return [
-                        _c("v-system-bar", {
-                          attrs: { color: "indigo darken-2", dark: "" }
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "v-toolbar",
-                          {
-                            attrs: { flat: "", color: "indigo" },
-                            scopedSlots: _vm._u([
-                              {
-                                key: "extension",
-                                fn: function() {
-                                  return [
-                                    _vm.user.store_id == null
-                                      ? _c(
-                                          "v-btn",
-                                          {
-                                            attrs: {
-                                              fab: "",
-                                              color: "cyan accent-2",
-                                              bottom: "",
-                                              left: "",
-                                              absolute: ""
-                                            },
-                                            on: {
-                                              click: function($event) {
-                                                _vm.dialog = !_vm.dialog
-                                              }
-                                            }
-                                          },
-                                          [_c("v-icon", [_vm._v("mdi-plus")])],
-                                          1
-                                        )
-                                      : _vm._e()
-                                  ]
-                                },
-                                proxy: true
-                              }
-                            ])
+            proxy: true
+          },
+          {
+            key: "body.prepend",
+            fn: function() {
+              return [
+                _c("tr", [
+                  _c("td", { attrs: { colspan: "10" } }),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    [
+                      _c("v-select", {
+                        attrs: {
+                          flat: "",
+                          "hide-details": "",
+                          small: "",
+                          multiple: "",
+                          clearable: "",
+                          "item-text": "name",
+                          "item-value": "name",
+                          label: "Estado",
+                          items: _vm.statuses
+                        },
+                        model: {
+                          value: _vm.status,
+                          callback: function($$v) {
+                            _vm.status = $$v
                           },
-                          [
-                            _vm._v(" "),
-                            _c(
-                              "v-toolbar-title",
-                              { staticClass: "white--text" },
-                              [_vm._v("Tienda")]
-                            ),
-                            _vm._v(" "),
-                            _c("v-divider", {
-                              staticClass: "mx-4",
-                              attrs: { inset: "", vertical: "" }
-                            }),
-                            _vm._v(" "),
-                            _c("v-spacer")
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-col",
-                          { attrs: { cols: "12", sm: "12" } },
-                          [
-                            _c("v-text-field", {
-                              attrs: {
-                                "append-icon": "search",
-                                label: "Buscar",
-                                "single-line": "",
-                                "hide-details": ""
-                              },
-                              model: {
-                                value: _vm.search,
-                                callback: function($$v) {
-                                  _vm.search = $$v
-                                },
-                                expression: "search"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ]
-                    },
-                    proxy: true
-                  },
-                  {
-                    key: "item.action",
-                    fn: function(ref) {
-                      var item = ref.item
-                      return [
-                        _c(
-                          "v-btn",
-                          {
-                            staticClass: "mr-2",
-                            attrs: {
-                              fab: "",
-                              dark: "",
-                              small: "",
-                              color: "green"
-                            },
-                            on: {
-                              click: function($event) {
-                                return _vm.agregarNegocio(item)
-                              }
-                            }
-                          },
-                          [
-                            _c("v-icon", { attrs: { dark: "" } }, [
-                              _vm._v("mdi-store")
-                            ])
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _vm.user.store_id == null
-                          ? _c(
-                              "v-btn",
-                              {
-                                staticClass: "mr-2",
-                                attrs: {
-                                  fab: "",
-                                  dark: "",
-                                  small: "",
-                                  color: "cyan"
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.editar(item)
-                                  }
-                                }
-                              },
-                              [
-                                _c("v-icon", { attrs: { dark: "" } }, [
-                                  _vm._v("mdi-pencil")
-                                ])
-                              ],
-                              1
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.user.store_id == null
-                          ? _c(
-                              "v-btn",
-                              {
-                                staticClass: "mr-2",
-                                attrs: {
-                                  fab: "",
-                                  dark: "",
-                                  small: "",
-                                  color: "error"
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.borrar(item)
-                                  }
-                                }
-                              },
-                              [
-                                _c("v-icon", { attrs: { dark: "" } }, [
-                                  _vm._v("mdi-delete")
-                                ])
-                              ],
-                              1
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.user.store_id == null
-                          ? _c(
-                              "v-btn",
-                              {
-                                staticClass: "mr-2",
-                                attrs: {
-                                  fab: "",
-                                  dark: "",
-                                  small: "",
-                                  color: "blue"
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.agregaTime(item)
-                                  }
-                                }
-                              },
-                              [
-                                _c("v-icon", { attrs: { dark: "" } }, [
-                                  _vm._v("mdi-calendar-clock")
-                                ])
-                              ],
-                              1
-                            )
-                          : _vm._e()
-                      ]
-                    }
-                  }
+                          expression: "status"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("td")
                 ])
-              })
-            ],
-            1
-          )
-        ],
-        1
-      ),
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "item.action",
+            fn: function(ref) {
+              var item = ref.item
+              return [
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { "x-small": "", fab: "", dark: "", color: "cyan" },
+                    on: {
+                      click: function($event) {
+                        return _vm.viewSale(item)
+                      }
+                    }
+                  },
+                  [_c("v-icon", { attrs: { dark: "" } }, [_vm._v("mdi-eye")])],
+                  1
+                )
+              ]
+            }
+          }
+        ])
+      }),
       _vm._v(" "),
       _c(
         "v-dialog",
         {
-          attrs: { "max-width": "1024px" },
+          attrs: { "hide-overlay": "", transition: "dialog-bottom-transition" },
           model: {
-            value: _vm.dialog,
+            value: _vm.detailForm,
             callback: function($$v) {
-              _vm.dialog = $$v
+              _vm.detailForm = $$v
             },
-            expression: "dialog"
+            expression: "detailForm"
           }
         },
         [
           _c(
             "v-card",
             [
-              _c("v-card-title", { staticClass: "cyan white--text" }, [
-                _c("span", { staticClass: "headline" }, [
-                  _vm._v(_vm._s(_vm.formTitle))
-                ])
-              ]),
+              _c(
+                "v-toolbar",
+                { attrs: { dark: "", color: "primary" } },
+                [
+                  _c("v-toolbar-title", [_vm._v("Detalle de pedido")]),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: {
+                        icon: "",
+                        dark: "",
+                        href: "/sales/" + _vm.selectedSale.id + "/print",
+                        target: "_blank"
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-printer")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { icon: "", dark: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.detailForm = false
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-close")])],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-stepper",
+                { attrs: { "alt-labels": "" } },
+                [
+                  _c(
+                    "v-stepper-header",
+                    [
+                      _c(
+                        "v-stepper-step",
+                        { attrs: { complete: "", step: "1" } },
+                        [
+                          _vm._v(
+                            "\n                        Iniciado\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-stepper-step",
+                        {
+                          attrs: {
+                            complete: _vm.selectedSale.status.id >= 2,
+                            step: "2",
+                            editable:
+                              _vm.selectedSale.status.id == 1 &&
+                              _vm.user.store_id == null
+                          },
+                          on: {
+                            click: function($event) {
+                              _vm.user.store_id == null
+                                ? _vm.updateSaleStatus(2)
+                                : function() {}
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Procesado\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-stepper-step",
+                        {
+                          attrs: {
+                            complete: _vm.selectedSale.status.id >= 3,
+                            step: "3",
+                            editable:
+                              _vm.selectedSale.status.id == 2 &&
+                              _vm.user.store_id == null
+                          },
+                          on: {
+                            click: function($event) {
+                              _vm.selectedSale.status.id == 2 &&
+                              _vm.user.store_id == null
+                                ? _vm.updateSaleStatus(3)
+                                : function() {}
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Surtido\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm.selectedSale.delivery_type_id == 1 &&
+                      _vm.selectedSale.delivery_id == null
+                        ? _c(
+                            "v-stepper-step",
+                            {
+                              attrs: {
+                                complete: _vm.selectedSale.status.id >= 4,
+                                editable:
+                                  _vm.selectedSale.status.id == 3 &&
+                                  _vm.user.store_id == null,
+                                step: "4"
+                              },
+                              on: {
+                                click: function($event) {
+                                  _vm.selectedSale.status.id == 3 &&
+                                  _vm.user.store_id == null
+                                    ? (_vm.deliveryForm = true)
+                                    : false
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Enviado\n                    "
+                              )
+                            ]
+                          )
+                        : _c(
+                            "v-stepper-step",
+                            {
+                              attrs: {
+                                complete: _vm.selectedSale.status.id >= 4,
+                                editable:
+                                  _vm.selectedSale.status.id == 3 &&
+                                  _vm.user.store_id == null,
+                                step: "4"
+                              },
+                              on: {
+                                click: function($event) {
+                                  _vm.selectedSale.status.id == 3 &&
+                                  _vm.user.store_id == null
+                                    ? _vm.updateSaleStatus(4)
+                                    : function() {}
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Enviado\n                    "
+                              )
+                            ]
+                          ),
+                      _vm._v(" "),
+                      _c(
+                        "v-stepper-step",
+                        {
+                          attrs: {
+                            complete: _vm.selectedSale.status.id >= 5,
+                            editable:
+                              _vm.selectedSale.status.id == 4 &&
+                              _vm.user.store_id == null,
+                            step: "5"
+                          },
+                          on: {
+                            click: function($event) {
+                              _vm.selectedSale.status.id == 4 &&
+                              _vm.user.store_id == null
+                                ? _vm.updateSaleStatus(5)
+                                : function() {}
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Entregado\n                    "
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
               _vm._v(" "),
               _c(
                 "v-card-text",
@@ -1197,205 +995,268 @@ var render = function() {
                     [
                       _c(
                         "v-col",
-                        { attrs: { cols: "6" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Nombre",
-                              required: "",
-                              rules: _vm.nameRules
-                            },
-                            model: {
-                              value: _vm.editado.name,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editado, "name", $$v)
-                              },
-                              expression: "editado.name"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "6" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Dirección",
-                              required: "",
-                              rules: _vm.nameRules
-                            },
-                            model: {
-                              value: _vm.editado.address,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editado, "address", $$v)
-                              },
-                              expression: "editado.address"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "6" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Teléfono",
-                              counter: 10,
-                              required: "",
-                              rules: _vm.phoneRules
-                            },
-                            model: {
-                              value: _vm.editado.phone_number,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editado, "phone_number", $$v)
-                              },
-                              expression: "editado.phone_number"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "6" } },
+                        { attrs: { sm8: "" } },
                         [
                           _c(
-                            "v-dialog",
-                            {
-                              ref: "dialog1",
-                              attrs: {
-                                "return-value": _vm.editado.opening_time,
-                                persistent: "",
-                                width: "290px"
-                              },
-                              on: {
-                                "update:returnValue": function($event) {
-                                  return _vm.$set(
-                                    _vm.editado,
-                                    "opening_time",
-                                    $event
-                                  )
-                                },
-                                "update:return-value": function($event) {
-                                  return _vm.$set(
-                                    _vm.editado,
-                                    "opening_time",
-                                    $event
-                                  )
-                                }
-                              },
-                              scopedSlots: _vm._u([
-                                {
-                                  key: "activator",
-                                  fn: function(ref) {
-                                    var on = ref.on
-                                    return [
-                                      _c(
-                                        "v-text-field",
-                                        _vm._g(
-                                          {
-                                            attrs: {
-                                              label: "Horario de apertura",
-                                              "append-icon": "access_time",
-                                              readonly: "",
-                                              required: "",
-                                              rules: _vm.timeRules
-                                            },
-                                            model: {
-                                              value: _vm.editado.opening_time,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.editado,
-                                                  "opening_time",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "editado.opening_time"
-                                            }
-                                          },
-                                          on
-                                        )
-                                      )
-                                    ]
-                                  }
-                                }
-                              ]),
-                              model: {
-                                value: _vm.dialogOpeningTime,
-                                callback: function($$v) {
-                                  _vm.dialogOpeningTime = $$v
-                                },
-                                expression: "dialogOpeningTime"
-                              }
-                            },
+                            "v-card",
                             [
-                              _vm._v(" "),
-                              _vm.dialogOpeningTime
-                                ? _c(
-                                    "v-time-picker",
-                                    {
-                                      attrs: { "full-width": "" },
-                                      model: {
-                                        value: _vm.editado.opening_time,
-                                        callback: function($$v) {
-                                          _vm.$set(
-                                            _vm.editado,
-                                            "opening_time",
-                                            $$v
-                                          )
-                                        },
-                                        expression: "editado.opening_time"
-                                      }
-                                    },
-                                    [
-                                      _c("v-spacer"),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: { text: "", color: "primary" },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.dialogOpeningTime = false
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                    Cancelar\n                                "
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: { text: "", color: "primary" },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.$refs.dialog1.save(
-                                                _vm.editado.opening_time
+                              _c("v-simple-table", {
+                                scopedSlots: _vm._u([
+                                  {
+                                    key: "default",
+                                    fn: function() {
+                                      return [
+                                        _c("thead", [
+                                          _c("tr", [
+                                            _c(
+                                              "th",
+                                              { staticClass: "text-left" },
+                                              [_vm._v("Producto")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "th",
+                                              { staticClass: "text-left" },
+                                              [_vm._v("Comentarios")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "th",
+                                              { staticClass: "text-left" },
+                                              [_vm._v("Cantidad")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "th",
+                                              { staticClass: "text-left" },
+                                              [_vm._v("Precio de venta")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c("th"),
+                                            _vm._v(" "),
+                                            _c("th")
+                                          ])
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "tbody",
+                                          [
+                                            _vm._l(_vm.saleProducts, function(
+                                              product
+                                            ) {
+                                              return _c(
+                                                "tr",
+                                                { key: product.id },
+                                                [
+                                                  _c("td", [
+                                                    _vm._v(_vm._s(product.name))
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(
+                                                      _vm._s(
+                                                        product.sale.comments
+                                                      )
+                                                    )
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(
+                                                      _vm._s(
+                                                        product.sale.quantity
+                                                      )
+                                                    )
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c("td", [
+                                                    _vm._v(
+                                                      "$" +
+                                                        _vm._s(
+                                                          product.sale
+                                                            .sale_price
+                                                        )
+                                                    )
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "td",
+                                                    [
+                                                      _vm.selectedSale.status
+                                                        .id <= 3 &&
+                                                      product.sale
+                                                        .business_id ==
+                                                        _vm.user.store_id &&
+                                                      product.completed == false
+                                                        ? _c(
+                                                            "v-icon",
+                                                            {
+                                                              attrs: {
+                                                                color:
+                                                                  "red darken-2"
+                                                              },
+                                                              on: {
+                                                                click: function(
+                                                                  $event
+                                                                ) {
+                                                                  return _vm.completedProduct(
+                                                                    product,
+                                                                    1
+                                                                  )
+                                                                }
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "mdi-checkbox-blank-circle"
+                                                              )
+                                                            ]
+                                                          )
+                                                        : _vm._e(),
+                                                      _vm._v(" "),
+                                                      _vm.selectedSale.status
+                                                        .id <= 3 &&
+                                                      product.sale
+                                                        .business_id ==
+                                                        _vm.user.store_id &&
+                                                      product.completed == true
+                                                        ? _c(
+                                                            "v-icon",
+                                                            {
+                                                              attrs: {
+                                                                color:
+                                                                  "green darken-2"
+                                                              },
+                                                              on: {
+                                                                click: function(
+                                                                  $event
+                                                                ) {
+                                                                  return _vm.completedProduct(
+                                                                    product,
+                                                                    0
+                                                                  )
+                                                                }
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "mdi-check-circle"
+                                                              )
+                                                            ]
+                                                          )
+                                                        : _vm._e()
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "td",
+                                                    [
+                                                      _vm.selectedSale.status
+                                                        .id <= 3 &&
+                                                      _vm.user.store_id == null
+                                                        ? _c(
+                                                            "v-icon",
+                                                            {
+                                                              on: {
+                                                                click: function(
+                                                                  $event
+                                                                ) {
+                                                                  return _vm.deleteProduct(
+                                                                    product.id
+                                                                  )
+                                                                }
+                                                              }
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                "mdi-delete-forever"
+                                                              )
+                                                            ]
+                                                          )
+                                                        : _vm._e()
+                                                    ],
+                                                    1
+                                                  )
+                                                ]
                                               )
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "Aceptar\n                                "
-                                          )
-                                        ]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                : _vm._e()
+                                            }),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td"),
+                                              _vm._v(" "),
+                                              _c("td"),
+                                              _vm._v(" "),
+                                              _c("td", [_vm._v(" Subtotal")]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(
+                                                  "$" +
+                                                    _vm._s(
+                                                      _vm.formatPrice(
+                                                        _vm.selectedSale.total
+                                                      )
+                                                    )
+                                                )
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("tr", [
+                                              _c("td"),
+                                              _vm._v(" "),
+                                              _c("td"),
+                                              _vm._v(" "),
+                                              _c("td", [_vm._v(" Envio")]),
+                                              _vm._v(" "),
+                                              _c("td", [
+                                                _vm._v(
+                                                  "$" +
+                                                    _vm._s(
+                                                      _vm.formatPrice(
+                                                        _vm.selectedSale
+                                                          .delivery_distance *
+                                                          _vm.selectedSale
+                                                            .delivery_price
+                                                      )
+                                                    )
+                                                )
+                                              ])
+                                            ])
+                                          ],
+                                          2
+                                        ),
+                                        _vm._v(" "),
+                                        _c("tfoot", [
+                                          _c("tr", [
+                                            _c("td"),
+                                            _vm._v(" "),
+                                            _c("td"),
+                                            _vm._v(" "),
+                                            _c("td", [
+                                              _vm._v(" Total a Pagar")
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("td", [
+                                              _vm._v(
+                                                "$" +
+                                                  _vm._s(
+                                                    _vm.formatPrice(
+                                                      _vm.selectedSale
+                                                        .delivery_distance *
+                                                        _vm.selectedSale
+                                                          .delivery_price +
+                                                        _vm.selectedSale.total
+                                                    )
+                                                  )
+                                              )
+                                            ])
+                                          ])
+                                        ])
+                                      ]
+                                    },
+                                    proxy: true
+                                  }
+                                ])
+                              })
                             ],
                             1
                           )
@@ -1405,810 +1266,244 @@ var render = function() {
                       _vm._v(" "),
                       _c(
                         "v-col",
-                        { attrs: { cols: "6" } },
+                        { attrs: { cols: "4" } },
                         [
                           _c(
-                            "v-dialog",
+                            "v-input",
                             {
-                              ref: "dialog2",
                               attrs: {
-                                "return-value": _vm.editado.closing_time,
-                                persistent: "",
-                                width: "290px"
-                              },
-                              on: {
-                                "update:returnValue": function($event) {
-                                  return _vm.$set(
-                                    _vm.editado,
-                                    "closing_time",
-                                    $event
-                                  )
-                                },
-                                "update:return-value": function($event) {
-                                  return _vm.$set(
-                                    _vm.editado,
-                                    "closing_time",
-                                    $event
-                                  )
-                                }
-                              },
-                              scopedSlots: _vm._u([
-                                {
-                                  key: "activator",
-                                  fn: function(ref) {
-                                    var on = ref.on
-                                    return [
-                                      _c(
-                                        "v-text-field",
-                                        _vm._g(
-                                          {
-                                            attrs: {
-                                              label: "Horario de cierre",
-                                              "append-icon": "access_time",
-                                              readonly: "",
-                                              required: "",
-                                              rules: _vm.timeRules
-                                            },
-                                            model: {
-                                              value: _vm.editado.closing_time,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.editado,
-                                                  "closing_time",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "editado.closing_time"
-                                            }
-                                          },
-                                          on
-                                        )
-                                      )
-                                    ]
-                                  }
-                                }
-                              ]),
-                              model: {
-                                value: _vm.dialogClosingTime,
-                                callback: function($$v) {
-                                  _vm.dialogClosingTime = $$v
-                                },
-                                expression: "dialogClosingTime"
+                                messages: ["No. Pedido"],
+                                dense: "",
+                                "prepend-icon": "mdi-star"
                               }
                             },
-                            [
-                              _vm._v(" "),
-                              _vm.dialogClosingTime
-                                ? _c(
-                                    "v-time-picker",
-                                    {
-                                      attrs: { "full-width": "" },
-                                      model: {
-                                        value: _vm.editado.closing_time,
-                                        callback: function($$v) {
-                                          _vm.$set(
-                                            _vm.editado,
-                                            "closing_time",
-                                            $$v
-                                          )
-                                        },
-                                        expression: "editado.closing_time"
-                                      }
-                                    },
-                                    [
-                                      _c("v-spacer"),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: { text: "", color: "primary" },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.dialogClosingTime = false
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                    Cancelar\n                                "
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: { text: "", color: "primary" },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.$refs.dialog2.save(
-                                                _vm.editado.closing_time
-                                              )
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "Aceptar\n                                "
-                                          )
-                                        ]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                : _vm._e()
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "6" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Mínimo Compra",
-                              required: "",
-                              rules: _vm.minNumberRules
-                            },
-                            model: {
-                              value: _vm.editado.minimum_purchase,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editado, "minimum_purchase", $$v)
-                              },
-                              expression: "editado.minimum_purchase"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "6" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Costo de Envío (Por Km)",
-                              required: "",
-                              rules: _vm.minNumberRules,
-                              prefix: "$",
-                              type: "number"
-                            },
-                            model: {
-                              value: _vm.editado.delivery_price,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editado, "delivery_price", $$v)
-                              },
-                              expression: "editado.delivery_price"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "6" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Latitud",
-                              required: "",
-                              rules: _vm.coordRules
-                            },
-                            model: {
-                              value: _vm.editado.latitude,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editado, "latitude", $$v)
-                              },
-                              expression: "editado.latitude"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "6" } },
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Longitud",
-                              required: "",
-                              rules: _vm.coordRules
-                            },
-                            model: {
-                              value: _vm.editado.longitude,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editado, "longitude", $$v)
-                              },
-                              expression: "editado.longitude"
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "ma-2 white--text",
-                      attrs: { color: "blue-grey" },
-                      on: { click: _vm.cancelar }
-                    },
-                    [_vm._v("\n                    Cancelar\n                ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "ma-2 white--text",
-                      attrs: { color: "teal accent-4" },
-                      on: { click: _vm.guardar }
-                    },
-                    [_vm._v("\n                    Guardar\n                ")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "1024px" },
-          scopedSlots: _vm._u([
-            {
-              key: "activator",
-              fn: function(ref) {
-                var on = ref.on
-                return undefined
-              }
-            }
-          ]),
-          model: {
-            value: _vm.dialogNeg,
-            callback: function($$v) {
-              _vm.dialogNeg = $$v
-            },
-            expression: "dialogNeg"
-          }
-        },
-        [
-          _vm._v(" "),
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", { staticClass: "cyan white--text" }, [
-                _c("span", { staticClass: "headline" }, [
-                  _vm._v(_vm._s(_vm.formTitleNeg))
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                { staticStyle: { height: "40px", position: "relative" } },
-                [
-                  _vm.user.store_id == null
-                    ? _c(
-                        "v-btn",
-                        {
-                          attrs: {
-                            absolute: "",
-                            dark: "",
-                            fab: "",
-                            top: "",
-                            right: "",
-                            color: "green"
-                          },
-                          on: {
-                            click: function($event) {
-                              _vm.dialogForm = !_vm.dialogForm
-                            }
-                          }
-                        },
-                        [_c("v-icon", [_vm._v("mdi-plus")])],
-                        1
-                      )
-                    : _vm._e()
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c(
-                    "v-container",
-                    [
-                      _c("v-data-table", {
-                        staticClass: "elevation-3",
-                        attrs: {
-                          headers: _vm.headersNeg,
-                          items: _vm.business,
-                          search: _vm.search,
-                          "sort-by": "id"
-                        },
-                        scopedSlots: _vm._u([
-                          {
-                            key: "item.action",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "cyan"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.editarNeg(item)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-pencil")
-                                    ])
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "error"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.borrarNeg(item)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-delete")
-                                    ])
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "cyan",
-                                      href:
-                                        "/missions/" +
-                                        item.id +
-                                        "/" +
-                                        item.store_id
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-send-outline")
-                                    ])
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "640px" },
-          scopedSlots: _vm._u([
-            {
-              key: "activator",
-              fn: function(ref) {
-                var on = ref.on
-                return undefined
-              }
-            }
-          ]),
-          model: {
-            value: _vm.dialogTime,
-            callback: function($$v) {
-              _vm.dialogTime = $$v
-            },
-            expression: "dialogTime"
-          }
-        },
-        [
-          _vm._v(" "),
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", { staticClass: "cyan white--text" }, [
-                _c("span", { staticClass: "headline" }, [
-                  _vm._v("Horarios disponibles")
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                { staticStyle: { height: "40px", position: "relative" } },
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: {
-                        absolute: "",
-                        dark: "",
-                        fab: "",
-                        top: "",
-                        right: "",
-                        color: "green"
-                      },
-                      on: {
-                        click: function($event) {
-                          _vm.dialogTimeAdd = !_vm.dialogTimeAdd
-                        }
-                      }
-                    },
-                    [_c("v-icon", [_vm._v("mdi-plus")])],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c(
-                    "v-container",
-                    [
-                      _c("v-data-table", {
-                        staticClass: "elevation-3",
-                        attrs: {
-                          headers: _vm.headersTime,
-                          items: _vm.pickupTimes,
-                          "sort-by": "id"
-                        },
-                        scopedSlots: _vm._u([
-                          {
-                            key: "item.action",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "cyan"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.editaTime(item)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-pencil")
-                                    ])
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "error"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.borrarTime(item)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-delete")
-                                    ])
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "640px" },
-          scopedSlots: _vm._u([
-            {
-              key: "activator",
-              fn: function(ref) {
-                var on = ref.on
-                return undefined
-              }
-            }
-          ]),
-          model: {
-            value: _vm.dialogTimeAdd,
-            callback: function($$v) {
-              _vm.dialogTimeAdd = $$v
-            },
-            expression: "dialogTimeAdd"
-          }
-        },
-        [
-          _vm._v(" "),
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", { staticClass: "cyan white--text" }, [
-                _c("span", { staticClass: "headline" }, [
-                  _vm._v("Agregar horario")
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c(
-                    "v-container",
-                    [
-                      _c("v-text-field", {
-                        attrs: { label: "Nombre", required: "" },
-                        model: {
-                          value: _vm.editadoTime.time,
-                          callback: function($$v) {
-                            _vm.$set(_vm.editadoTime, "time", $$v)
-                          },
-                          expression: "editadoTime.time"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "ma-2 white--text",
-                      attrs: { color: "blue-grey" },
-                      on: { click: _vm.cancelarAddTime }
-                    },
-                    [_vm._v("\n                    Cancelar\n                ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "ma-2 white--text",
-                      attrs: { color: "teal accent-4" },
-                      on: { click: _vm.guardarTime }
-                    },
-                    [_vm._v("\n                    Guardar\n                ")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "1024px" },
-          model: {
-            value: _vm.dialogForm,
-            callback: function($$v) {
-              _vm.dialogForm = $$v
-            },
-            expression: "dialogForm"
-          }
-        },
-        [
-          _c(
-            "v-form",
-            {
-              ref: "form",
-              scopedSlots: _vm._u([
-                {
-                  key: "activator",
-                  fn: function(ref) {
-                    var on = ref.on
-                    return undefined
-                  }
-                }
-              ])
-            },
-            [
-              _vm._v(" "),
-              _c(
-                "v-card",
-                [
-                  _c("v-card-title", { staticClass: "cyan white--text" }, [
-                    _c("span", { staticClass: "headline" }, [
-                      _vm._v(_vm._s(_vm.formTitle))
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-text",
-                    [
-                      _c(
-                        "v-container",
-                        [
-                          _c("v-text-field", {
-                            attrs: { label: "Nombre", required: "" },
-                            model: {
-                              value: _vm.editadoNeg.name,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editadoNeg, "name", $$v)
-                              },
-                              expression: "editadoNeg.name"
-                            }
-                          }),
+                            [_vm._v(_vm._s(_vm.selectedSale.id))]
+                          ),
                           _vm._v(" "),
-                          _c("v-text-field", {
-                            attrs: { label: "Descripción", required: "" },
-                            model: {
-                              value: _vm.editadoNeg.description,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editadoNeg, "description", $$v)
-                              },
-                              expression: "editadoNeg.description"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Proporción",
-                              type: "number",
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.editadoNeg.proportion,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editadoNeg, "proportion", $$v)
-                              },
-                              expression: "editadoNeg.proportion"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Fila",
-                              type: "number",
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.editadoNeg.row,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editadoNeg, "row", $$v)
-                              },
-                              expression: "editadoNeg.row"
-                            }
-                          }),
+                          _c("br"),
                           _vm._v(" "),
                           _c(
-                            "v-card-text",
+                            "v-input",
+                            {
+                              attrs: {
+                                messages: ["Fecha Pedido"],
+                                dense: "",
+                                "prepend-icon": "mdi-calendar-multiple-check"
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.selectedSale.created_at))]
+                          ),
+                          _vm._v(" "),
+                          _vm.selectedSale.status.id == 5 ? _c("br") : _vm._e(),
+                          _vm._v(" "),
+                          _vm.selectedSale.status.id == 5
+                            ? _c(
+                                "v-input",
+                                {
+                                  attrs: {
+                                    messages: ["Fecha Pedido Entregado"],
+                                    dense: "",
+                                    "prepend-icon":
+                                      "mdi-calendar-multiple-check"
+                                  }
+                                },
+                                [_vm._v(_vm._s(_vm.selectedSale.updated_at))]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c(
+                            "v-input",
+                            {
+                              attrs: {
+                                messages: ["Dirección"],
+                                dense: "",
+                                "prepend-icon": "mdi-pin"
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.selectedSale.address.address))]
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c(
+                            "v-input",
+                            {
+                              attrs: {
+                                messages: ["Cliente"],
+                                "prepend-icon": "mdi-account"
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.selectedSale.user.name))]
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
                             [
                               _c(
-                                "v-btn",
-                                {
-                                  staticClass: "primary",
-                                  attrs: { raised: "" },
-                                  on: { click: _vm.onPickFile }
-                                },
+                                "v-col",
+                                { attrs: { cols: "4" } },
                                 [
-                                  _vm._v(
-                                    "Subir imagen\n                        "
+                                  _c(
+                                    "v-input",
+                                    {
+                                      attrs: {
+                                        messages: ["Metodo de Pago"],
+                                        "prepend-icon": "mdi-currency-usd"
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.selectedSale.payment_method.name
+                                        )
+                                      )
+                                    ]
                                   )
-                                ]
+                                ],
+                                1
                               ),
                               _vm._v(" "),
-                              _c("input", {
-                                ref: "fileInput",
-                                staticStyle: { display: "none" },
-                                attrs: { type: "file", accept: "image/jpeg" },
-                                on: { change: _vm.onFilePicked }
-                              })
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "4" } },
+                                [
+                                  _vm.selectedSale.payment_method_id == 1
+                                    ? _c(
+                                        "v-input",
+                                        {
+                                          attrs: {
+                                            messages: ["Paga con"],
+                                            "prepend-icon": "mdi-currency-usd"
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(_vm.selectedSale.cash_amount)
+                                          )
+                                        ]
+                                      )
+                                    : _vm._e()
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "4" } },
+                                [
+                                  _vm.selectedSale.payment_method_id == 1
+                                    ? _c(
+                                        "v-input",
+                                        {
+                                          attrs: {
+                                            messages: ["Cambio"],
+                                            "prepend-icon": "mdi-currency-usd"
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.formatPrice(
+                                                _vm.selectedSale.cash_amount -
+                                                  (_vm.selectedSale
+                                                    .delivery_distance *
+                                                    _vm.selectedSale
+                                                      .delivery_price +
+                                                    _vm.selectedSale.total)
+                                              )
+                                            )
+                                          )
+                                        ]
+                                      )
+                                    : _vm._e()
+                                ],
+                                1
+                              )
                             ],
                             1
                           ),
                           _vm._v(" "),
-                          _c("v-layout", [
-                            _c("img", {
+                          _c("br"),
+                          _vm._v(" "),
+                          _c(
+                            "v-input",
+                            {
                               attrs: {
-                                src: _vm.editadoNeg.imageUrl,
-                                height: "150"
+                                messages: ["Tipo entrega"],
+                                "prepend-icon": "mdi-cube-send"
                               }
-                            })
-                          ])
+                            },
+                            [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(
+                                    _vm.selectedSale.delivery_type_id != 1
+                                      ? "En tienda"
+                                      : _vm.selectedSale.delivery_id == null
+                                      ? "A domicilio"
+                                      : "A domicilio por " +
+                                        _vm.deliveryMen.find(function(item) {
+                                          return (
+                                            item.id ===
+                                            _vm.selectedSale.delivery_id
+                                          )
+                                        }).name
+                                  ) +
+                                  "\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c(
+                            "v-input",
+                            {
+                              attrs: {
+                                messages: ["Horario"],
+                                "prepend-icon": "mdi-clock"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(_vm.selectedSale.delivery_time.time)
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _c(
+                            "v-input",
+                            {
+                              attrs: {
+                                messages: ["Comentario"],
+                                "prepend-icon": "mdi-tooltip-outline"
+                              }
+                            },
+                            [_vm._v(_vm._s(_vm.selectedSale.comments))]
+                          ),
+                          _vm._v(" "),
+                          _c("br"),
+                          _vm._v(" "),
+                          _vm.selectedSale.status.id <= 4
+                            ? _c(
+                                "v-btn",
+                                {
+                                  attrs: { dark: "", color: "danger" },
+                                  on: { click: _vm.cancelOrder }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            CANCELAR PEDIDO\n                        "
+                                  )
+                                ]
+                              )
+                            : _vm._e()
                         ],
                         1
                       )
@@ -2216,40 +1511,262 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
+                  _c("v-divider"),
+                  _vm._v(" "),
                   _c(
-                    "v-card-actions",
+                    "v-row",
                     [
-                      _c("v-spacer"),
-                      _vm._v(" "),
                       _c(
-                        "v-btn",
+                        "v-col",
                         {
-                          staticClass: "ma-2 white--text",
-                          attrs: { color: "blue-grey" },
-                          on: { click: _vm.cancelarNeg }
+                          staticClass:
+                            "text-center align-center align-content-center"
                         },
                         [
-                          _vm._v(
-                            "\n                    Cancelar\n                "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          staticClass: "ma-2 white--text",
-                          attrs: { color: "teal accent-4" },
-                          on: { click: _vm.guardarNeg }
-                        },
-                        [
-                          _vm._v(
-                            "\n                    Guardar\n                "
-                          )
+                          _c("iframe", {
+                            staticStyle: { border: "0" },
+                            attrs: {
+                              src:
+                                "http://www.google.com/maps?q=" +
+                                _vm.selectedSale.address.latitude +
+                                "," +
+                                _vm.selectedSale.address.longitude +
+                                "&z=15&output=embed",
+                              width: "500",
+                              height: "300",
+                              frameborder: "0",
+                              allowfullscreen: ""
+                            }
+                          })
                         ]
                       )
                     ],
                     1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { "max-width": "500" },
+          model: {
+            value: _vm.deliveryForm,
+            callback: function($$v) {
+              _vm.deliveryForm = $$v
+            },
+            expression: "deliveryForm"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", [
+                _vm._v(
+                  "\n                Asignación de repartidor\n            "
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c("v-select", {
+                    attrs: {
+                      flat: "",
+                      "hide-details": "",
+                      small: "",
+                      clearable: "",
+                      "item-text": "name",
+                      "item-value": "id",
+                      label: "Repartidor",
+                      items: _vm.deliveryMen
+                    },
+                    model: {
+                      value: _vm.deliveryMan,
+                      callback: function($$v) {
+                        _vm.deliveryMan = $$v
+                      },
+                      expression: "deliveryMan"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.deliveryForm = false
+                          _vm.deliveryMan = ""
+                        }
+                      }
+                    },
+                    [_vm._v("Cancelar")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "primary" },
+                      on: { click: _vm.updateSaleDelivery }
+                    },
+                    [_vm._v("Asignar Repartidor")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { "max-width": "500" },
+          model: {
+            value: _vm.cancelForm,
+            callback: function($$v) {
+              _vm.cancelForm = $$v
+            },
+            expression: "cancelForm"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", [
+                _vm._v("\n                Motivo de cancelación\n            ")
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c("v-select", {
+                    attrs: {
+                      flat: "",
+                      "hide-details": "",
+                      small: "",
+                      clearable: "",
+                      "item-text": "name",
+                      "item-value": "id",
+                      label: "Seleccione una opción",
+                      items: _vm.motivosCancelacion
+                    },
+                    model: {
+                      value: _vm.motivoCancelacion,
+                      callback: function($$v) {
+                        _vm.motivoCancelacion = $$v
+                      },
+                      expression: "motivoCancelacion"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      on: {
+                        click: function($event) {
+                          _vm.cancelForm = false
+                          _vm.motivoCancelacion = ""
+                        }
+                      }
+                    },
+                    [_vm._v("Cancelar")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "primary" },
+                      on: {
+                        click: function($event) {
+                          return _vm.updateCancelReason(6)
+                        }
+                      }
+                    },
+                    [_vm._v("Confirmar")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          ref: "confirm",
+          attrs: { "max-width": "500" },
+          on: {
+            keydown: function($event) {
+              if (
+                !$event.type.indexOf("key") &&
+                _vm._k($event.keyCode, "esc", 27, $event.key, ["Esc", "Escape"])
+              ) {
+                return null
+              }
+              return _vm.cancel($event)
+            }
+          },
+          model: {
+            value: _vm.confirm,
+            callback: function($$v) {
+              _vm.confirm = $$v
+            },
+            expression: "confirm"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", [
+                _vm._v(
+                  "\n            " + _vm._s(_vm.confirm_text) + "\n        "
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      nativeOn: {
+                        click: function($event) {
+                          return _vm.cancel($event)
+                        }
+                      }
+                    },
+                    [_vm._v("Cancelar")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "primary" },
+                      nativeOn: {
+                        click: function($event) {
+                          return _vm.agree($event)
+                        }
+                      }
+                    },
+                    [_vm._v("Aceptar")]
                   )
                 ],
                 1
@@ -2271,17 +1788,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/views/Stores.vue":
-/*!**************************************************!*\
-  !*** ./resources/js/components/views/Stores.vue ***!
-  \**************************************************/
+/***/ "./resources/js/components/views/Sales.vue":
+/*!*************************************************!*\
+  !*** ./resources/js/components/views/Sales.vue ***!
+  \*************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Stores_vue_vue_type_template_id_3374e644___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Stores.vue?vue&type=template&id=3374e644& */ "./resources/js/components/views/Stores.vue?vue&type=template&id=3374e644&");
-/* harmony import */ var _Stores_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Stores.vue?vue&type=script&lang=js& */ "./resources/js/components/views/Stores.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Sales_vue_vue_type_template_id_11197390___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Sales.vue?vue&type=template&id=11197390& */ "./resources/js/components/views/Sales.vue?vue&type=template&id=11197390&");
+/* harmony import */ var _Sales_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Sales.vue?vue&type=script&lang=js& */ "./resources/js/components/views/Sales.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -2291,9 +1808,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Stores_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Stores_vue_vue_type_template_id_3374e644___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Stores_vue_vue_type_template_id_3374e644___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Sales_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Sales_vue_vue_type_template_id_11197390___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Sales_vue_vue_type_template_id_11197390___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -2303,38 +1820,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/views/Stores.vue"
+component.options.__file = "resources/js/components/views/Sales.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/views/Stores.vue?vue&type=script&lang=js&":
-/*!***************************************************************************!*\
-  !*** ./resources/js/components/views/Stores.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************/
+/***/ "./resources/js/components/views/Sales.vue?vue&type=script&lang=js&":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/views/Sales.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Stores_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Stores.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Stores.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Stores_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Sales_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Sales.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Sales.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Sales_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/views/Stores.vue?vue&type=template&id=3374e644&":
-/*!*********************************************************************************!*\
-  !*** ./resources/js/components/views/Stores.vue?vue&type=template&id=3374e644& ***!
-  \*********************************************************************************/
+/***/ "./resources/js/components/views/Sales.vue?vue&type=template&id=11197390&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/views/Sales.vue?vue&type=template&id=11197390& ***!
+  \********************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Stores_vue_vue_type_template_id_3374e644___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Stores.vue?vue&type=template&id=3374e644& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Stores.vue?vue&type=template&id=3374e644&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Stores_vue_vue_type_template_id_3374e644___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Sales_vue_vue_type_template_id_11197390___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Sales.vue?vue&type=template&id=11197390& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Sales.vue?vue&type=template&id=11197390&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Sales_vue_vue_type_template_id_11197390___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Stores_vue_vue_type_template_id_3374e644___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Sales_vue_vue_type_template_id_11197390___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

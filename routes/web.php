@@ -11,6 +11,25 @@
 |
 */
  
+/****** CHOCOPLASTIC ROUTES *************/
+
+
+Route::get('/entitieslist', 'FederalEntityController@EntitiesList');
+Route::get('/listUser', 'AdminController@listUser');
+Route::get('/rolUser/{idUser}', 'AdminController@rolUser');
+
+Route::get('/providerlist', 'ProviderController@ProvidersList');
+Route::post('/providers/add', 'ProviderController@add');
+Route::put('/providers/update', 'ProviderController@update');
+Route::put('/providers/delete', 'ProviderController@delete');
+
+Route::get('/clientlist', 'ClientController@ClientsList');
+Route::post('/clients/add', 'ClientController@add');
+Route::put('/clients/update', 'ClientController@update');
+Route::put('/clients/delete', 'ClientController@delete');
+
+
+/****** *************/
 Auth::routes(['register' => false, 'reset' => false]);
 Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('password/reset/{token}', 'Auth\Api\ResetPasswordController@showResetForm')->name('password.reset');
@@ -85,7 +104,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/promoproduct/update', 'ProductController@updatePromoProduct');
 
     Route::get('/saleList/{idStore}', 'SaleController@listsale');
-    Route::get('/listUser', 'SaleController@listUser');
+    
     Route::get('/statusNode', 'SaleController@liststate');
     Route::put('/sale/updateStatus', 'SaleController@updateStatus');
     Route::put('/sale/updateProductSale', 'SaleController@updateProductSale');    
@@ -96,7 +115,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/deliveryMen', 'DeliveryController@deliveryMen');
     Route::post('/sale/delivery/update', 'DeliveryController@update');
     Route::get('/motivosCancelacion', 'SaleController@motivosCancelacion');
-    Route::get('/rolUser/{idUser}', 'SaleController@rolUser');
+    
 
     Route::get('/sales/{sale}/products/{id}/delete', 'SaleController@deleteProduct');
 

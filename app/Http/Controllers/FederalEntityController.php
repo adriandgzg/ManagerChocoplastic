@@ -17,6 +17,17 @@ class FederalEntityController extends Controller
         //
     }
 
+    public function EntitiesList(){
+        $entities = FederalEntity::all();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'entities loaded',
+            'data' => $entities,
+        ], 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

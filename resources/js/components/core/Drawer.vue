@@ -16,6 +16,19 @@
           </v-list-item-action>
           <v-list-item-title>Venta (Cobro)</v-list-item-title>
         </v-list-item>
+        <v-list-item href="/proveedores">
+          <v-list-item-action>
+            <v-icon>mdi-cart</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Proveedores</v-list-item-title>
+        </v-list-item>
+
+        <v-list-item href="/clients">
+          <v-list-item-action>
+            <v-icon>mdi-cart</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Clientes</v-list-item-title>
+        </v-list-item>
 
         <v-list-item href="/logout">
           <v-list-item-action>

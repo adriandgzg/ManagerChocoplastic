@@ -1,15 +1,14 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[10],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PointOfSale.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/PointOfSale.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Notifications.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Notifications.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 //
 //
 //
@@ -243,101 +242,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      money: {
-        decimal: ",",
-        thousands: ".",
-        prefix: "",
-        suffix: "",
-        precision: 2,
-        masked: false
-        /* doesn't work with directive */
-
-      },
-      minNumberRules: [function (value) {
-        return !!value || "Requerido.";
-      }, function (value) {
-        return value > 0 || "El número debe ser mayor o igual a cero";
-      }],
-      dialog: false,
-      dialogcredito: false,
-      dialogcontado: false,
-      dialogdelete: false,
-      clientes: [{
-        name: "Cliente Generico",
-        id: 1
-      }, {
-        name: "Juan López Castellanos",
-        id: 2
-      }, {
-        name: "Fran Álvarez Alcaraz",
-        id: 3
-      }, {
-        name: "Armando Hernandez Torres",
-        id: 4
-      }, {
-        name: "Ximena Hernandez Torres",
-        id: 5
-      }],
-      desserts: [{
-        num: 1,
-        id: 1000,
-        name: "PRODUCTO MENUDEO",
-        um: "CJ",
-        cantidad: 13,
-        precio: "$100.00",
-        importe: "$1,300.00"
-      }, {
-        num: 2,
-        id: 1001,
-        name: "ADOBO ANITA 1 KG (CJ.12PZ)",
-        um: "PZ",
-        cantidad: 2,
-        precio: "$20.00",
-        importe: "$40.00"
-      }, {
-        num: 3,
-        id: 1002,
-        name: "ADOBO ANITA 110 GR (CJ.50PZ)",
-        um: "PZ",
-        cantidad: 2,
-        precio: "$50.00",
-        importe: "$200.00"
-      }]
+      color: null,
+      colors: ['purple', 'info', 'success', 'warning', 'error'],
+      top: true,
+      bottom: false,
+      left: false,
+      right: false,
+      snackbar: false
     };
+  },
+  methods: {
+    snack: function snack() {
+      this.top = false;
+      this.bottom = false;
+      this.left = false;
+      this.right = false;
+
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      for (var _i = 0, _args = args; _i < _args.length; _i++) {
+        var loc = _args[_i];
+        this[loc] = true;
+      }
+
+      this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+      this.snackbar = true;
+    }
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PointOfSale.vue?vue&type=template&id=097a461c&":
-/*!********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/PointOfSale.vue?vue&type=template&id=097a461c& ***!
-  \********************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Notifications.vue?vue&type=template&id=ad547528&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Notifications.vue?vue&type=template&id=ad547528& ***!
+  \**********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -351,53 +295,256 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-container",
+    { attrs: { fluid: "", "grid-list-xl": "", "fill-height": "" } },
     [
       _c(
-        "v-row",
+        "v-layout",
+        { attrs: { "justify-center": "", "align-center": "" } },
         [
           _c(
-            "v-col",
+            "v-flex",
+            { attrs: { xs12: "" } },
             [
               _c(
-                "v-card",
+                "material-card",
+                { attrs: { color: "green" } },
                 [
-                  _c("v-text-field", {
-                    attrs: { label: "Ingresar No. Pedido:" }
-                  }),
+                  _c("div", { attrs: { slot: "header" }, slot: "header" }, [
+                    _c("div", { staticClass: "title font-weight-light mb-2" }, [
+                      _vm._v("Notifications")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "category" },
+                      [
+                        _vm._v(
+                          "\n            Handcrafted by us with\n            "
+                        ),
+                        _c("v-icon", { attrs: { size: "17" } }, [
+                          _vm._v("\n              mdi-heart\n            ")
+                        ])
+                      ],
+                      1
+                    )
+                  ]),
                   _vm._v(" "),
                   _c(
-                    "v-card-title",
-                    { staticClass: "subheading font-weight-bold" },
-                    [_vm._v("No. Pedido: 10000003251")]
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c(
-                    "v-row",
+                    "v-card-text",
                     [
                       _c(
-                        "v-col",
-                        { attrs: { cols: "4" } },
+                        "v-layout",
+                        { attrs: { row: "", wrap: "" } },
                         [
                           _c(
-                            "v-card-text",
+                            "v-flex",
+                            { attrs: { md6: "", sm12: "" } },
+                            [
+                              _c(
+                                "h2",
+                                { staticClass: "title font-weight-light mb-3" },
+                                [_vm._v("Notifications Style")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "material-notification",
+                                {
+                                  staticClass: "mb-3",
+                                  attrs: { color: "info" }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                This is a plain notification\n              "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "material-notification",
+                                {
+                                  staticClass: "mb-3",
+                                  attrs: { color: "info", dismissible: "" }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                This is a notification with close button.\n              "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "material-notification",
+                                {
+                                  staticClass: "mb-3",
+                                  attrs: {
+                                    color: "info",
+                                    dismissible: "",
+                                    icon: "mdi-bell-plus"
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n\n                This is a notification with close button and icon.\n              "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "material-notification",
+                                {
+                                  staticClass: "mb-3",
+                                  attrs: {
+                                    color: "info",
+                                    dismissible: "",
+                                    icon: "mdi-bell-plus"
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n\n                This is a notification with close button and icon and have many lines. You can see that the icon and the close button are always vertically aligned. This is a beautiful notification. So you don't have to worry about the style.\n              "
+                                  )
+                                ]
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-flex",
+                            { attrs: { md6: "", sm12: "" } },
+                            [
+                              _c(
+                                "h2",
+                                { staticClass: "title font-weight-light" },
+                                [_vm._v("Notifcation Statess")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "material-notification",
+                                {
+                                  staticClass: "mb-3",
+                                  attrs: { color: "info", dismissible: "" }
+                                },
+                                [
+                                  _c("strong", [_vm._v("INFO")]),
+                                  _vm._v(
+                                    ' - This is a regular notification made with `color="info"`\n              '
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "material-notification",
+                                {
+                                  staticClass: "mb-3",
+                                  attrs: { color: "success", dismissible: "" }
+                                },
+                                [
+                                  _c("strong", [_vm._v("SUCCESS")]),
+                                  _vm._v(
+                                    ' - This is a regular notification made with `color="success"`\n              '
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "material-notification",
+                                {
+                                  staticClass: "mb-3",
+                                  attrs: { color: "warning", dismissible: "" }
+                                },
+                                [
+                                  _c("strong", [_vm._v("WARNING")]),
+                                  _vm._v(
+                                    ' - This is a regular notification made with `color="warning"`\n              '
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "material-notification",
+                                {
+                                  staticClass: "mb-3",
+                                  attrs: { color: "error", dismissible: "" }
+                                },
+                                [
+                                  _c("strong", [_vm._v("DANGER")]),
+                                  _vm._v(
+                                    ' - This is a regular notification made with `color="error"`\n              '
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "material-notification",
+                                {
+                                  staticClass: "mb-3",
+                                  attrs: { color: "purple", dismissible: "" }
+                                },
+                                [
+                                  _c("strong", [_vm._v("PRIMARY")]),
+                                  _vm._v(
+                                    ' - This is a regular notification made with `color="purple"`\n              '
+                                  )
+                                ]
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "text-xs-center" }, [
+                        _c(
+                          "h2",
+                          { staticClass: "title font-weight-light mb-2" },
+                          [_vm._v("Notification Places")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            staticClass:
+                              " subheading font-weight-light grey--text"
+                          },
+                          [_vm._v("Click to view notifications")]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-container",
+                        { attrs: { "grid-list-lg": "" } },
+                        [
+                          _c(
+                            "v-layout",
                             {
-                              staticClass:
-                                "category d-inline-flex font-weight-light"
+                              attrs: { "justify-center": "", row: "", wrap: "" }
                             },
                             [
-                              _c("v-select", {
-                                attrs: {
-                                  items: _vm.clientes,
-                                  label: "Cliente",
-                                  "item-text": "name",
-                                  "item-value": "id",
-                                  filled: "",
-                                  chips: "",
-                                  placeholder: "Seleccionar Cliente"
-                                }
-                              })
+                              _c(
+                                "v-flex",
+                                { attrs: { xs12: "", sm4: "" } },
+                                [
+                                  _c(
+                                    "v-btn",
+                                    {
+                                      attrs: { block: "", color: "success" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.snack("bottom", "right")
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                  Lanzar notificación\n                "
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
                             ],
                             1
                           )
@@ -406,45 +553,54 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-col",
-                        { attrs: { cols: "4" } },
+                        "v-snackbar",
+                        {
+                          attrs: {
+                            color: _vm.color,
+                            bottom: _vm.bottom,
+                            top: _vm.top,
+                            left: _vm.left,
+                            right: _vm.right,
+                            dark: ""
+                          },
+                          model: {
+                            value: _vm.snackbar,
+                            callback: function($$v) {
+                              _vm.snackbar = $$v
+                            },
+                            expression: "snackbar"
+                          }
+                        },
                         [
                           _c(
-                            "v-card-text",
-                            {
-                              staticClass:
-                                "category d-inline-flex font-weight-light"
-                            },
+                            "v-icon",
+                            { staticClass: "mr-3", attrs: { color: "white" } },
                             [
-                              _c(
-                                "span",
-                                { staticClass: "subheading font-weight-bold" },
-                                [_vm._v("Vendedor:")]
-                              ),
-                              _vm._v("  Carlos Jiménez Martinez\n            ")
+                              _vm._v(
+                                "\n              mdi-bell-plus\n            "
+                              )
                             ]
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-col",
-                        { attrs: { cols: "4" } },
-                        [
+                          ),
+                          _vm._v(" "),
+                          _c("div", [
+                            _vm._v("Notificación de prueba "),
+                            _c("b", [_vm._v(" Admin")])
+                          ]),
+                          _vm._v(" "),
                           _c(
-                            "v-card-text",
+                            "v-icon",
                             {
-                              staticClass:
-                                "category d-inline-flex font-weight-light"
+                              attrs: { size: "16" },
+                              on: {
+                                click: function($event) {
+                                  _vm.snackbar = false
+                                }
+                              }
                             },
                             [
-                              _c(
-                                "span",
-                                { staticClass: "subheading font-weight-bold" },
-                                [_vm._v("Fecha:")]
-                              ),
-                              _vm._v("  10/10/2020\n            ")
+                              _vm._v(
+                                "\n              mdi-close-circle\n            "
+                              )
                             ]
                           )
                         ],
@@ -452,621 +608,6 @@ var render = function() {
                       )
                     ],
                     1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-card",
-                { attrs: { justify: "end" } },
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { dark: "", color: "danger" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog = !_vm.dialog
-                        }
-                      }
-                    },
-                    [_vm._v("CANCELAR PEDIDO")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { dark: "", color: "warning" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialogcredito = !_vm.dialogcredito
-                        }
-                      }
-                    },
-                    [_vm._v("CRÉDITO")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { dark: "", color: "success" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialogcontado = !_vm.dialogcontado
-                        }
-                      }
-                    },
-                    [_vm._v("CONTADO")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-row",
-        [
-          _c(
-            "v-col",
-            [
-              _c(
-                "v-card",
-                [
-                  _c("v-simple-table", {
-                    scopedSlots: _vm._u([
-                      {
-                        key: "default",
-                        fn: function() {
-                          return [
-                            _c("thead", [
-                              _c("tr", [
-                                _c("th", { staticClass: "text-left" }, [
-                                  _vm._v("#")
-                                ]),
-                                _vm._v(" "),
-                                _c("th", { staticClass: "text-left" }, [
-                                  _vm._v("ID")
-                                ]),
-                                _vm._v(" "),
-                                _c("th", { staticClass: "text-left" }, [
-                                  _vm._v("Producto")
-                                ]),
-                                _vm._v(" "),
-                                _c("th", { staticClass: "text-left" }, [
-                                  _vm._v("Unidad Medida")
-                                ]),
-                                _vm._v(" "),
-                                _c("th", { staticClass: "text-left" }, [
-                                  _vm._v("Cantidad")
-                                ]),
-                                _vm._v(" "),
-                                _c("th", { staticClass: "text-left" }, [
-                                  _vm._v("Precio")
-                                ]),
-                                _vm._v(" "),
-                                _c("th", { staticClass: "text-left" }, [
-                                  _vm._v("Importe")
-                                ]),
-                                _vm._v(" "),
-                                _c("th"),
-                                _vm._v(" "),
-                                _c("th")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "tbody",
-                              [
-                                _vm._l(_vm.desserts, function(item) {
-                                  return _c("tr", { key: item.name }, [
-                                    _c("td", [_vm._v(_vm._s(item.num))]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(item.id))]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(item.name))]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(item.um))]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(item.cantidad))]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(item.precio))]),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(item.importe))]),
-                                    _vm._v(" "),
-                                    _c(
-                                      "td",
-                                      [
-                                        _c(
-                                          "v-icon",
-                                          {
-                                            staticClass: "mr-2",
-                                            attrs: { small: "" }
-                                          },
-                                          [_vm._v("mdi-pencil")]
-                                        ),
-                                        _vm._v(" "),
-                                        _c(
-                                          "v-icon",
-                                          {
-                                            attrs: { small: "" },
-                                            on: {
-                                              click: function($event) {
-                                                _vm.dialogdelete = !_vm.dialogdelete
-                                              }
-                                            }
-                                          },
-                                          [_vm._v("mdi-delete")]
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ])
-                                }),
-                                _vm._v(" "),
-                                _c("tr", [
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v("Subtotal")]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v("$1, 540.00")]),
-                                  _vm._v(" "),
-                                  _c("td")
-                                ]),
-                                _vm._v(" "),
-                                _c("tr", [
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v("Total Descuento")]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v("$0.00")]),
-                                  _vm._v(" "),
-                                  _c("td")
-                                ]),
-                                _vm._v(" "),
-                                _c("tr", [
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v("Total I.E.P.S.")]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v("$0.00")]),
-                                  _vm._v(" "),
-                                  _c("td")
-                                ]),
-                                _vm._v(" "),
-                                _c("tr", [
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td"),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v("Total I.V.A.")]),
-                                  _vm._v(" "),
-                                  _c("td", [_vm._v("$246.4‬0")]),
-                                  _vm._v(" "),
-                                  _c("td")
-                                ])
-                              ],
-                              2
-                            ),
-                            _vm._v(" "),
-                            _c("tfoot", [
-                              _c("tr", [
-                                _c("td"),
-                                _vm._v(" "),
-                                _c("td"),
-                                _vm._v(" "),
-                                _c("td"),
-                                _vm._v(" "),
-                                _c("td"),
-                                _vm._v(" "),
-                                _c("td"),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("Total")]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v("$1,786.40")])
-                              ])
-                            ])
-                          ]
-                        },
-                        proxy: true
-                      }
-                    ])
-                  })
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "500" },
-          model: {
-            value: _vm.dialog,
-            callback: function($$v) {
-              _vm.dialog = $$v
-            },
-            expression: "dialog"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", [_vm._v("Motivo de Cancelación:")]),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c("v-text-field", {
-                    attrs: { label: "Ejemplo: El cliente cancelo por..." }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      on: {
-                        click: function($event) {
-                          _vm.dialog = !_vm.dialog
-                        }
-                      }
-                    },
-                    [_vm._v("Cancelar")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      staticClass: "ma-2 white--text",
-                      attrs: { color: "danger" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog = !_vm.dialog
-                        }
-                      }
-                    },
-                    [_vm._v("Confirmar")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "500" },
-          model: {
-            value: _vm.dialogcredito,
-            callback: function($$v) {
-              _vm.dialogcredito = $$v
-            },
-            expression: "dialogcredito"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", [_vm._v("Crédito:")]),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c("v-text-field", { attrs: { label: "Comentario:" } }),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "subheading font-weight-bold" }, [
-                    _vm._v("Forma de Pago:")
-                  ]),
-                  _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      label: "Efectivo: ",
-                      required: "",
-                      rules: _vm.minNumberRules,
-                      prefix: "$",
-                      type: "number"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      label: "Tarjeta: ",
-                      required: "",
-                      rules: _vm.minNumberRules,
-                      prefix: "$",
-                      type: "number"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [_vm._v("Subtotal")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("$1, 540.00")]),
-                    _vm._v(" "),
-                    _c("td")
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [_vm._v("Total Descuento")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("$0.00")]),
-                    _vm._v(" "),
-                    _c("td")
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [_vm._v("Total I.E.P.S.")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("$0.00")]),
-                    _vm._v(" "),
-                    _c("td")
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [_vm._v("Total I.V.A.")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("$246.4‬0")]),
-                    _vm._v(" "),
-                    _c("td")
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [_vm._v("Total")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("$1,786.40")])
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [_vm._v("Total Crédito")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("$786.40")])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      on: {
-                        click: function($event) {
-                          _vm.dialogcredito = !_vm.dialogcredito
-                        }
-                      }
-                    },
-                    [_vm._v("Cancelar")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "warning" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialogcredito = !_vm.dialogcredito
-                        }
-                      }
-                    },
-                    [_vm._v("Confirmar")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "500" },
-          model: {
-            value: _vm.dialogcontado,
-            callback: function($$v) {
-              _vm.dialogcontado = $$v
-            },
-            expression: "dialogcontado"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", [_vm._v("Contado")]),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c("span", { staticClass: "subheading font-weight-bold" }, [
-                    _vm._v("Forma de Pago:")
-                  ]),
-                  _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      label: "Efectivo: ",
-                      required: "",
-                      rules: _vm.minNumberRules,
-                      prefix: "$",
-                      type: "number"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("v-text-field", {
-                    attrs: {
-                      label: "Tarjeta: ",
-                      required: "",
-                      rules: _vm.minNumberRules,
-                      prefix: "$",
-                      type: "number"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [_vm._v("Subtotal")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("$1, 540.00")]),
-                    _vm._v(" "),
-                    _c("td")
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [_vm._v("Total Descuento")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("$0.00")]),
-                    _vm._v(" "),
-                    _c("td")
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [_vm._v("Total I.E.P.S.")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("$0.00")]),
-                    _vm._v(" "),
-                    _c("td")
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [_vm._v("Total I.V.A.")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("$246.4‬0")]),
-                    _vm._v(" "),
-                    _c("td")
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [_vm._v("Total")]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v("$1,786.40")])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      on: {
-                        click: function($event) {
-                          _vm.dialogcontado = !_vm.dialogcontado
-                        }
-                      }
-                    },
-                    [_vm._v("Cancelar")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "success" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialogcontado = !_vm.dialogcontado
-                        }
-                      }
-                    },
-                    [_vm._v("Confirmar")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "500" },
-          model: {
-            value: _vm.dialogdelete,
-            callback: function($$v) {
-              _vm.dialogdelete = $$v
-            },
-            expression: "dialogdelete"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", [_vm._v("Confirmar Eliminación")]),
-              _vm._v(" "),
-              _c(
-                "v-card-text",
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      on: {
-                        click: function($event) {
-                          _vm.dialogdelete = !_vm.dialogdelete
-                        }
-                      }
-                    },
-                    [_vm._v("Cancelar")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "danger" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialogdelete = !_vm.dialogdelete
-                        }
-                      }
-                    },
-                    [_vm._v("Confirmar")]
                   )
                 ],
                 1
@@ -1088,17 +629,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/views/PointOfSale.vue":
-/*!*******************************************************!*\
-  !*** ./resources/js/components/views/PointOfSale.vue ***!
-  \*******************************************************/
+/***/ "./resources/js/components/views/Notifications.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/views/Notifications.vue ***!
+  \*********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _PointOfSale_vue_vue_type_template_id_097a461c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PointOfSale.vue?vue&type=template&id=097a461c& */ "./resources/js/components/views/PointOfSale.vue?vue&type=template&id=097a461c&");
-/* harmony import */ var _PointOfSale_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PointOfSale.vue?vue&type=script&lang=js& */ "./resources/js/components/views/PointOfSale.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Notifications_vue_vue_type_template_id_ad547528___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Notifications.vue?vue&type=template&id=ad547528& */ "./resources/js/components/views/Notifications.vue?vue&type=template&id=ad547528&");
+/* harmony import */ var _Notifications_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Notifications.vue?vue&type=script&lang=js& */ "./resources/js/components/views/Notifications.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -1108,9 +649,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _PointOfSale_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _PointOfSale_vue_vue_type_template_id_097a461c___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _PointOfSale_vue_vue_type_template_id_097a461c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Notifications_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Notifications_vue_vue_type_template_id_ad547528___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Notifications_vue_vue_type_template_id_ad547528___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1120,38 +661,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/views/PointOfSale.vue"
+component.options.__file = "resources/js/components/views/Notifications.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/views/PointOfSale.vue?vue&type=script&lang=js&":
-/*!********************************************************************************!*\
-  !*** ./resources/js/components/views/PointOfSale.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************/
+/***/ "./resources/js/components/views/Notifications.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/views/Notifications.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PointOfSale_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PointOfSale.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PointOfSale.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PointOfSale_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Notifications_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Notifications.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Notifications.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Notifications_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/views/PointOfSale.vue?vue&type=template&id=097a461c&":
-/*!**************************************************************************************!*\
-  !*** ./resources/js/components/views/PointOfSale.vue?vue&type=template&id=097a461c& ***!
-  \**************************************************************************************/
+/***/ "./resources/js/components/views/Notifications.vue?vue&type=template&id=ad547528&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/views/Notifications.vue?vue&type=template&id=ad547528& ***!
+  \****************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PointOfSale_vue_vue_type_template_id_097a461c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PointOfSale.vue?vue&type=template&id=097a461c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PointOfSale.vue?vue&type=template&id=097a461c&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PointOfSale_vue_vue_type_template_id_097a461c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Notifications_vue_vue_type_template_id_ad547528___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Notifications.vue?vue&type=template&id=ad547528& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Notifications.vue?vue&type=template&id=ad547528&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Notifications_vue_vue_type_template_id_ad547528___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PointOfSale_vue_vue_type_template_id_097a461c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Notifications_vue_vue_type_template_id_ad547528___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
