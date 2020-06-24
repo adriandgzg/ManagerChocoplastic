@@ -39,7 +39,7 @@
                             <v-text-field v-model="editado.clie_city" label="Ciudad" maxlength="300"
                                         :rules="nameRules" required></v-text-field>
                             
-                            <v-switch v-model="editado.clie_status"/>
+                            <v-switch v-model="estado"/>
                         
                             <v-select :items="entities" v-model="select" label="Selecione un estado" single-line
                                     item-text="feen_name" item-value="feen_pk" return-object persistent-hint 
@@ -74,7 +74,7 @@
                                     <v-icon>mdi-plus</v-icon>
                                 </v-btn>
                             </template>
-                            <v-toolbar-title class="white--text">Lista de Proveedores</v-toolbar-title>
+                            <v-toolbar-title class="white--text">Lista de Clientes</v-toolbar-title>
                             <v-divider class="mx-4" inset vertical></v-divider>
                             <v-spacer></v-spacer>
 
@@ -190,6 +190,7 @@ export default {
       textMsg: "",
       valid: false,
       validProvider:false,
+      estado:false,
       folioRules: [
         value => !!value || "Requerido.",
         value => (value && value.length >= 10) || "Min 10 caracter"
@@ -244,10 +245,17 @@ export default {
       this.editedIndex = this.clientes.indexOf(item)
       this.editado = Object.assign({}, item)
       this.select = this.editado.feen_fk
+      this.estado = this.editado.clie_status
       this.dialog = true
     },
     guardar() {
         this.editado.feen_fk = this.select.feen_pk
+
+        if(this.estado == true)
+            this.editado.clie_status =  1;
+        else
+            this.editado.clie_status =  0;
+
         if (this.editedIndex > -1) {
             this.editar()
         } else {            

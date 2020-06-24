@@ -107,5 +107,10 @@ export default [{
         name: 'Clientes',
         view: 'Clients'
     },
+    {
+        path: '/stores',
+        name: 'Tiendas',
+        view: 'Stores'
+    },
 
 ]

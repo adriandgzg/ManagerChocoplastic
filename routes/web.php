@@ -28,6 +28,10 @@ Route::post('/clients/add', 'ClientController@add');
 Route::put('/clients/update', 'ClientController@update');
 Route::put('/clients/delete', 'ClientController@delete');
 
+Route::get('/storelist', 'StoreController@StoresList');
+Route::post('/store/add', 'StoreController@add');
+Route::put('/store/update', 'StoreController@update');
+Route::put('/store/delete', 'StoreController@delete');
 
 /****** *************/
 Auth::routes(['register' => false, 'reset' => false]);
@@ -79,9 +83,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/listPickupTimes/{idStore}', 'StoreController@listPickupTimes');
     Route::get('/storeList/{idStore}', 'StoreController@listStore');
     Route::post('/businessNode', 'StoreController@listStoreAll');
-    Route::post('/store/add', 'StoreController@addStore');
-    Route::put('/store/update', 'StoreController@updateStore');
-    Route::put('/store/delete', 'StoreController@deleteStore');
+    
 
     Route::post('/store/addTime', 'PickUpTimeController@addTime');
     Route::put('/store/updateTime', 'PickUpTimeController@updateTime');

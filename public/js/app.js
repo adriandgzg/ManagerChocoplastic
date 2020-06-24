@@ -2554,6 +2554,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -29856,6 +29863,21 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("v-list-item-title", [_vm._v("Clientes")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
+                { attrs: { href: "/stores" } },
+                [
+                  _c(
+                    "v-list-item-action",
+                    [_c("v-icon", [_vm._v("mdi-cart")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-list-item-title", [_vm._v("Tiendas")])
                 ],
                 1
               ),
@@ -89490,6 +89512,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/clients',
   name: 'Clientes',
   view: 'Clients'
+}, {
+  path: '/stores',
+  name: 'Tiendas',
+  view: 'Stores'
 }]);
 
 /***/ }),

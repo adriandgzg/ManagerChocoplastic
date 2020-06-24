@@ -187,6 +187,7 @@ __webpack_require__.r(__webpack_exports__);
       textMsg: "",
       valid: false,
       validProvider: false,
+      estado: false,
       folioRules: [function (value) {
         return !!value || "Requerido.";
       }, function (value) {
@@ -238,10 +239,12 @@ __webpack_require__.r(__webpack_exports__);
       this.editedIndex = this.clientes.indexOf(item);
       this.editado = Object.assign({}, item);
       this.select = this.editado.feen_fk;
+      this.estado = this.editado.clie_status;
       this.dialog = true;
     },
     guardar: function guardar() {
       this.editado.feen_fk = this.select.feen_pk;
+      if (this.estado == true) this.editado.clie_status = 1;else this.editado.clie_status = 0;
 
       if (this.editedIndex > -1) {
         this.editar();
@@ -525,11 +528,11 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-switch", {
                             model: {
-                              value: _vm.editado.clie_status,
+                              value: _vm.estado,
                               callback: function($$v) {
-                                _vm.$set(_vm.editado, "clie_status", $$v)
+                                _vm.estado = $$v
                               },
-                              expression: "editado.clie_status"
+                              expression: "estado"
                             }
                           }),
                           _vm._v(" "),
@@ -664,7 +667,7 @@ var render = function() {
                                     _c(
                                       "v-toolbar-title",
                                       { staticClass: "white--text" },
-                                      [_vm._v("Lista de Proveedores")]
+                                      [_vm._v("Lista de Clientes")]
                                     ),
                                     _vm._v(" "),
                                     _c("v-divider", {

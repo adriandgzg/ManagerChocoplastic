@@ -30,6 +30,13 @@
           <v-list-item-title>Clientes</v-list-item-title>
         </v-list-item>
 
+        <v-list-item href="/stores">
+          <v-list-item-action>
+            <v-icon>mdi-cart</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Tiendas</v-list-item-title>
+        </v-list-item>
+
         <v-list-item href="/logout">
           <v-list-item-action>
             <v-icon>mdi-group</v-icon>
