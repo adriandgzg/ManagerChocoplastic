@@ -33,6 +33,18 @@ Route::post('/store/add', 'StoreController@add');
 Route::put('/store/update', 'StoreController@update');
 Route::put('/store/delete', 'StoreController@delete');
 
+Route::get('/categorieslist', 'ProductCategoryController@CategoriesList');
+Route::post('/categories/add', 'ProductCategoryController@add');
+Route::put('/categories/update', 'ProductCategoryController@update');
+Route::put('/categories/delete', 'ProductCategoryController@delete');
+
+
+Route::get('/measurementsList', 'MeasurementController@MeasurementsList');
+Route::post('/measurements/add', 'MeasurementController@add');
+Route::put('/measurements/update', 'MeasurementController@update');
+Route::put('/measurements/delete', 'MeasurementController@delete');
+
+
 /****** *************/
 Auth::routes(['register' => false, 'reset' => false]);
 Route::get('/logout', 'Auth\LoginController@logout');
@@ -64,12 +76,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/subcategoriesList', 'CategoryController@listSubcategories');
     Route::get('/subcategories/{id}', 'CategoryController@Subcategories');
     Route::get('/categoriesNode', 'CategoryController@listCategoriesAll');
-    Route::post('/categories/add', 'CategoryController@addCategorie');
     Route::post('/categories/addAsociar', 'CategoryController@addCategorieAsociar');
     Route::post('/categories/addSub', 'CategoryController@addSubCategorie');
-    Route::put('/categories/update', 'CategoryController@updateCategorie');
     Route::put('/categories/updateSub', 'CategoryController@updateSubCategorie');
-    Route::put('/categories/delete', 'CategoryController@deleteCategorie');
     Route::put('/categories/deleteSub', 'CategoryController@deleteSubCategorie');
     Route::post('/categories/updateBusinessCategory', 'CategoryController@updateBusinessCategory');
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Measurement;
 use Illuminate\Http\Request;
+use DB;
 
 class MeasurementController extends Controller
 {
@@ -17,69 +18,42 @@ class MeasurementController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function MeasurementsList(){
+        $stores = DB::table('measurements AS P')
+        ->where('meas_status','=',1)
+        ->get();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Stores loaded',
+            'data' => $stores,
+        ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function add(Request $request)
+    {               
+        $stores = new Measurement();        
+        $stores->meas_name = $request->meas_name;
+        $stores->meas_abbreviation = $request->meas_abbreviation;
+        $stores->meas_status = $request->meas_status;
+
+        $stores->save();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Measurement  $measurement
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Measurement $measurement)
-    {
-        //
+    public function update(Request $request)
+    {        
+        
+        \DB::update("update measurements set"
+        . "   meas_name = '" . $request->meas_name 
+        . "',  meas_abbreviation = '" . $request->meas_abbreviation
+        . "', meas_status = " .  $request->meas_status
+        . " where meas_pk = ". $request->meas_pk);
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Measurement  $measurement
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Measurement $measurement)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Measurement  $measurement
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Measurement $measurement)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Measurement  $measurement
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Measurement $measurement)
-    {
-        //
+    public function delete(Request $request)
+    { 
+        \DB::update("update measurements set meas_status = '0' where meas_pk = ". $request->meas_pk );
     }
 }

@@ -543,7 +543,7 @@ var render = function() {
                                     _c(
                                       "v-toolbar-title",
                                       { staticClass: "white--text" },
-                                      [_vm._v("Lista de Proveedores")]
+                                      [_vm._v("Lista de Tiendas")]
                                     ),
                                     _vm._v(" "),
                                     _c("v-divider", {

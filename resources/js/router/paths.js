@@ -112,5 +112,22 @@ export default [{
         name: 'Tiendas',
         view: 'Stores'
     },
+    {
+        path: '/categories',
+        name: 'Categorias',
+        view: 'Categorie'
+    },
+    {
+        path: '/measurements',
+        name: 'Medidas',
+        view: 'Measurements'
+    },
+    {
+        path: '/admins',
+        name: 'Administración',
+        view: 'Administration'
+    },
+
+    
 
 ]

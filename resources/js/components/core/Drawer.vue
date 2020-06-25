@@ -9,6 +9,13 @@
 
           <v-list-item-title class="title">Chocoplastic</v-list-item-title>
         </v-list-item>
+        
+        <v-list-item href="/admins">
+          <v-list-item-action>
+            <v-icon>mdi-cart</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Administración</v-list-item-title>
+        </v-list-item>
 
         <v-list-item href="/pos">
           <v-list-item-action>
@@ -35,6 +42,18 @@
             <v-icon>mdi-cart</v-icon>
           </v-list-item-action>
           <v-list-item-title>Tiendas</v-list-item-title>
+        </v-list-item>
+        <v-list-item href="/categories">
+          <v-list-item-action>
+            <v-icon>mdi-cart</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Categorias</v-list-item-title>
+        </v-list-item>
+        <v-list-item href="/measurements">
+          <v-list-item-action>
+            <v-icon>mdi-cart</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Medidas</v-list-item-title>
         </v-list-item>
 
         <v-list-item href="/logout">

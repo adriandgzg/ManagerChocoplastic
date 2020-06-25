@@ -190,7 +190,7 @@ export default {
       textMsg: "",
       valid: false,
       validProvider:false,
-      estado:false,
+      estado:true,
       folioRules: [
         value => !!value || "Requerido.",
         value => (value && value.length >= 10) || "Min 10 caracter"

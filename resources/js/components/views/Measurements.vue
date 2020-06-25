@@ -22,8 +22,10 @@
                     </v-card-title>
                     <v-form v-model="validProvider" >
                         <v-card-text>
-                            <v-text-field v-model="editado.prca_name" label="Nombre" maxlength="300"
-                                        :rules="nameRules" required></v-text-field>                                                     
+                            <v-text-field v-model="editado.meas_name" label="Nombre" maxlength="300"
+                                        :rules="nameRules" required></v-text-field>                 
+                            <v-text-field v-model="editado.meas_abbreviation" label="Abreviación" maxlength="300"
+                                        :rules="nameRules" required></v-text-field>                                       
                             <span>Activo/Inactivo</span>
                             <v-switch v-model="estado"/>
                         </v-card-text>
@@ -40,7 +42,7 @@
             <v-row>
             <v-col>
                 <v-card>
-                    <v-data-table :headers="headers" :items="categories" :search="search" sort-by="id" class="elevation-3">
+                    <v-data-table :headers="headers" :items="measurements" :search="search" sort-by="id" class="elevation-3">
                     <template v-slot:top>
                     <v-system-bar color="indigo darken-2" dark></v-system-bar>
                         <v-toolbar flat color="indigo">
@@ -56,7 +58,7 @@
                                     <v-icon>mdi-plus</v-icon>
                                 </v-btn>
                             </template>
-                            <v-toolbar-title class="white--text">Lista de Categorias</v-toolbar-title>
+                            <v-toolbar-title class="white--text">Lista de Medidas</v-toolbar-title>
                             <v-divider class="mx-4" inset vertical></v-divider>
                             <v-spacer></v-spacer>
 
@@ -89,16 +91,20 @@ export default {
          headers: [
                     {
                         text: 'ID',
-                        value: 'prca_pk',
+                        value: 'meas_pk',
                         width: '10%'
                     }, 
                     {
                         text: 'Nombre',
-                        value: 'prca_name'
+                        value: 'meas_name'
+                    }, 
+                    {
+                        text: 'Abrev',
+                        value: 'meas_abbreviation'
                     }, 
                     {
                         text: 'Principal',
-                        value: 'prca_status'
+                        value: 'meas_status'
                     }, 
                     {
                         text: '',
@@ -111,17 +117,19 @@ export default {
          principal:false,
          estado:true,
          editado:{
-            prca_pk:0,
-            prca_name:'',
-            prca_status:0,
+            meas_pk:0,
+            meas_name:'',            
+            meas_abbreviation:'',
+            meas_status:0,
          },
          defaultItem:{
-            prca_pk:0,
-            prca_name:'',
-            prca_status:0,
+            meas_pk:0,
+            meas_name:'',
+            meas_abbreviation:'',
+            meas_status:0,
          },
          editedIndex: -1,
-          categories: [],
+          measurements: [],
           entities: [],
           search:"",
           dialog: false,
@@ -145,29 +153,17 @@ export default {
     };
   },
    created() {
-       this.getCategories();
-       this.getEntities();
+       this.getMeasurements();
    },
 
   methods: {
 
-      getCategories() {
+      getMeasurements() {
       axios
-        .get("/categorieslist")
+        .get("/measurementsList")
         .then(response => {
             console.log(response.data)
-          this.categories = response.data.data;          
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
-    getEntities() {
-      axios
-        .get("/entitieslist")
-        .then(response => {
-            console.log(response.data)
-          this.entities = response.data.data;          
+          this.measurements = response.data.data;          
         })
         .catch(e => {
           console.log(e);
@@ -180,18 +176,17 @@ export default {
                 this.editedIndex = -1
             },
     edita (item) {         
-      this.editedIndex = this.categories.indexOf(item)
+      this.editedIndex = this.measurements.indexOf(item)
       this.editado = Object.assign({}, item)
-      this.principal = this.editado.prca_main
-      this.estado = this.editado.prca_status
+      this.estado = this.editado.meas_status
       this.dialog = true
     },
     guardar() {
         
         if(this.estado == true)
-            this.editado.prca_status =  1;
+            this.editado.meas_status =  1;
         else
-            this.editado.prca_status =  0;
+            this.editado.meas_status =  0;
         
         if (this.editedIndex > -1) {
             this.editar()
@@ -201,22 +196,22 @@ export default {
         this.cancelar()
     },
     alta: function () {
-        axios.post('/categories/add', this.editado).then(response => {
+        axios.post('/measurements/add', this.editado).then(response => {
             this.snackbar = true
             this.textMsg = '¡Alta exitosa!'
-            this.getCategories();
+            this.getMeasurements();
         });
     },
     editar: function () {
-        axios.put('/categories/update', this.editado).then(response => {
+        axios.put('/measurements/update', this.editado).then(response => {
             this.snackbar = true
             this.textMsg = '¡Actualización Exitosa!'
-            this.getCategories();
+            this.getMeasurements();
         });
     },
 
     borrar(item) {
-        const index = this.categories.indexOf(item)
+        const index = this.measurements.indexOf(item)
         this.editado = Object.assign({}, item)
         var r = confirm("¿Está seguro de borrar el registro?");
         if (r == true) {
@@ -225,10 +220,10 @@ export default {
     },
 
     delete: function () {
-        axios.put('/categories/delete', this.editado).then(response => {
+        axios.put('/measurements/delete', this.editado).then(response => {
             this.snackbar = true;
             this.textMsg = "¡Eliminado correctamente!";
-            this.getCategories();
+            this.getMeasurements();
         });
     },
 

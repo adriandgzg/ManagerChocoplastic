@@ -2561,6 +2561,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -29824,6 +29843,21 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-list-item",
+                { attrs: { href: "/admins" } },
+                [
+                  _c(
+                    "v-list-item-action",
+                    [_c("v-icon", [_vm._v("mdi-cart")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-list-item-title", [_vm._v("Administración")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
                 { attrs: { href: "/pos" } },
                 [
                   _c(
@@ -29878,6 +29912,36 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("v-list-item-title", [_vm._v("Tiendas")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
+                { attrs: { href: "/categories" } },
+                [
+                  _c(
+                    "v-list-item-action",
+                    [_c("v-icon", [_vm._v("mdi-cart")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-list-item-title", [_vm._v("Categorias")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
+                { attrs: { href: "/measurements" } },
+                [
+                  _c(
+                    "v-list-item-action",
+                    [_c("v-icon", [_vm._v("mdi-cart")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-list-item-title", [_vm._v("Medidas")])
                 ],
                 1
               ),
@@ -89156,6 +89220,10 @@ var map = {
 		"./resources/js/components/views/Maps.vue",
 		2
 	],
+	"./Measurements.vue": [
+		"./resources/js/components/views/Measurements.vue",
+		21
+	],
 	"./Missions.vue": [
 		"./resources/js/components/views/Missions.vue",
 		1,
@@ -89516,6 +89584,18 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/stores',
   name: 'Tiendas',
   view: 'Stores'
+}, {
+  path: '/categories',
+  name: 'Categorias',
+  view: 'Categorie'
+}, {
+  path: '/measurements',
+  name: 'Medidas',
+  view: 'Measurements'
+}, {
+  path: '/admins',
+  name: 'Administración',
+  view: 'Administration'
 }]);
 
 /***/ }),
