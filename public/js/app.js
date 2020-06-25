@@ -2580,6 +2580,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -29843,21 +29879,6 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-list-item",
-                { attrs: { href: "/admins" } },
-                [
-                  _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-cart")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-list-item-title", [_vm._v("Administración")])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
                 { attrs: { href: "/pos" } },
                 [
                   _c(
@@ -29872,76 +29893,155 @@ var render = function() {
               ),
               _vm._v(" "),
               _c(
-                "v-list-item",
-                { attrs: { href: "/proveedores" } },
+                "v-list-group",
+                {
+                  attrs: { "prepend-icon": "account_circle", "no-action": "" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function() {
+                        return [_c("v-list-item-title", [_vm._v("Catalogos")])]
+                      },
+                      proxy: true
+                    }
+                  ])
+                },
                 [
+                  _vm._v(" "),
                   _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-cart")])],
+                    "v-list-item",
+                    { attrs: { href: "/proveedores" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Proveedores")])
+                    ],
                     1
                   ),
                   _vm._v(" "),
-                  _c("v-list-item-title", [_vm._v("Proveedores")])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
-                { attrs: { href: "/clients" } },
-                [
                   _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-cart")])],
+                    "v-list-item",
+                    { attrs: { href: "/clients" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Clientes")])
+                    ],
                     1
                   ),
                   _vm._v(" "),
-                  _c("v-list-item-title", [_vm._v("Clientes")])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
-                { attrs: { href: "/stores" } },
-                [
                   _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-cart")])],
+                    "v-list-item",
+                    { attrs: { href: "/admins" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Administración")])
+                    ],
                     1
                   ),
                   _vm._v(" "),
-                  _c("v-list-item-title", [_vm._v("Tiendas")])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
-                { attrs: { href: "/categories" } },
-                [
                   _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-cart")])],
+                    "v-list-item",
+                    { attrs: { href: "/stores" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Tiendas")])
+                    ],
                     1
                   ),
                   _vm._v(" "),
-                  _c("v-list-item-title", [_vm._v("Categorias")])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
-                { attrs: { href: "/measurements" } },
-                [
                   _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-cart")])],
+                    "v-list-item",
+                    { attrs: { href: "/categories" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Categorias")])
+                    ],
                     1
                   ),
                   _vm._v(" "),
-                  _c("v-list-item-title", [_vm._v("Medidas")])
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/measurements" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Medidas")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/entities" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Entidades Federativas")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/paymentmethods" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Metodos de Pago")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/paymentshapes " } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Formas de Pago")])
+                    ],
+                    1
+                  )
                 ],
                 1
               ),
@@ -89216,64 +89316,76 @@ var map = {
 		"./resources/js/components/views/Dashboard.vue",
 		8
 	],
+	"./Entities.vue": [
+		"./resources/js/components/views/Entities.vue",
+		9
+	],
 	"./Maps.vue": [
 		"./resources/js/components/views/Maps.vue",
 		2
 	],
 	"./Measurements.vue": [
 		"./resources/js/components/views/Measurements.vue",
-		21
+		10
 	],
 	"./Missions.vue": [
 		"./resources/js/components/views/Missions.vue",
 		1,
-		9
+		11
 	],
 	"./Notifications.vue": [
 		"./resources/js/components/views/Notifications.vue",
-		10
+		12
+	],
+	"./PaymentMethods.vue": [
+		"./resources/js/components/views/PaymentMethods.vue",
+		13
+	],
+	"./PaymentShapes.vue": [
+		"./resources/js/components/views/PaymentShapes.vue",
+		14
 	],
 	"./PointOfSale.vue": [
 		"./resources/js/components/views/PointOfSale.vue",
-		11
+		15
 	],
 	"./Product.vue": [
 		"./resources/js/components/views/Product.vue",
-		12
+		16
 	],
 	"./Proveedores.vue": [
 		"./resources/js/components/views/Proveedores.vue",
-		13
+		17
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
 		0,
-		14
+		18
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
 		0,
-		15
+		19
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		16
+		20
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		17
+		21
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		20
+		24
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		18
+		22
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		19
+		23
 	]
 };
 function webpackAsyncContext(req) {
@@ -89596,6 +89708,18 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/admins',
   name: 'Administración',
   view: 'Administration'
+}, {
+  path: '/entities',
+  name: 'Entidades Federativas',
+  view: 'Entities'
+}, {
+  path: '/paymentmethods',
+  name: 'Métodos de Pago',
+  view: 'PaymentMethods'
+}, {
+  path: '/paymentshapes',
+  name: 'Entidades Federativas',
+  view: 'PaymentShapes'
 }]);
 
 /***/ }),

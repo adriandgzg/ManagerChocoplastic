@@ -17,69 +17,39 @@ class PaymentMethodController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function PaymentMethodsList(){
+        $payment = PaymentMethod::all();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'entities loaded',
+            'data' => $payment,
+        ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function add(Request $request)
+    {        
+       
+        $payment = new PaymentMethod();        
+        $payment->pame_name = $request->pame_name;
+        $payment->pame_status = $request->pame_status;
+
+        $payment->save();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\PaymentMethod  $paymentMethod
-     * @return \Illuminate\Http\Response
-     */
-    public function show(PaymentMethod $paymentMethod)
-    {
-        //
+    public function update(Request $request)
+    {        
+        
+        \DB::update("update payment_methods set"
+        . "   pame_name = '" . $request->pame_name 
+        . "', pame_status = " .  $request->pame_status
+        . " where pame_pk = ". $request->pame_pk);
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\PaymentMethod  $paymentMethod
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(PaymentMethod $paymentMethod)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PaymentMethod  $paymentMethod
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, PaymentMethod $paymentMethod)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\PaymentMethod  $paymentMethod
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PaymentMethod $paymentMethod)
-    {
-        //
+    public function delete(Request $request)
+    { 
+        \DB::update("update payment_methods set pame_status = '0' where pame_pk = ". $request->pame_pk );
     }
 }

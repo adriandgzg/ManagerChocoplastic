@@ -17,69 +17,39 @@ class PaymentShapeController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function PaymentShapesList(){
+        $payment = PaymentShape::all();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'entities loaded',
+            'data' => $payment,
+        ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function add(Request $request)
+    {        
+       
+        $payment = new PaymentShape();        
+        $payment->pash_name = $request->pash_name;
+        $payment->pash_status = $request->pash_status;
+
+        $payment->save();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\PaymentShape  $paymentShape
-     * @return \Illuminate\Http\Response
-     */
-    public function show(PaymentShape $paymentShape)
-    {
-        //
+    public function update(Request $request)
+    {        
+        
+        \DB::update("update payment_shapes set"
+        . "   pash_name = '" . $request->pash_name 
+        . "', pash_status = " .  $request->pash_status
+        . " where pash_pk = ". $request->pash_pk);
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\PaymentShape  $paymentShape
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(PaymentShape $paymentShape)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PaymentShape  $paymentShape
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, PaymentShape $paymentShape)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\PaymentShape  $paymentShape
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PaymentShape $paymentShape)
-    {
-        //
+    public function delete(Request $request)
+    { 
+        \DB::update("update payment_shapes set pash_status = '0' where pash_pk = ". $request->pash_pk );
     }
 }

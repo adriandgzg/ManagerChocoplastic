@@ -127,6 +127,21 @@ export default [{
         name: 'Administración',
         view: 'Administration'
     },
+    {
+        path: '/entities',
+        name: 'Entidades Federativas',
+        view: 'Entities'
+    },
+    {
+        path: '/paymentmethods',
+        name: 'Métodos de Pago',
+        view: 'PaymentMethods'
+    },
+    {
+        path: '/paymentshapes',
+        name: 'Entidades Federativas',
+        view: 'PaymentShapes'
+    },
 
     
 

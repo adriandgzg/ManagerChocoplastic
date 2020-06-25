@@ -44,6 +44,20 @@ Route::post('/measurements/add', 'MeasurementController@add');
 Route::put('/measurements/update', 'MeasurementController@update');
 Route::put('/measurements/delete', 'MeasurementController@delete');
 
+Route::get('/entitiesList', 'FederalEntityController@EntitiesList');
+Route::post('/entities/add', 'FederalEntityController@add');
+Route::put('/entities/update', 'FederalEntityController@update');
+Route::put('/entities/delete', 'FederalEntityController@delete');
+
+Route::get('/paymentmethodsList', 'PaymentMethodController@PaymentMethodsList');
+Route::post('/paymentmethods/add', 'PaymentMethodController@add');
+Route::put('/paymentmethods/update', 'PaymentMethodController@update');
+Route::put('/paymentmethods/delete', 'PaymentMethodController@delete');
+
+Route::get('/paymentshapesList', 'PaymentShapeController@PaymentShapesList');
+Route::post('/paymentshapes/add', 'PaymentShapeController@add');
+Route::put('/paymentshapes/update', 'PaymentShapeController@update');
+Route::put('/paymentshapes/delete', 'PaymentShapeController@delete');
 
 /****** *************/
 Auth::routes(['register' => false, 'reset' => false]);

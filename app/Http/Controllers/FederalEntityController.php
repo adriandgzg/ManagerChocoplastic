@@ -28,69 +28,29 @@ class FederalEntityController extends Controller
         ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function add(Request $request)
+    {        
+       
+        $stores = new FederalEntity();        
+        $stores->feen_name = $request->feen_name;
+        $stores->feen_status = $request->feen_status;
+
+        $stores->save();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function update(Request $request)
+    {        
+        
+        \DB::update("update federal_entities set"
+        . "   feen_name = '" . $request->feen_name 
+        . "', feen_status = " .  $request->feen_status
+        . " where feen_pk = ". $request->feen_pk);
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\FederalEntity  $federalEntity
-     * @return \Illuminate\Http\Response
-     */
-    public function show(FederalEntity $federalEntity)
-    {
-        //
+    public function delete(Request $request)
+    { 
+        \DB::update("update federal_entities set feen_status = '0' where feen_pk = ". $request->feen_pk );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\FederalEntity  $federalEntity
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(FederalEntity $federalEntity)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\FederalEntity  $federalEntity
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, FederalEntity $federalEntity)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\FederalEntity  $federalEntity
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(FederalEntity $federalEntity)
-    {
-        //
-    }
 }
