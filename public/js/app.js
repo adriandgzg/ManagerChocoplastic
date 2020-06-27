@@ -2616,6 +2616,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -29907,6 +29917,36 @@ var render = function() {
                   ])
                 },
                 [
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/products" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Productos")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/sales" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Ventas")])
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c(
                     "v-list-item",
@@ -89720,6 +89760,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/paymentshapes',
   name: 'Entidades Federativas',
   view: 'PaymentShapes'
+}, {
+  path: '/products',
+  name: 'Productos',
+  view: 'Product'
+}, {
+  path: '/sales',
+  name: 'Ventas',
+  view: 'Sales'
 }]);
 
 /***/ }),

@@ -93,6 +93,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -104,8 +109,8 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Nombre',
         value: 'prca_name'
       }, {
-        text: 'Principal',
-        value: 'prca_status'
+        text: 'Estatus',
+        value: 'status'
       }, {
         text: '',
         value: 'action',
@@ -153,7 +158,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.getCategories();
-    this.getEntities();
   },
   methods: {
     getCategories: function getCategories() {
@@ -162,16 +166,6 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/categorieslist").then(function (response) {
         console.log(response.data);
         _this.categories = response.data.data;
-      })["catch"](function (e) {
-        console.log(e);
-      });
-    },
-    getEntities: function getEntities() {
-      var _this2 = this;
-
-      axios.get("/entitieslist").then(function (response) {
-        console.log(response.data);
-        _this2.entities = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -200,23 +194,23 @@ __webpack_require__.r(__webpack_exports__);
       this.cancelar();
     },
     alta: function alta() {
-      var _this3 = this;
+      var _this2 = this;
 
       axios.post('/categories/add', this.editado).then(function (response) {
-        _this3.snackbar = true;
-        _this3.textMsg = '¡Alta exitosa!';
+        _this2.snackbar = true;
+        _this2.textMsg = '¡Alta exitosa!';
 
-        _this3.getCategories();
+        _this2.getCategories();
       });
     },
     editar: function editar() {
-      var _this4 = this;
+      var _this3 = this;
 
       axios.put('/categories/update', this.editado).then(function (response) {
-        _this4.snackbar = true;
-        _this4.textMsg = '¡Actualización Exitosa!';
+        _this3.snackbar = true;
+        _this3.textMsg = '¡Actualización Exitosa!';
 
-        _this4.getCategories();
+        _this3.getCategories();
       });
     },
     borrar: function borrar(item) {
@@ -229,13 +223,13 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     "delete": function _delete() {
-      var _this5 = this;
+      var _this4 = this;
 
       axios.put('/categories/delete', this.editado).then(function (response) {
-        _this5.snackbar = true;
-        _this5.textMsg = "¡Eliminado correctamente!";
+        _this4.snackbar = true;
+        _this4.textMsg = "¡Eliminado correctamente!";
 
-        _this5.getCategories();
+        _this4.getCategories();
       });
     }
   },
@@ -518,6 +512,25 @@ var render = function() {
                               ]
                             },
                             proxy: true
+                          },
+                          {
+                            key: "item.status",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                item.prca_status == 1
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "green", dark: "" } },
+                                      [_vm._v("  Activo  ")]
+                                    )
+                                  : _c(
+                                      "v-chip",
+                                      { attrs: { color: "red", dark: "" } },
+                                      [_vm._v("Inactivo")]
+                                    )
+                              ]
+                            }
                           },
                           {
                             key: "item.action",

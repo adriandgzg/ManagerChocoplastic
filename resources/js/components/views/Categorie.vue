@@ -66,7 +66,12 @@
                                           hide-details></v-text-field>
                         </v-col>
                     </template>
-                    <template v-slot:item.action="{ item }">                   
+                    <template v-slot:item.status="{ item }">                            
+                            <v-chip v-if="item.prca_status == 1" color="green" dark>  Activo  </v-chip>
+                            <v-chip v-else color="red" dark>Inactivo</v-chip>                        
+                    </template>
+                    <template v-slot:item.action="{ item }">   
+                                     
                         <v-btn class="mr-2" fab dark small color="cyan" @click="edita(item)">
                             <v-icon dark>mdi-pencil</v-icon>
                         </v-btn>
@@ -95,11 +100,11 @@ export default {
                     {
                         text: 'Nombre',
                         value: 'prca_name'
-                    }, 
-                    {
-                        text: 'Principal',
-                        value: 'prca_status'
-                    }, 
+                    },               
+                     {
+                        text: 'Estatus',
+                        value: 'status'
+                    },
                     {
                         text: '',
                         value: 'action',
@@ -146,7 +151,6 @@ export default {
   },
    created() {
        this.getCategories();
-       this.getEntities();
    },
 
   methods: {
@@ -157,17 +161,6 @@ export default {
         .then(response => {
             console.log(response.data)
           this.categories = response.data.data;          
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
-    getEntities() {
-      axios
-        .get("/entitieslist")
-        .then(response => {
-            console.log(response.data)
-          this.entities = response.data.data;          
         })
         .catch(e => {
           console.log(e);

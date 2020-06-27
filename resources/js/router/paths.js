@@ -142,6 +142,16 @@ export default [{
         name: 'Entidades Federativas',
         view: 'PaymentShapes'
     },
+    {
+        path: '/products',
+        name: 'Productos',
+        view: 'Product'
+    },
+    {
+        path: '/sales',
+        name: 'Ventas',
+        view: 'Sales'
+    },
 
     
 

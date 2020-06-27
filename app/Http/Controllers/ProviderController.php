@@ -24,7 +24,6 @@ class ProviderController extends Controller
         $provider = DB::table('providers AS P')
         ->join('federal_entities AS FE', 'P.feen_fk', '=', 'FE.feen_pk')
         ->orderBy('FE.created_at', 'DESC')
-        ->where('prov_status','=',1)
         ->get();
         
         

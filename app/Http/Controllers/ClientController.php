@@ -22,7 +22,6 @@ class ClientController extends Controller
         $client = DB::table('clients AS P')
         ->join('federal_entities AS FE', 'P.feen_fk', '=', 'FE.feen_pk')
         ->orderBy('FE.created_at', 'DESC')
-        ->where('clie_status','=',1)
         ->get();
         
         

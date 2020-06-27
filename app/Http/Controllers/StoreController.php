@@ -20,7 +20,6 @@ class StoreController extends Controller
 
     public function StoresList(){
         $stores = DB::table('stores AS P')
-        ->where('stor_status','=',1)
         ->get();
         
         
