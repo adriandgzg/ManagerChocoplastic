@@ -21,13 +21,14 @@ class CreateProductsTable extends Migration
             $table->foreign('prca_fk')->references('prca_pk')->on('product_categories')->onUpdate('cascade');
 
             $table->bigInteger('meas_fk_input')->unsigned(); //Llave Foranea Catálogo Unidad de Medida Entrada
-            $table->foreign('meas_fk_input')->references('meas_pk')->on('measurements')->onUpdate('cascade');
+            $table->foreign('meas_fk_input')->references('meas_pk')->on('measurements')->onUpdate('cascade'); 
 
             $table->bigInteger('meas_fk_output')->unsigned(); //Llave Foranea Catálogo Unidad de Medida Salida
             $table->foreign('meas_fk_output')->references('meas_pk')->on('measurements')->onUpdate('cascade');
 
             $table->string('prod_identifier', 20)->unique(); //Identificador Personalizado
             $table->string('prod_name', 300); //Nombre
+            $table->text('prod_image'); //URL Imagen
             $table->decimal('prod_actualprice', 12, 2); //Precio Actual
             $table->decimal('prod_eventualprice', 12, 2); //Precio Eventual
             $table->decimal('prod_preferentialprice', 12, 2); //Precio Preferente

@@ -13,7 +13,7 @@ class CreateClientOrdersTable extends Migration
      */
     public function up()
     {
-        //Cliente || Pedidos
+        //Cliente || Pedidos 
         Schema::create('client_orders', function (Blueprint $table) {
             $table->bigIncrements('clor_pk'); //Llave Primaria
 
@@ -25,6 +25,7 @@ class CreateClientOrdersTable extends Migration
             $table->timestamps();
         });
     }
+    
 
     /**
      * Reverse the migrations.

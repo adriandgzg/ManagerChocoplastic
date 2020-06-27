@@ -59,6 +59,28 @@ Route::post('/paymentshapes/add', 'PaymentShapeController@add');
 Route::put('/paymentshapes/update', 'PaymentShapeController@update');
 Route::put('/paymentshapes/delete', 'PaymentShapeController@delete');
 
+
+
+
+
+
+
+
+Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /****** *************/
 Auth::routes(['register' => false, 'reset' => false]);
 Route::get('/logout', 'Auth\LoginController@logout');

@@ -1,5 +1,8 @@
 <?php
 
+use App\ClientSale;
+use App\ClientSaleDetail;
+use App\Measurement;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,6 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $this->call(FederalEntitySeeder::class);
+        $this->call(MeasurementSeeder::class);
+        $this->call(ProductCategorySeeder::class);
+        $this->call(ProductSeeder::class);
+        $this->call(ClientSeeder::class);
+        $this->call(ClientOrderSeeder::class);
+        $this->call(ClientOrderDetailSeeder::class);
     }
 }
