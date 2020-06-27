@@ -30,6 +30,19 @@ class ProductCategoryController extends Controller
         ], 200);
     }
 
+    public function Categories(){
+        $stores = DB::table('product_categories AS P')
+        ->where('prca_status','=','1')
+        ->get();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Stores loaded',
+            'data' => $stores,
+        ], 200);
+    }
+
     public function add(Request $request)
     {        
        

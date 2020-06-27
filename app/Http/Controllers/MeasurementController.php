@@ -30,6 +30,19 @@ class MeasurementController extends Controller
         ], 200);
     }
 
+    public function Measurements(){
+        $stores = DB::table('measurements AS P')
+        ->where('meas_status','=','1')
+        ->get();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Stores loaded',
+            'data' => $stores,
+        ], 200);
+    }
+
     public function add(Request $request)
     {               
         $stores = new Measurement();        

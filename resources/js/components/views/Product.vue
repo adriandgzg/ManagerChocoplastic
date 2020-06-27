@@ -23,9 +23,39 @@
                     <v-form v-model="validProvider" >
                         <v-card-text>
                             <v-text-field v-model="editado.prod_name" label="Nombre" maxlength="300"
-                                        :rules="nameRules" required></v-text-field>                                                     
+                                        :rules="nameRules" required></v-text-field>
+                            <v-text-field v-model="editado.prod_identifier" label="Nombre" maxlength="300"
+                                        :rules="nameRules" required></v-text-field>  
+                            <v-select :items="categories" v-model="selectCat" label="Selecione una categoría" single-line
+                                    item-text="prca_name" item-value="prca_pk"  persistent-hint 
+                                    ></v-select>
+                            <v-select :items="measurements" v-model="selectMeasIn" label="Selecione una Unidad Entrada" single-line
+                                    item-text="meas_name" item-value="meas_pk"  persistent-hint 
+                                    ></v-select>
+                            <v-select :items="measurements" v-model="selectMeasOut" label="Selecione una Unidad Salida" single-line
+                                    item-text="meas_name" item-value="meas_pk"  persistent-hint 
+                                    ></v-select>
+                            <v-text-field v-model="editado.prod_actualprice" label="Precio Actual" prefix="$" type="number"
+                                            :rules="numberRules" required></v-text-field>
+                            <v-text-field v-model="editado.prod_eventualprice" label="Precio Eventual" prefix="$" type="number"
+                                            :rules="numberRules" required></v-text-field>
+                            <v-text-field v-model="editado.prod_preferentialprice" label="Precio Preferencial" prefix="$" type="number"
+                                            :rules="numberRules" required></v-text-field>
+                            <v-text-field v-model="editado.prod_packingquantity" label="Stock" type="number"
+                                          :rules="numberRules"></v-text-field>
                             <span>Activo/Inactivo</span>
                             <v-switch v-model="estado"/>
+
+                            <v-card-text>
+                            
+                                <v-btn raised class="primary" @click="onPickFileProduct">Subir imagen</v-btn>
+                                <input type="file" style="display: none" ref="fileInput" accept="image/jpeg"
+                                       @change="onFilePickedProduct"  required :rules="rulesImage" />                               
+                            </v-card-text>
+
+                            <v-layout>
+                                <img :src="this.imageUrl" height="150"/>
+                            </v-layout>
                         </v-card-text>
                         <v-card-actions>
                         <v-spacer></v-spacer>
@@ -92,15 +122,43 @@ export default {
   data() {
     return {
          headers: [
-                    {
-                        text: 'ID',
-                        value: 'prod_pk',
-                        width: '10%'
-                    }, 
+                     {
+                        text: 'Identificador',
+                        value: 'prod_identifier'
+                    },                   
                     {
                         text: 'Nombre',
                         value: 'prod_name'
-                    },               
+                    }, 
+                   
+                    {
+                        text: 'Categoria',
+                        value: 'prca_name'
+                    }, 
+                    {
+                        text: 'Unidad Entrada',
+                        value: 'meas_fk_input_name'
+                    }, 
+                    {
+                        text: 'Unidad Salida',
+                        value: 'meas_fk_output_name'
+                    }, 
+                    {
+                        text: 'Precio Actual',
+                        value: 'prod_actualprice'
+                    },   
+                    {
+                        text: 'Precio Eventual',
+                        value: 'prod_eventualprice'
+                    }, 
+                    {
+                        text: 'Precio Preferencial',
+                        value: 'prod_preferentialprice'
+                    }, 
+                    {
+                        text: 'Cantidad por Paquete',
+                        value: 'prod_packingquantity'
+                    },             
                      {
                         text: 'Estatus',
                         value: 'status'
@@ -110,31 +168,38 @@ export default {
                         value: 'action',
                         width: '20%'
                     },
-
          ],
          select:0,
+         selectCat:0,
+         selectMeasIn:0,
+         selectMeasOut:0,
          principal:false,
          estado:true,
+         imageUrl:'',
          editado:{
             prod_pk:0,
-            prod_fk:0,
-            prod_fk_name:'',
+            prca_fk:0,
+            prca_name:'',
             meas_fk_input:0,
             meas_fk_input_name:'',
             meas_fk_output:0,
             meas_fk_output_name:'',
             prod_identifier:'',
             prod_name:'',
+            prod_name:'',
             prod_actualprice:0,
             prod_eventualprice:0,
             prod_preferentialprice:0,
             prod_packingquantity:0,
-            prod_status:0,
+            prod_status:0,            
+            is_mod: false,
+            imageUrl: this.imageUrl,
          },
          defaultItem:{
             prod_pk:0,
-            prod_fk:0,
-            prod_fk_name:'',
+            prca_fk:0,
+            prca_fk_name:'',
+            prod_name:'',
             meas_fk_input:0,
             meas_fk_input_name:'',
             meas_fk_output:0,
@@ -146,11 +211,13 @@ export default {
             prod_preferentialprice:0,
             prod_packingquantity:0,
             prod_status:0,
-
+            is_mod: false,
+            imageUrl: this.imageUrl,
          },
          editedIndex: -1,
           products: [],
-          entities: [],
+          categories: [],
+          measurements:[],
           search:"",
           dialog: false,
         snackbar: false,
@@ -170,10 +237,20 @@ export default {
             value => !!value || 'Requerido.',
             value => (value && value.length == 10 ) || 'Requiere 10 caracteres',
                  ],
+    numberRules: [
+        value => !!value || 'Requerido.',
+        value => value > 0 || 'El número debe ser mayor a cero',
+    ],
+    rulesImage: [
+        value => !!value || 'Archivo requerido',
+        value => !value || value.size < 2000000 || 'La imagen tiene que ser menor a 2 MB!',
+    ],
     };
   },
    created() {
        this.getProducts();
+       this.getCategories();
+       this.getMeasurements();
    },
 
   methods: {
@@ -190,6 +267,28 @@ export default {
         });
     },
 
+    getCategories() {
+      axios
+        .get("/categories")
+        .then(response => {
+          this.categories = response.data.data;          
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+
+    getMeasurements() {
+      axios
+        .get("/measurements")
+        .then(response => {
+          this.measurements = response.data.data;          
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+
     cancelar() {
                 this.dialog = false
                 this.editado = Object.assign({}, this.defaultItem)
@@ -199,6 +298,10 @@ export default {
       this.editedIndex = this.products.indexOf(item)
       this.editado = Object.assign({}, item)
       this.estado = this.editado.prod_status
+      this.selectCat = this.editado.prca_fk
+      this.selectMeasIn = this.editado.meas_fk_input
+      this.selectMeasOut = this.editado.meas_fk_output
+      this.imageUrl = this.editado.prod_image
       this.dialog = true
     },
     guardar() {
@@ -207,7 +310,11 @@ export default {
             this.editado.prod_status =  1;
         else
             this.editado.prod_status =  0;
-        
+
+      this.editado.prca_fk = this.selectCat;
+      this.editado.meas_fk_input = this.selectMeasIn;
+      this.editado.meas_fk_output = this.selectMeasOut;
+        console.log(this.editado)
         if (this.editedIndex > -1) {
             this.editar()
         } else {            
@@ -245,6 +352,24 @@ export default {
             this.textMsg = "¡Eliminado correctamente!";
             this.getProducts();
         });
+    },
+
+    onPickFileProduct() {
+        this.$refs.fileInput.click()
+    },
+    onFilePickedProduct(event) {
+        const files = event.target.files
+        let filename = files[0].name
+        
+        const fileReader = new FileReader()
+        fileReader.addEventListener('load', () => {
+           this.imageUrl = fileReader.result          
+            this.editado.imageUrl = fileReader.result
+            this.editado.is_mod = true
+            console.log(this.editado)
+        })
+        fileReader.readAsDataURL(files[0])
+        this.image = files[0]
     },
 
 },

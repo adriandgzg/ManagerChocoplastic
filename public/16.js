@@ -9,6 +9,38 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -100,14 +132,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
+    var _editado, _defaultItem;
+
     return {
       headers: [{
-        text: 'ID',
-        value: 'prod_pk',
-        width: '10%'
+        text: 'Identificador',
+        value: 'prod_identifier'
       }, {
         text: 'Nombre',
         value: 'prod_name'
+      }, {
+        text: 'Categoria',
+        value: 'prca_name'
+      }, {
+        text: 'Unidad Entrada',
+        value: 'meas_fk_input_name'
+      }, {
+        text: 'Unidad Salida',
+        value: 'meas_fk_output_name'
+      }, {
+        text: 'Precio Actual',
+        value: 'prod_actualprice'
+      }, {
+        text: 'Precio Eventual',
+        value: 'prod_eventualprice'
+      }, {
+        text: 'Precio Preferencial',
+        value: 'prod_preferentialprice'
+      }, {
+        text: 'Cantidad por Paquete',
+        value: 'prod_packingquantity'
       }, {
         text: 'Estatus',
         value: 'status'
@@ -117,43 +171,38 @@ __webpack_require__.r(__webpack_exports__);
         width: '20%'
       }],
       select: 0,
+      selectCat: 0,
+      selectMeasIn: 0,
+      selectMeasOut: 0,
       principal: false,
       estado: true,
-      editado: {
+      imageUrl: '',
+      editado: (_editado = {
         prod_pk: 0,
-        prod_fk: 0,
-        prod_fk_name: '',
+        prca_fk: 0,
+        prca_name: '',
         meas_fk_input: 0,
         meas_fk_input_name: '',
         meas_fk_output: 0,
         meas_fk_output_name: '',
         prod_identifier: '',
-        prod_name: '',
-        prod_actualprice: 0,
-        prod_eventualprice: 0,
-        prod_preferentialprice: 0,
-        prod_packingquantity: 0,
-        prod_status: 0
-      },
-      defaultItem: {
+        prod_name: ''
+      }, _defineProperty(_editado, "prod_name", ''), _defineProperty(_editado, "prod_actualprice", 0), _defineProperty(_editado, "prod_eventualprice", 0), _defineProperty(_editado, "prod_preferentialprice", 0), _defineProperty(_editado, "prod_packingquantity", 0), _defineProperty(_editado, "prod_status", 0), _defineProperty(_editado, "is_mod", false), _defineProperty(_editado, "imageUrl", this.imageUrl), _editado),
+      defaultItem: (_defaultItem = {
         prod_pk: 0,
-        prod_fk: 0,
-        prod_fk_name: '',
+        prca_fk: 0,
+        prca_fk_name: '',
+        prod_name: '',
         meas_fk_input: 0,
         meas_fk_input_name: '',
         meas_fk_output: 0,
         meas_fk_output_name: '',
-        prod_identifier: '',
-        prod_name: '',
-        prod_actualprice: 0,
-        prod_eventualprice: 0,
-        prod_preferentialprice: 0,
-        prod_packingquantity: 0,
-        prod_status: 0
-      },
+        prod_identifier: ''
+      }, _defineProperty(_defaultItem, "prod_name", ''), _defineProperty(_defaultItem, "prod_actualprice", 0), _defineProperty(_defaultItem, "prod_eventualprice", 0), _defineProperty(_defaultItem, "prod_preferentialprice", 0), _defineProperty(_defaultItem, "prod_packingquantity", 0), _defineProperty(_defaultItem, "prod_status", 0), _defineProperty(_defaultItem, "is_mod", false), _defineProperty(_defaultItem, "imageUrl", this.imageUrl), _defaultItem),
       editedIndex: -1,
       products: [],
-      entities: [],
+      categories: [],
+      measurements: [],
       search: "",
       dialog: false,
       snackbar: false,
@@ -175,11 +224,23 @@ __webpack_require__.r(__webpack_exports__);
         return !!value || 'Requerido.';
       }, function (value) {
         return value && value.length == 10 || 'Requiere 10 caracteres';
+      }],
+      numberRules: [function (value) {
+        return !!value || 'Requerido.';
+      }, function (value) {
+        return value > 0 || 'El número debe ser mayor a cero';
+      }],
+      rulesImage: [function (value) {
+        return !!value || 'Archivo requerido';
+      }, function (value) {
+        return !value || value.size < 2000000 || 'La imagen tiene que ser menor a 2 MB!';
       }]
     };
   },
   created: function created() {
     this.getProducts();
+    this.getCategories();
+    this.getMeasurements();
   },
   methods: {
     getProducts: function getProducts() {
@@ -188,6 +249,24 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/productList").then(function (response) {
         console.log(response.data);
         _this.products = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    getCategories: function getCategories() {
+      var _this2 = this;
+
+      axios.get("/categories").then(function (response) {
+        _this2.categories = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    getMeasurements: function getMeasurements() {
+      var _this3 = this;
+
+      axios.get("/measurements").then(function (response) {
+        _this3.measurements = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -201,10 +280,18 @@ __webpack_require__.r(__webpack_exports__);
       this.editedIndex = this.products.indexOf(item);
       this.editado = Object.assign({}, item);
       this.estado = this.editado.prod_status;
+      this.selectCat = this.editado.prca_fk;
+      this.selectMeasIn = this.editado.meas_fk_input;
+      this.selectMeasOut = this.editado.meas_fk_output;
+      this.imageUrl = this.editado.prod_image;
       this.dialog = true;
     },
     guardar: function guardar() {
       if (this.estado == true) this.editado.prod_status = 1;else this.editado.prod_status = 0;
+      this.editado.prca_fk = this.selectCat;
+      this.editado.meas_fk_input = this.selectMeasIn;
+      this.editado.meas_fk_output = this.selectMeasOut;
+      console.log(this.editado);
 
       if (this.editedIndex > -1) {
         this.editar();
@@ -215,23 +302,23 @@ __webpack_require__.r(__webpack_exports__);
       this.cancelar();
     },
     alta: function alta() {
-      var _this2 = this;
+      var _this4 = this;
 
       axios.post('/product/add', this.editado).then(function (response) {
-        _this2.snackbar = true;
-        _this2.textMsg = '¡Alta exitosa!';
+        _this4.snackbar = true;
+        _this4.textMsg = '¡Alta exitosa!';
 
-        _this2.getProducts();
+        _this4.getProducts();
       });
     },
     editar: function editar() {
-      var _this3 = this;
+      var _this5 = this;
 
       axios.put('/product/update', this.editado).then(function (response) {
-        _this3.snackbar = true;
-        _this3.textMsg = '¡Actualización Exitosa!';
+        _this5.snackbar = true;
+        _this5.textMsg = '¡Actualización Exitosa!';
 
-        _this3.getProducts();
+        _this5.getProducts();
       });
     },
     borrar: function borrar(item) {
@@ -244,14 +331,32 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     "delete": function _delete() {
-      var _this4 = this;
+      var _this6 = this;
 
       axios.put('/product/delete', this.editado).then(function (response) {
-        _this4.snackbar = true;
-        _this4.textMsg = "¡Eliminado correctamente!";
+        _this6.snackbar = true;
+        _this6.textMsg = "¡Eliminado correctamente!";
 
-        _this4.getProducts();
+        _this6.getProducts();
       });
+    },
+    onPickFileProduct: function onPickFileProduct() {
+      this.$refs.fileInput.click();
+    },
+    onFilePickedProduct: function onFilePickedProduct(event) {
+      var _this7 = this;
+
+      var files = event.target.files;
+      var filename = files[0].name;
+      var fileReader = new FileReader();
+      fileReader.addEventListener('load', function () {
+        _this7.imageUrl = fileReader.result;
+        _this7.editado.imageUrl = fileReader.result;
+        _this7.editado.is_mod = true;
+        console.log(_this7.editado);
+      });
+      fileReader.readAsDataURL(files[0]);
+      this.image = files[0];
     }
   },
   computed: {
@@ -371,6 +476,150 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Nombre",
+                              maxlength: "300",
+                              rules: _vm.nameRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editado.prod_identifier,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editado, "prod_identifier", $$v)
+                              },
+                              expression: "editado.prod_identifier"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-select", {
+                            attrs: {
+                              items: _vm.categories,
+                              label: "Selecione una categoría",
+                              "single-line": "",
+                              "item-text": "prca_name",
+                              "item-value": "prca_pk",
+                              "persistent-hint": ""
+                            },
+                            model: {
+                              value: _vm.selectCat,
+                              callback: function($$v) {
+                                _vm.selectCat = $$v
+                              },
+                              expression: "selectCat"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-select", {
+                            attrs: {
+                              items: _vm.measurements,
+                              label: "Selecione una Unidad Entrada",
+                              "single-line": "",
+                              "item-text": "meas_name",
+                              "item-value": "meas_pk",
+                              "persistent-hint": ""
+                            },
+                            model: {
+                              value: _vm.selectMeasIn,
+                              callback: function($$v) {
+                                _vm.selectMeasIn = $$v
+                              },
+                              expression: "selectMeasIn"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-select", {
+                            attrs: {
+                              items: _vm.measurements,
+                              label: "Selecione una Unidad Salida",
+                              "single-line": "",
+                              "item-text": "meas_name",
+                              "item-value": "meas_pk",
+                              "persistent-hint": ""
+                            },
+                            model: {
+                              value: _vm.selectMeasOut,
+                              callback: function($$v) {
+                                _vm.selectMeasOut = $$v
+                              },
+                              expression: "selectMeasOut"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Precio Actual",
+                              prefix: "$",
+                              type: "number",
+                              rules: _vm.numberRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editado.prod_actualprice,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editado, "prod_actualprice", $$v)
+                              },
+                              expression: "editado.prod_actualprice"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Precio Eventual",
+                              prefix: "$",
+                              type: "number",
+                              rules: _vm.numberRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editado.prod_eventualprice,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editado, "prod_eventualprice", $$v)
+                              },
+                              expression: "editado.prod_eventualprice"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Precio Preferencial",
+                              prefix: "$",
+                              type: "number",
+                              rules: _vm.numberRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editado.prod_preferentialprice,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.editado,
+                                  "prod_preferentialprice",
+                                  $$v
+                                )
+                              },
+                              expression: "editado.prod_preferentialprice"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Stock",
+                              type: "number",
+                              rules: _vm.numberRules
+                            },
+                            model: {
+                              value: _vm.editado.prod_packingquantity,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.editado,
+                                  "prod_packingquantity",
+                                  $$v
+                                )
+                              },
+                              expression: "editado.prod_packingquantity"
+                            }
+                          }),
+                          _vm._v(" "),
                           _c("span", [_vm._v("Activo/Inactivo")]),
                           _vm._v(" "),
                           _c("v-switch", {
@@ -381,7 +630,41 @@ var render = function() {
                               },
                               expression: "estado"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "v-card-text",
+                            [
+                              _c(
+                                "v-btn",
+                                {
+                                  staticClass: "primary",
+                                  attrs: { raised: "" },
+                                  on: { click: _vm.onPickFileProduct }
+                                },
+                                [_vm._v("Subir imagen")]
+                              ),
+                              _vm._v(" "),
+                              _c("input", {
+                                ref: "fileInput",
+                                staticStyle: { display: "none" },
+                                attrs: {
+                                  type: "file",
+                                  accept: "image/jpeg",
+                                  required: "",
+                                  rules: _vm.rulesImage
+                                },
+                                on: { change: _vm.onFilePickedProduct }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-layout", [
+                            _c("img", {
+                              attrs: { src: this.imageUrl, height: "150" }
+                            })
+                          ])
                         ],
                         1
                       ),

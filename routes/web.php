@@ -34,12 +34,14 @@ Route::put('/store/update', 'StoreController@update');
 Route::put('/store/delete', 'StoreController@delete');
 
 Route::get('/categorieslist', 'ProductCategoryController@CategoriesList');
+Route::get('/categories', 'ProductCategoryController@Categories');
 Route::post('/categories/add', 'ProductCategoryController@add');
 Route::put('/categories/update', 'ProductCategoryController@update');
 Route::put('/categories/delete', 'ProductCategoryController@delete');
 
 
 Route::get('/measurementsList', 'MeasurementController@MeasurementsList');
+Route::get('/measurements', 'MeasurementController@Measurements');
 Route::post('/measurements/add', 'MeasurementController@add');
 Route::put('/measurements/update', 'MeasurementController@update');
 Route::put('/measurements/delete', 'MeasurementController@delete');
