@@ -1,368 +1,257 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-<v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3"
->     
-      <template v-slot:top>    
-        <v-system-bar color="indigo darken-2" dark></v-system-bar>
-        <v-toolbar flat color="indigo">
-            <template v-slot:extension>
-            <v-btn
-              fab
-              color="cyan accent-2"
-              bottom
-              left
-              absolute
-              @click="dialog = !dialog"
-            >
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </template>            
-          <v-toolbar-title class="white--text">Productos</v-toolbar-title>
-            <v-divider class="mx-4" inset vertical></v-divider> 
-          <v-spacer></v-spacer>  
-         
-        
-            <!--  Modal del diálogo para Alta y Edicion    -->
-          <v-dialog v-model="dialog" max-width="500px" >
-            <template v-slot:activator="{ on }"></template>
-            <v-form ref="form" v-model="valid" lazy-validation>
-            <v-card>
-                <!-- para el EDICION-->
-             <v-card-title  class="cyan white--text">
-                <span class="headline">{{ formTitle }}</span>
-              </v-card-title>    
-                
-              <v-card-text>                  
-                <v-container>
-                   
-                      <v-text-field v-model="editado.name" label="Nombre" :rules="nameRules"  required ></v-text-field>                    
-                      <v-text-field v-model="editado.description" label="Descripción" :rules="nameRules"  required></v-text-field>
-                      <v-text-field v-model="editado.long_key" label="Key" :rules="nameRules"  required></v-text-field>
-                      <v-text-field v-model="editado.price" label="Precio" prefix="$" type="number" :rules="numberRules"  required></v-text-field>
-                      <v-text-field v-model="editado.content" label="Contenido" type="number" :rules="numberRules"></v-text-field>
-                      <v-text-field v-model="editado.unit" label="Unidad" :rules="unidadRules"></v-text-field>
-                      <v-text-field v-model="editado.brand" label="Marca" :rules="nameRules"></v-text-field>
-                      <v-select :items="categories" v-model="select" label="Select" single-line
-                                item-text="name" item-value="id" return-object persistent-hint 
-                                v-on:change="changeRoute(`${select.id}`)"></v-select>
-                      <v-select :items="subcategories" v-model="selectSub" label="Select" single-line
-                                item-text="name" item-value="id" return-object persistent-hint 
-                                v-on:change="changeRouteSub(`${selectSub.id}`)"></v-select>
-                      <v-card-text>
-                        <v-btn raised class="primary" @click="onPickFile">Subir imagen</v-btn>
-                        <input type="file" style="display: none"  ref="fileInput" accept="image/jpeg"  @change="onFilePicked"/>
-                      </v-card-text>                      
-                   
-                  <v-layout>
-                      <img :src="imageUrl" height="150"/>
-                    </v-layout>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue-grey" class="ma-2 white--text" @click="cancelar">Cancelar</v-btn>
-                <v-btn color="teal accent-4" class="ma-2 white--text"  @click="guardar">Guardar</v-btn>
-              </v-card-actions>
-            </v-card>
-            </v-form>
-          </v-dialog>
+    <v-app>
+        <v-container>
+                <v-snackbar color="#000000"
+                    v-model="snackbar"
+                    :timeout="timeout">
+                    {{ textMsg }}
+                    <v-btn
+                            color="blue"
+                            text
+                            @click="snackbar = false"
+                    >
+                        Cerrar
+                    </v-btn>
+                </v-snackbar>
+            
+             <!--  Modal del diálogo para Alta y Edicion    -->
+            <v-dialog v-model="dialog" max-width="500px" persistent>
+                <v-card>
+                    <v-card-title class="cyan white--text">
+                        <span class="headline">{{ formTitle }}</span>
+                    </v-card-title>
+                    <v-form v-model="validProvider" >
+                        <v-card-text>
+                            <v-text-field v-model="editado.prod_name" label="Nombre" maxlength="300"
+                                        :rules="nameRules" required></v-text-field>                                                     
+                            <span>Activo/Inactivo</span>
+                            <v-switch v-model="estado"/>
+                        </v-card-text>
+                        <v-card-actions>
+                        <v-spacer></v-spacer>
+                            <v-btn color="blue-grey" class="ma-2 white--text" @click="cancelar">Cancelar</v-btn>
+                            <v-btn :disabled="!validProvider" color="teal accent-4" class="ma-2 white--text" @click="guardar">Guardar</v-btn>
+                        </v-card-actions>
+                    </v-form>
+                </v-card>
 
-        </v-toolbar>
-           <!-- Barra de búsqueda  -->
-          <v-col cols="12" sm="12">
-             <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
-          </v-col>
-      </template>
-      <template v-slot:item.image="{ item }">
-            <div class="p-2">
-              <v-img :src="item.image" :alt="item.name" aspect-ratio="1"></v-img>
-            </div>
-          </template>
-      <template v-slot:item.action="{ item }">   
-         
-        <v-btn class="mr-2" fab dark small color="cyan" @click="editar(item)">
-        <v-icon dark>mdi-pencil</v-icon>
-        </v-btn>   
-        <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)">
-        <v-icon dark>mdi-delete</v-icon>
-        </v-btn>
-      </template>
-    </v-data-table>
-    </v-col>
+            </v-dialog>
 
-    </v-row>
-  
-  </v-container>
+            <v-row>
+            <v-col>
+                <v-card>
+                    <v-data-table :headers="headers" :items="categories" :search="search" sort-by="id" class="elevation-3">
+                    <template v-slot:top>
+                    <v-system-bar color="indigo darken-2" dark></v-system-bar>
+                        <v-toolbar flat color="indigo">
+                            <template v-slot:extension>
+                                <v-btn
+                                        fab
+                                        color="cyan accent-2"
+                                        bottom
+                                        left
+                                        absolute
+                                        @click="dialog = !dialog"
+                                >
+                                    <v-icon>mdi-plus</v-icon>
+                                </v-btn>
+                            </template>
+                            <v-toolbar-title class="white--text">Lista de Productos</v-toolbar-title>
+                            <v-divider class="mx-4" inset vertical></v-divider>
+                            <v-spacer></v-spacer>
+
+                        </v-toolbar>
+                        <v-col cols="12" sm="12">
+                            <v-text-field v-model="search" append-icon="search" label="Buscar" single-line
+                                          hide-details></v-text-field>
+                        </v-col>
+                    </template>
+                    <template v-slot:item.status="{ item }">                            
+                            <v-chip v-if="item.prod_status == 1" color="green" dark>  Activo  </v-chip>
+                            <v-chip v-else color="red" dark>Inactivo</v-chip>                        
+                    </template>
+                    <template v-slot:item.action="{ item }">   
+                                     
+                        <v-btn class="mr-2" fab dark small color="cyan" @click="edita(item)">
+                            <v-icon dark>mdi-pencil</v-icon>
+                        </v-btn>
+                        <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)">
+                            <v-icon dark>mdi-delete</v-icon>
+                        </v-btn>
+                    </template>
+                </v-data-table>
+                </v-card>
+            </v-col>
+            </v-row>
+
+        </v-container>
+    </v-app>
 </template>
 <script>
-import {mapGetters} from "vuex";
 export default {
-  data () {
-      
-    return{
-       
-      headers:[        
-        {
-          text: 'ID',
-          value: 'id',
-          width:'5%'
-        },{
-          text: 'Nombre',
-          value: 'name',
-          width:'35%'
-        },{
-          text: 'Descripción',
-          value: 'description',
-          width:'20%'
-        },
-        {
-          text: 'Key',
-          value: 'long_key',
-          width:'20%'
-        },{
-          text: 'Precio',
-          value: 'price',
-          width:'10%'
-        },{
-          text: 'Contenido',
-          value: 'content',
-          width:'10%'
-        },{
-          text: 'Unidad',
-          value: 'unit',
-          width:'10%'
-        },{
-          text: 'Marca',
-          value: 'brand',
-          width:'10%'
-        },
+  data() {
+    return {
+         headers: [
+                    {
+                        text: 'ID',
+                        value: 'prod_pk',
+                        width: '10%'
+                    }, 
+                    {
+                        text: 'Nombre',
+                        value: 'prod_name'
+                    },               
+                     {
+                        text: 'Estatus',
+                        value: 'status'
+                    },
+                    {
+                        text: '',
+                        value: 'action',
+                        width: '20%'
+                    },
 
-        { text: "Image", value: "image", sortable: false,
-          width:'15%' }
-        ,{
-          text: '',
-          value: 'action',
-          width:'20%'
-        },
+         ],
+         select:0,
+         principal:false,
+         estado:true,
+         editado:{
+            prod_pk:0,
+            prod_fk:0,
+            prod_fk_name:'',
+            meas_fk_input:0,
+            meas_fk_input_name:'',
+            meas_fk_output:0,
+            meas_fk_output_name:'',
+            prod_identifier:'',
+            prod_name:'',
+            prod_actualprice:0,
+            prod_eventualprice:0,
+            prod_preferentialprice:0,
+            prod_packingquantity:0,
+            prod_status:0,
+         },
+         defaultItem:{
+            prod_pk:0,
+            prod_fk:0,
+            prod_fk_name:'',
+            meas_fk_input:0,
+            meas_fk_input_name:'',
+            meas_fk_output:0,
+            meas_fk_output_name:'',
+            prod_identifier:'',
+            prod_name:'',
+            prod_actualprice:0,
+            prod_eventualprice:0,
+            prod_preferentialprice:0,
+            prod_packingquantity:0,
+            prod_status:0,
+
+         },
+         editedIndex: -1,
+          categories: [],
+          entities: [],
+          search:"",
+          dialog: false,
+        snackbar: false,
+        timeout: 2000,
+      textMsg: "",
+      valid: false,
+      validProvider:false,
+      folioRules: [
+        value => !!value || "Requerido.",
+        value => (value && value.length >= 10) || "Min 10 caracter"
       ],
-       nameRules: [
-      value => !!value || 'Requerido.',
-      value => (value && value.length >= 3) || 'Min 3 caracteres',
-    ],
-     unidadRules: [
-      value => !!value || 'Requerido.',
-      value => (value && value.length >= 1) || 'Min 1 caracter',
-    ],
-     numberRules: [
-      value => !!value || 'Requerido.',
-      value => value > 0 || 'El número debe ser mayor a cero',
-    ],
-    valid: true,
-      products:[], 
-      search: '', //para el cuadro de búsqueda de datatables  
-      dialog: false, //para que la ventana de dialogo o modal no aparezca automáticamente 
-      imageUrl:'',
-      select:{
-            id: 0,
-        },
-      selectinput: {
-            id: 0,
-        },
-      selectSub:{id: 0},
-      categories:[],
-      subcategories:[],
-      editado: {
-      id: '',
-      name: '',
-      description: '',
-      long_key:'',
-      price:'',
-      content:'',
-      unit:'',
-      brand:'',
-      sales_unit:'',
-      bulk:'',
-      imageUrl:this.imageUrl,
-      idsubcategoria:0,
-      select:0,
-        },
-        defaultItem: {
-      id: '',
-      name: '',
-      description: '',
-      long_key:'',
-      price:'',
-      content:'',
-      unit:'',
-      brand:'',
-      imageUrl:this.imageUrl,
-      sales_unit:'',
-      bulk:'',
-      idsubcategoria:0,
-        },
-      }
+      nameRules: [
+                    value => !!value || 'Requerido.',
+                    value => (value && value.length >= 3) || 'Min 3 caracteres',
+                ],
+    phoneRules: [
+            value => !!value || 'Requerido.',
+            value => (value && value.length == 10 ) || 'Requiere 10 caracteres',
+                 ],
+    };
   },
-  created() {
-    this.getProducts();
-    this.getCategories();
-  },
-   methods:{
-     changeRoute(a) {
-    //this.$router.push({path: a.src })
-    console.log(a)
-    this.getSubCategories(a)
-    console.log(this.select)
-  },
-  changeRouteSub(a) {
-    //this.$router.push({path: a.src })
-    this.idsubcategoria=a
-    this.editado.category_id  = this.idsubcategoria
-    console.log('ID sub ' + this.idsubcategoria + ' --> ' + this.editado.category_id)
-    
-   // getSubCategories(a)
-  },
-       validate () {
-      if (this.$refs.form.validate()) {
-        this.snackbar = true
-      }
-    },
-       getProducts(){
-      axios.get('/productList')
+   created() {
+       this.getProducts();
+   },
+
+  methods: {
+
+      getProducts() {
+      axios
+        .get("/productslist")
         .then(response => {
-          this.products = response.data.data
+            console.log(response.data)
+          this.categories = response.data.data;          
         })
         .catch(e => {
-          this.errors.push(e)
-        })
+          console.log(e);
+        });
     },
-    getCategories(){
-     
-      axios.get('/CategoriesCbx')
-        .then(response => {
-           
-          this.categories = response.data.data
-          console.log(this.categories)
-        })
-        .catch(e => {
-          this.errors.push(e)
-        })
-    },
-    getSubCategories(id){
-      axios.get('/subcategories/'+id)
-        .then(response => {
-          this.subcategories = response.data.data
-        })
-        .catch(e => {
-          this.errors.push(e)
-        })
-    },
-    guardar () {
-        if (!this.$refs.form.validate()) {
-        this.snackbar = true
-      }
-      else{
-      if (this.editedIndex > -1) {
-          //Guarda en caso de Edición
-        this.textSnack = '¡Actualización Exitosa!'  
-        this.editarProduct() 
-      } else {
-          //Guarda el registro en caso de Alta  
-          if(this.editado.marca == "" || this.editado.modelo == "" || this.editado.stock == 0){
-          this.snackbar = true
-          this.textSnack = 'Datos incompletos.'      
-        }else{
-          this.textSnack = '¡Alta exitosa!'
-          this.addProduct()
-        }       
-      }
-      this.cancelar()
-      }
-    },
-    editarProduct:function(){
-      console.log(this.editado)
-        axios.put('/product/update', this.editado).then(response =>{
-            this.getProducts();
-        });        
-         this.name = "",
-         this.description = ""
-    }, 
-    editar (item) {    
-      this. getCategories();
-      this.editedIndex = this.products.indexOf(item)
+
+    cancelar() {
+                this.dialog = false
+                this.editado = Object.assign({}, this.defaultItem)
+                this.editedIndex = -1
+            },
+    edita (item) {         
+      this.editedIndex = this.categories.indexOf(item)
       this.editado = Object.assign({}, item)
-            
-      this.select.id = parseInt(this.editado.select)
-      
-      
-      if (this.editado.select != null)
-      {
-        this.getSubCategories(this.select.id)
-        if(this.selectSub != null){
-          this.selectSub.id = this.editado.category_id
-          
-        }
-      }
+      this.estado = this.editado.prod_status
       this.dialog = true
     },
-    borrar (item) { 
-      const index = this.products.indexOf(item)
-      this.editado = Object.assign({}, item)
-      console.log(this.products[index].id) //capturo el id de la fila seleccionada 
+    guardar() {
+        
+        if(this.estado == true)
+            this.editado.prod_status =  1;
+        else
+            this.editado.prod_status =  0;
+        
+        if (this.editedIndex > -1) {
+            this.editar()
+        } else {            
+            this.alta()
+        }
+        this.cancelar()
+    },
+    alta: function () {
+        axios.post('/categories/add', this.editado).then(response => {
+            this.snackbar = true
+            this.textMsg = '¡Alta exitosa!'
+            this.getProducts();
+        });
+    },
+    editar: function () {
+        axios.put('/categories/update', this.editado).then(response => {
+            this.snackbar = true
+            this.textMsg = '¡Actualización Exitosa!'
+            this.getProducts();
+        });
+    },
+
+    borrar(item) {
+        const index = this.categories.indexOf(item)
+        this.editado = Object.assign({}, item)
         var r = confirm("¿Está seguro de borrar el registro?");
         if (r == true) {
-        this.deleteProduct()
-        this.snackbar = true
-        this.textSnack = 'Se eliminó el registro.'    
-        } else {
-        this.snackbar = true
-        this.textSnack = 'Operación cancelada.'    
-        }    
+            this.delete()
+        }
     },
-    addProduct:function(){
-        axios.post('/product/add', this.editado).then(response =>{
+
+    delete: function () {
+        axios.put('/categories/delete', this.editado).then(response => {
+            this.snackbar = true;
+            this.textMsg = "¡Eliminado correctamente!";
             this.getProducts();
-        });        
-         this.name = "",
-         this.description = ""
-    },  
-    deleteProduct:function(){
-        axios.put('/product/delete', this.editado).then(response =>{
-            this.getProducts();
-        });        
-         this.name = "",
-         this.description = ""
-    }, 
-    cancelar () {
-      this.dialog = false
-      this.editado = Object.assign({}, this.defaultItem)
-      
-      this.editedIndex = -1
+        });
     },
-       onPickFile () {
-  this.$refs.fileInput.click()
+
 },
-onFilePicked (event) {
-  const files = event.target.files
-  let filename = files[0].name
-  const fileReader = new FileReader()
-  fileReader.addEventListener('load', () => {
-    this.imageUrl = fileReader.result
-    this.editado.imageUrl= fileReader.result
-  })
-  fileReader.readAsDataURL(files[0])
-  this.image = files[0]
-}
-   },
-  computed: {
-    // ...mapGetters('auth', ['can'])
-    //Dependiendo si es Alta o Edición cambia el título del modal  
-    formTitle () {
-      //operadores condicionales "condición ? expr1 : expr2"
-      // si <condicion> es true, devuelve <expr1>, de lo contrario devuelve <expr2>    
-      return this.editedIndex === -1 ? 'Nuevo Registro' : 'Editar Registro'
-    },
-  },
-}
+computed: {
+formTitle () {      
+return this.editedIndex === -1 ? 'Nuevo Registro' : 'Editar Registro'
+},
+},
+};
 </script>

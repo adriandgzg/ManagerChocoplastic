@@ -20,7 +20,6 @@ class MeasurementController extends Controller
 
     public function MeasurementsList(){
         $stores = DB::table('measurements AS P')
-        ->where('meas_status','=',1)
         ->get();
         
         

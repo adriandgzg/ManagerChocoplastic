@@ -93,6 +93,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -105,7 +109,7 @@ __webpack_require__.r(__webpack_exports__);
         value: 'pash_name'
       }, {
         text: 'Estatus',
-        value: 'pash_status'
+        value: 'status'
       }, {
         text: '',
         value: 'action',
@@ -506,6 +510,25 @@ var render = function() {
                               ]
                             },
                             proxy: true
+                          },
+                          {
+                            key: "item.status",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                item.pash_status == 1
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "green", dark: "" } },
+                                      [_vm._v("  Activo  ")]
+                                    )
+                                  : _c(
+                                      "v-chip",
+                                      { attrs: { color: "red", dark: "" } },
+                                      [_vm._v("Inactivo")]
+                                    )
+                              ]
+                            }
                           },
                           {
                             key: "item.action",

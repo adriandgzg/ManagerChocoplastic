@@ -84,6 +84,10 @@
                                           hide-details></v-text-field>
                         </v-col>
                     </template>
+                    <template v-slot:item.status="{ item }">                            
+                            <v-chip v-if="item.prov_status == 1" color="green" dark>  Activo  </v-chip>
+                            <v-chip v-else color="red" dark>Inactivo</v-chip>                        
+                    </template>
                     <template v-slot:item.action="{ item }">                   
                         <v-btn class="mr-2" fab dark small color="cyan" @click="edita(item)">
                             <v-icon dark>mdi-pencil</v-icon>
@@ -146,6 +150,10 @@ export default {
                         text: 'Estado',
                         value: 'feen_name'
                     }, 
+                    {
+                        text: 'Estatus',
+                        value: 'status'
+                    },
                     {
                         text: '',
                         value: 'action',

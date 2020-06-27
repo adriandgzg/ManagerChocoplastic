@@ -20,7 +20,6 @@ class ProductCategoryController extends Controller
 
     public function CategoriesList(){
         $stores = DB::table('product_categories AS P')
-        ->where('prca_status','=',1)
         ->get();
         
         
