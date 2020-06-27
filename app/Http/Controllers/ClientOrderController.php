@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\ClientOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ClientOrderController extends Controller
 {
@@ -14,7 +16,42 @@ class ClientOrderController extends Controller
      */
     public function index()
     {
-        //
+
+        try {
+     
+            $vClientOrders = 
+                DB::table('client_orders AS CO')
+                    ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
+                    ->select(
+                        'CO.clor_pk',
+                        'CO.clor_identifier',
+                        'CO.clor_status',
+                        'CO.created_at',
+                        'C.clie_pk',
+                        'C.clie_identifier',
+                        'C.clie_name',
+                        'C.clie_rfc'
+                    )
+                    ->where('clor_status', '=', 1)
+                    ->get();
+
+
+            return response()->json([
+                'code' => 200,
+                'success' => true,
+                'message' => 'Pedidos de los clientes',
+                'data' =>  $vClientOrders
+            ], 200);
+
+          
+
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'success' => false,
+                'message' => $e
+            ], 200);
+        }
     }
 
     /**

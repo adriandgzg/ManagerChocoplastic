@@ -68,6 +68,8 @@ Route::put('/paymentshapes/delete', 'PaymentShapeController@delete');
 
 Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente)
 
+Route::get('/clientorders', 'ClientOrderController@index'); //Lista de Pedidos (Cliente)
+
 
 
 
