@@ -60,7 +60,7 @@ class ClientSaleController extends Controller
 
         }
 
-        //try {
+        try {
             //Asignacion de variables
            $vclor_pk = $vInput['clor_pk'];
 
@@ -154,6 +154,7 @@ class ClientSaleController extends Controller
                 
                 //Modificar Pedido a Procesado
                 DB::table('client_orders')
+                ->where('clor_pk', '=', $vclor_pk)
                 ->update(['clor_status' =>  2]);
 
                 return response()->json([
@@ -177,13 +178,13 @@ class ClientSaleController extends Controller
                 ], 200);
             }
 
-        /*} catch (Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'code' => 500,
                 'success' => false,
                 'message' => $e
             ], 200);
-        }*/
+        }
     }
 
     /**
