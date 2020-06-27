@@ -152,7 +152,7 @@ __webpack_require__.r(__webpack_exports__);
         prod_status: 0
       },
       editedIndex: -1,
-      categories: [],
+      products: [],
       entities: [],
       search: "",
       dialog: false,
@@ -185,9 +185,9 @@ __webpack_require__.r(__webpack_exports__);
     getProducts: function getProducts() {
       var _this = this;
 
-      axios.get("/productslist").then(function (response) {
+      axios.get("/productList").then(function (response) {
         console.log(response.data);
-        _this.categories = response.data.data;
+        _this.products = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -198,7 +198,7 @@ __webpack_require__.r(__webpack_exports__);
       this.editedIndex = -1;
     },
     edita: function edita(item) {
-      this.editedIndex = this.categories.indexOf(item);
+      this.editedIndex = this.products.indexOf(item);
       this.editado = Object.assign({}, item);
       this.estado = this.editado.prod_status;
       this.dialog = true;
@@ -217,7 +217,7 @@ __webpack_require__.r(__webpack_exports__);
     alta: function alta() {
       var _this2 = this;
 
-      axios.post('/categories/add', this.editado).then(function (response) {
+      axios.post('/product/add', this.editado).then(function (response) {
         _this2.snackbar = true;
         _this2.textMsg = '¡Alta exitosa!';
 
@@ -227,7 +227,7 @@ __webpack_require__.r(__webpack_exports__);
     editar: function editar() {
       var _this3 = this;
 
-      axios.put('/categories/update', this.editado).then(function (response) {
+      axios.put('/product/update', this.editado).then(function (response) {
         _this3.snackbar = true;
         _this3.textMsg = '¡Actualización Exitosa!';
 
@@ -235,7 +235,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     borrar: function borrar(item) {
-      var index = this.categories.indexOf(item);
+      var index = this.products.indexOf(item);
       this.editado = Object.assign({}, item);
       var r = confirm("¿Está seguro de borrar el registro?");
 
@@ -246,7 +246,7 @@ __webpack_require__.r(__webpack_exports__);
     "delete": function _delete() {
       var _this4 = this;
 
-      axios.put('/categories/delete', this.editado).then(function (response) {
+      axios.put('/product/delete', this.editado).then(function (response) {
         _this4.snackbar = true;
         _this4.textMsg = "¡Eliminado correctamente!";
 
@@ -439,7 +439,7 @@ var render = function() {
                         staticClass: "elevation-3",
                         attrs: {
                           headers: _vm.headers,
-                          items: _vm.categories,
+                          items: _vm.products,
                           search: _vm.search,
                           "sort-by": "id"
                         },

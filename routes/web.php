@@ -59,6 +59,11 @@ Route::post('/paymentshapes/add', 'PaymentShapeController@add');
 Route::put('/paymentshapes/update', 'PaymentShapeController@update');
 Route::put('/paymentshapes/delete', 'PaymentShapeController@delete');
 
+Route::get('/productList', 'ProductController@ProductList');
+Route::post('/product/add', 'ProductController@add');
+Route::put('/product/update', 'ProductController@update');
+Route::put('/product/delete', 'ProductController@delete');
+
 
 
 
@@ -140,10 +145,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/AsociarCategoriesBusiness/{id}/{idStore}', 'CategoryController@AsociarCategoriesBusiness');
     
 
-    Route::get('/productList', 'ProductController@listproduct');
-    Route::post('/product/add', 'ProductController@addproduct');
-    Route::put('/product/update', 'ProductController@updateproduct');
-    Route::put('/product/delete', 'ProductController@deleteproduct');
+    
     Route::get('/productBusiness/{idSubcategorie}/{idStore}/{idBusiness}', 'ProductController@ProductsBusiness');
     Route::put('/businessproduct/update', 'ProductController@updateBusinessProduct');
     Route::post('/businessproduct/add', 'ProductController@insertBusinessProduct');

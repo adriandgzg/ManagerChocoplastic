@@ -40,7 +40,7 @@
             <v-row>
             <v-col>
                 <v-card>
-                    <v-data-table :headers="headers" :items="categories" :search="search" sort-by="id" class="elevation-3">
+                    <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3">
                     <template v-slot:top>
                     <v-system-bar color="indigo darken-2" dark></v-system-bar>
                         <v-toolbar flat color="indigo">
@@ -149,7 +149,7 @@ export default {
 
          },
          editedIndex: -1,
-          categories: [],
+          products: [],
           entities: [],
           search:"",
           dialog: false,
@@ -180,10 +180,10 @@ export default {
 
       getProducts() {
       axios
-        .get("/productslist")
+        .get("/productList")
         .then(response => {
             console.log(response.data)
-          this.categories = response.data.data;          
+          this.products = response.data.data;          
         })
         .catch(e => {
           console.log(e);
@@ -196,7 +196,7 @@ export default {
                 this.editedIndex = -1
             },
     edita (item) {         
-      this.editedIndex = this.categories.indexOf(item)
+      this.editedIndex = this.products.indexOf(item)
       this.editado = Object.assign({}, item)
       this.estado = this.editado.prod_status
       this.dialog = true
@@ -216,14 +216,14 @@ export default {
         this.cancelar()
     },
     alta: function () {
-        axios.post('/categories/add', this.editado).then(response => {
+        axios.post('/product/add', this.editado).then(response => {
             this.snackbar = true
             this.textMsg = '¡Alta exitosa!'
             this.getProducts();
         });
     },
     editar: function () {
-        axios.put('/categories/update', this.editado).then(response => {
+        axios.put('/product/update', this.editado).then(response => {
             this.snackbar = true
             this.textMsg = '¡Actualización Exitosa!'
             this.getProducts();
@@ -231,7 +231,7 @@ export default {
     },
 
     borrar(item) {
-        const index = this.categories.indexOf(item)
+        const index = this.products.indexOf(item)
         this.editado = Object.assign({}, item)
         var r = confirm("¿Está seguro de borrar el registro?");
         if (r == true) {
@@ -240,7 +240,7 @@ export default {
     },
 
     delete: function () {
-        axios.put('/categories/delete', this.editado).then(response => {
+        axios.put('/product/delete', this.editado).then(response => {
             this.snackbar = true;
             this.textMsg = "¡Eliminado correctamente!";
             this.getProducts();
