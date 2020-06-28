@@ -57,7 +57,7 @@ Route::put('/paymentmethods/update', 'PaymentMethodController@update');
 Route::put('/paymentmethods/delete', 'PaymentMethodController@delete');
 
 Route::get('/paymentshapesList', 'PaymentShapeController@PaymentShapesList');
-Route::post('/paymentshapes/add', 'PaymentShapeController@add');
+Route::post('/paymentshapes/add', 'PaymentShapeController@add'); 
 Route::put('/paymentshapes/update', 'PaymentShapeController@update');
 Route::put('/paymentshapes/delete', 'PaymentShapeController@delete');
 

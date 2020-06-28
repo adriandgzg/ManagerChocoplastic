@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Store;
-use Illuminate\Http\Request;
 use DB;
+use App\Store;
+use Exception;
+use Illuminate\Http\Request;
+use App\Http\Controllers\api\ApiResponseController;
 
-class StoreController extends Controller
+
+class StoreController extends ApiResponseController
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +18,12 @@ class StoreController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $vStore = Store::where('stor_status', '=', 1)->select('stor_pk','stor_name','stor_phone','stor_addres', 'stor_main')->get();
+            return $this->successResponse($vStore, true, 200, "Lista de Sucursales");
+        } catch (Exception $e) {
+            return $this->errorResponse(null, false, 500, $e);
+        }
     }
 
     public function StoresList(){

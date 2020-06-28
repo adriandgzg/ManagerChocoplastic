@@ -1,5 +1,6 @@
 <?php
 
+use App\System;
 use Illuminate\Database\Seeder;
 
 class SystemSeeder extends Seeder
@@ -11,6 +12,15 @@ class SystemSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        System::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        System::create([
+            'syst_clie_order' => 0,
+            'syst_clie_sale' => 0,
+            'syst_prov_order' => 0,
+            'syst_prov_purchase' => 0
+        ]);
     }
 }

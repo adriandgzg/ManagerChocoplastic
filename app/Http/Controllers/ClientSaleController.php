@@ -6,7 +6,6 @@ use App\ClientOrder;
 use App\ClientOrderDetail;
 use App\ClientSale;
 use App\ClientSaleDetail;
-use ClientSaleDetailSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;

@@ -18,6 +18,18 @@ class ClientSeeder extends Seeder
 
         Client::create([
             'feen_fk' => 27,
+            'clie_identifier' => "ClienteGenerico",
+            'clie_name' => "Cliente Generico",
+            'clie_rfc' => "",
+            'clie_phone' => "",
+            'clie_email' => "",
+            'clie_addres' => "",
+            'clie_cp' => "",
+            'clie_city' => "",
+        ]);
+
+        Client::create([
+            'feen_fk' => 27,
             'clie_identifier' => "Cliente1",
             'clie_name' => "Francisco Gabriel Alvarez Alvarez",
             'clie_rfc' => "AAAF9107106I4",

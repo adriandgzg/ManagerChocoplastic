@@ -37,13 +37,13 @@ class ClientOrderSeeder extends Seeder
         ]);
         ClientOrder::create([
             'clor_pk' => 4,
-            'clie_fk' => 2,
+            'clie_fk' => 3,
             'clor_identifier' => "Ped0004",
             'clor_status' => 1
         ]);
         ClientOrder::create([
             'clor_pk' => 5,
-            'clie_fk' => 2,
+            'clie_fk' => 3,
             'clor_identifier' => "Ped0005",
             'clor_status' => 1
         ]);
@@ -55,7 +55,7 @@ class ClientOrderSeeder extends Seeder
         ]);
         ClientOrder::create([
             'clor_pk' => 7,
-            'clie_fk' => 2,
+            'clie_fk' => 3,
             'clor_identifier' => "Ped0007",
             'clor_status' => 1
         ]);
