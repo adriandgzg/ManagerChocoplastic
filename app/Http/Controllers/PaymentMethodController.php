@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\PaymentMethod;
 use Illuminate\Http\Request;
+use DB;
 
 class PaymentMethodController extends Controller
 {
@@ -19,6 +20,20 @@ class PaymentMethodController extends Controller
 
     public function PaymentMethodsList(){
         $payment = PaymentMethod::all();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'entities loaded',
+            'data' => $payment,
+        ], 200);
+    }
+
+    public function PaymentMethods(){
+        $payment = DB::table('payment_methods AS P')
+        ->where('P.pame_status','=','1')
+        ->get();
+    
         
         
         return response()->json([

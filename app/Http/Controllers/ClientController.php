@@ -32,6 +32,19 @@ class ClientController extends Controller
         ], 200);
     }
 
+    public function Clients(){
+        $client = DB::table('clients AS P')
+        ->where('P.clie_status','=','1')
+        ->get();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Clients loaded',
+            'data' => $client,
+        ], 200);
+    }
+
     public function add(Request $request)
     {        
        
