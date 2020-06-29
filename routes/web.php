@@ -75,7 +75,11 @@ Route::put('/product/delete', 'ProductController@delete');
 Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente)
 Route::post('/clientsales/update', 'ClientSaleController@update'); //Finalziar Venta (Cliente)
 
+Route::post('/client_sale_details/update', 'ClientSaleDetailController@update'); //Venta Producto Eliminar (Cliente)
+Route::post('/client_sale_details/destroy', 'ClientSaleDetailController@destroy'); //Venta Producto Modificar (Cliente)
+
 Route::get('/clientorders', 'ClientOrderController@index'); //Lista de Pedidos (Cliente)
+
 
 
 
