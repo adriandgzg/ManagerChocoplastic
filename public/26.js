@@ -76,6 +76,85 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -86,7 +165,18 @@ __webpack_require__.r(__webpack_exports__);
       payments: [],
       saleHeader: '',
       saleDetail: [],
-      select: ''
+      desserts: [],
+      select: '',
+      snackbar: false,
+      timeout: 2000,
+      subtotal: 0,
+      total: 0,
+      iva: 0,
+      textMsg: "",
+      editado: {
+        clsd_pk: 0,
+        clsd_quantity: 0
+      }
     };
   },
   created: function created() {
@@ -95,37 +185,94 @@ __webpack_require__.r(__webpack_exports__);
     this.getPayment();
   },
   methods: {
-    finalizar: function finalizar() {
-      console.log(this.select);
+    formatPrice: function formatPrice(value) {
+      var val = (value / 1).toFixed(2).replace(',', '.');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
-    createsale: function createsale() {
+    onQuantityChange: function onQuantityChange(item) {
       var _this = this;
 
-      axios.post('/clientsales?clor_pk=' + this.clor_pk + '').then(function (response) {
-        _this.sales = response.data.data;
-        _this.saleHeader = response.data.data.sale; //this.select = this.saleHeader.clor_fk;
+      this.editado = Object.assign({}, item);
+      axios.post('/client_sale_details/update', this.editado).then(function (response) {
+        _this.snackbar = true;
+        _this.textMsg = "¡Actualizado correctamente!";
+        console.log("¡Actualizado correctamente!");
 
-        console.log(_this.saleHeader.clor_fk);
+        _this.getTotal();
       })["catch"](function (e) {
         _this.errors.push(e);
       });
     },
-    getClients: function getClients() {
+    finalizar: function finalizar() {
+      console.log(this.select);
+    },
+    createsale: function createsale() {
       var _this2 = this;
 
+      axios.post('/clientsales?clor_pk=' + this.clor_pk + '').then(function (response) {
+        _this2.sales = response.data.data;
+        _this2.saleHeader = response.data.data.sale;
+        _this2.desserts = _this2.sales.sale_details;
+
+        _this2.getTotal();
+      })["catch"](function (e) {
+        _this2.errors.push(e);
+      });
+    },
+    getTotal: function getTotal() {
+      for (var i = 0; i < this.desserts.length; i++) {
+        this.subtotal = this.subtotal + this.desserts[i].clsd_price * this.desserts[i].clsd_quantity;
+      }
+
+      this.iva = this.subtotal * 0.16;
+      this.total = this.subtotal + this.iva;
+    },
+    getClients: function getClients() {
+      var _this3 = this;
+
       axios.get("/clients").then(function (response) {
-        _this2.clients = response.data.data;
+        _this3.clients = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPayment: function getPayment() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get("/paymentmethodsget").then(function (response) {
-        _this3.payments = response.data.data;
+        _this4.payments = response.data.data;
       })["catch"](function (e) {
         console.log(e);
+      });
+    },
+    borrar: function borrar(item) {
+      this.editado = Object.assign({}, item);
+      var r = confirm("¿Está seguro de borrar el registro?");
+
+      if (r == true) {
+        this.editado.clsd_pk = item.clsd_pk;
+        this["delete"]();
+      }
+    },
+    "delete": function _delete() {
+      var _this5 = this;
+
+      axios.post('/client_sale_details/destroy', this.editado).then(function (response) {
+        _this5.snackbar = true;
+        _this5.textMsg = "¡Eliminado correctamente!";
+
+        _this5.createsale();
+      });
+    },
+    actualizar: function actualizar(item) {
+      var _this6 = this;
+
+      this.editado = Object.assign({}, item);
+      axios.post('/client_sale_details/update', this.editado).then(function (response) {
+        _this6.snackbar = true;
+        _this6.textMsg = "¡Actualizado correctamente!";
+      })["catch"](function (e) {
+        _this6.errors.push(e);
       });
     }
   }
@@ -154,6 +301,40 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-snackbar",
+            {
+              attrs: { color: "#000000", timeout: _vm.timeout },
+              model: {
+                value: _vm.snackbar,
+                callback: function($$v) {
+                  _vm.snackbar = $$v
+                },
+                expression: "snackbar"
+              }
+            },
+            [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.textMsg) +
+                  "\n                "
+              ),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "blue", text: "" },
+                  on: {
+                    click: function($event) {
+                      _vm.snackbar = false
+                    }
+                  }
+                },
+                [_vm._v("\n                    Cerrar\n                ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-row",
             [
@@ -371,6 +552,209 @@ var render = function() {
                         },
                         [_vm._v("FINALIZAR")]
                       )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            [
+              _c(
+                "v-col",
+                [
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-simple-table", {
+                        scopedSlots: _vm._u([
+                          {
+                            key: "default",
+                            fn: function() {
+                              return [
+                                _c("thead", [
+                                  _c("tr", [
+                                    _c("th", { staticClass: "text-left" }, [
+                                      _vm._v("ID")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th", { staticClass: "text-left" }, [
+                                      _vm._v("Producto")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th", { staticClass: "text-left" }, [
+                                      _vm._v("Unidad Medida")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th", { staticClass: "text-left" }, [
+                                      _vm._v("Cantidad")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th", { staticClass: "text-left" }, [
+                                      _vm._v("Precio")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th", { staticClass: "text-left" }, [
+                                      _vm._v("Importe")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th"),
+                                    _vm._v(" "),
+                                    _c("th")
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "tbody",
+                                  [
+                                    _vm._l(_vm.desserts, function(item) {
+                                      return _c("tr", { key: item.prod_name }, [
+                                        _c("td", [
+                                          _vm._v(_vm._s(item.prod_identifier))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(_vm._s(item.prod_name))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(_vm._s(item.meas_name))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          [
+                                            _c("v-text-field", {
+                                              attrs: {
+                                                label: "",
+                                                required: ""
+                                              },
+                                              on: {
+                                                change: function($event) {
+                                                  return _vm.onQuantityChange(
+                                                    item
+                                                  )
+                                                }
+                                              },
+                                              model: {
+                                                value: item.clsd_quantity,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    item,
+                                                    "clsd_quantity",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression: "item.clsd_quantity"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.formatPrice(item.clsd_price)
+                                            )
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.formatPrice(
+                                                item.clsd_quantity *
+                                                  item.clsd_price
+                                              )
+                                            )
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          [
+                                            _c(
+                                              "v-icon",
+                                              {
+                                                attrs: { small: "" },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.borrar(item)
+                                                  }
+                                                }
+                                              },
+                                              [_vm._v("mdi-delete")]
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ])
+                                    }),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v("Subtotal")]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(_vm._s(_vm.subtotal))]),
+                                      _vm._v(" "),
+                                      _c("td")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v("I.V.A.")]),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v(_vm._s(_vm.iva))]),
+                                      _vm._v(" "),
+                                      _c("td")
+                                    ])
+                                  ],
+                                  2
+                                ),
+                                _vm._v(" "),
+                                _c("tfoot", [
+                                  _c("tr", [
+                                    _c("td"),
+                                    _vm._v(" "),
+                                    _c("td"),
+                                    _vm._v(" "),
+                                    _c("td"),
+                                    _vm._v(" "),
+                                    _c("td"),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v("Total")]),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(_vm.total))]),
+                                    _vm._v(" "),
+                                    _c("td")
+                                  ])
+                                ])
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ])
+                      })
                     ],
                     1
                   )

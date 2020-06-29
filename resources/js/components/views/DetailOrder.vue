@@ -1,6 +1,18 @@
 <template>
     <v-app>
         <v-container>
+        <v-snackbar color="#000000"
+                    v-model="snackbar"
+                    :timeout="timeout">
+                    {{ textMsg }}
+                    <v-btn
+                            color="blue"
+                            text
+                            @click="snackbar = false"
+                    >
+                        Cerrar
+                    </v-btn>
+                </v-snackbar>
             <v-row>
       <v-col>
         <v-card>
@@ -62,6 +74,73 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">ID</th>
+                  <th class="text-left">Producto</th>
+                  <th class="text-left">Unidad Medida</th>
+                  <th class="text-left">Cantidad</th>
+                  <th class="text-left">Precio</th>
+                  <th class="text-left">Importe</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in desserts" :key="item.prod_name">
+                  <td>{{ item.prod_identifier }}</td>
+                  <td>{{ item.prod_name }}</td>
+                  <td>{{ item.meas_name }}</td>
+                  <td>
+                  <v-text-field v-model="item.clsd_quantity" label=""
+                        @change="onQuantityChange(item)" required></v-text-field>
+                  </td>
+                  <td>{{ formatPrice(item.clsd_price) }}</td>
+                  <td>{{ formatPrice(item.clsd_quantity * item.clsd_price) }}</td>
+                  <td>
+                    <v-icon @click="borrar(item)" small>mdi-delete</v-icon>
+                  </td>
+                </tr>
+                <tr>
+                  <td />
+                  <td />
+                  <td />
+                  <td />
+                  <td>Subtotal</td>
+                  <td>{{subtotal}}</td>
+                  <td />
+                </tr>                
+                <tr>
+                  <td />
+                  <td />
+                  <td />
+                  <td />
+                  <td>I.V.A.</td>
+                  <td>{{iva}}</td>
+                  <td />
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td />
+                  <td />
+                  <td />
+                  <td />
+                  <td>Total</td>
+                  <td>{{total}}</td>
+                  <td />
+                </tr>
+              </tfoot>
+            </template>
+          </v-simple-table>
+        </v-card>
+      </v-col>
+    </v-row>
         </v-container>
     </v-app>
 </template>
@@ -76,7 +155,18 @@ export default {
         payments:[],
         saleHeader:'',
         saleDetail:[],
+        desserts:[],
         select:'',
+        snackbar: false,
+        timeout: 2000,
+        subtotal:0,
+        total:0,
+        iva:0,
+      textMsg: "",
+        editado:{
+            clsd_pk:0,
+            clsd_quantity:0,
+        },
     };
   },
    created() {
@@ -86,6 +176,24 @@ export default {
    },
 
   methods: {
+      formatPrice(value) {
+                        let val = (value/1).toFixed(2).replace(',', '.')
+                        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                    },
+        onQuantityChange(item){
+            this.editado = Object.assign({}, item)
+            axios.post('/client_sale_details/update', this.editado)
+                .then(response => {
+                    this.snackbar = true;
+                this.textMsg = "¡Actualizado correctamente!";
+                console.log("¡Actualizado correctamente!")
+                this.getTotal();
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                    })
+
+        },
       finalizar(){
           console.log(this.select);
       },
@@ -94,13 +202,23 @@ export default {
                 .then(response => {
                     this.sales = response.data.data;
                     this.saleHeader = response.data.data.sale;
-                    //this.select = this.saleHeader.clor_fk;
-                    console.log(this.saleHeader.clor_fk)
+                    this.desserts =  this.sales.sale_details;
+
+                    this.getTotal();
                 })
                 .catch(e => {
                     this.errors.push(e)
                     })
                 },
+    getTotal(){
+
+            for (var i = 0; i < this.desserts.length; i++) {
+                this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity );
+            }
+            this.iva =  this.subtotal * 0.16;
+
+            this.total = this.subtotal + this.iva;
+    },
     getClients(){
             axios.get("/clients")
             .then(response => {
@@ -121,6 +239,40 @@ export default {
                 console.log(e);
                 });
             },
+        
+        borrar(item) {
+        
+            this.editado = Object.assign({}, item)
+            var r = confirm("¿Está seguro de borrar el registro?");
+            if (r == true) {
+                this.editado.clsd_pk = item.clsd_pk;
+                this.delete()
+            }
+        },
+
+        delete: function () {
+            
+            axios.post('/client_sale_details/destroy', this.editado).then(response => {
+                this.snackbar = true;
+                this.textMsg = "¡Eliminado correctamente!";
+               this.createsale();
+            });
+        },
+
+        actualizar(item) {
+        
+            this.editado = Object.assign({}, item)
+            axios.post('/client_sale_details/update', this.editado)
+                .then(response => {
+                    this.snackbar = true;
+                this.textMsg = "¡Actualizado correctamente!";
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                    })
+        },
+
+        
     }
 }
 </script>
