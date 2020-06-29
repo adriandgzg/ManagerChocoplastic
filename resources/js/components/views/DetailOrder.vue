@@ -42,10 +42,10 @@
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
                 <v-combobox required v-model="selectStore"
-            :items="payments"
+            :items="stores"
             label="Sucursal"
-            item-text="pame_name"
-            item-value="pame_pk"
+            item-text="stor_name"
+            item-value="stor_pk"
             filled
             chips
             placeholder="Seleccionar Cliente"
@@ -141,6 +141,88 @@
         </v-card>
       </v-col>
     </v-row>
+
+    <!-- Dialog -->
+
+    
+    <v-dialog v-model="dialogcredito" max-width="500">
+      <v-card>
+        <v-card-title>Crédito:</v-card-title>
+        <v-card-text>
+          <v-text-field label="Comentario:"></v-text-field>
+          <span class="subheading font-weight-bold">Forma de Pago:</span>
+          <v-text-field
+            label="Efectivo: "
+            required
+            :rules="minNumberRules"
+            prefix="$"
+            type="number"
+            v-model="efectivo"
+          ></v-text-field>
+          <v-text-field label="Tarjeta: " v-model="tarjeta" required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
+
+          <br />
+          <tr>
+            <td>Subtotal</td>
+            <td> ${{subtotal}}</td>
+            <td />
+          </tr>          
+          <tr>
+            <td>Total I.V.A.</td>
+            <td> ${{iva}}</td>
+            <td />
+          </tr>
+          <tr>
+            <td>Total</td>
+            <td> ${{total}}</td>
+          </tr>
+          <tr>
+            <td>Total Crédito</td>
+            <td> ${{total - efectivo - tarjeta }}</td>
+          </tr>
+
+          <v-btn @click="dialogcredito = !dialogcredito">Cancelar</v-btn>
+          <v-btn @click="finalizarVenta" color="warning">Confirmar</v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogcontado" max-width="500">
+      <v-card>
+        <v-card-title>Contado</v-card-title>
+
+        <v-card-text>
+          <span class="subheading font-weight-bold">Forma de Pago:</span>
+
+          <v-text-field
+            label="Efectivo: "
+            required
+            :rules="minNumberRules"
+            prefix="$"
+            type="number"
+          ></v-text-field>
+          <v-text-field label="Tarjeta: " required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
+
+          <br />
+          <tr>
+            <td>Subtotal</td>
+            <td> ${{subtotal}}</td>
+            <td />
+          </tr>          
+          <tr>
+            <td>Total I.V.A.</td>
+            <td> ${{iva}}</td>
+            <td />
+          </tr>
+          <tr>
+            <td>Total</td>
+            <td> ${{total}}</td>
+          </tr>
+          <v-btn @click="dialogcontado = !dialogcontado">Cancelar</v-btn>
+          <v-btn @click="finalizarVenta" color="success">Confirmar</v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
         </v-container>
     </v-app>
 </template>
@@ -151,6 +233,7 @@ export default {
         clor_pk: this.$route.params.id,
         valid:false,
         sales:[],
+        stores:[],
         clients:[],
         payments:[],
         saleHeader:'',
@@ -164,17 +247,34 @@ export default {
         subtotal:0,
         total:0,
         iva:0,
+        efectivo:0,
+        tarjeta:0,
       textMsg: "",
         editado:{
             clsd_pk:0,
             clsd_quantity:0,
         },
+        editadoSale:{
+            clsa_pk:0,
+            clie_fk:0,
+            pame_fk:0,
+            stor_fk:0,
+        },
+        
+      dialogcredito: false,
+      dialogcontado: false,
+
+      minNumberRules: [
+                    value => !!value || 'Requerido.',
+                    value => value > 0 || 'El número debe ser mayor o igual a cero',
+                ],
     };
   },
    created() {
        this.createsale();
        this.getClients();
        this.getPayment();
+       this.getStores();
    },
 
   methods: {
@@ -198,8 +298,52 @@ export default {
         },
       finalizar(){
           console.log(this.selectClient);
+          
+          if(this.selectClient =='' || this.selectClient == null){
+              alert("Debe seleccionar un cliente");
+              return;
+          }
+
+          if(this.selectpame =='' || this.selectpame == null){
+              alert("Debe seleccionar un método de pago");
+              return;
+          }
+
+          if(this.selectStore =='' || this.selectStore == null){
+              alert("Debe seleccionar una sucursal");
+              return;
+          }
+          console.log("paso 2");
           console.log(this.selectpame);
           console.log(this.selectStore);
+
+          this.editadoSale.clsa_pk = this.saleHeader.clsa_pk;
+          this.editadoSale.clie_fk = this.selectClient.clie_pk;
+          this.editadoSale.pame_fk = this.selectpame.pame_pk;
+          this.editadoSale.stor_fk = this.selectStore.stor_pk;
+
+          if(this.editadoSale.pame_fk == 1)
+          this.dialogcontado = true;
+          else
+          this.dialogcredito = true;
+
+            
+      },
+      finalizarVenta(){
+          var r = confirm("¿Está seguro de finalizar la venta?");
+            if (r == true) {
+          axios.post('/clientsales/update', this.editadoSale)
+                .then(response => {
+                    this.snackbar = true;
+                this.textMsg = "¡Actualizado correctamente!";
+                alert("¡Actualizado correctamente!");
+                this.$router.push('/sales') ; 
+                
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                    })
+            }
       },
       createsale() {
             axios.post('/clientsales?clor_pk=' + this.clor_pk + '')
@@ -224,7 +368,7 @@ export default {
             this.total = this.subtotal + this.iva;
     },
     getClients(){
-            axios.get("/clients")
+            axios.get("/clientsget")
             .then(response => {
             this.clients = response.data.data;
             })
@@ -243,6 +387,16 @@ export default {
                 console.log(e);
                 });
             },
+        getStores(){
+            axios.get("/storeget")
+            .then(response => {
+            this.stores = response.data.data;
+            })
+            .catch(e => {
+            console.log(e);
+            });
+
+        },
         
         borrar(item) {
         
@@ -275,6 +429,8 @@ export default {
                     this.errors.push(e)
                     })
         },
+
+       
 
         
     }

@@ -33,17 +33,14 @@
                         </v-col>
                     </template>
                     <template v-slot:item.status="{ item }">                            
-                            <v-chip v-if="item.clor_status == 1" color="green" dark>  Activo  </v-chip>
-                            <v-chip v-else color="red" dark>Inactivo</v-chip>                        
+                            <v-chip v-if="item.clor_status == 2" color="green" dark>  Pagado  </v-chip>
+                            <v-chip v-else color="red" dark>Pendiente</v-chip>                        
                     </template>
                      <template v-slot:item.action="{ item }">   
                                     
                         <v-btn class="mr-2" fab dark small color="cyan" 
                                :href="'/detaiorder/'+item.clor_pk">
                             <v-icon dark>mdi-cash-register</v-icon>
-                        </v-btn>
-                        <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)">
-                            <v-icon dark>mdi-delete</v-icon>
                         </v-btn>
                     </template>
                 </v-data-table>
@@ -61,16 +58,20 @@ export default {
          headers: [
                     {
                         text: 'ID',
-                        value: 'clor_pk',
+                        value: 'clsa_pk',
                         width: '10%'
-                    }, 
-                    {
-                        text: 'No. Orden',
-                        value: 'clor_identifier'
-                    },
+                    },                     
                     {
                         text: 'Cliente',
                         value: 'clie_name'
+                    },
+                    {
+                        text: 'Sucursal',
+                        value: 'stor_name'
+                    },
+                    {
+                        text: 'Fecha',
+                        value: 'created_at'
                     },
                      {
                         text: 'Estatus',
@@ -107,5 +108,23 @@ export default {
                  ],
     };
   },
+  created() {
+       this.getSales();
+   },
+
+  methods: {
+
+      getSales() {
+      axios
+        .get("/clientsales")
+        .then(response => {
+            console.log(response.data)
+          this.sales = response.data.data;          
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+  }
 }
   </script>

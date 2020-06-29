@@ -12,7 +12,7 @@
         
         
 
-        <v-list-item href="/pos">
+        <v-list-item href="/sales">
           <v-list-item-action>
             <v-icon>mdi-cart</v-icon>
           </v-list-item-action>

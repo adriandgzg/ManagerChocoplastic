@@ -155,12 +155,95 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       clor_pk: this.$route.params.id,
       valid: false,
       sales: [],
+      stores: [],
       clients: [],
       payments: [],
       saleHeader: '',
@@ -174,17 +257,33 @@ __webpack_require__.r(__webpack_exports__);
       subtotal: 0,
       total: 0,
       iva: 0,
+      efectivo: 0,
+      tarjeta: 0,
       textMsg: "",
       editado: {
         clsd_pk: 0,
         clsd_quantity: 0
-      }
+      },
+      editadoSale: {
+        clsa_pk: 0,
+        clie_fk: 0,
+        pame_fk: 0,
+        stor_fk: 0
+      },
+      dialogcredito: false,
+      dialogcontado: false,
+      minNumberRules: [function (value) {
+        return !!value || 'Requerido.';
+      }, function (value) {
+        return value > 0 || 'El número debe ser mayor o igual a cero';
+      }]
     };
   },
   created: function created() {
     this.createsale();
     this.getClients();
     this.getPayment();
+    this.getStores();
   },
   methods: {
     formatPrice: function formatPrice(value) {
@@ -207,20 +306,59 @@ __webpack_require__.r(__webpack_exports__);
     },
     finalizar: function finalizar() {
       console.log(this.selectClient);
+
+      if (this.selectClient == '' || this.selectClient == null) {
+        alert("Debe seleccionar un cliente");
+        return;
+      }
+
+      if (this.selectpame == '' || this.selectpame == null) {
+        alert("Debe seleccionar un método de pago");
+        return;
+      }
+
+      if (this.selectStore == '' || this.selectStore == null) {
+        alert("Debe seleccionar una sucursal");
+        return;
+      }
+
+      console.log("paso 2");
       console.log(this.selectpame);
       console.log(this.selectStore);
+      this.editadoSale.clsa_pk = this.saleHeader.clsa_pk;
+      this.editadoSale.clie_fk = this.selectClient.clie_pk;
+      this.editadoSale.pame_fk = this.selectpame.pame_pk;
+      this.editadoSale.stor_fk = this.selectStore.stor_pk;
+      if (this.editadoSale.pame_fk == 1) this.dialogcontado = true;else this.dialogcredito = true;
     },
-    createsale: function createsale() {
+    finalizarVenta: function finalizarVenta() {
       var _this2 = this;
 
-      axios.post('/clientsales?clor_pk=' + this.clor_pk + '').then(function (response) {
-        _this2.sales = response.data.data;
-        _this2.saleHeader = response.data.data.sale;
-        _this2.desserts = _this2.sales.sale_details;
+      var r = confirm("¿Está seguro de finalizar la venta?");
 
-        _this2.getTotal();
+      if (r == true) {
+        axios.post('/clientsales/update', this.editadoSale).then(function (response) {
+          _this2.snackbar = true;
+          _this2.textMsg = "¡Actualizado correctamente!";
+          alert("¡Actualizado correctamente!");
+
+          _this2.$router.push('/sales');
+        })["catch"](function (e) {
+          _this2.errors.push(e);
+        });
+      }
+    },
+    createsale: function createsale() {
+      var _this3 = this;
+
+      axios.post('/clientsales?clor_pk=' + this.clor_pk + '').then(function (response) {
+        _this3.sales = response.data.data;
+        _this3.saleHeader = response.data.data.sale;
+        _this3.desserts = _this3.sales.sale_details;
+
+        _this3.getTotal();
       })["catch"](function (e) {
-        _this2.errors.push(e);
+        _this3.errors.push(e);
       });
     },
     getTotal: function getTotal() {
@@ -232,19 +370,28 @@ __webpack_require__.r(__webpack_exports__);
       this.total = this.subtotal + this.iva;
     },
     getClients: function getClients() {
-      var _this3 = this;
+      var _this4 = this;
 
-      axios.get("/clients").then(function (response) {
-        _this3.clients = response.data.data;
+      axios.get("/clientsget").then(function (response) {
+        _this4.clients = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPayment: function getPayment() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get("/paymentmethodsget").then(function (response) {
-        _this4.payments = response.data.data;
+        _this5.payments = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    getStores: function getStores() {
+      var _this6 = this;
+
+      axios.get("/storeget").then(function (response) {
+        _this6.stores = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -259,24 +406,24 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     "delete": function _delete() {
-      var _this5 = this;
+      var _this7 = this;
 
       axios.post('/client_sale_details/destroy', this.editado).then(function (response) {
-        _this5.snackbar = true;
-        _this5.textMsg = "¡Eliminado correctamente!";
+        _this7.snackbar = true;
+        _this7.textMsg = "¡Eliminado correctamente!";
 
-        _this5.createsale();
+        _this7.createsale();
       });
     },
     actualizar: function actualizar(item) {
-      var _this6 = this;
+      var _this8 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this6.snackbar = true;
-        _this6.textMsg = "¡Actualizado correctamente!";
+        _this8.snackbar = true;
+        _this8.textMsg = "¡Actualizado correctamente!";
       })["catch"](function (e) {
-        _this6.errors.push(e);
+        _this8.errors.push(e);
       });
     }
   }
@@ -485,10 +632,10 @@ var render = function() {
                                       _c("v-combobox", {
                                         attrs: {
                                           required: "",
-                                          items: _vm.payments,
+                                          items: _vm.stores,
                                           label: "Sucursal",
-                                          "item-text": "pame_name",
-                                          "item-value": "pame_pk",
+                                          "item-text": "stor_name",
+                                          "item-value": "stor_pk",
                                           filled: "",
                                           chips: "",
                                           placeholder: "Seleccionar Cliente"
@@ -773,6 +920,235 @@ var render = function() {
                           }
                         ])
                       })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "500" },
+              model: {
+                value: _vm.dialogcredito,
+                callback: function($$v) {
+                  _vm.dialogcredito = $$v
+                },
+                expression: "dialogcredito"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", [_vm._v("Crédito:")]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c("v-text-field", { attrs: { label: "Comentario:" } }),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        { staticClass: "subheading font-weight-bold" },
+                        [_vm._v("Forma de Pago:")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: {
+                          label: "Efectivo: ",
+                          required: "",
+                          rules: _vm.minNumberRules,
+                          prefix: "$",
+                          type: "number"
+                        },
+                        model: {
+                          value: _vm.efectivo,
+                          callback: function($$v) {
+                            _vm.efectivo = $$v
+                          },
+                          expression: "efectivo"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: {
+                          label: "Tarjeta: ",
+                          required: "",
+                          rules: _vm.minNumberRules,
+                          prefix: "$",
+                          type: "number"
+                        },
+                        model: {
+                          value: _vm.tarjeta,
+                          callback: function($$v) {
+                            _vm.tarjeta = $$v
+                          },
+                          expression: "tarjeta"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Subtotal")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(" $" + _vm._s(_vm.subtotal))]),
+                        _vm._v(" "),
+                        _c("td")
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Total I.V.A.")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(" $" + _vm._s(_vm.iva))]),
+                        _vm._v(" "),
+                        _c("td")
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Total")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(" $" + _vm._s(_vm.total))])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Total Crédito")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            " $" +
+                              _vm._s(_vm.total - _vm.efectivo - _vm.tarjeta)
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.dialogcredito = !_vm.dialogcredito
+                            }
+                          }
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "warning" },
+                          on: { click: _vm.finalizarVenta }
+                        },
+                        [_vm._v("Confirmar")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "500" },
+              model: {
+                value: _vm.dialogcontado,
+                callback: function($$v) {
+                  _vm.dialogcontado = $$v
+                },
+                expression: "dialogcontado"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", [_vm._v("Contado")]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(
+                        "span",
+                        { staticClass: "subheading font-weight-bold" },
+                        [_vm._v("Forma de Pago:")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: {
+                          label: "Efectivo: ",
+                          required: "",
+                          rules: _vm.minNumberRules,
+                          prefix: "$",
+                          type: "number"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: {
+                          label: "Tarjeta: ",
+                          required: "",
+                          rules: _vm.minNumberRules,
+                          prefix: "$",
+                          type: "number"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Subtotal")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(" $" + _vm._s(_vm.subtotal))]),
+                        _vm._v(" "),
+                        _c("td")
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Total I.V.A.")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(" $" + _vm._s(_vm.iva))]),
+                        _vm._v(" "),
+                        _c("td")
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Total")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(" $" + _vm._s(_vm.total))])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          on: {
+                            click: function($event) {
+                              _vm.dialogcontado = !_vm.dialogcontado
+                            }
+                          }
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "success" },
+                          on: { click: _vm.finalizarVenta }
+                        },
+                        [_vm._v("Confirmar")]
+                      )
                     ],
                     1
                   )

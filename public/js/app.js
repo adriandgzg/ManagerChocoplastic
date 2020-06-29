@@ -29896,7 +29896,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-list-item",
-                { attrs: { href: "/pos" } },
+                { attrs: { href: "/sales" } },
                 [
                   _c(
                     "v-list-item-action",

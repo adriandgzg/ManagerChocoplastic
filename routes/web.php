@@ -24,7 +24,7 @@ Route::put('/providers/update', 'ProviderController@update');
 Route::put('/providers/delete', 'ProviderController@delete');
 
 Route::get('/clientlist', 'ClientController@ClientsList');
-Route::get('/clients', 'ClientController@Clients');
+Route::get('/clientsget', 'ClientController@Clients');
 Route::post('/clients/add', 'ClientController@add');
 Route::put('/clients/update', 'ClientController@update');
 Route::put('/clients/delete', 'ClientController@delete');

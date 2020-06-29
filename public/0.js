@@ -62,22 +62,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       headers: [{
         text: 'ID',
-        value: 'clor_pk',
+        value: 'clsa_pk',
         width: '10%'
-      }, {
-        text: 'No. Orden',
-        value: 'clor_identifier'
       }, {
         text: 'Cliente',
         value: 'clie_name'
+      }, {
+        text: 'Sucursal',
+        value: 'stor_name'
+      }, {
+        text: 'Fecha',
+        value: 'created_at'
       }, {
         text: 'Estatus',
         value: 'status'
@@ -112,6 +112,21 @@ __webpack_require__.r(__webpack_exports__);
         return value && value.length == 10 || 'Requiere 10 caracteres';
       }]
     };
+  },
+  created: function created() {
+    this.getSales();
+  },
+  methods: {
+    getSales: function getSales() {
+      var _this = this;
+
+      axios.get("/clientsales").then(function (response) {
+        console.log(response.data);
+        _this.sales = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    }
   }
 });
 
@@ -243,16 +258,16 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                item.clor_status == 1
+                                item.clor_status == 2
                                   ? _c(
                                       "v-chip",
                                       { attrs: { color: "green", dark: "" } },
-                                      [_vm._v("  Activo  ")]
+                                      [_vm._v("  Pagado  ")]
                                     )
                                   : _c(
                                       "v-chip",
                                       { attrs: { color: "red", dark: "" } },
-                                      [_vm._v("Inactivo")]
+                                      [_vm._v("Pendiente")]
                                     )
                               ]
                             }
@@ -277,30 +292,6 @@ var render = function() {
                                   [
                                     _c("v-icon", { attrs: { dark: "" } }, [
                                       _vm._v("mdi-cash-register")
-                                    ])
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "error"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.borrar(item)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-delete")
                                     ])
                                   ],
                                   1

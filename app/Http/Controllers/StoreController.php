@@ -28,7 +28,7 @@ class StoreController extends ApiResponseController
 
     public function Stores(){
         $stores = DB::table('stores AS P')
-        ->where('stor_starus','=',1)
+        ->where('stor_status','=',1)
         ->get();
         
         
