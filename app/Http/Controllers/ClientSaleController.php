@@ -269,12 +269,12 @@ class ClientSaleController extends Controller
 
         try {
             //Asignacion de variables
-           $vclas_pk = $vInput['clsa_pk'];
+           $clsa_pk = $vInput['clsa_pk'];
            $vclie_fk = $vInput['clie_fk'];
            $vpame_fk = $vInput['pame_fk'];
            $vstor_fk = $vInput['stor_fk'];
 
-            $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)->where('clsa_status', '=', 0)->first();
+            $vClientSale = ClientSale::where('clsa_pk', '=', $clsa_pk)->where('clsa_status', '=', 0)->first();
 
             if($vClientSale)
             { 
@@ -291,7 +291,7 @@ class ClientSaleController extends Controller
                 $vclsa_identifier =  "Ven_" . $vsyst_clie_sale;
                 //Modificar Venta (Finalizar)
                 DB::table('client_sales')
-                ->where('clsa_pk', '=', $vclsa_pk)
+                ->where('clsa_pk', '=', $clsa_pk)
                 ->update(['clsa_status' =>  $vclsa_status, 'clie_fk' =>  $vclie_fk, 'pame_fk' =>  $vpame_fk, 'stor_fk' => $vstor_fk, 'clsa_identifier' => $vclsa_identifier]);
 
 
