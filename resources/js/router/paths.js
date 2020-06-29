@@ -152,7 +152,17 @@ export default [{
         name: 'Ventas',
         view: 'Sales'
     },
-
+    {
+        path: '/orders',
+        name: 'Ordenes',
+        view: 'ClientOrders'
+    },
+    {
+        path: '/detaiorder/:id',
+        name: 'Detalle de Orden', 
+        view: 'DetailOrder'
+    },
+    
     
 
 ]

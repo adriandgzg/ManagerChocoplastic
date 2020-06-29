@@ -24,11 +24,13 @@ Route::put('/providers/update', 'ProviderController@update');
 Route::put('/providers/delete', 'ProviderController@delete');
 
 Route::get('/clientlist', 'ClientController@ClientsList');
+Route::get('/clients', 'ClientController@Clients');
 Route::post('/clients/add', 'ClientController@add');
 Route::put('/clients/update', 'ClientController@update');
 Route::put('/clients/delete', 'ClientController@delete');
 
 Route::get('/storelist', 'StoreController@StoresList');
+Route::get('/storeget', 'StoreController@Stores');
 Route::post('/store/add', 'StoreController@add');
 Route::put('/store/update', 'StoreController@update');
 Route::put('/store/delete', 'StoreController@delete');
@@ -52,6 +54,7 @@ Route::put('/entities/update', 'FederalEntityController@update');
 Route::put('/entities/delete', 'FederalEntityController@delete');
 
 Route::get('/paymentmethodsList', 'PaymentMethodController@PaymentMethodsList');
+Route::get('/paymentmethodsget', 'PaymentMethodController@PaymentMethods');
 Route::post('/paymentmethods/add', 'PaymentMethodController@add');
 Route::put('/paymentmethods/update', 'PaymentMethodController@update');
 Route::put('/paymentmethods/delete', 'PaymentMethodController@delete');
@@ -65,10 +68,6 @@ Route::get('/productList', 'ProductController@ProductList');
 Route::post('/product/add', 'ProductController@add');
 Route::put('/product/update', 'ProductController@update');
 Route::put('/product/delete', 'ProductController@delete');
-
-
-
-
 
 
 

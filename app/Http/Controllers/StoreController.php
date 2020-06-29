@@ -26,6 +26,19 @@ class StoreController extends ApiResponseController
         }
     }
 
+    public function Stores(){
+        $stores = DB::table('stores AS P')
+        ->where('stor_starus','=',1)
+        ->get();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Stores loaded',
+            'data' => $stores,
+        ], 200);
+    }
+
     public function StoresList(){
         $stores = DB::table('stores AS P')
         ->get();
