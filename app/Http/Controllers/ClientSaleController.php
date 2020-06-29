@@ -170,10 +170,40 @@ class ClientSaleController extends Controller
             }
             else
             {
+                $vClientSale = ClientSale::where('clor_fk', '=', $vclor_pk)->first();
+
+                $vClientSaleDetail = DB::table('client_sale_details AS CSD')
+                ->join('products AS P', 'P.prod_pk', '=', 'CSD.prod_fk')
+                ->join('measurements AS M', 'M.meas_pk', '=', 'CSD.meas_fk')
+                ->select(
+                    'CSD.clsd_pk',
+                    'CSD.clsa_fk',
+                    'P.prod_pk',
+                    'P.prod_identifier',
+                    'P.prod_name',
+                    'M.meas_pk',
+                    'M.meas_name',
+                    'M.meas_abbreviation',
+                    'CSD.clsd_quantity',
+                    'CSD.clsd_price',
+                    'CSD.clsd_discountrate',
+                    'CSD.clsd_ieps',
+                    'CSD.clsd_iva',
+                    'CSD.clsd_status'
+                )
+                ->where('clsa_fk', '=', $vClientSale->clsa_pk)
+                ->get();
+
+
                 return response()->json([
                     'code' => 404,
                     'success' => false,
-                    'message' => 'Pedido No Encontrado'
+                    'message' => 'Pedido No Encontrado',
+                    'data' => 
+                            [
+                                'sale' => $vClientSale, 
+                                'sale_details' => $vClientSaleDetail
+                            ]
                 ], 200);
             }
 
