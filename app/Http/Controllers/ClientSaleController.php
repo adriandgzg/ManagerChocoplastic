@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\ClientOrder;
-use App\ClientOrderDetail;
-use App\ClientSale;
-use App\ClientSaleDetail;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Exception;
 use Validator;
+use App\System;
+use App\ClientSale;
+use App\ClientOrder;
+use App\ClientSaleDetail;
+use App\ClientOrderDetail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ClientSaleController extends Controller
 {
@@ -245,9 +246,83 @@ class ClientSaleController extends Controller
      * @param  \App\ClientSale  $clientSale
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ClientSale $clientSale)
+    public function update(Request $r)
     {
-        //
+        $vInput = $r->all();
+
+        $validator = Validator::make($vInput, [
+            'clsa_pk' => 'required', //PK Venta
+            'clie_fk' => 'required', //PK Cliente
+            'pame_fk' => 'required', //PK Metodo Pago
+            'stor_fk' => 'required' //PK Sucursal
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'code' => 500,
+                'success' => false,
+                'message' => $validator->errors()
+            ], 200);
+
+        }
+
+        try {
+            //Asignacion de variables
+           $vclas_pk = $vInput['clsa_pk'];
+           $vclie_fk = $vInput['clie_fk'];
+           $vpame_fk = $vInput['pame_fk'];
+           $vstor_fk = $vInput['stor_fk'];
+
+            $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)->where('clsa_status', '=', 0)->first();
+
+            if($vClientSale)
+            { 
+                if ($vpame_fk == 1) {
+                    $vclsa_status = 3;
+                } else {
+                    $vclsa_status = 2;
+                }
+                
+                //Buscar el folio consecutivo
+                $vSystem = System::select('syst_clie_sale')->first();
+                $vsyst_clie_sale = $vSystem->syst_clie_sale;
+                
+                $vclsa_identifier =  "Ven_" . $vsyst_clie_sale;
+                //Modificar Venta (Finalizar)
+                DB::table('client_sales')
+                ->where('clsa_pk', '=', $vclsa_pk)
+                ->update(['clsa_status' =>  $vclsa_status, 'clie_fk' =>  $vclie_fk, 'pame_fk' =>  $vpame_fk, 'stor_fk' => $vstor_fk, 'clsa_identifier' => $vclsa_identifier]);
+
+
+                //Modificar Folio del Venta
+                DB::table('systems')
+                ->update(['syst_clie_sale' =>  $vsyst_clie_sale + 1]);
+                
+                return response()->json([
+                    'code' => 200,
+                    'success' => true,
+                    'message' => 'Venta Finaliza Correctamente',
+                    'data' => $vclsa_identifier 
+                ], 200);
+            }
+            else
+            {
+                return response()->json([
+                    'code' => 404,
+                    'success' => false,
+                    'message' => 'Venta No Encontrada'
+         
+                ], 200);
+            }
+
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'success' => false,
+                'message' => $e
+            ], 200);
+        }
     }
 
     /**
