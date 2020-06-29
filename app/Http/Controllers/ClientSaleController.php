@@ -28,7 +28,12 @@ class ClientSaleController extends Controller
                 ->select(
                     'CS.clsa_pk',
                     'CS.clsa_identifier',
-                    'CS.clsa_status',
+                    //'CS.clsa_status',
+                    DB::raw('(CASE 
+                        WHEN CS.clsa_status = 0 THEN "Pendiente" 
+                        WHEN CS.clsa_status = 1 THEN "Finalizado" 
+                        WHEN CS.clsa_status = 2 THEN "Pagado" 
+                        ELSE "" END) AS clsa_status'),
                     'CS.created_at',
                     'C.clie_pk',
                     'C.clie_identifier',
@@ -39,7 +44,7 @@ class ClientSaleController extends Controller
                     'S.stor_pk',
                     'S.stor_name',
                 )
-                ->where('clsa_status', '<>', 0)
+                //->where('clsa_status', '<>', 0)
                 ->get();
 
             return response()->json([
