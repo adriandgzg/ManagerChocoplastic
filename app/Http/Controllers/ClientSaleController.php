@@ -20,7 +20,42 @@ class ClientSaleController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $vClientSales = DB::table('client_sales AS CS')
+                ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
+                ->join('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
+                ->join('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
+                ->select(
+                    'CS.clsa_pk',
+                    'CS.clsa_identifier',
+                    'CS.clsa_status',
+                    'CS.created_at',
+                    'C.clie_pk',
+                    'C.clie_identifier',
+                    'C.clie_name',
+                    'C.clie_rfc',
+                    'PM.pame_pk',
+                    'PM.pame_name',
+                    'S.stor_pk',
+                    'S.stor_name',
+                )
+                ->where('clsa_status', '<>', 0)
+                ->get();
+
+            return response()->json([
+                'code' => 200,
+                'success' => true,
+                'message' => 'Ventas de los clientes',
+                'data' =>  $vClientSales
+            ], 200);
+            
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'success' => false,
+                'message' => $e
+            ], 200);
+        }
 
         
     }

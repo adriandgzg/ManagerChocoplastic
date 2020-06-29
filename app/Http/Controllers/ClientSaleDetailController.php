@@ -18,7 +18,7 @@ class ClientSaleDetailController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -78,7 +78,6 @@ class ClientSaleDetailController extends Controller
         $validator = Validator::make($vInput, [
             'clsd_pk' => 'required', //PK Venta Detalle Producto
             'clsd_quantity' => 'required', //Cantidad Venta Detalle Producto
-            
         ]);
 
 

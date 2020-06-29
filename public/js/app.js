@@ -89368,27 +89368,27 @@ var map = {
 	],
 	"./ClientOrders.vue": [
 		"./resources/js/components/views/ClientOrders.vue",
-		25
+		6
 	],
 	"./Clients.vue": [
 		"./resources/js/components/views/Clients.vue",
-		6
+		7
 	],
 	"./Coverages.vue": [
 		"./resources/js/components/views/Coverages.vue",
-		7
+		8
 	],
 	"./Dashboard.vue": [
 		"./resources/js/components/views/Dashboard.vue",
-		8
+		9
 	],
 	"./DetailOrder.vue": [
 		"./resources/js/components/views/DetailOrder.vue",
-		26
+		10
 	],
 	"./Entities.vue": [
 		"./resources/js/components/views/Entities.vue",
-		9
+		11
 	],
 	"./Maps.vue": [
 		"./resources/js/components/views/Maps.vue",
@@ -89396,66 +89396,66 @@ var map = {
 	],
 	"./Measurements.vue": [
 		"./resources/js/components/views/Measurements.vue",
-		10
+		12
 	],
 	"./Missions.vue": [
 		"./resources/js/components/views/Missions.vue",
 		1,
-		11
+		13
 	],
 	"./Notifications.vue": [
 		"./resources/js/components/views/Notifications.vue",
-		12
+		14
 	],
 	"./PaymentMethods.vue": [
 		"./resources/js/components/views/PaymentMethods.vue",
-		13
+		15
 	],
 	"./PaymentShapes.vue": [
 		"./resources/js/components/views/PaymentShapes.vue",
-		14
+		16
 	],
 	"./PointOfSale.vue": [
 		"./resources/js/components/views/PointOfSale.vue",
-		15
+		17
 	],
 	"./Product.vue": [
 		"./resources/js/components/views/Product.vue",
-		16
+		18
 	],
 	"./Proveedores.vue": [
 		"./resources/js/components/views/Proveedores.vue",
-		17
+		19
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
 		0,
-		18
+		20
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
 		0,
-		19
+		21
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		20
+		22
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		21
+		23
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		24
+		26
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		22
+		24
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		23
+		25
 	]
 };
 function webpackAsyncContext(req) {
