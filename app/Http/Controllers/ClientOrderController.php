@@ -39,13 +39,13 @@ class ClientOrderController extends ApiResponseController
                 ->where('clor_status', '=', 1)
                 ->get();
 
-
             return response()->json([
                 'code' => 200,
                 'success' => true,
                 'message' => 'Pedidos de los clientes',
                 'data' =>  $vClientOrders
             ], 200);
+            
         } catch (Exception $e) {
             return response()->json([
                 'code' => 500,
