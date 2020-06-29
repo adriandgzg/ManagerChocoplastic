@@ -166,7 +166,9 @@ __webpack_require__.r(__webpack_exports__);
       saleHeader: '',
       saleDetail: [],
       desserts: [],
-      select: '',
+      selectClient: '',
+      selectStore: '',
+      selectpame: '',
       snackbar: false,
       timeout: 2000,
       subtotal: 0,
@@ -204,7 +206,9 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     finalizar: function finalizar() {
-      console.log(this.select);
+      console.log(this.selectClient);
+      console.log(this.selectpame);
+      console.log(this.selectStore);
     },
     createsale: function createsale() {
       var _this2 = this;
@@ -393,11 +397,11 @@ var render = function() {
                                           placeholder: "Seleccionar Cliente"
                                         },
                                         model: {
-                                          value: _vm.select,
+                                          value: _vm.selectClient,
                                           callback: function($$v) {
-                                            _vm.select = $$v
+                                            _vm.selectClient = $$v
                                           },
-                                          expression: "select"
+                                          expression: "selectClient"
                                         }
                                       })
                                     ],
@@ -488,6 +492,13 @@ var render = function() {
                                           filled: "",
                                           chips: "",
                                           placeholder: "Seleccionar Cliente"
+                                        },
+                                        model: {
+                                          value: _vm.selectStore,
+                                          callback: function($$v) {
+                                            _vm.selectStore = $$v
+                                          },
+                                          expression: "selectStore"
                                         }
                                       })
                                     ],
@@ -518,6 +529,13 @@ var render = function() {
                                           filled: "",
                                           chips: "",
                                           placeholder: "Seleccionar Cliente"
+                                        },
+                                        model: {
+                                          value: _vm.selectpame,
+                                          callback: function($$v) {
+                                            _vm.selectpame = $$v
+                                          },
+                                          expression: "selectpame"
                                         }
                                       })
                                     ],

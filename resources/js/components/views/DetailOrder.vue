@@ -22,7 +22,7 @@
           <v-row>
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <v-combobox v-model="select" :items="clients" label="Cliente"
+                <v-combobox v-model="selectClient" :items="clients" label="Cliente"
                 item-text="clie_name" item-value="clie_pk" filled chips 
                 placeholder="Seleccionar Cliente"></v-combobox>
               </v-card-text>
@@ -41,7 +41,7 @@
           <v-row>
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <v-combobox required
+                <v-combobox required v-model="selectStore"
             :items="payments"
             label="Sucursal"
             item-text="pame_name"
@@ -55,7 +55,7 @@
           
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <v-combobox required
+                <v-combobox required v-model="selectpame"
             :items="payments"
             label="Métodos de pago"
             item-text="pame_name"
@@ -156,7 +156,9 @@ export default {
         saleHeader:'',
         saleDetail:[],
         desserts:[],
-        select:'',
+        selectClient:'',
+        selectStore:'',
+        selectpame:'',
         snackbar: false,
         timeout: 2000,
         subtotal:0,
@@ -195,7 +197,9 @@ export default {
 
         },
       finalizar(){
-          console.log(this.select);
+          console.log(this.selectClient);
+          console.log(this.selectpame);
+          console.log(this.selectStore);
       },
       createsale() {
             axios.post('/clientsales?clor_pk=' + this.clor_pk + '')
