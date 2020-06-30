@@ -126,7 +126,7 @@ import { mapGetters, mapMutations, mapState } from "vuex";
 
 export default {
   data: () => ({
-    logo: "./images/logo_chocoplastic_miniatura.png",
+    logo: "/images/logo_chocoplastic_miniatura.png",
     links: [
       {
         to: "/admins",
