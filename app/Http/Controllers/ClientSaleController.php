@@ -111,8 +111,8 @@ class ClientSaleController extends Controller
                 $SelectCO = ClientOrder::where('clor_pk', '=', $vclor_pk)
                     ->select(
                         array(
-                            'clor_pk AS clor_fk',
                             'clie_fk', 
+                            'clor_pk AS clor_fk',
                             DB::raw("0 AS clsa_status"),
                             DB::raw("NOW() AS created_at"),
                             DB::raw("NOW() AS updated_at")
