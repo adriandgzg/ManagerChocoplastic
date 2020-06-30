@@ -32,7 +32,7 @@ class ClientSaleController extends Controller
                     DB::raw('(CASE 
                         WHEN CS.clsa_status = 0 THEN "Pendiente" 
                         WHEN CS.clsa_status = 1 THEN "Finalizado" 
-                        WHEN CS.clsa_status = 2 THEN "Pagado" 
+                        WHEN CS.clsa_status = 3 THEN "Pagado" 
                         ELSE "" END) AS clsa_status'),
                     'CS.created_at',
                     'C.clie_pk',

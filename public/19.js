@@ -59,15 +59,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       headers: [{
         text: 'ID',
-        value: 'clsa_pk',
+        value: 'clsa_identifier',
         width: '10%'
       }, {
         text: 'Cliente',
@@ -79,8 +76,11 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Fecha',
         value: 'created_at'
       }, {
+        text: 'Metodo Pago',
+        value: 'pame_name'
+      }, {
         text: 'Estatus',
-        value: 'status'
+        value: 'clsa_status'
       }, {
         text: '',
         value: 'action',
@@ -252,25 +252,6 @@ var render = function() {
                               ]
                             },
                             proxy: true
-                          },
-                          {
-                            key: "item.status",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                item.clor_status == 2
-                                  ? _c(
-                                      "v-chip",
-                                      { attrs: { color: "green", dark: "" } },
-                                      [_vm._v("  Pagado  ")]
-                                    )
-                                  : _c(
-                                      "v-chip",
-                                      { attrs: { color: "red", dark: "" } },
-                                      [_vm._v("Pendiente")]
-                                    )
-                              ]
-                            }
                           },
                           {
                             key: "item.action",

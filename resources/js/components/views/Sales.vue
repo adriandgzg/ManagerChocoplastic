@@ -32,10 +32,7 @@
                                           hide-details></v-text-field>
                         </v-col>
                     </template>
-                    <template v-slot:item.status="{ item }">                            
-                            <v-chip v-if="item.clor_status == 2" color="green" dark>  Pagado  </v-chip>
-                            <v-chip v-else color="red" dark>Pendiente</v-chip>                        
-                    </template>
+                   
                      <template v-slot:item.action="{ item }">   
                                     
                         <v-btn class="mr-2" fab dark small color="cyan" 
@@ -58,7 +55,7 @@ export default {
          headers: [
                     {
                         text: 'ID',
-                        value: 'clsa_pk',
+                        value: 'clsa_identifier',
                         width: '10%'
                     },                     
                     {
@@ -73,9 +70,13 @@ export default {
                         text: 'Fecha',
                         value: 'created_at'
                     },
+                    {
+                        text: 'Metodo Pago',
+                        value: 'pame_name'
+                    },
                      {
                         text: 'Estatus',
-                        value: 'status'
+                        value: 'clsa_status'
                     },
                     {
                         text: '',
