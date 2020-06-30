@@ -1,8 +1,8 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[8],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Coverages.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Coverages.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -48,177 +48,269 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      map: {},
-      drawingManager: {},
-      stores: [],
-      store: ''
+      dailySalesChart: {
+        data: {
+          labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+          series: [[12, 17, 7, 17, 23, 18, 38]]
+        },
+        options: {
+          lineSmooth: this.$chartist.Interpolation.cardinal({
+            tension: 0
+          }),
+          low: 0,
+          high: 50,
+          // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          }
+        }
+      },
+      dataCompletedTasksChart: {
+        data: {
+          labels: ['12am', '3pm', '6pm', '9pm', '12pm', '3am', '6am', '9am'],
+          series: [[230, 750, 450, 300, 280, 240, 200, 190]]
+        },
+        options: {
+          lineSmooth: this.$chartist.Interpolation.cardinal({
+            tension: 0
+          }),
+          low: 0,
+          high: 1000,
+          // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          }
+        }
+      },
+      emailsSubscriptionChart: {
+        data: {
+          labels: ['Ja', 'Fe', 'Ma', 'Ap', 'Mai', 'Ju', 'Jul', 'Au', 'Se', 'Oc', 'No', 'De'],
+          series: [[542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]]
+        },
+        options: {
+          axisX: {
+            showGrid: false
+          },
+          low: 0,
+          high: 1000,
+          chartPadding: {
+            top: 0,
+            right: 5,
+            bottom: 0,
+            left: 0
+          }
+        },
+        responsiveOptions: [['screen and (max-width: 640px)', {
+          seriesBarDistance: 5,
+          axisX: {
+            labelInterpolationFnc: function labelInterpolationFnc(value) {
+              return value[0];
+            }
+          }
+        }]]
+      },
+      headers: [{
+        sortable: false,
+        text: 'ID',
+        value: 'id'
+      }, {
+        sortable: false,
+        text: 'Name',
+        value: 'name'
+      }, {
+        sortable: false,
+        text: 'Salary',
+        value: 'salary',
+        align: 'right'
+      }, {
+        sortable: false,
+        text: 'Country',
+        value: 'country',
+        align: 'right'
+      }, {
+        sortable: false,
+        text: 'City',
+        value: 'city',
+        align: 'right'
+      }],
+      items: [{
+        name: 'Dakota Rice',
+        country: 'Niger',
+        city: 'Oud-Tunrhout',
+        salary: '$35,738'
+      }, {
+        name: 'Minerva Hooper',
+        country: 'Curaçao',
+        city: 'Sinaai-Waas',
+        salary: '$23,738'
+      }, {
+        name: 'Sage Rodriguez',
+        country: 'Netherlands',
+        city: 'Overland Park',
+        salary: '$56,142'
+      }, {
+        name: 'Philip Chanley',
+        country: 'Korea, South',
+        city: 'Gloucester',
+        salary: '$38,735'
+      }, {
+        name: 'Doris Greene',
+        country: 'Malawi',
+        city: 'Feldkirchen in Kārnten',
+        salary: '$63,542'
+      }],
+      tabs: 0,
+      list: {
+        0: false,
+        1: false,
+        2: false
+      }
     };
   },
-  created: function created() {
-    this.getCoverages();
-  },
-  mounted: function mounted() {
-    var mapsScript = document.createElement('script');
-    mapsScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC4P8sBXqyMQpCqYbmnrV5WeHYgz9ukRSg&libraries=drawing,geometry&sensor=false');
-    document.head.appendChild(mapsScript);
-  },
   methods: {
-    getCoverages: function getCoverages() {
-      var _this = this;
-
-      axios.get('/coverages').then(function (response) {
-        _this.stores = response.data.data;
-      })["catch"](function (e) {
-        console.log(e);
-      });
-    },
-    initMap: function initMap() {
-      var self = this;
-      this.map = new google.maps.Map(document.getElementById('map'), {
-        center: {
-          lat: 17.988073,
-          lng: -92.940934
-        },
-        zoom: 15
-      });
-      this.drawingManager = new google.maps.drawing.DrawingManager({
-        drawingControl: true,
-        drawingControlOptions: {
-          position: google.maps.ControlPosition.TOP_CENTER,
-          drawingModes: ['polygon']
-        }
-      });
-      this.drawingManager.setMap(this.map);
-      self.loadPolygons(this.map);
-      google.maps.event.addListener(this.drawingManager, 'polygoncomplete', function (polygon) {
-        self.savePolygon(polygon);
-        self.setPolygonEvents(polygon);
-      });
-    },
-    setPolygonEvents: function setPolygonEvents(polygon) {
-      var self = this;
-      google.maps.event.addListener(polygon, 'click', function (event) {
-        console.log(this);
-      });
-      google.maps.event.addListener(polygon, 'rightclick', function (e) {
-        if (e.vertex == undefined) {
-          var res = confirm("¿Desea eliminar esta cobertura? Este cambio no se puede deshacer.");
-
-          if (res) {
-            this.setMap(null);
-            self.destroyPolygon(polygon, this);
-          }
-        } else {
-          polygon.getPath().removeAt(e.vertex);
-          self.updatePolygon(polygon);
-        }
-      });
-      google.maps.event.addListener(polygon.getPath(), 'set_at', function (event) {
-        self.updatePolygon(polygon);
-      });
-      google.maps.event.addListener(polygon.getPath(), 'insert_at', function () {
-        self.updatePolygon(polygon);
-      });
-    },
-    savePolygon: function savePolygon(polygon) {
-      var _this2 = this;
-
-      var self = this;
-      var encode = google.maps.geometry.encoding.encodePath(polygon.getPath());
-      var store = this.stores.find(function (item) {
-        return item.id == _this2.store;
-      });
-      axios.put('/coverages', {
-        id: self.store,
-        name: store.name,
-        store_id: store.id,
-        polygon: polygon.getPath().getArray().toString(),
-        encode: encode
-      }).then(function (response) {
-        polygon.id = response.data.data.id;
-        self.drawingManager.setDrawingMode(null);
-      });
-    },
-    updatePolygon: function updatePolygon(polygon) {
-      var encode = google.maps.geometry.encoding.encodePath(polygon.getPath());
-      axios.post('/coverages/' + polygon.id, {
-        polygon: polygon.getPath().getArray().toString(),
-        encode: encode
-      }).then(function (response) {
-        console.log("Poligono actualizado");
-      });
-    },
-    destroyPolygon: function destroyPolygon(polygon, t) {
-      axios.get('/coverages/destroy/' + polygon.id).then(function (response) {
-        t.setMap(null);
-      });
-    },
-    loadPolygons: function loadPolygons(map) {
-      var self = this;
-      axios.get('/coverages/' + this.store) // $("#sucCobertura").val(),
-      .then(function (response) {
-        if (response.data.data.length <= 0) {
-          return;
-        }
-
-        var c = 0;
-        response.data.data.forEach(function (polyg) {
-          if (c == 0) {
-            if (polyg != null) {
-              self.drawPolygonWithEvents(polyg);
-            }
-          } else {
-            self.drawPolygon(polyg);
-          }
-
-          c = c + 1;
-        });
-      });
-    },
-    drawPolygon: function drawPolygon(polyg) {
-      this.drawingManager.drawingControl = true;
-      this.drawingManager.polygonOptions = {
-        editable: false,
-        clickable: false
-      };
-      this.drawingManager.setMap(this.map);
-      var decodePath = google.maps.geometry.encoding.decodePath(polyg.encode);
-      var polygon = new google.maps.Polygon({
-        path: decodePath,
-        map: this.map,
-        editable: false,
-        clickable: false,
-        strokeWeight: 0.6,
-        strokeColor: '#002266',
-        fillColor: '#002266'
-      });
-      polygon.id = polyg.id;
-    },
-    drawPolygonWithEvents: function drawPolygonWithEvents(polyg) {
-      var decodePath = google.maps.geometry.encoding.decodePath(polyg.encode);
-      var polygon = new google.maps.Polygon({
-        path: decodePath,
-        map: this.map,
-        editable: true,
-        strokeWeight: 0.8,
-        strokeColor: '#992200',
-        fillColor: '#e00'
-      });
-      polygon.id = polyg.id;
-      this.map.setCenter(decodePath[0]);
-      this.setPolygonEvents(polygon);
+    complete: function complete(index) {
+      this.list[index] = !this.list[index];
     }
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Coverages.vue?vue&type=template&id=7733448f&":
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18&":
 /*!******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Coverages.vue?vue&type=template&id=7733448f& ***!
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18& ***!
   \******************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -231,73 +323,335 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-container", [
-    _c("div", { staticClass: "container-fluid spark-screen" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-12 col-sm6" }, [
-          _c("div", { staticClass: "box box-primary collapsed-box" }, [
-            _c("div", { staticClass: "box-header with-border" }, [
-              _c("h3", { staticClass: "box-title" }, [
-                _vm._v("Nueva cobertura de entrega")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "box-tools pull-right" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-box-tool",
-                    attrs: {
-                      type: "button",
-                      "data-widget": "collapse",
-                      "data-toggle": "tooltip",
-                      title: "Abrir"
-                    }
-                  },
-                  [_c("i", { staticClass: "fa fa-plus" })]
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "box-body" }, [
+  return _c(
+    "v-container",
+    { attrs: { "fill-height": "", fluid: "", "grid-list-xl": "" } },
+    [
+      _c(
+        "v-layout",
+        { attrs: { wrap: "" } },
+        [
+          _c(
+            "v-flex",
+            { attrs: { md4: "", sm12: "", lg4: "" } },
+            [
               _c(
-                "div",
-                { staticClass: "form-group" },
+                "v-card",
                 [
-                  _c("label", [_vm._v("Sucursal")]),
+                  _c(
+                    "v-card",
+                    { attrs: { color: "info", tile: "" } },
+                    [
+                      _c("chartist", {
+                        attrs: {
+                          ratio: "ct-major-second",
+                          data: _vm.dailySalesChart.data,
+                          options: _vm.dailySalesChart.options,
+                          type: "Line"
+                        }
+                      })
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
-                  _c("v-select", {
-                    attrs: {
-                      items: _vm.stores,
-                      "item-text": "name",
-                      "item-value": "id",
-                      filled: "",
-                      chips: "",
-                      label: "Tienda",
-                      placeholder: "Selecciona sucursal"
-                    },
-                    on: { change: _vm.initMap },
-                    model: {
-                      value: _vm.store,
-                      callback: function($$v) {
-                        _vm.store = $$v
-                      },
-                      expression: "store"
-                    }
-                  })
+                  _c(
+                    "v-card",
+                    { attrs: { tile: "" } },
+                    [
+                      _c("v-card-title", [_vm._v("Transacciones por días")]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        {
+                          staticClass:
+                            "category d-inline-flex font-weight-light"
+                        },
+                        [
+                          _c(
+                            "v-icon",
+                            { attrs: { color: "green", small: "" } },
+                            [_vm._v("\n             mdi-arrow-up\n           ")]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "green--text" }, [
+                            _vm._v("55%")
+                          ]),
+                          _vm._v(
+                            " \n           increase in today's sales\n         "
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-icon",
+                            { staticClass: "mr-2", attrs: { small: "" } },
+                            [
+                              _vm._v(
+                                "\n             mdi-clock-outline\n           "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass:
+                                "caption grey--text font-weight-light"
+                            },
+                            [_vm._v("updated 4 minutes ago")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
                 ],
                 1
-              ),
-              _vm._v(" "),
-              _c("div", {
-                staticStyle: { height: "500px" },
-                attrs: { id: "map" }
-              })
-            ])
-          ])
-        ])
-      ])
-    ])
-  ])
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-flex",
+            { attrs: { md4: "", sm12: "", lg4: "" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-card",
+                    { attrs: { color: "info" } },
+                    [
+                      _c("chartist", {
+                        attrs: {
+                          ratio: "ct-major-second",
+                          type: "Bar",
+                          data: _vm.emailsSubscriptionChart.data,
+                          options: _vm.emailsSubscriptionChart.options,
+                          "responsive-options":
+                            _vm.emailsSubscriptionChart.responsiveOptions
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    { attrs: { tile: "" } },
+                    [
+                      _c("v-card-title", [_vm._v("Transacciones por mes")]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        {
+                          staticClass:
+                            "category d-inline-flex font-weight-light"
+                        },
+                        [
+                          _vm._v(
+                            "\n            Resultados de ultima campaña\n          "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-icon",
+                            { staticClass: "mr-2", attrs: { small: "" } },
+                            [
+                              _vm._v(
+                                "\n              mdi-clock-outline\n            "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass:
+                                "caption grey--text font-weight-light"
+                            },
+                            [_vm._v("updated 14 minutes ago")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-flex",
+            { attrs: { md4: "", sm12: "", lg4: "" } },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-card",
+                    { attrs: { color: "info" } },
+                    [
+                      _c("chartist", {
+                        attrs: {
+                          ratio: "ct-major-second",
+                          data: _vm.dataCompletedTasksChart.data,
+                          options: _vm.dataCompletedTasksChart.options,
+                          type: "Line"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    { attrs: { tile: "" } },
+                    [
+                      _c("v-card-title", [_vm._v("Promedio por hora")]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        {
+                          staticClass:
+                            "category d-inline-flex font-weight-light"
+                        },
+                        [
+                          _vm._v(
+                            "\n            Resultados de ultima campaña\n          "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-icon",
+                            { staticClass: "mr-2", attrs: { small: "" } },
+                            [
+                              _vm._v(
+                                "\n              mdi-clock-outline\n            "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              staticClass:
+                                "caption grey--text font-weight-light"
+                            },
+                            [_vm._v("updated 14 minutes ago")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-flex",
+            { attrs: { sm6: "", xs6: "", md6: "", lg6: "" } },
+            [
+              _c("v-card", [
+                _c(
+                  "div",
+                  { staticClass: "d-flex flex-no-wrap justify-space-between" },
+                  [
+                    _c(
+                      "div",
+                      [
+                        _c("v-card-title", { staticClass: "headline" }, [
+                          _vm._v("$34,245.00")
+                        ]),
+                        _vm._v(" "),
+                        _c("v-card-subtitle", [_vm._v("Ultimas 24 hrs")])
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        staticClass: "ma-3",
+                        attrs: { color: "info", size: "60", tile: "" }
+                      },
+                      [_vm._v("mdi-currency-usd")]
+                    )
+                  ],
+                  1
+                )
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-flex",
+            { attrs: { sm6: "", xs6: "", md6: "", lg6: "" } },
+            [
+              _c("v-card", [
+                _c(
+                  "div",
+                  { staticClass: "d-flex flex-no-wrap justify-space-between" },
+                  [
+                    _c(
+                      "div",
+                      [
+                        _c("v-card-title", { staticClass: "headline" }, [
+                          _vm._v("$1,325.00")
+                        ]),
+                        _vm._v(" "),
+                        _c("v-card-subtitle", [
+                          _vm._v("Transacciones canceladas")
+                        ])
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        staticClass: "ma-3",
+                        attrs: { color: "info", size: "60", tile: "" }
+                      },
+                      [_vm._v("mdi-cancel")]
+                    )
+                  ],
+                  1
+                )
+              ])
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -306,17 +660,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/views/Coverages.vue":
+/***/ "./resources/js/components/views/Dashboard.vue":
 /*!*****************************************************!*\
-  !*** ./resources/js/components/views/Coverages.vue ***!
+  !*** ./resources/js/components/views/Dashboard.vue ***!
   \*****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Coverages_vue_vue_type_template_id_7733448f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Coverages.vue?vue&type=template&id=7733448f& */ "./resources/js/components/views/Coverages.vue?vue&type=template&id=7733448f&");
-/* harmony import */ var _Coverages_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Coverages.vue?vue&type=script&lang=js& */ "./resources/js/components/views/Coverages.vue?vue&type=script&lang=js&");
+/* harmony import */ var _Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Dashboard.vue?vue&type=template&id=5a2d3b18& */ "./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18&");
+/* harmony import */ var _Dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Dashboard.vue?vue&type=script&lang=js& */ "./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -326,9 +680,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Coverages_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Coverages_vue_vue_type_template_id_7733448f___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Coverages_vue_vue_type_template_id_7733448f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _Dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -338,38 +692,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/views/Coverages.vue"
+component.options.__file = "resources/js/components/views/Dashboard.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/views/Coverages.vue?vue&type=script&lang=js&":
+/***/ "./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js&":
 /*!******************************************************************************!*\
-  !*** ./resources/js/components/views/Coverages.vue?vue&type=script&lang=js& ***!
+  !*** ./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js& ***!
   \******************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Coverages_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Coverages.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Coverages.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Coverages_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Dashboard.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Dashboard.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/views/Coverages.vue?vue&type=template&id=7733448f&":
+/***/ "./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18&":
 /*!************************************************************************************!*\
-  !*** ./resources/js/components/views/Coverages.vue?vue&type=template&id=7733448f& ***!
+  !*** ./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18& ***!
   \************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Coverages_vue_vue_type_template_id_7733448f___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Coverages.vue?vue&type=template&id=7733448f& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Coverages.vue?vue&type=template&id=7733448f&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Coverages_vue_vue_type_template_id_7733448f___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Dashboard.vue?vue&type=template&id=5a2d3b18& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Dashboard.vue?vue&type=template&id=5a2d3b18&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Coverages_vue_vue_type_template_id_7733448f___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_5a2d3b18___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
