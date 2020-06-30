@@ -99,7 +99,7 @@ class ClientSaleController extends Controller
 
         }
 
-        try {
+        //try {
             //Asignacion de variables
            $vclor_pk = $vInput['clor_pk'];
 
@@ -249,13 +249,13 @@ class ClientSaleController extends Controller
                 ], 200);
             }
 
-        } catch (Exception $e) {
+        /*} catch (Exception $e) {
             return response()->json([
                 'code' => 500,
                 'success' => false,
                 'message' => $e
             ], 200);
-        }
+        }*/
     }
 
     /**
