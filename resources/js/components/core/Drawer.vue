@@ -76,13 +76,13 @@
               </v-list-item-action>
               <v-list-item-title>Tiendas</v-list-item-title>
             </v-list-item>
-            <v-list-item href="/categories">
+            <v-list-item href="/categoriesView">
               <v-list-item-action>
                 <v-icon>mdi-cart</v-icon>
               </v-list-item-action>
               <v-list-item-title>Categorias</v-list-item-title>
             </v-list-item>
-            <v-list-item href="/measurements">
+            <v-list-item href="/measurementsView">
               <v-list-item-action>
                 <v-icon>mdi-cart</v-icon>
               </v-list-item-action>

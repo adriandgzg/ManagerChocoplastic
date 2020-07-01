@@ -14,84 +14,6 @@ export default [{
         name: 'Dashboard',
         view: 'Dashboard'
     },
-    /*{
-        path: '/admins',
-        name: 'Administración',
-        view: 'Administration'
-    },
-    {
-        path: '/user-profile',
-        name: 'User Profile',
-        view: 'UserProfile'
-    },
-    {
-        path: '/maps',
-        view: 'Maps'
-    },
-    {
-        path: '/notifications',
-        view: 'Notifications'
-    },
-    {
-        path: '/table',
-        view: 'Table'
-    },
-    {
-        path: '/categories',
-        name: 'Categorías',
-        view: 'Categorie'
-    },
-    {
-      path: '/business',
-      name: 'Negocios',
-      view: 'Business'
-    },
-    {
-        path: '/stores',
-        name: 'Tiendas',
-        view: 'Stores'
-    },
-    {
-        path: '/missions',
-        name: 'Misiones',
-        view: 'Missions'
-    },
-    {
-        path: '/products',
-        name: 'Productos',
-        view: 'Product'
-    },
-    {
-        path: '/sales',
-        name: 'Ventas',
-        view: 'Sales'
-    },
-    {
-        path: '/salesbusiness',
-        name: 'Ventas negocio',
-        view: 'SalesBusiness'
-    },
-    {
-        path: '/coverage',
-        name: 'Cobertura',
-        view: 'Coverages'
-    },
-    {
-        path: '/userlist',
-        name: 'Usuarios',
-        view: 'UserList'
-    },
-
-    {
-        path: '/pos',
-        name: 'Venta (Cobro)',
-        view: 'PointOfSale'
-    },
-    {
-        path: '/missions/:id/:idStore',
-        name: 'Negocios',
-        view: 'Missions'
-    },*/
     {
         path: '/pos',
         name: 'Venta (Cobro)',
@@ -113,12 +35,12 @@ export default [{
         view: 'Stores'
     },
     {
-        path: '/categories',
+        path: '/categoriesView',
         name: 'Categorias',
         view: 'Categorie'
     },
     {
-        path: '/measurements',
+        path: '/measurementsView',
         name: 'Medidas',
         view: 'Measurements'
     },
