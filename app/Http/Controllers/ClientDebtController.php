@@ -22,7 +22,9 @@ class ClientDebtController extends Controller
                 ->join('client_sales AS CS', 'CS.clsa_pk', '=', 'CD.clsa_fk')
                 ->select(
                     'CD.clde_pk',
-                    'CD.clde_amount',
+                    'CD.clde_amount',  //Monto de la deuda
+                    '0 AS clde_amount_paid', //Monto Pagado
+                    '0 AS clde_amount_outstanding', //Monto Pendiente por pagar
                     'CD.created_at',
                     'C.clie_pk',
                     'C.clie_identifier',

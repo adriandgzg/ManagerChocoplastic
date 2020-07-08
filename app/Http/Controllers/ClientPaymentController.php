@@ -130,7 +130,6 @@ class ClientPaymentController extends Controller
                     'C.clie_rfc',
 
                     'CD.clde_pk'
-                           
                 )
                 ->where('CP.clpa_status', '=', 1)
                 ->where('CP.clde_fk', '=', $clde_fk)
