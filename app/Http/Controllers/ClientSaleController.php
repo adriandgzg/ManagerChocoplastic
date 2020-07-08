@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\ClientDebt;
 use Exception;
 use Validator;
 use App\System;
 use App\ClientSale;
 use App\ClientOrder;
 use App\ClientOrderDetail;
+use App\ClientPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -31,7 +33,7 @@ class ClientSaleController extends Controller
                     //'CS.clsa_status',
                     DB::raw('(CASE 
                         WHEN CS.clsa_status = 0 THEN "Pendiente" 
-                        WHEN CS.clsa_status = 1 THEN "Finalizado" 
+                        WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
                         WHEN CS.clsa_status = 3 THEN "Pagado" 
                         ELSE "" END) AS clsa_status'),
                     'CS.created_at',
@@ -99,7 +101,7 @@ class ClientSaleController extends Controller
 
         }
 
-        //try {
+        try {
             //Asignacion de variables
            $vclor_pk = $vInput['clor_pk'];
 
@@ -249,13 +251,13 @@ class ClientSaleController extends Controller
                 ], 200);
             }
 
-        /*} catch (Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'code' => 500,
                 'success' => false,
                 'message' => $e
             ], 200);
-        }*/
+        }
     }
 
     /**
@@ -295,7 +297,10 @@ class ClientSaleController extends Controller
             'clsa_pk' => 'required', //PK Venta
             'clie_fk' => 'required', //PK Cliente
             'pame_fk' => 'required', //PK Metodo Pago
-            'stor_fk' => 'required' //PK Sucursal
+            'stor_fk' => 'required', //PK Sucursal
+            'clde_amount' => 'required', //Monto Total
+            'clpa_amount_cash' => 'required', //Monto Efectivo
+            'clpa_amount_transfer' => 'required', //Monto Transferencia
         ]);
 
 
@@ -305,8 +310,9 @@ class ClientSaleController extends Controller
                 'success' => false,
                 'message' => $validator->errors()
             ], 200);
-
         }
+
+
 
         try {
             //Asignacion de variables
@@ -314,6 +320,9 @@ class ClientSaleController extends Controller
            $vclie_fk = $vInput['clie_fk'];
            $vpame_fk = $vInput['pame_fk'];
            $vstor_fk = $vInput['stor_fk'];
+           $vclde_amount = $vInput['clde_amount'];
+           $vclpa_amount_cash = $vInput['clpa_amount_cash'];
+           $vclpa_amount_transfer = $vInput['clpa_amount_transfer'];
 
             $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)->where('clsa_status', '=', 0)->first();
 
@@ -322,6 +331,7 @@ class ClientSaleController extends Controller
                 if ($vpame_fk == 1) {
                     $vclsa_status = 3;
                 } else {
+                    
                     $vclsa_status = 2;
                 }
                 
@@ -333,7 +343,55 @@ class ClientSaleController extends Controller
                 //Modificar Venta (Finalizar)
                 DB::table('client_sales')
                 ->where('clsa_pk', '=', $vclsa_pk)
-                ->update(['clsa_status' =>  $vclsa_status, 'clie_fk' =>  $vclie_fk, 'pame_fk' =>  $vpame_fk, 'stor_fk' => $vstor_fk, 'clsa_identifier' => $vclsa_identifier]);
+                ->update([
+                    'clsa_status' =>  $vclsa_status, 
+                    'clie_fk' =>  $vclie_fk, 
+                    'pame_fk' =>  $vpame_fk, 
+                    'stor_fk' => $vstor_fk, 
+                    'clsa_identifier' => $vclsa_identifier
+                ]);
+
+
+
+                if ($vpame_fk == 1) {
+                    //De contado
+                } else {
+                    //Credito
+
+                    //Inserción de deuda
+                    $vCD = new ClientDebt();        
+                    $vCD->clie_fk = $vclie_fk;
+                    $vCD->clsa_fk = $vclsa_pk;
+                    $vCD->clde_amount = $vclde_amount;
+                    $vCD->save();
+
+                    $vclde_fk = $vCD->clde_pk;
+
+                    //Insersion de Abonos
+
+                    //Efectivo
+                    if($vclpa_amount_cash > 0)
+                    {
+                        $vCPC = new ClientPayment();        
+                        $vCPC->clie_fk = $vclie_fk;
+                        $vCPC->clde_fk = $vclde_fk;
+                        $vCPC->pash_fk = 1;
+                        $vCPC->clpa_amount = $vclpa_amount_cash;
+                        $vCPC->save();
+                    }
+
+                    //Transferencia
+                    if($vclpa_amount_transfer > 0)
+                    {
+                        $vCPT = new ClientPayment();        
+                        $vCPT->clie_fk = $vclie_fk;
+                        $vCPT->clde_fk = $vclde_fk;
+                        $vCPT->pash_fk = 2;
+                        $vCPT->clpa_amount = $vclpa_amount_transfer;
+                        $vCPT->save(); 
+                    }
+                }
+
 
 
                 //Modificar Folio del Venta
