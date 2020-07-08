@@ -62,9 +62,7 @@ class ClientSaleController extends Controller
                 'success' => false,
                 'message' => $e
             ], 200);
-        }
-
-        
+        }        
     }
 
     /**
