@@ -89760,7 +89760,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   view: 'DetailOrder'
 }, {
   path: '/clientdebts',
-  name: 'Pagos Clientes',
+  name: 'Cuentas por Pagar',
   view: 'ClientDebts'
 }]);
 
