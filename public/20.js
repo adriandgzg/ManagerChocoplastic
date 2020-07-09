@@ -262,7 +262,7 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                item.clsa_pk == 2
+                                item.clsa_status == "Pendiente"
                                   ? _c(
                                       "v-chip",
                                       { attrs: { color: "gray", dark: "" } },
@@ -285,7 +285,7 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                item.clsa_pk == 2
+                                item.clsa_status == "Pendiente"
                                   ? _c(
                                       "v-btn",
                                       {
