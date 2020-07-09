@@ -23,8 +23,8 @@ class ClientDebtController extends Controller
                 ->select(
                     'CD.clde_pk',
                     'CD.clde_amount',  //Monto de la deuda
-                    '0 AS clde_amount_paid', //Monto Pagado
-                    '0 AS clde_amount_outstanding', //Monto Pendiente por pagar
+                    'clde_amount AS clde_amount_paid', //Monto Pagado
+                    'clde_amount AS clde_amount_outstanding', //Monto Pendiente por pagar
                     'CD.created_at',
                     'C.clie_pk',
                     'C.clie_identifier',
