@@ -505,7 +505,7 @@ var render = function() {
                                     attrs: {
                                       required: "",
                                       items: _vm.payments,
-                                      label: "Métodos de pago",
+                                      label: "Forma de pago",
                                       "item-text": "pash_name",
                                       "item-value": "pash_pk",
                                       filled: "",
