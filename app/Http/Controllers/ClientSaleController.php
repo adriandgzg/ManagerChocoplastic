@@ -30,7 +30,7 @@ class ClientSaleController extends Controller
                 ->select(
                     'CS.clsa_pk',
                     'CS.clsa_identifier',
-                    'CS.clor_fk',
+                    'CS.clor_fk AS clor_pk',
                     DB::raw('(CASE 
                         WHEN CS.clsa_status = 0 THEN "Pendiente" 
                         WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
