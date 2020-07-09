@@ -30,7 +30,7 @@ class ClientSaleController extends Controller
                 ->select(
                     'CS.clsa_pk',
                     'CS.clsa_identifier',
-                    //'CS.clsa_status',
+                    'CS.clor_fk',
                     DB::raw('(CASE 
                         WHEN CS.clsa_status = 0 THEN "Pendiente" 
                         WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
@@ -46,7 +46,6 @@ class ClientSaleController extends Controller
                     'S.stor_pk',
                     'S.stor_name',
                 )
-                //->where('clsa_status', '<>', 0)
                 ->get();
 
             return response()->json([
@@ -248,7 +247,6 @@ class ClientSaleController extends Controller
                             ]
                 ], 200);
             }
-
         } catch (Exception $e) {
             return response()->json([
                 'code' => 500,
