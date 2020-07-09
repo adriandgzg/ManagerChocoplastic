@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use DB;
 use App\ClientDebt;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,39 @@ class ClientDebtController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $vClientSales = DB::table('client_debts AS CD')
+                ->join('clients AS C', 'C.clie_pk', '=', 'CD.clie_fk')
+                ->join('client_sales AS CS', 'CS.clsa_pk', '=', 'CD.clsa_fk')
+                ->select(
+                    'CD.clde_pk',
+                    'CD.clde_amount',  //Monto de la deuda
+                    '0 AS clde_amount_paid', //Monto Pagado
+                    '0 AS clde_amount_outstanding', //Monto Pendiente por pagar
+                    'CD.created_at',
+                    'C.clie_pk',
+                    'C.clie_identifier',
+                    'C.clie_name',
+                    'C.clie_rfc',
+                    'CS.clsa_identifier'       
+                )
+                ->where('CD.clde_status', '=', 1)
+                ->get();
+
+            return response()->json([
+                'code' => 200,
+                'success' => true,
+                'message' => 'Ventas por Cobrar de los clientes',
+                'data' =>  $vClientSales
+            ], 200);
+            
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'success' => false,
+                'message' => $e
+            ], 200);
+        }
     }
 
     /**

@@ -81,6 +81,12 @@ Route::post('/client_sale_details/destroy', 'ClientSaleDetailController@destroy'
 
 Route::get('/clientorders', 'ClientOrderController@index'); //Lista de Pedidos (Cliente)
 
+Route::get('/client/debts', 'ClientDebtController@index'); //Lista de Deudas (Cliente)
+
+Route::post('/client/payments', 'ClientPaymentController@store'); //Guardar Pagos (Cliente)
+Route::get('/client/payments/{clde_fk}', 'ClientPaymentController@show'); //Lista de Pagos, filtado por deuda (Cliente)
+
+
 
 
 

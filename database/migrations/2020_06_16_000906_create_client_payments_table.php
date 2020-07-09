@@ -17,8 +17,8 @@ class CreateClientPaymentsTable extends Migration
         Schema::create('client_payments', function (Blueprint $table) {
             $table->bigIncrements('clpa_pk'); //Llave Primaria
 
-            $table->bigInteger('prov_fk')->unsigned(); //Llave Foranea Catálogo de Proveedores
-            $table->foreign('prov_fk')->references('prov_pk')->on('providers')->onUpdate('cascade');
+            $table->bigInteger('clie_fk')->unsigned(); //Llave Foranea Catálogo de Clientes
+            $table->foreign('clie_fk')->references('clie_pk')->on('clients')->onUpdate('cascade');
 
             $table->bigInteger('clde_fk')->unsigned(); //Llave Foranea Cliente Deuda 
             $table->foreign('clde_fk')->references('clde_pk')->on('client_debts')->onUpdate('cascade');
