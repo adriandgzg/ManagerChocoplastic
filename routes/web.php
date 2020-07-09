@@ -74,12 +74,13 @@ Route::put('/product/delete', 'ProductController@delete');
 
 Route::get('/clientsales', 'ClientSaleController@index'); ////Lista de Ventas (Cliente)
 Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente) 
-Route::post('/clientsales/update', 'ClientSaleController@update'); //Finalziar Venta (Cliente)
+Route::post('/clientsales/update', 'ClientSaleController@update'); //Finalizar Venta (Cliente)
 
 Route::post('/client_sale_details/update', 'ClientSaleDetailController@update'); //Venta Producto Eliminar (Cliente)
 Route::post('/client_sale_details/destroy', 'ClientSaleDetailController@destroy'); //Venta Producto Modificar (Cliente)
 
 Route::get('/clientorders', 'ClientOrderController@index'); //Lista de Pedidos (Cliente)
+Route::post('/client/orders/destroy', 'ClientOrderController@destroy'); //Cancelar Pedido (Cliente)
 
 Route::get('/client/debts', 'ClientDebtController@index'); //Lista de Deudas (Cliente)
 

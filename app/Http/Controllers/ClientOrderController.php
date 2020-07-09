@@ -174,7 +174,6 @@ class ClientOrderController extends ApiResponseController
                 'success' => false,
                 'message' => $validator->errors()
             ], 200);
-
         }
 
         try {
@@ -213,10 +212,10 @@ class ClientOrderController extends ApiResponseController
                     'success' => true,
                     'message' => 'Información de Pedido',
                     'data' => 
-                            [
-                                'order' => $vClientOrder, 
-                                'order_details' => $vClientOrderDetail
-                            ]
+                        [
+                            'order' => $vClientOrder, 
+                            'order_details' => $vClientOrderDetail
+                        ]
                 ], 200);
 
             }
@@ -267,8 +266,58 @@ class ClientOrderController extends ApiResponseController
      * @param  \App\ClientOrder  $clientOrder
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClientOrder $clientOrder)
+    public function destroy(Request $r)
     {
-        //
+        $vInput = $r->all();
+
+        $validator = Validator::make($vInput, [
+            'clor_pk' => 'required'
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'code' => 500,
+                'success' => false,
+                'message' => $validator->errors()
+            ], 200);
+        }
+
+        try {
+            //Asignacion de variables
+           $vclor_pk = $vInput['clor_pk'];
+
+            $vClientOrder = ClientOrder::where('clor_pk', '=', $vclor_pk)->first();
+
+            if($vClientOrder)
+            { 
+                //Cancelar Pedido
+                DB::table('clor_pk')
+                ->where('clor_pk', '=', $vclor_pk)
+                ->update(['clor_status' =>  0]);
+    
+                return response()->json([
+                    'code' => 200,
+                    'success' => true,
+                    'message' => 'Pedido Cancelado Correctamente'
+                ], 200);
+
+            }
+            else
+            {
+                return response()->json([
+                    'code' => 404,
+                    'success' => false,
+                    'message' => 'Pedido No Encontrado'
+                ], 200);
+            }
+
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'success' => false,
+                'message' => $e
+            ], 200);
+        }
     }
 }
