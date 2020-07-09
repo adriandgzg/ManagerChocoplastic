@@ -644,6 +644,36 @@ var render = function() {
                                 _c("v-label", [
                                   _vm._v(
                                     "$" +
+                                      _vm._s(_vm.formatMoney(item.clde_amount))
+                                  )
+                                ])
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.clde_amount_paid",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c("v-label", [
+                                  _vm._v(
+                                    "$" +
+                                      _vm._s(
+                                        _vm.formatMoney(item.clde_amount_paid)
+                                      )
+                                  )
+                                ])
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.clde_amount_outstanding",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c("v-label", [
+                                  _vm._v(
+                                    "$" +
                                       _vm._s(
                                         _vm.formatMoney(
                                           item.clde_amount_outstanding
