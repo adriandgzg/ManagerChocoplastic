@@ -259,7 +259,7 @@ __webpack_require__.r(__webpack_exports__);
     getPayment: function getPayment() {
       var _this2 = this;
 
-      axios.get("/paymentmethodsget").then(function (response) {
+      axios.get("/paymentshapesget").then(function (response) {
         _this2.payments = response.data.data;
       })["catch"](function (e) {
         console.log(e);
@@ -268,7 +268,7 @@ __webpack_require__.r(__webpack_exports__);
     guardar: function guardar() {
       var _this3 = this;
 
-      this.editado.pash_fk = this.selectpame.pame_pk;
+      this.editado.pash_fk = this.selectpame.pash_pk;
 
       if (this.selectpame == '' || this.selectpame == null) {
         alert("Debe seleccionar un método de pago");
@@ -497,11 +497,11 @@ var render = function() {
                                       required: "",
                                       items: _vm.payments,
                                       label: "Métodos de pago",
-                                      "item-text": "pame_name",
-                                      "item-value": "pame_pk",
+                                      "item-text": "pash_name",
+                                      "item-value": "pash_pk",
                                       filled: "",
                                       chips: "",
-                                      placeholder: "Seleccionar Cliente"
+                                      placeholder: "Seleccionar una opción"
                                     },
                                     model: {
                                       value: _vm.selectpame,

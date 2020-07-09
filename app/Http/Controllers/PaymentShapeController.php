@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\PaymentShape;
 use Illuminate\Http\Request;
+use DB;
 
 class PaymentShapeController extends Controller
 {
@@ -19,6 +20,20 @@ class PaymentShapeController extends Controller
 
     public function PaymentShapesList(){
         $payment = PaymentShape::all();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'entities loaded',
+            'data' => $payment,
+        ], 200);
+    }
+
+    public function PaymentShapes(){
+        $payment = DB::table('payment_shapes AS P')
+        ->where('P.pash_status','=','1')
+        ->get();
+    
         
         
         return response()->json([

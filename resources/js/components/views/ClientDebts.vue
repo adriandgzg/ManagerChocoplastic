@@ -43,11 +43,11 @@
                                 <v-combobox required v-model="selectpame"
                             :items="payments"
                             label="Métodos de pago"
-                            item-text="pame_name"
-                            item-value="pame_pk"
+                            item-text="pash_name"
+                            item-value="pash_pk"
                             filled
                             chips
-                            placeholder="Seleccionar Cliente"
+                            placeholder="Seleccionar una opción"
                         ></v-combobox>
                             </v-card-text>
                             
@@ -255,7 +255,7 @@ this.editado.clsa_identifier = item.clsa_identifier
     },
     getPayment() {
             axios
-                .get("/paymentmethodsget")
+                .get("/paymentshapesget")
                 .then(response => {
                 this.payments = response.data.data;   
                 })
@@ -264,7 +264,7 @@ this.editado.clsa_identifier = item.clsa_identifier
                 });
             },
     guardar(){
-        this.editado.pash_fk = this.selectpame.pame_pk;
+        this.editado.pash_fk = this.selectpame.pash_pk;
        
         if(this.selectpame =='' || this.selectpame == null){
               alert("Debe seleccionar un método de pago");
