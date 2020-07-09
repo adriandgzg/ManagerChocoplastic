@@ -351,7 +351,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       console.log(this.total + '-' + (this.efectivo + this.tarjeta));
-      if (this.editadoSale.pame_fk == 1) if (this.total - (this.efectivo + this.tarjeta) == 0) {} else {
+      if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
         alert("Los montos de pago deben ser igual al total");
         return;
       }

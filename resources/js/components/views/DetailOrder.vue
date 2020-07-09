@@ -351,7 +351,7 @@ export default {
       finalizarVenta(){
         console.log((this.total + '-' + (this.efectivo + this.tarjeta)));
           if(this.editadoSale.pame_fk == 1)          
-          if((this.total - (this.efectivo + this.tarjeta))==0)
+          if((this.total - this.efectivo - this.tarjeta)==0)
           {
 
           }
