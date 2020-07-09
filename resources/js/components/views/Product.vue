@@ -96,6 +96,16 @@
                                           hide-details></v-text-field>
                         </v-col>
                     </template>
+                    
+                    <template v-slot:item.prod_actualprice="{ item }">          
+                        <v-label>${{formatMoney(item.prod_actualprice)}}</v-label>                              
+                    </template>
+                    <template v-slot:item.prod_eventualprice="{ item }">          
+                        <v-label>${{formatMoney(item.prod_eventualprice)}}</v-label>                              
+                    </template>
+                    <template v-slot:item.prod_preferentialprice="{ item }">          
+                        <v-label>${{formatMoney(item.prod_preferentialprice)}}</v-label>                              
+                    </template>
                     <template v-slot:item.status="{ item }">                            
                             <v-chip v-if="item.prod_status == 1" color="green" dark>  Activo  </v-chip>
                             <v-chip v-else color="red" dark>Inactivo</v-chip>                        
@@ -254,6 +264,22 @@ export default {
    },
 
   methods: {
+
+      formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
+          try {
+            decimalCount = Math.abs(decimalCount);
+            decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+            const negativeSign = amount < 0 ? "-" : "";
+
+            let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+            let j = (i.length > 3) ? i.length % 3 : 0;
+
+            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+          } catch (e) {
+            console.log(e)
+          }
+        },
 
       getProducts() {
       axios

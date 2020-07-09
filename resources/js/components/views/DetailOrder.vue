@@ -100,8 +100,8 @@
                   <v-text-field v-model="item.clsd_quantity" label=""
                         @change="onQuantityChange(item)" required></v-text-field>
                   </td>
-                  <td>{{ formatPrice(item.clsd_price) }}</td>
-                  <td>{{ formatPrice(item.clsd_quantity * item.clsd_price) }}</td>
+                  <td>${{ formatMoney(item.clsd_price) }}</td>
+                  <td>${{ formatMoney(item.clsd_quantity * item.clsd_price) }}</td>
                   <td>
                     <v-icon @click="borrar(item)" small>mdi-delete</v-icon>
                   </td>
@@ -112,7 +112,7 @@
                   <td />
                   <td />
                   <td>Subtotal</td>
-                  <td>{{subtotal}}</td>
+                  <td>${{formatMoney(subtotal)}}</td>
                   <td />
                 </tr>                
                 <tr>
@@ -121,7 +121,7 @@
                   <td />
                   <td />
                   <td>I.V.A.</td>
-                  <td>{{iva}}</td>
+                  <td>${{formatMoney(iva)}}</td>
                   <td />
                 </tr>
               </tbody>
@@ -132,7 +132,7 @@
                   <td />
                   <td />
                   <td>Total</td>
-                  <td>{{total}}</td>
+                  <td>${{formatMoney(total)}}</td>
                   <td />
                 </tr>
               </tfoot>
@@ -164,21 +164,21 @@
           <br />
           <tr>
             <td>Subtotal</td>
-            <td> ${{subtotal}}</td>
+            <td> ${{formatMoney(subtotal)}}</td>
             <td />
           </tr>          
           <tr>
             <td>Total I.V.A.</td>
-            <td> ${{iva}}</td>
+            <td> ${{formatMoney(iva)}}</td>
             <td />
           </tr>
           <tr>
             <td>Total</td>
-            <td> ${{total}}</td>
+            <td> ${{formatMoney(total)}}</td>
           </tr>
           <tr>
             <td>Total Crédito</td>
-            <td> ${{total - efectivo - tarjeta }}</td>
+            <td> ${{formatMoney(total - efectivo - tarjeta) }}</td>
           </tr>
 
           <v-btn @click="dialogcredito = !dialogcredito">Cancelar</v-btn>
@@ -206,17 +206,17 @@
           <br />
           <tr>
             <td>Subtotal</td>
-            <td> ${{subtotal}}</td>
+            <td> ${{formatMoney(subtotal)}}</td>
             <td />
           </tr>          
           <tr>
             <td>Total I.V.A.</td>
-            <td> ${{iva}}</td>
+            <td> ${{formatMoney(iva)}}</td>
             <td />
           </tr>
           <tr>
             <td>Total</td>
-            <td> ${{total}}</td>
+            <td> ${{formatMoney(total)}}</td>
           </tr>
           <v-btn @click="dialogcontado = !dialogcontado">Cancelar</v-btn>
           <v-btn @click="finalizarVenta" color="success">Confirmar</v-btn>
@@ -268,6 +268,7 @@ export default {
                     value => !!value || 'Requerido.',
                     value => value > 0 || 'El número debe ser mayor o igual a cero',
                 ],
+      
     };
   },
    created() {
@@ -278,6 +279,24 @@ export default {
    },
 
   methods: {
+    
+      formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
+          try {
+            decimalCount = Math.abs(decimalCount);
+            decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+            const negativeSign = amount < 0 ? "-" : "";
+
+            let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+            let j = (i.length > 3) ? i.length % 3 : 0;
+
+            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+          } catch (e) {
+            console.log(e)
+          }
+        },
+
+
       formatPrice(value) {
                         let val = (value/1).toFixed(2).replace(',', '.')
                         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
@@ -363,7 +382,7 @@ export default {
             for (var i = 0; i < this.desserts.length; i++) {
                 this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity );
             }
-            this.iva =  this.subtotal * 0.16;
+            //this.iva =  this.subtotal * 0.16;
 
             this.total = this.subtotal + this.iva;
     },
@@ -371,6 +390,8 @@ export default {
             axios.get("/clientsget")
             .then(response => {
             this.clients = response.data.data;
+            this.selectClient = this.clients[0];
+
             })
             .catch(e => {
             console.log(e);

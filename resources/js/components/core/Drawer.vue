@@ -40,12 +40,6 @@
           </v-list-item-action>
           <v-list-item-title>Productos</v-list-item-title>
         </v-list-item>
-        <v-list-item href="/sales">
-          <v-list-item-action>
-            <v-icon>mdi-cart</v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Ventas</v-list-item-title>
-        </v-list-item>
 
           <v-list-item href="/proveedores">
           <v-list-item-action>
