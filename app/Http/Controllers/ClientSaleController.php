@@ -25,8 +25,8 @@ class ClientSaleController extends Controller
         try {
             $vClientSales = DB::table('client_sales AS CS')
                 ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
-                ->join('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
-                ->join('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
+                ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
+                ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
                 ->select(
                     'CS.clsa_pk',
                     'CS.clsa_identifier',

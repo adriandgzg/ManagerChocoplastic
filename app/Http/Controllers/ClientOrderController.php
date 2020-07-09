@@ -4,14 +4,12 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Validator;
-
+use DB;
 use Carbon\Carbon;
 use App\ClientOrder;
-use App\ClientOrderDetail;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\api\ApiResponseController;
 use App\System;
+use Illuminate\Http\Request;
+use App\Http\Controllers\api\ApiResponseController;
 
 class ClientOrderController extends ApiResponseController
 {
