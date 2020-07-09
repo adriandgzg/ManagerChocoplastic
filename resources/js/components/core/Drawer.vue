@@ -26,6 +26,20 @@
           <v-list-item-title>Ordenes</v-list-item-title>
         </v-list-item>
 
+        <v-list-group prepend-icon="account_circle" no-action>        
+          <template v-slot:activator>          
+            <v-list-item-title>Clientes</v-list-item-title>
+          </template>
+
+          <v-list-item href="/clientdebts">
+            <v-list-item-action>
+              <v-icon>mdi-cart</v-icon>
+            </v-list-item-action>
+            <v-list-item-title>Pagos Clientes</v-list-item-title>
+          </v-list-item>
+
+        </v-list-group>
+
 
         
         

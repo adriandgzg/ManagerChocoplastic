@@ -84,7 +84,11 @@ export default [{
         name: 'Detalle de Orden', 
         view: 'DetailOrder'
     },
-    
+    {
+        path: '/clientdebts',
+        name: 'Pagos Clientes', 
+        view: 'ClientDebts'
+    },
     
 
 ]

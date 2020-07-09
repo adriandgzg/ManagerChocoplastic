@@ -235,9 +235,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -365,11 +362,17 @@ __webpack_require__.r(__webpack_exports__);
         this.editadoSale.clpa_amount_cash = this.efectivo;
         this.editadoSale.clpa_amount_transfer = this.tarjeta;
         axios.post('/clientsales/update', this.editadoSale).then(function (response) {
-          _this2.snackbar = true;
-          _this2.textMsg = "¡Actualizado correctamente!";
-          alert("¡Actualizado correctamente!");
+          console.log(response);
 
-          _this2.$router.push('/sales');
+          if (response.data.code == 200) {
+            _this2.snackbar = true;
+            _this2.textMsg = "¡Actualizado correctamente!";
+            alert("¡Actualizado correctamente!");
+
+            _this2.$router.push('/sales');
+          } else {
+            alert(response.data.message);
+          }
         })["catch"](function (e) {
           _this2.errors.push(e);
         });
@@ -996,8 +999,6 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _c("v-text-field", { attrs: { label: "Comentario:" } }),
-                      _vm._v(" "),
                       _c(
                         "span",
                         { staticClass: "subheading font-weight-bold" },
@@ -1007,8 +1008,6 @@ var render = function() {
                       _c("v-text-field", {
                         attrs: {
                           label: "Efectivo: ",
-                          required: "",
-                          rules: _vm.minNumberRules,
                           prefix: "$",
                           type: "number"
                         },
@@ -1024,8 +1023,6 @@ var render = function() {
                       _c("v-text-field", {
                         attrs: {
                           label: "Transferencia: ",
-                          required: "",
-                          rules: _vm.minNumberRules,
                           prefix: "$",
                           type: "number"
                         },

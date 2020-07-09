@@ -149,17 +149,14 @@
       <v-card>
         <v-card-title>Crédito:</v-card-title>
         <v-card-text>
-          <v-text-field label="Comentario:"></v-text-field>
           <span class="subheading font-weight-bold">Forma de Pago:</span>
           <v-text-field
             label="Efectivo: "
-            required
-            :rules="minNumberRules"
             prefix="$"
             type="number"
             v-model="efectivo"
           ></v-text-field>
-          <v-text-field label="Transferencia: " v-model="tarjeta" required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
+          <v-text-field label="Transferencia: " v-model="tarjeta"  prefix="$" type="number"></v-text-field>
 
           <br />
           <tr>
@@ -356,6 +353,7 @@ export default {
           if(this.editadoSale.pame_fk == 1)          
           if((this.total - (this.efectivo + this.tarjeta))==0)
           {
+
           }
           else{
             alert("Los montos de pago deben ser igual al total");
@@ -368,10 +366,16 @@ export default {
             this.editadoSale.clpa_amount_transfer= this.tarjeta
           axios.post('/clientsales/update', this.editadoSale)
                 .then(response => {
+                  console.log(response)
+                  if(response.data.code == 200){
                     this.snackbar = true;
-                this.textMsg = "¡Actualizado correctamente!";
-                alert("¡Actualizado correctamente!");
-                this.$router.push('/sales') ; 
+                    this.textMsg = "¡Actualizado correctamente!";
+                    alert("¡Actualizado correctamente!");
+                    this.$router.push('/sales') ; 
+                  }
+                  else{
+                    alert(response.data.message);
+                  }
                 
                 })
                 .catch(e => {
