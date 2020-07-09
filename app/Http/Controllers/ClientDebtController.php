@@ -23,8 +23,8 @@ class ClientDebtController extends Controller
                 ->select(
                     'CD.clde_pk',
                     'CD.clde_amount',  //Monto de la deuda
-                    'clde_amount AS clde_amount_paid', //Monto Pagado
-                    'clde_amount AS clde_amount_outstanding', //Monto Pendiente por pagar
+                    DB::raw('(SELECT SUM(clpa_amount) AS clde_amount_paid FROM client_payments WHERE clde_fk = CD.clde_pk) AS clde_amount_paid'),//Monto Pagado
+                    DB::raw('(SELECT CD.clde_amount - SUM(clpa_amount) AS clde_amount_outstanding FROM client_payments WHERE clde_fk = CD.clde_pk) AS clde_amount_outstanding'), //Monto Pendiente por pagar
                     'CD.created_at',
                     'C.clie_pk',
                     'C.clie_identifier',
