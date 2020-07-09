@@ -33,13 +33,13 @@
                         </v-col>
                     </template>
                     <template v-slot:item.status="{ item }">                            
-                            <v-chip v-if="item.clsa_status == 1" color="yellow" dark>  Pendiente  </v-chip>
-                            <v-chip v-else color="green" dark>Finalizada</v-chip>                        
+                            <v-chip v-if="item.clsa_pk == 2" color="gray" dark>  {{item.clsa_status}}  </v-chip>
+                            <v-chip v-else color="green" dark>{{item.clsa_status}}</v-chip>                        
                     </template>
                    
                      <template v-slot:item.action="{ item }">   
                                     
-                        <v-btn class="mr-2" fab dark small color="cyan"  v-if="item.clsa_status == 1"
+                        <v-btn class="mr-2" fab dark small color="cyan"  v-if="item.clsa_pk == 2"
                                :href="'/detaiorder/'+item.clsa_pk">
                             <v-icon dark>mdi-cash-register</v-icon>
                         </v-btn>

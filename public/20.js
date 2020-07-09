@@ -262,16 +262,20 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                item.clsa_status == 1
+                                item.clsa_pk == 2
                                   ? _c(
                                       "v-chip",
-                                      { attrs: { color: "yellow", dark: "" } },
-                                      [_vm._v("  Pendiente  ")]
+                                      { attrs: { color: "gray", dark: "" } },
+                                      [
+                                        _vm._v(
+                                          "  " + _vm._s(item.clsa_status) + "  "
+                                        )
+                                      ]
                                     )
                                   : _c(
                                       "v-chip",
                                       { attrs: { color: "green", dark: "" } },
-                                      [_vm._v("Finalizada")]
+                                      [_vm._v(_vm._s(item.clsa_status))]
                                     )
                               ]
                             }
@@ -281,7 +285,7 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                item.clsa_status == 1
+                                item.clsa_pk == 2
                                   ? _c(
                                       "v-btn",
                                       {
