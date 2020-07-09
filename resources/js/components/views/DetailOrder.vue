@@ -159,7 +159,7 @@
             type="number"
             v-model="efectivo"
           ></v-text-field>
-          <v-text-field label="Tarjeta: " v-model="tarjeta" required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
+          <v-text-field label="Transferencia: " v-model="tarjeta" required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
 
           <br />
           <tr>
@@ -196,12 +196,13 @@
 
           <v-text-field
             label="Efectivo: "
+            v-model="efectivo"
             required
             :rules="minNumberRules"
             prefix="$"
             type="number"
           ></v-text-field>
-          <v-text-field label="Tarjeta: " required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
+          <v-text-field label="Transferencia: " v-model="tarjeta" required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
 
           <br />
           <tr>
@@ -259,6 +260,9 @@ export default {
             clie_fk:0,
             pame_fk:0,
             stor_fk:0,
+            clde_amount:0,
+            clpa_amount_cash:0,
+            clpa_amount_transfer:0,
         },
         
       dialogcredito: false,
@@ -317,6 +321,8 @@ export default {
         },
       finalizar(){
           console.log(this.selectClient);
+          this.efectivo = 0;
+          this.tarjeta = 0;
           
           if(this.selectClient =='' || this.selectClient == null){
               alert("Debe seleccionar un cliente");
@@ -332,9 +338,6 @@ export default {
               alert("Debe seleccionar una sucursal");
               return;
           }
-          console.log("paso 2");
-          console.log(this.selectpame);
-          console.log(this.selectStore);
 
           this.editadoSale.clsa_pk = this.saleHeader.clsa_pk;
           this.editadoSale.clie_fk = this.selectClient.clie_pk;
@@ -349,8 +352,20 @@ export default {
             
       },
       finalizarVenta(){
+        console.log((this.total + '-' + (this.efectivo + this.tarjeta)));
+          if(this.editadoSale.pame_fk == 1)          
+          if((this.total - (this.efectivo + this.tarjeta))==0)
+          {
+          }
+          else{
+            alert("Los montos de pago deben ser igual al total");
+              return;
+          }
           var r = confirm("¿Está seguro de finalizar la venta?");
             if (r == true) {
+              this.editadoSale.clde_amount = this.total
+            this.editadoSale.clpa_amount_cash=this.efectivo
+            this.editadoSale.clpa_amount_transfer= this.tarjeta
           axios.post('/clientsales/update', this.editadoSale)
                 .then(response => {
                     this.snackbar = true;

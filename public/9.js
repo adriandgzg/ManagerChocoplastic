@@ -237,6 +237,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -268,7 +269,10 @@ __webpack_require__.r(__webpack_exports__);
         clsa_pk: 0,
         clie_fk: 0,
         pame_fk: 0,
-        stor_fk: 0
+        stor_fk: 0,
+        clde_amount: 0,
+        clpa_amount_cash: 0,
+        clpa_amount_transfer: 0
       },
       dialogcredito: false,
       dialogcontado: false,
@@ -286,6 +290,22 @@ __webpack_require__.r(__webpack_exports__);
     this.getStores();
   },
   methods: {
+    formatMoney: function formatMoney(amount) {
+      var decimalCount = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+      var decimal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ".";
+      var thousands = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : ",";
+
+      try {
+        decimalCount = Math.abs(decimalCount);
+        decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+        var negativeSign = amount < 0 ? "-" : "";
+        var i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+        var j = i.length > 3 ? i.length % 3 : 0;
+        return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+      } catch (e) {
+        console.log(e);
+      }
+    },
     formatPrice: function formatPrice(value) {
       var val = (value / 1).toFixed(2).replace(',', '.');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -306,6 +326,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     finalizar: function finalizar() {
       console.log(this.selectClient);
+      this.efectivo = 0;
+      this.tarjeta = 0;
 
       if (this.selectClient == '' || this.selectClient == null) {
         alert("Debe seleccionar un cliente");
@@ -322,9 +344,6 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      console.log("paso 2");
-      console.log(this.selectpame);
-      console.log(this.selectStore);
       this.editadoSale.clsa_pk = this.saleHeader.clsa_pk;
       this.editadoSale.clie_fk = this.selectClient.clie_pk;
       this.editadoSale.pame_fk = this.selectpame.pame_pk;
@@ -334,9 +353,17 @@ __webpack_require__.r(__webpack_exports__);
     finalizarVenta: function finalizarVenta() {
       var _this2 = this;
 
+      console.log(this.total + '-' + (this.efectivo + this.tarjeta));
+      if (this.editadoSale.pame_fk == 1) if (this.total - (this.efectivo + this.tarjeta) == 0) {} else {
+        alert("Los montos de pago deben ser igual al total");
+        return;
+      }
       var r = confirm("¿Está seguro de finalizar la venta?");
 
       if (r == true) {
+        this.editadoSale.clde_amount = this.total;
+        this.editadoSale.clpa_amount_cash = this.efectivo;
+        this.editadoSale.clpa_amount_transfer = this.tarjeta;
         axios.post('/clientsales/update', this.editadoSale).then(function (response) {
           _this2.snackbar = true;
           _this2.textMsg = "¡Actualizado correctamente!";
@@ -364,9 +391,9 @@ __webpack_require__.r(__webpack_exports__);
     getTotal: function getTotal() {
       for (var i = 0; i < this.desserts.length; i++) {
         this.subtotal = this.subtotal + this.desserts[i].clsd_price * this.desserts[i].clsd_quantity;
-      }
+      } //this.iva =  this.subtotal * 0.16;
 
-      this.iva = this.subtotal * 0.16;
+
       this.total = this.subtotal + this.iva;
     },
     getClients: function getClients() {
@@ -374,6 +401,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/clientsget").then(function (response) {
         _this4.clients = response.data.data;
+        _this4.selectClient = _this4.clients[0];
       })["catch"](function (e) {
         console.log(e);
       });
@@ -824,20 +852,22 @@ var render = function() {
                                         _vm._v(" "),
                                         _c("td", [
                                           _vm._v(
-                                            _vm._s(
-                                              _vm.formatPrice(item.clsd_price)
-                                            )
+                                            "$" +
+                                              _vm._s(
+                                                _vm.formatMoney(item.clsd_price)
+                                              )
                                           )
                                         ]),
                                         _vm._v(" "),
                                         _c("td", [
                                           _vm._v(
-                                            _vm._s(
-                                              _vm.formatPrice(
-                                                item.clsd_quantity *
-                                                  item.clsd_price
+                                            "$" +
+                                              _vm._s(
+                                                _vm.formatMoney(
+                                                  item.clsd_quantity *
+                                                    item.clsd_price
+                                                )
                                               )
-                                            )
                                           )
                                         ]),
                                         _vm._v(" "),
@@ -873,7 +903,14 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [_vm._v("Subtotal")]),
                                       _vm._v(" "),
-                                      _c("td", [_vm._v(_vm._s(_vm.subtotal))]),
+                                      _c("td", [
+                                        _vm._v(
+                                          "$" +
+                                            _vm._s(
+                                              _vm.formatMoney(_vm.subtotal)
+                                            )
+                                        )
+                                      ]),
                                       _vm._v(" "),
                                       _c("td")
                                     ]),
@@ -889,7 +926,11 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td", [_vm._v("I.V.A.")]),
                                       _vm._v(" "),
-                                      _c("td", [_vm._v(_vm._s(_vm.iva))]),
+                                      _c("td", [
+                                        _vm._v(
+                                          "$" + _vm._s(_vm.formatMoney(_vm.iva))
+                                        )
+                                      ]),
                                       _vm._v(" "),
                                       _c("td")
                                     ])
@@ -909,7 +950,11 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("td", [_vm._v("Total")]),
                                     _vm._v(" "),
-                                    _c("td", [_vm._v(_vm._s(_vm.total))]),
+                                    _c("td", [
+                                      _vm._v(
+                                        "$" + _vm._s(_vm.formatMoney(_vm.total))
+                                      )
+                                    ]),
                                     _vm._v(" "),
                                     _c("td")
                                   ])
@@ -978,7 +1023,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("v-text-field", {
                         attrs: {
-                          label: "Tarjeta: ",
+                          label: "Transferencia: ",
                           required: "",
                           rules: _vm.minNumberRules,
                           prefix: "$",
@@ -998,7 +1043,9 @@ var render = function() {
                       _c("tr", [
                         _c("td", [_vm._v("Subtotal")]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(" $" + _vm._s(_vm.subtotal))]),
+                        _c("td", [
+                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.subtotal)))
+                        ]),
                         _vm._v(" "),
                         _c("td")
                       ]),
@@ -1006,7 +1053,9 @@ var render = function() {
                       _c("tr", [
                         _c("td", [_vm._v("Total I.V.A.")]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(" $" + _vm._s(_vm.iva))]),
+                        _c("td", [
+                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.iva)))
+                        ]),
                         _vm._v(" "),
                         _c("td")
                       ]),
@@ -1014,7 +1063,9 @@ var render = function() {
                       _c("tr", [
                         _c("td", [_vm._v("Total")]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(" $" + _vm._s(_vm.total))])
+                        _c("td", [
+                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.total)))
+                        ])
                       ]),
                       _vm._v(" "),
                       _c("tr", [
@@ -1023,7 +1074,11 @@ var render = function() {
                         _c("td", [
                           _vm._v(
                             " $" +
-                              _vm._s(_vm.total - _vm.efectivo - _vm.tarjeta)
+                              _vm._s(
+                                _vm.formatMoney(
+                                  _vm.total - _vm.efectivo - _vm.tarjeta
+                                )
+                              )
                           )
                         ])
                       ]),
@@ -1092,16 +1147,30 @@ var render = function() {
                           rules: _vm.minNumberRules,
                           prefix: "$",
                           type: "number"
+                        },
+                        model: {
+                          value: _vm.efectivo,
+                          callback: function($$v) {
+                            _vm.efectivo = $$v
+                          },
+                          expression: "efectivo"
                         }
                       }),
                       _vm._v(" "),
                       _c("v-text-field", {
                         attrs: {
-                          label: "Tarjeta: ",
+                          label: "Transferencia: ",
                           required: "",
                           rules: _vm.minNumberRules,
                           prefix: "$",
                           type: "number"
+                        },
+                        model: {
+                          value: _vm.tarjeta,
+                          callback: function($$v) {
+                            _vm.tarjeta = $$v
+                          },
+                          expression: "tarjeta"
                         }
                       }),
                       _vm._v(" "),
@@ -1110,7 +1179,9 @@ var render = function() {
                       _c("tr", [
                         _c("td", [_vm._v("Subtotal")]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(" $" + _vm._s(_vm.subtotal))]),
+                        _c("td", [
+                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.subtotal)))
+                        ]),
                         _vm._v(" "),
                         _c("td")
                       ]),
@@ -1118,7 +1189,9 @@ var render = function() {
                       _c("tr", [
                         _c("td", [_vm._v("Total I.V.A.")]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(" $" + _vm._s(_vm.iva))]),
+                        _c("td", [
+                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.iva)))
+                        ]),
                         _vm._v(" "),
                         _c("td")
                       ]),
@@ -1126,7 +1199,9 @@ var render = function() {
                       _c("tr", [
                         _c("td", [_vm._v("Total")]),
                         _vm._v(" "),
-                        _c("td", [_vm._v(" $" + _vm._s(_vm.total))])
+                        _c("td", [
+                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.total)))
+                        ])
                       ]),
                       _vm._v(" "),
                       _c(
