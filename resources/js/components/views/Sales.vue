@@ -40,7 +40,7 @@
                      <template v-slot:item.action="{ item }">   
                                     
                         <v-btn class="mr-2" fab dark small color="cyan"  v-if="item.clsa_status == 'Pendiente'"
-                               :href="'/detaiorder/'+item.clsa_pk">
+                               :href="'/detaiorder/'+item.clor_pk">
                             <v-icon dark>mdi-cash-register</v-icon>
                         </v-btn>
                     </template>
