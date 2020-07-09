@@ -295,7 +295,7 @@ var render = function() {
                                           dark: "",
                                           small: "",
                                           color: "cyan",
-                                          href: "/detaiorder/" + item.clsa_pk
+                                          href: "/detaiorder/" + item.clor_pk
                                         }
                                       },
                                       [
