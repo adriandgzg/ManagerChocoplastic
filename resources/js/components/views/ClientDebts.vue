@@ -79,6 +79,15 @@
                                           hide-details></v-text-field>
                         </v-col>
                     </template>
+                    <template v-slot:item.clde_amount="{ item }">          
+                        <v-label>${{formatMoney(item.clde_amount)}}</v-label>                              
+                    </template>
+                    <template v-slot:item.clde_amount="{ item }">          
+                        <v-label>${{formatMoney(item.clde_amount_paid)}}</v-label>                              
+                    </template>
+                    <template v-slot:item.clde_amount="{ item }">          
+                        <v-label>${{formatMoney(item.clde_amount_outstanding)}}</v-label>                              
+                    </template>
                      <template v-slot:item.action="{ item }">   
                                     
                         
