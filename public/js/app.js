@@ -29958,7 +29958,7 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Pagos Clientes")])
+                      _c("v-list-item-title", [_vm._v("Cuentas por Pagar")])
                     ],
                     1
                   )
