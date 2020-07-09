@@ -59,6 +59,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -80,7 +84,7 @@ __webpack_require__.r(__webpack_exports__);
         value: 'pame_name'
       }, {
         text: 'Estatus',
-        value: 'clsa_status'
+        value: 'status'
       }, {
         text: '',
         value: 'action',
@@ -254,6 +258,25 @@ var render = function() {
                             proxy: true
                           },
                           {
+                            key: "item.status",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                item.clsa_status == 1
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "yellow", dark: "" } },
+                                      [_vm._v("  Pendiente  ")]
+                                    )
+                                  : _c(
+                                      "v-chip",
+                                      { attrs: { color: "green", dark: "" } },
+                                      [_vm._v("Finalizada")]
+                                    )
+                              ]
+                            }
+                          },
+                          {
                             key: "item.action",
                             fn: function(ref) {
                               var item = ref.item
@@ -267,7 +290,7 @@ var render = function() {
                                       dark: "",
                                       small: "",
                                       color: "cyan",
-                                      href: "/detaiorder/" + item.clor_pk
+                                      href: "/detaiorder/" + item.clsa_pk
                                     }
                                   },
                                   [

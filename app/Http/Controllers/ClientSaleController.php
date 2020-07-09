@@ -25,12 +25,11 @@ class ClientSaleController extends Controller
         try {
             $vClientSales = DB::table('client_sales AS CS')
                 ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
-                ->join('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
-                ->join('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
+                ->leftJoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
+                ->leftJoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
                 ->select(
                     'CS.clsa_pk',
                     'CS.clsa_identifier',
-                    //'CS.clsa_status',
                     DB::raw('(CASE 
                         WHEN CS.clsa_status = 0 THEN "Pendiente" 
                         WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
@@ -329,15 +328,17 @@ class ClientSaleController extends Controller
                 if ($vpame_fk == 1) {
                     $vclsa_status = 3;
                 } else {
-                    
                     $vclsa_status = 2;
                 }
                 
                 //Buscar el folio consecutivo
                 $vSystem = System::select('syst_clie_sale')->first();
                 $vsyst_clie_sale = $vSystem->syst_clie_sale;
+
+                $vsyst_clie_sale_actuality = $vsyst_clie_sale + 1;
                 
-                $vclsa_identifier =  "Ven_" . $vsyst_clie_sale;
+                $vclsa_identifier =  "Ven_" . $vsyst_clie_sale_actuality;
+
                 //Modificar Venta (Finalizar)
                 DB::table('client_sales')
                 ->where('clsa_pk', '=', $vclsa_pk)
@@ -349,7 +350,9 @@ class ClientSaleController extends Controller
                     'clsa_identifier' => $vclsa_identifier
                 ]);
 
-
+                //Modificar Folio del Venta
+                DB::table('systems')
+                ->update(['syst_clie_sale' =>  $vsyst_clie_sale + 1]);
 
                 if ($vpame_fk == 1) {
                     //De contado
@@ -362,7 +365,6 @@ class ClientSaleController extends Controller
                     $vCD->clsa_fk = $vclsa_pk;
                     $vCD->clde_amount = $vclde_amount;
                     $vCD->save();
-
                     $vclde_fk = $vCD->clde_pk;
 
                     //Insersion de Abonos
@@ -392,9 +394,7 @@ class ClientSaleController extends Controller
 
 
 
-                //Modificar Folio del Venta
-                DB::table('systems')
-                ->update(['syst_clie_sale' =>  $vsyst_clie_sale + 1]);
+                
                 
                 return response()->json([
                     'code' => 200,
