@@ -123,7 +123,7 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Monto pagado',
         value: 'clpa_amount'
       }, {
-        text: 'fecha/hora pago',
+        text: 'Fecha pago',
         value: 'created_at'
       }],
       headers: [{

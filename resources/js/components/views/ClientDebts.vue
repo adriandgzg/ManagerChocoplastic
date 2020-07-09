@@ -117,7 +117,7 @@ export default {
                 value: 'clpa_amount'
             },
             {
-                text: 'fecha/hora pago',
+                text: 'Fecha pago',
                 value: 'created_at'
             },
         ]
