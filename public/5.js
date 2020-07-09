@@ -186,7 +186,7 @@ __webpack_require__.r(__webpack_exports__);
     borrar: function borrar(item) {
       var index = this.categories.indexOf(item);
       this.editado = Object.assign({}, item);
-      var r = confirm("¿Está seguro de borrar el registro?");
+      var r = confirm("¿Está seguro de borrar el registro?--");
 
       if (r == true) {
         this["delete"]();
@@ -195,11 +195,17 @@ __webpack_require__.r(__webpack_exports__);
     "delete": function _delete() {
       var _this3 = this;
 
-      axios.put('/categories/delete', this.editado).then(function (response) {
-        _this3.snackbar = true;
-        _this3.textMsg = "¡Eliminado correctamente!";
+      axios.post('/client/orders/destroy', this.editado).then(function (response) {
+        console.log(response);
 
-        _this3.getCategories();
+        if (response.data.code == 200) {
+          _this3.snackbar = true;
+          _this3.textMsg = "¡Eliminado correctamente!";
+
+          _this3.getCategories();
+        } else {
+          alert(response.data.message);
+        }
       });
     }
   },

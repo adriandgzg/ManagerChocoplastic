@@ -451,6 +451,7 @@ export default {
         delete: function () {
             
             axios.post('/client_sale_details/destroy', this.editado).then(response => {
+              
                 this.snackbar = true;
                 this.textMsg = "¡Eliminado correctamente!";
                this.createsale();

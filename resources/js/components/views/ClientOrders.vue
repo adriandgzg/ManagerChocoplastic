@@ -187,17 +187,23 @@ export default {
     borrar(item) {
         const index = this.categories.indexOf(item)
         this.editado = Object.assign({}, item)
-        var r = confirm("¿Está seguro de borrar el registro?");
+        var r = confirm("¿Está seguro de borrar el registro?--");
         if (r == true) {
             this.delete()
         }
     },
 
     delete: function () {
-        axios.put('/categories/delete', this.editado).then(response => {
+        axios.post('/client/orders/destroy', this.editado).then(response => {
+            console.log(response)
+            if(response.data.code == 200){
             this.snackbar = true;
             this.textMsg = "¡Eliminado correctamente!";
             this.getCategories();
+            }
+            else{
+                alert(response.data.message);
+            }
         });
     },
 
