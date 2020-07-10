@@ -12,16 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-
-
-Route::get('/stores', 'StoreController@index');
-Route::get('/products/{stor_pk}/{prca_fk}', 'ProductController@index');
-Route::get('/products/{stor_pk}/{prca_fk}', 'ProductController@index');
-
-Route::get('/clientorders', 'ClientOrderController@clientorders');
-Route::post('/clientorders', 'ClientOrderController@store');
-Route::get('/clientordershow', 'ClientOrderController@show');
+ 
 
 
 
@@ -30,6 +21,19 @@ Route::get('/clientordershow', 'ClientOrderController@show');
 
 
 
+
+
+ 
+Route::get('/product/categories', 'ProductCategoryController@index'); //Lista de Categorias 
+Route::get('/products/{stor_pk}/{prca_fk}', 'ProductController@index'); //Lista de Producto filtados por sucursal y categoria
+
+
+//Route::get('/stores', 'StoreController@index');
+
+Route::post('/client/orders', 'ClientOrderController@store'); //Guardar Pedido 
+Route::get('/client/orders', 'ClientOrderController@clientorders');
+
+Route::get('/client/order/show', 'ClientOrderController@show');
 
 
 
@@ -40,7 +44,7 @@ Route::get('/clientordershow', 'ClientOrderController@show');
 Route::post('/start', 'Auth\Api\LoginController@start');
 Route::post('/verify', 'Auth\Api\LoginController@verify');
 Route::post('/completeRegister', 'Auth\Api\LoginController@complete');
-Route::post('/login', 'Auth\Api\LoginController@login');
+Route::post('/login', 'Auth\Api\LoginController@login'); 
 Route::post('/login/refresh', 'Auth\Api\LoginController@refresh');
 Route::post('/password/email', 'Auth\Api\ForgotPasswordController@sendResetLinkEmail');
 
@@ -54,6 +58,9 @@ Route::get('/faqs', 'FaqController@index');
 
 Route::middleware('auth:api')->group( function(){
     Route::get('/user',  function (Request $request) { return $request->user(); });
+
+   
+
 
 });
 

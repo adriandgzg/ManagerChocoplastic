@@ -16,7 +16,7 @@ class CreateDevCodesTable extends Migration
         Schema::create('dev_codes', function (Blueprint $table) {
             $table->bigIncrements('deco_pk');
             $table->smallInteger('deco_code');
-            $table->string('deco_status', 20);
+            $table->boolean('deco_status');
             $table->string('deco_description',5000);
             $table->string('deco_message', 500);
             $table->timestamps();

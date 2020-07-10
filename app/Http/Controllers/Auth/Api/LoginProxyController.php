@@ -7,8 +7,9 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\api\ApiResponseController;
 
-class LoginProxyController extends Controller
+class LoginProxyController extends ApiResponseController
 {
 
     const REFRESH_TOKEN = 'refreshToken';
@@ -26,10 +27,12 @@ class LoginProxyController extends Controller
         ])->first();
 
         if (!is_null($user)) {
-            return $this->proxy('password', [
+            return $this->proxy($phonne_number,
+                'password', [
                 'username' => $phonne_number,
                 'password' => $password
-            ]);
+            ])
+            ;
         }
 
     }
@@ -40,7 +43,7 @@ class LoginProxyController extends Controller
      * @param string $grantType what type of grant type should be proxied
      * @param array $data the data to send to the server
      */
-    public function proxy($grantType, array $data = [])
+    public function proxy($phonne_number, $grantType, array $data = [])
     {
         $data = array_merge($data, [
             'client_id' => config('auth.password_client_id'),
@@ -53,11 +56,18 @@ class LoginProxyController extends Controller
 
         $result = json_decode($response->getContent());
         //dd($response->status());
-        return response()->json([
+
+        $vUser = User::where('phone_number', '=', $phonne_number)->select('phone_number','stor_fk')->first();
+
+
+
+        return $this->dbResponse($vUser, 200, null, isset($result->error) ? $result->message : 'Login Exitoso');
+
+       /* return response()->json([
             'success' => !isset($result->error),
-            'message' => isset($result->error) ? $result->message : 'Login exitoso',
-            'data' => $result,
-        ], 200);
+            'message' => ,
+            'data' => $result, 
+        ], 200);*/
     }
 
     /**

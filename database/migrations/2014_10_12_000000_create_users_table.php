@@ -26,10 +26,21 @@ class CreateUsersTable extends Migration
             $table->longText('profile_picture')->nullable();
             $table->integer('user_type_id')->default(1);
             $table->string('player_id')->nullable();
+            $table->bigInteger('stor_fk')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
     }
+
+
+    
+
+
+
+
+
+
+
 
     /**
      * Reverse the migrations.

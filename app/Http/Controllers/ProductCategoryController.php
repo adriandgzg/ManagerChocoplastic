@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\ProductCategory;
 use Illuminate\Http\Request;
 use DB;
+use Exception;
+use App\Http\Controllers\api\ApiResponseController;
 
-class ProductCategoryController extends Controller
+class ProductCategoryController extends ApiResponseController
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +17,19 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        //
+        
+        try {
+            //Asignación de variable
+
+            $vPC = ProductCategory::where('prca_status', '=', 1)
+                    ->select('prca_pk AS PK_Category', 'prca_name AS Category')
+                    ->get();
+            
+            return $this->dbResponse($vPC, 200, null, 'Lista de Categorías de Productos');
+          
+        } catch (Exception $e) {
+            return $this->dbResponse(null, 500, $e, null);
+        }
     }
 
     public function CategoriesList(){

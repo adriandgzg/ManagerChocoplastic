@@ -2,6 +2,7 @@
 
 use App\ClientSale;
 use App\ClientSaleDetail;
+use App\DevCode;
 use App\Measurement;
 use Illuminate\Database\Seeder;
 
@@ -14,6 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(DevCodeSeeder::class); 
         $this->call(SystemSeeder::class); 
         $this->call(PaymentMethodSeeder::class); 
         $this->call(PaymentShapeSeeder::class); 

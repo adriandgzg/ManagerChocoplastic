@@ -23,58 +23,38 @@ class ProductController extends ApiResponseController
 
             $vStore = Store::where('stor_pk', '=', $stor_pk)->first();
            
-
-            if ($prca_fk == 0 || $prca_fk == null) {
-                $vProducts = DB::table('products AS P')
-                    ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
-                    //->join('measurements AS MI', 'P.meas_fk_input', '=', 'MI.meas_pk')
-                    ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
-                    ->select(
-                        'P.prod_pk',
-                        'P.prod_identifier',
-                        'P.prod_name',
-                        'P.prod_image',
-                        'P.prod_actualprice',
-                        'P.prod_eventualprice',
-                        'P.prod_preferentialprice',
-                        'P.prod_packingquantity',
-                        DB::raw("10 AS prd_stock"),
-                        'PC.prca_pk', 'PC.prca_name',
-                        //DB::raw("P.meas_fk_input AS meas_pk_input"), DB::raw("MI.meas_name AS meas_name_input"), DB::raw("MI.meas_abbreviation AS meas_abbreviation_input"),
-                        DB::raw("P.meas_fk_output AS meas_pk_output"), DB::raw("MO.meas_name AS meas_name_output"), DB::raw("MO.meas_abbreviation AS meas_abbreviation_output"),
-                        DB::raw("'$vStore->stor_pk' AS stor_pk"), DB::raw("'$vStore->stor_name' AS stor_name")
-                    )
-                    ->where('prod_status', '=', 1)
-                    ->get();
-            } else {
-                $vProducts = DB::table('products AS P')
-                    ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
-                    //->join('measurements AS MI', 'P.meas_fk_input', '=', 'MI.meas_pk')
-                    ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
-                    ->select(
-                        'P.prod_pk',
-                        'P.prod_identifier',
-                        'P.prod_name',
-                        'P.prod_image',
-                        'P.prod_actualprice',
-                        'P.prod_eventualprice',
-                        'P.prod_preferentialprice',
-                        'P.prod_packingquantity',
-                        DB::raw("10 AS prd_stock"),
-                        'PC.prca_pk', 'PC.prca_name',
-                        //DB::raw("P.meas_fk_input AS meas_pk_input"), DB::raw("MI.meas_name AS meas_name_input"), DB::raw("MI.meas_abbreviation AS meas_abbreviation_input"),
-                        DB::raw("P.meas_fk_output AS meas_pk_output"), DB::raw("MO.meas_name AS meas_name_output"), DB::raw("MO.meas_abbreviation AS meas_abbreviation_output"),
-                        DB::raw("'$vStore->stor_pk' AS stor_pk"), DB::raw("'$vStore->stor_name' AS stor_name")
-                    )
-                    ->where('prod_status', '=', 1)
-                    ->where('prca_fk', '=', $prca_fk)
-                    ->get();
-            }
+            $vProducts = DB::table('products AS P')
+                ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                ->select(
+                    'P.prod_pk AS PK_Product',
+                    //'P.prod_identifier',
+                    'P.prod_name AS Product',
+                    'P.prod_image AS ProductImage',
+                    'P.prod_actualprice AS ActualPrice',
+                    'P.prod_eventualprice AS EventualPrice',
+                    'P.prod_preferentialprice AS PreferentialPrice',
+                    //'P.prod_packingquantity AS PackingQuantity',
+                    DB::raw("10 AS Stock"),
+                    //'PC.prca_pk', 
+                    'PC.prca_name AS Category',
+                    //DB::raw("P.meas_fk_output AS meas_pk_output"), 
+                    DB::raw("MO.meas_name AS Measurement"),
+                    //DB::raw("MO.meas_abbreviation AS meas_abbreviation_output"),
+                    //DB::raw("'$vStore->stor_pk' AS stor_pk"), 
+                    DB::raw("'$vStore->stor_name' AS Store")
+                )
+                ->where('prod_status', '=', 1)
+                ->where('prca_fk', '=', $prca_fk)
+                ->get();
             
-            return $this->successResponse($vProducts, true, 200, "Lista de Productos, filtrada por Sucursal y Categoría");
+        return $this->dbResponse($vProducts, 200, null, 'Lista de Productos, filtrada por Sucursal y Categoría');
+          
         } catch (Exception $e) {
-            return $this->errorResponse(null, false, 500, $e);
+            return $this->dbResponse(null, 500, $e, null);
         }
+
+
     }
 
     public function ProductList(){

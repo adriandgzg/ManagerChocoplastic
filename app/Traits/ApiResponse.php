@@ -7,23 +7,30 @@ use App\DevCode;
 trait ApiResponse
 {
 
-    public function dbResponse($pdata, $pdeco_code, $ptechnicaldetail)
+    public function dbResponse($pdata, $pdeco_code, $ptechnicaldetail, $msj)
     {
         $vDV = DevCode::where('deco_code', '=', $pdeco_code)->select('deco_pk', 'deco_status', 'deco_description', 'deco_message')->get();
-
+        $vtechnicaldetail = $ptechnicaldetail;
         $vstatus = $vDV[0]->deco_status;
-        $vdeco_description = $vDV[0]->deco_description;
-        $vdeco_message = $vDV[0]->deco_message;
+        $vdeco_description = $msj; //$vDV[0]->deco_description;
+        $vdeco_message = $msj; //$vDV[0]->deco_message;
 
-        if($vstatus == 'success')
+        if($vstatus == 1)
         {
             $pdeco_code = 200;
         }
 
-        return response()->json
-        (
+        if ($vstatus == 1) {
+            $vStatusBool = true;
+        }
+        else
+        {
+            $vStatusBool = false;
+        }
+
+        return response()->json(
             array(
-                "status" => array("status" => $vstatus , "code" => $pdeco_code, "description" => $vdeco_description, "message" => $vdeco_message, "technicaldetail" => $ptechnicaldetail), 
+                "status" => array("status" => $vStatusBool, "code" => $pdeco_code, "description" => $vdeco_description, "message" => $vdeco_message, "technicaldetail" => $vtechnicaldetail), 
                 "data" => $pdata
             )
             , 200

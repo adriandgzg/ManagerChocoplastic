@@ -10,6 +10,7 @@ use App\ClientOrder;
 use App\System;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
+use App\Product;
 
 class ClientOrderController extends ApiResponseController
 {
@@ -59,21 +60,21 @@ class ClientOrderController extends ApiResponseController
             $vClientOrders = DB::table('client_orders AS CO')
             ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
             ->select(
-                'CO.clor_pk',
-                'CO.clor_identifier',
-                'CO.clor_status',
-                'CO.created_at',
-                'C.clie_pk',
-                'C.clie_identifier',
-                'C.clie_name',
-                'C.clie_rfc'
+                'CO.clor_pk AS PK_Order',
+                'CO.clor_identifier AS Identifier',
+                //'CO.clor_status',
+                'CO.created_at AS DateCreated'
+                //'C.clie_pk',
+                //'C.clie_identifier',
+                //'C.clie_name',
+                //'C.clie_rfc'
             )
             ->where('clor_status', '=', 1)
             ->get();
             
-            return $this->successResponse($vClientOrders, true, 200, "Lista de Pedidos de los Clientes");
+            return $this->dbResponse($vClientOrders, 200, null, 'Lista de Pedidos');
         } catch (Exception $e) {
-            return $this->errorResponse(null, false, 500, $e);
+            return $this->dbResponse(null, 500, $e, null);
         }
     }
 
@@ -115,16 +116,19 @@ class ClientOrderController extends ApiResponseController
             //Guardar el detallado del pedido (Productos)
             foreach ($vCODetail as $detail => $cod)
             {
+                $vprod_pk = $cod["PK_Product"];
+                $vProduct = Product::where('prod_pk','=',$vprod_pk)->first();
+
                 DB::table('client_order_details')->insert(array(
                     'clor_fk' => $vclor_pk,
-                    'prod_fk' => $cod["prod_fk"],
-                    'meas_fk' => $cod["meas_fk"],
-                    'clod_quantity' => $cod["clod_quantity"],
-                    'clod_type' => $cod["clod_type"],
-                    'clod_price' => $cod["clod_price"],
-                    'clod_discountrate' => $cod["clod_discountrate"],
-                    'clod_ieps' => $cod["clod_ieps"],
-                    'clod_iva' => $cod["clod_iva"],
+                    'prod_fk' => $vprod_pk,
+                    'meas_fk' => $vProduct->meas_fk_output,
+                    'clod_quantity' => $cod["Quantity"],
+                    'clod_type' => $cod["Type"],
+                    'clod_price' => $cod["Price"],
+                    'clod_discountrate' => 0,
+                    'clod_ieps' => 0,
+                    'clod_iva' => 0,
                     'clod_status' => 1,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
@@ -134,21 +138,12 @@ class ClientOrderController extends ApiResponseController
             //Modificar Folio del Pedido
             DB::table('systems')
             ->update(['syst_clie_order' =>  $vsyst_clie_order + 1]);
-
-            return response()->json([
-                'code' => 200,
-                'success' => true,
-                'message' => 'Pedido Guardado Correctamente',
-                'data' => "Ped_" . $vsyst_clie_order
-            ], 200);
-
+       
+            return $this->dbResponse("Ped_" . $vsyst_clie_order, 200, null, 'Pedido Guardado Correctamente');
         } catch (Exception $e) {
-            return response()->json([
-                'code' => 500,
-                'success' => false,
-                'message' => $e
-            ], 200);
+            return $this->dbResponse(null, 500, $e, null);
         }
+
     }
 
     /**
@@ -178,7 +173,13 @@ class ClientOrderController extends ApiResponseController
             //Asignacion de variables
            $vclor_pk = $vInput['clor_pk'];
 
-            $vClientOrder = ClientOrder::where('clor_pk', '=', $vclor_pk)->select('clor_pk','clor_identifier','created_at')->first();
+            $vClientOrder = ClientOrder::where('clor_pk', '=', $vclor_pk)
+                            ->select(
+                                'clor_pk AS PK_Order',
+                                'clor_identifier AS Identifier',
+                                'created_at AS DateCreated'
+                                )
+                            ->first();
 
             if($vClientOrder)
             { 
@@ -186,52 +187,46 @@ class ClientOrderController extends ApiResponseController
                 $vClientOrderDetail = DB::table('client_order_details AS COD')
                     ->join('products AS P', 'P.prod_pk', '=', 'COD.prod_fk')
                     ->join('measurements AS M', 'M.meas_pk', '=', 'COD.meas_fk')
+                    ->join('product_categories AS PC', 'PC.prca_pk', '=', 'P.prca_fk')
                     ->select(
-                        'COD.clod_pk',
-                        'P.prod_pk',
-                        'P.prod_identifier',
-                        'P.prod_name',
-                        'M.meas_pk',
-                        'M.meas_name',
-                        'M.meas_abbreviation',
-                        'COD.clod_quantity',
-                        'COD.clod_price',
-                        'COD.clod_discountrate',
-                        'COD.clod_ieps',
-                        'COD.clod_iva',
-                        'COD.clod_status'
+                        'COD.clod_pk AS PK_OrderProduct',
+                        'P.prod_pk AS PK_Product',
+                        //'P.prod_identifier',
+                        'P.prod_name AS Product',
+                        //'M.meas_pk',
+                        'M.meas_name AS Measurement',
+                        //'M.meas_abbreviation',
+                        'PC.prca_name AS Category',
+                        'COD.clod_type AS Type',
+                        'COD.clod_quantity AS Quantity',
+                        'COD.clod_price AS Price',
+                        //'COD.clod_discountrate',
+                        //'COD.clod_ieps',
+                        //'COD.clod_iva',
+                        //'COD.clod_status'
                     )
                     ->where('COD.clor_fk', '=', $vclor_pk)
+                    ->where('COD.clod_status', '=', 1)
                     ->get();
    
 
-                return response()->json([
-                    'code' => 200,
-                    'success' => true,
-                    'message' => 'Información de Pedido',
-                    'data' => 
-                        [
-                            'order' => $vClientOrder, 
-                            'order_details' => $vClientOrderDetail
-                        ]
-                ], 200);
+                $data = 
+                [
+                    'order' => $vClientOrder, 
+                    'order_details' => $vClientOrderDetail
+                ];
+
+
+                return $this->dbResponse($data, 200, null, 'Lista de Pedidos');
 
             }
             else
             {
-                return response()->json([
-                    'code' => 404,
-                    'success' => false,
-                    'message' => 'Pedido No Encontrado'
-                ], 200);
+                return $this->dbResponse(null, 404, null, 'Pedido No Encontrado');
             }
-
+            
         } catch (Exception $e) {
-            return response()->json([
-                'code' => 500,
-                'success' => false,
-                'message' => $e
-            ], 200);
+            return $this->dbResponse(null, 500, $e, null);
         }
     }
 

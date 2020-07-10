@@ -7,12 +7,13 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\api\ApiResponseController;
 
 /**
  * Class LoginController
  * @package App\Http\Controllers\Auth\Api
  */
-class LoginController extends Controller
+class LoginController extends ApiResponseController
 {
     /**
      * @var LoginProxyController
@@ -165,36 +166,22 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $user = User::where([
-            'phone_number' => $request->phone_number
-        ])->first();
+        $user = User::where(['phone_number' => $request->phone_number])->first();
+        
         if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Usuario no encontrado',
-                'data' => null,
-            ], 200);
+            return $this->dbResponse(null, 501, null, 'Usuario no encontrado');
         }
+
         if (!$user->verified) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Usuario no verficado',
-                'data' => null,
-            ], 200);
+            return $this->dbResponse(null, 501, null, 'Usuario no verficado');
         }
+
         if ($user->password == '' || $request->password == null) {
-            return response()->json([
-                'success' => false,
-                'message' => 'La contraseña es necesaria',
-                'data' => null,
-            ], 200);
+            return $this->dbResponse(null, 501, null, 'La contraseña es necesaria');
         }
+
         if (!Hash::check($request->password, $user->password)){
-            return response()->json([
-                'success' => false,
-                'message' => 'Contraseña incorrecta, verifica e intenta de nuevo',
-                'data' => null,
-            ], 200);
+            return $this->dbResponse(null, 501, null, 'Contraseña incorrecta, verifica e intenta de nuevo');
         }
         $phone_number = $request->phone_number;
         $password = $request->password;
