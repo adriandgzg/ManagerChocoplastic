@@ -63,7 +63,8 @@ class ProductController extends ApiResponseController
             select p.prod_pk, p.prca_fk, c.prca_name, p.meas_fk_input, 
             m.meas_name as meas_fk_input_name,  p.meas_fk_output, p.prod_identifier, 
             p.prod_name, p.prod_image, p.prod_actualprice, p.prod_eventualprice, 
-            p.prod_preferentialprice, p.prod_packingquantity, p.prod_status 
+            p.prod_preferentialprice, p.prod_saleprice, p.prod_listprice, 
+            p.prod_packingquantity, p.prod_status, p.prod_bulk
             from products p LEFT JOIN product_categories c on p.prca_fk = c.prca_pk 
             LEFT JOIN measurements m on p.meas_fk_input = m.meas_pk )as principal 
             left join measurements m on principal.meas_fk_output = m.meas_pk");
@@ -77,6 +78,10 @@ class ProductController extends ApiResponseController
 
     public function add(Request $request)
     {        
+        try {
+
+            
+            $stores = new Product();      
         $imageName = '';
         $urlImage = '';
         $ruta =   public_path('/images/products/');
@@ -90,21 +95,30 @@ class ProductController extends ApiResponseController
             $urlImage = '/images/products/' . $imageName; 
             $stores->prod_image =  $urlImage ;
         }
-       
-        $stores = new Product();        
+      
+          
         $stores->prca_fk =  $request->prca_fk; 
         $stores->meas_fk_input = $request->meas_fk_input; 
         $stores->meas_fk_output = $request->meas_fk_output;
         $stores->prod_identifier = $request->prod_identifier ;
         $stores->prod_name = $request->prod_name; 
+        $stores->prod_description = $request->prod_description; 
         
         $stores->prod_actualprice = $request->prod_actualprice;
         $stores->prod_eventualprice = $request->prod_eventualprice;
         $stores->prod_preferentialprice = $request->prod_preferentialprice;
+        $stores->prod_saleprice = $request->prod_saleprice;
+        $stores->prod_listprice = $request->prod_listprice;
         $stores->prod_packingquantity = $request->prod_packingquantity;
         $stores->prod_status = $request->prod_status;
+        $stores->prod_bulk = $request->prod_bulk;
 
         $stores->save();
+
+        return $this->dbResponse("Agregado", 200, null, 'Guardado Correctamente');
+        } catch (Exception $e) {
+            return $this->dbResponse(null, 500, $e, null);
+        }
     }
 
     public function update(Request $request)

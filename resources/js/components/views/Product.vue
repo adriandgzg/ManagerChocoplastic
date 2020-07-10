@@ -24,7 +24,9 @@
                         <v-card-text>
                             <v-text-field v-model="editado.prod_name" label="Nombre" maxlength="300"
                                         :rules="nameRules" required></v-text-field>
-                            <v-text-field v-model="editado.prod_identifier" label="Nombre" maxlength="300"
+                            <v-textarea v-model="editado.prod_description" label="Descripción" maxlength="5000"
+                                        :rules="nameRules" required></v-textarea>  
+                            <v-text-field v-model="editado.prod_identifier" label="Identificador" maxlength="300"
                                         :rules="nameRules" required></v-text-field>  
                             <v-select :items="categories" v-model="selectCat" label="Selecione una categoría" single-line
                                     item-text="prca_name" item-value="prca_pk"  persistent-hint 
@@ -40,9 +42,15 @@
                             <v-text-field v-model="editado.prod_eventualprice" label="Precio Eventual" prefix="$" type="number"
                                             :rules="numberRules" required></v-text-field>
                             <v-text-field v-model="editado.prod_preferentialprice" label="Precio Preferencial" prefix="$" type="number"
+                                            :rules="numberRules" required></v-text-field>                            
+                            <v-text-field v-model="editado.prod_saleprice" label="Precio Venta" prefix="$" type="number"
+                                            :rules="numberRules" required></v-text-field>
+                            <v-text-field v-model="editado.prod_listprice" label="Precio Lista" prefix="$" type="number"
                                             :rules="numberRules" required></v-text-field>
                             <v-text-field v-model="editado.prod_packingquantity" label="Stock" type="number"
                                           :rules="numberRules"></v-text-field>
+                            <span>Venta a Granel</span>
+                            <v-switch v-model="estadoGranel"/>
                             <span>Activo/Inactivo</span>
                             <v-switch v-model="estado"/>
 
@@ -106,9 +114,18 @@
                     <template v-slot:item.prod_preferentialprice="{ item }">          
                         <v-label>${{formatMoney(item.prod_preferentialprice)}}</v-label>                              
                     </template>
+                    <template v-slot:item.prod_saleprice="{ item }">          
+                        <v-label>${{formatMoney(item.prod_saleprice)}}</v-label>                              
+                    </template>
+                    <template v-slot:item.prod_listprice="{ item }">          
+                        <v-label>${{formatMoney(item.prod_listprice)}}</v-label>                              
+                    </template>
                     <template v-slot:item.status="{ item }">                            
                             <v-chip v-if="item.prod_status == 1" color="green" dark>  Activo  </v-chip>
                             <v-chip v-else color="red" dark>Inactivo</v-chip>                        
+                    </template>
+                    <template v-slot:item.bulk="{ item }">
+                        <v-chip v-if="item.prod_bulk == 1" color="green" dark> Granel</v-chip>
                     </template>
                     <template v-slot:item.action="{ item }">   
                                      
@@ -133,7 +150,7 @@ export default {
     return {
          headers: [
                      {
-                        text: 'Identificador',
+                        text: 'Ident',
                         value: 'prod_identifier'
                     },                   
                     {
@@ -166,8 +183,20 @@ export default {
                         value: 'prod_preferentialprice'
                     }, 
                     {
+                        text: 'Precio Venta',
+                        value: 'prod_saleprice'
+                    }, 
+                    {
+                        text: 'Precio Lista',
+                        value: 'prod_listprice'
+                    }, 
+                    {
                         text: 'Cantidad por Paquete',
                         value: 'prod_packingquantity'
+                    },  
+                    {
+                        text: 'Tipo',
+                        value: 'bulk'
                     },             
                      {
                         text: 'Estatus',
@@ -185,6 +214,7 @@ export default {
          selectMeasOut:0,
          principal:false,
          estado:true,
+         estadoGranel:true,
          imageUrl:'',
          editado:{
             prod_pk:0,
@@ -192,14 +222,17 @@ export default {
             prca_name:'',
             meas_fk_input:0,
             meas_fk_input_name:'',
+            prod_description:'Produ',
             meas_fk_output:0,
             meas_fk_output_name:'',
-            prod_identifier:'',
-            prod_name:'',
-            prod_name:'',
+            prod_identifier:'Produ01',
+            prod_name:'Produ',
             prod_actualprice:0,
             prod_eventualprice:0,
             prod_preferentialprice:0,
+            prod_saleprice:0,
+            prod_listprice:0,
+            prod_bulk:0,
             prod_packingquantity:0,
             prod_status:0,            
             is_mod: false,
@@ -208,19 +241,23 @@ export default {
          defaultItem:{
             prod_pk:0,
             prca_fk:0,
-            prca_fk_name:'',
-            prod_name:'',
+            prca_name:'',
             meas_fk_input:0,
             meas_fk_input_name:'',
+            prod_description:'',
             meas_fk_output:0,
             meas_fk_output_name:'',
             prod_identifier:'',
             prod_name:'',
+            prod_name:'',
             prod_actualprice:0,
             prod_eventualprice:0,
             prod_preferentialprice:0,
+            prod_saleprice:0,
+            prod_listprice:0,
+            prod_bulk:0,
             prod_packingquantity:0,
-            prod_status:0,
+            prod_status:0,            
             is_mod: false,
             imageUrl: this.imageUrl,
          },
@@ -324,6 +361,7 @@ export default {
       this.editedIndex = this.products.indexOf(item)
       this.editado = Object.assign({}, item)
       this.estado = this.editado.prod_status
+      this.estadoGranel = this.editado.prod_bulk
       this.selectCat = this.editado.prca_fk
       this.selectMeasIn = this.editado.meas_fk_input
       this.selectMeasOut = this.editado.meas_fk_output
@@ -336,6 +374,11 @@ export default {
             this.editado.prod_status =  1;
         else
             this.editado.prod_status =  0;
+
+        if(this.estadoGranel == true)
+            this.editado.prod_bulk =  1;
+        else
+            this.editado.prod_bulk =  0;
 
       this.editado.prca_fk = this.selectCat;
       this.editado.meas_fk_input = this.selectMeasIn;
@@ -350,17 +393,35 @@ export default {
     },
     alta: function () {
         axios.post('/product/add', this.editado).then(response => {
+            console.log(response.data)
+            if(response.data.status.code == 200){
             this.snackbar = true
-            this.textMsg = '¡Alta exitosa!'
+            this.textMsg = response.data.status.message
+            
             this.getProducts();
-        });
+            }
+            else{
+                alert(response.data.status.technicaldetail.errorInfo[2]);
+            }
+        })
+        .catch(e => {
+                    this.errors.push(e)
+                    })
     },
     editar: function () {
         axios.put('/product/update', this.editado).then(response => {
+            if(response.data.code == 200){
             this.snackbar = true
             this.textMsg = '¡Actualización Exitosa!'
             this.getProducts();
-        });
+            }
+            else{
+                alert(response.data.message);
+            }
+        })
+        .catch(e => {
+                    this.errors.push(e)
+                    })
     },
 
     borrar(item) {

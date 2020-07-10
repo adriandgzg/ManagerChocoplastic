@@ -140,13 +140,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    var _editado, _defaultItem;
+    var _defaultItem;
 
     return {
       headers: [{
-        text: 'Identificador',
+        text: 'Ident',
         value: 'prod_identifier'
       }, {
         text: 'Nombre',
@@ -170,8 +187,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: 'Precio Preferencial',
         value: 'prod_preferentialprice'
       }, {
+        text: 'Precio Venta',
+        value: 'prod_saleprice'
+      }, {
+        text: 'Precio Lista',
+        value: 'prod_listprice'
+      }, {
         text: 'Cantidad por Paquete',
         value: 'prod_packingquantity'
+      }, {
+        text: 'Tipo',
+        value: 'bulk'
       }, {
         text: 'Estatus',
         value: 'status'
@@ -186,29 +212,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       selectMeasOut: 0,
       principal: false,
       estado: true,
+      estadoGranel: true,
       imageUrl: '',
-      editado: (_editado = {
+      editado: {
         prod_pk: 0,
         prca_fk: 0,
         prca_name: '',
         meas_fk_input: 0,
         meas_fk_input_name: '',
+        prod_description: 'Produ',
+        meas_fk_output: 0,
+        meas_fk_output_name: '',
+        prod_identifier: 'Produ01',
+        prod_name: 'Produ',
+        prod_actualprice: 0,
+        prod_eventualprice: 0,
+        prod_preferentialprice: 0,
+        prod_saleprice: 0,
+        prod_listprice: 0,
+        prod_bulk: 0,
+        prod_packingquantity: 0,
+        prod_status: 0,
+        is_mod: false,
+        imageUrl: this.imageUrl
+      },
+      defaultItem: (_defaultItem = {
+        prod_pk: 0,
+        prca_fk: 0,
+        prca_name: '',
+        meas_fk_input: 0,
+        meas_fk_input_name: '',
+        prod_description: '',
         meas_fk_output: 0,
         meas_fk_output_name: '',
         prod_identifier: '',
         prod_name: ''
-      }, _defineProperty(_editado, "prod_name", ''), _defineProperty(_editado, "prod_actualprice", 0), _defineProperty(_editado, "prod_eventualprice", 0), _defineProperty(_editado, "prod_preferentialprice", 0), _defineProperty(_editado, "prod_packingquantity", 0), _defineProperty(_editado, "prod_status", 0), _defineProperty(_editado, "is_mod", false), _defineProperty(_editado, "imageUrl", this.imageUrl), _editado),
-      defaultItem: (_defaultItem = {
-        prod_pk: 0,
-        prca_fk: 0,
-        prca_fk_name: '',
-        prod_name: '',
-        meas_fk_input: 0,
-        meas_fk_input_name: '',
-        meas_fk_output: 0,
-        meas_fk_output_name: '',
-        prod_identifier: ''
-      }, _defineProperty(_defaultItem, "prod_name", ''), _defineProperty(_defaultItem, "prod_actualprice", 0), _defineProperty(_defaultItem, "prod_eventualprice", 0), _defineProperty(_defaultItem, "prod_preferentialprice", 0), _defineProperty(_defaultItem, "prod_packingquantity", 0), _defineProperty(_defaultItem, "prod_status", 0), _defineProperty(_defaultItem, "is_mod", false), _defineProperty(_defaultItem, "imageUrl", this.imageUrl), _defaultItem),
+      }, _defineProperty(_defaultItem, "prod_name", ''), _defineProperty(_defaultItem, "prod_actualprice", 0), _defineProperty(_defaultItem, "prod_eventualprice", 0), _defineProperty(_defaultItem, "prod_preferentialprice", 0), _defineProperty(_defaultItem, "prod_saleprice", 0), _defineProperty(_defaultItem, "prod_listprice", 0), _defineProperty(_defaultItem, "prod_bulk", 0), _defineProperty(_defaultItem, "prod_packingquantity", 0), _defineProperty(_defaultItem, "prod_status", 0), _defineProperty(_defaultItem, "is_mod", false), _defineProperty(_defaultItem, "imageUrl", this.imageUrl), _defaultItem),
       editedIndex: -1,
       products: [],
       categories: [],
@@ -306,6 +345,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.editedIndex = this.products.indexOf(item);
       this.editado = Object.assign({}, item);
       this.estado = this.editado.prod_status;
+      this.estadoGranel = this.editado.prod_bulk;
       this.selectCat = this.editado.prca_fk;
       this.selectMeasIn = this.editado.meas_fk_input;
       this.selectMeasOut = this.editado.meas_fk_output;
@@ -314,6 +354,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     guardar: function guardar() {
       if (this.estado == true) this.editado.prod_status = 1;else this.editado.prod_status = 0;
+      if (this.estadoGranel == true) this.editado.prod_bulk = 1;else this.editado.prod_bulk = 0;
       this.editado.prca_fk = this.selectCat;
       this.editado.meas_fk_input = this.selectMeasIn;
       this.editado.meas_fk_output = this.selectMeasOut;
@@ -331,20 +372,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this4 = this;
 
       axios.post('/product/add', this.editado).then(function (response) {
-        _this4.snackbar = true;
-        _this4.textMsg = '¡Alta exitosa!';
+        console.log(response.data);
 
-        _this4.getProducts();
+        if (response.data.status.code == 200) {
+          _this4.snackbar = true;
+          _this4.textMsg = response.data.status.message;
+
+          _this4.getProducts();
+        } else {
+          alert(response.data.status.technicaldetail.errorInfo[2]);
+        }
+      })["catch"](function (e) {
+        _this4.errors.push(e);
       });
     },
     editar: function editar() {
       var _this5 = this;
 
       axios.put('/product/update', this.editado).then(function (response) {
-        _this5.snackbar = true;
-        _this5.textMsg = '¡Actualización Exitosa!';
+        if (response.data.code == 200) {
+          _this5.snackbar = true;
+          _this5.textMsg = '¡Actualización Exitosa!';
 
-        _this5.getProducts();
+          _this5.getProducts();
+        } else {
+          alert(response.data.message);
+        }
+      })["catch"](function (e) {
+        _this5.errors.push(e);
       });
     },
     borrar: function borrar(item) {
@@ -502,9 +557,25 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
+                          _c("v-textarea", {
+                            attrs: {
+                              label: "Descripción",
+                              maxlength: "5000",
+                              rules: _vm.nameRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editado.prod_description,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editado, "prod_description", $$v)
+                              },
+                              expression: "editado.prod_description"
+                            }
+                          }),
+                          _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
-                              label: "Nombre",
+                              label: "Identificador",
                               maxlength: "300",
                               rules: _vm.nameRules,
                               required: ""
@@ -629,6 +700,40 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
+                              label: "Precio Venta",
+                              prefix: "$",
+                              type: "number",
+                              rules: _vm.numberRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editado.prod_saleprice,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editado, "prod_saleprice", $$v)
+                              },
+                              expression: "editado.prod_saleprice"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Precio Lista",
+                              prefix: "$",
+                              type: "number",
+                              rules: _vm.numberRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editado.prod_listprice,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editado, "prod_listprice", $$v)
+                              },
+                              expression: "editado.prod_listprice"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
                               label: "Stock",
                               type: "number",
                               rules: _vm.numberRules
@@ -643,6 +748,18 @@ var render = function() {
                                 )
                               },
                               expression: "editado.prod_packingquantity"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Venta a Granel")]),
+                          _vm._v(" "),
+                          _c("v-switch", {
+                            model: {
+                              value: _vm.estadoGranel,
+                              callback: function($$v) {
+                                _vm.estadoGranel = $$v
+                              },
+                              expression: "estadoGranel"
                             }
                           }),
                           _vm._v(" "),
@@ -894,6 +1011,38 @@ var render = function() {
                             }
                           },
                           {
+                            key: "item.prod_saleprice",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c("v-label", [
+                                  _vm._v(
+                                    "$" +
+                                      _vm._s(
+                                        _vm.formatMoney(item.prod_saleprice)
+                                      )
+                                  )
+                                ])
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.prod_listprice",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c("v-label", [
+                                  _vm._v(
+                                    "$" +
+                                      _vm._s(
+                                        _vm.formatMoney(item.prod_listprice)
+                                      )
+                                  )
+                                ])
+                              ]
+                            }
+                          },
+                          {
                             key: "item.status",
                             fn: function(ref) {
                               var item = ref.item
@@ -909,6 +1058,21 @@ var render = function() {
                                       { attrs: { color: "red", dark: "" } },
                                       [_vm._v("Inactivo")]
                                     )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.bulk",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                item.prod_bulk == 1
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "green", dark: "" } },
+                                      [_vm._v(" Granel")]
+                                    )
+                                  : _vm._e()
                               ]
                             }
                           },
