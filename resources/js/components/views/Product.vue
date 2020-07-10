@@ -125,7 +125,9 @@
                             <v-chip v-else color="red" dark>Inactivo</v-chip>                        
                     </template>
                     <template v-slot:item.bulk="{ item }">
-                        <v-chip v-if="item.prod_bulk == 1" color="green" dark> Granel</v-chip>
+                        <v-chip v-if="item.prod_bulk == 1" color="green" outlined> 
+                        Granel</v-chip>
+                        <v-chip v-else color="red" outlined>NA Granel</v-chip>
                     </template>
                     <template v-slot:item.action="{ item }">   
                                      

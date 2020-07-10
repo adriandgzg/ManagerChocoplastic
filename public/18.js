@@ -157,6 +157,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _defaultItem;
@@ -1069,10 +1071,16 @@ var render = function() {
                                 item.prod_bulk == 1
                                   ? _c(
                                       "v-chip",
-                                      { attrs: { color: "green", dark: "" } },
-                                      [_vm._v(" Granel")]
+                                      {
+                                        attrs: { color: "green", outlined: "" }
+                                      },
+                                      [_vm._v(" \n                    Granel")]
                                     )
-                                  : _vm._e()
+                                  : _c(
+                                      "v-chip",
+                                      { attrs: { color: "red", outlined: "" } },
+                                      [_vm._v("NA Granel")]
+                                    )
                               ]
                             }
                           },
