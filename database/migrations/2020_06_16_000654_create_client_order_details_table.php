@@ -25,9 +25,9 @@ class CreateClientOrderDetailsTable extends Migration
 
             $table->bigInteger('meas_fk')->unsigned(); //Llave Foranea Catálogo Unidad de Medida
             $table->foreign('meas_fk')->references('meas_pk')->on('measurements')->onUpdate('cascade');
-            $table->smallInteger('clod_type'); //Tipo Compra 1) Moneda o 2) Granel
+            //$table->smallInteger('clod_type'); //Tipo Compra 1) Moneda o 2) Granel
 
-            $table->integer('clod_quantity'); //Cantidad
+            $table->decimal('clod_quantity', 12, 2); //Cantidad
             $table->decimal('clod_price', 12, 2); //Precio Actual
             $table->decimal('clod_discountrate', 12, 2); //Porcentaje Descuento
             $table->decimal('clod_ieps', 12, 2); //IEPS

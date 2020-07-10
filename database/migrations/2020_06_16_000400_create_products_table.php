@@ -28,11 +28,15 @@ class CreateProductsTable extends Migration
 
             $table->string('prod_identifier', 20)->unique(); //Identificador Personalizado
             $table->string('prod_name', 300); //Nombre
+            $table->string('prod_description', 5000); //Nombre
             $table->text('prod_image'); //URL Imagen
             $table->decimal('prod_actualprice', 12, 2); //Precio Actual
             $table->decimal('prod_eventualprice', 12, 2); //Precio Eventual
             $table->decimal('prod_preferentialprice', 12, 2); //Precio Preferente
+            $table->decimal('prod_saleprice', 12, 2); //Precio Venta
+            $table->decimal('prod_listprice', 12, 2); //Precio Lista
             $table->decimal('prod_packingquantity', 12, 2); //Cantidad Empaque
+            $table->boolean('prod_bulk'); //Aplica Granel
             $table->smallInteger('prod_status')->default(1); //Estatus
             $table->timestamps();
         });

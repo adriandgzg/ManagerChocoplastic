@@ -26,7 +26,7 @@ class CreateClientSaleDetailsTable extends Migration
             $table->bigInteger('meas_fk')->unsigned(); //Llave Foranea Catálogo Unidad de Medida
             $table->foreign('meas_fk')->references('meas_pk')->on('measurements')->onUpdate('cascade');
 
-            $table->integer('clsd_quantity'); //Cantidad
+            $table->decimal('clsd_quantity', 12, 2); //Cantidad
             $table->decimal('clsd_price', 12, 2); //Precio Actual
             $table->decimal('clsd_discountrate', 12, 2); //Porcentaje Descuento
             $table->decimal('clsd_ieps', 12, 2); //IEPS
