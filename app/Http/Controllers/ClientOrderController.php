@@ -24,17 +24,14 @@ class ClientOrderController extends ApiResponseController
     {
 
         try {
-            $vClientOrders = DB::table('client_orders AS CO')
+                $vClientOrders = DB::table('client_orders AS CO')
                 ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
+                ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
                 ->select(
-                    'CO.clor_pk',
-                    'CO.clor_identifier',
-                    'CO.clor_status',
-                    'CO.created_at',
-                    'C.clie_pk',
-                    'C.clie_identifier',
-                    'C.clie_name',
-                    'C.clie_rfc'
+                    'CO.clor_pk AS PK_Order',
+                    'CO.clor_identifier AS Identifier',
+                    'CO.created_at AS DateCreated',
+                    'S.stor_name AS Store'
                 )
                 ->where('clor_status', '=', 1)
                 ->get();
