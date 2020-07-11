@@ -180,7 +180,7 @@ class AdminController extends Controller
     {
         /*$stores=User::all();*/
     
-       $stores = \DB::select("select id, name, email, phone_number, user_type_id, 
+       $stores = \DB::select("select id, name, email, phone_number, user_type_id,  gender, stor_fk,
                                         case when user_type_id = 2 then 'Repartidor' 
                                         else 'Cliente' end as user_type from users "); 
         return response()->json([

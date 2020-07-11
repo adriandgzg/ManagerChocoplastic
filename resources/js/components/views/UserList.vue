@@ -43,21 +43,27 @@
             <v-card-title class="cyan white--text">
                 <span class="headline">Usuario</span>
             </v-card-title>
-            
+            <v-form v-model="valid" >
             <v-card-text>
                 <v-container>
                 <v-text-field v-model="editado.name" label="Nombre" maxlength="300"
                                         :rules="nameRules" required></v-text-field>
                 <v-text-field v-model="editado.email" label="Email" maxlength="300"
-                                        :rules="nameRules" required></v-text-field>
+                                        :rules="[rules.required, rules.email]" required></v-text-field>
+                <v-text-field v-model="editado.phone_number" label="Teléfono" maxlength="300"
+                                        :rules="nameRules" required></v-text-field>  
                 <v-text-field v-model="editado.password" label="Contraseña" maxlength="300"
-                                        :rules="nameRules" required></v-text-field>                
+                                        :rules="[rules.required, rules.min]" 
+                                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :type="show1 ? 'text' : 'password'"
+                                        @click:append="show1 = !show1"
+                                        ></v-text-field>                
                     <v-select
                                         
                                         v-model="gender"
-                                        :items="statuses"
+                                        :items="genders"
                                         item-text="name"
-                                        item-value="id"
+                                        item-value="name"
                                         filled
                                         chips
                                         label="Genero"
@@ -65,13 +71,13 @@
                                 ></v-select>
                     <v-select
                                         
-                                        v-model="gender"
-                                        :items="statuses"
-                                        item-text="name"
-                                        item-value="id"
+                                        v-model="store"
+                                        :items="stores"
+                                        item-text="stor_name"
+                                        item-value="stor_pk"
                                         filled
                                         chips
-                                        label="Tienda"
+                                        label="Sucursal"
                                         placeholder="Selecciona sucursal"
                                 ></v-select>
                 </v-container>
@@ -80,11 +86,73 @@
                     <v-btn color="blue-grey" class="ma-2 white--text" @click="cancelar">
                         Cancelar
                     </v-btn>
-                    <v-btn color="teal accent-4" class="ma-2 white--text" @click="guardar">
+                    <v-btn :disabled="!valid" color="teal accent-4" class="ma-2 white--text" @click="guardar">
                         Guardar
                     </v-btn>
                 </v-card-actions>
             </v-card-text>
+            </v-form>
+        </v-card>
+    </v-dialog>
+    <!--FIN-->
+    <!--  Modal del diálogo para Alta y Edicion    -->
+    <v-dialog v-model="dialog" max-width="800px">
+        <template v-slot:activator="{ on }"></template>
+
+        <v-card>
+            <!-- para el EDICION-->
+            <v-card-title class="cyan white--text">
+                <span class="headline">Usuario</span>
+            </v-card-title>
+            <v-form v-model="validUpdate" >
+            <v-card-text>
+                <v-container>
+                <v-text-field v-model="editado.name" label="Nombre" maxlength="300"
+                                        :rules="nameRules" required></v-text-field>
+                <v-text-field v-model="editado.email" label="Email" maxlength="300"
+                                        :rules="[rules.required, rules.email]" required></v-text-field>
+                <v-text-field v-model="editado.phone_number" label="Teléfono" maxlength="300"
+                                        :rules="nameRules" required></v-text-field>      
+                <v-text-field v-model="editado.password" label="Contraseña" maxlength="300"
+                                        :rules="[rules.required, rules.min]" 
+                                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :type="show1 ? 'text' : 'password'"
+                                        @click:append="show1 = !show1"
+                                        ></v-text-field>                           
+                    <v-select
+                                        
+                                        v-model="gender"
+                                        :items="genders"
+                                        item-text="name"
+                                        item-value="name"
+                                        filled
+                                        chips
+                                        label="Genero"
+                                        placeholder="Selecciona su genero"
+                                ></v-select>
+                    <v-select
+                                        
+                                        v-model="store"
+                                        :items="stores"
+                                        item-text="stor_name"
+                                        item-value="stor_pk"
+                                        filled
+                                        chips
+                                        label="Sucursal"
+                                        placeholder="Selecciona sucursal"
+                                ></v-select>
+                </v-container>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue-grey" class="ma-2 white--text" @click="cancelarupdate">
+                        Cancelar
+                    </v-btn>
+                    <v-btn :disabled="!validUpdate" color="teal accent-4" class="ma-2 white--text" @click="actualizar">
+                        Guardar
+                    </v-btn>
+                </v-card-actions>
+            </v-card-text>
+            </v-form>
         </v-card>
     </v-dialog>
     <!--FIN-->
@@ -96,11 +164,18 @@
         data() {
             return {
                 dialogForm:false,
+                dialog:false,
+                show1: false,
                 statuses:[
                     {name:'Cliente',id:1},
                     {name:'Repartidor',id:2},
                 ],
+                valid:false,
+                validUpdate:false,
+                genders:[],
                 gender:'',
+                store:'',
+                stores:[],
                 headers: [
                     {
                         text: 'ID',
@@ -136,14 +211,20 @@
                     profile_picture:'',
                     user_type:'',
                     user_type_id:0,
+                    stor_fk:0,
                 },
                 defaultItem: {
-                    email:'',
                     id: '',
                     name: '',
+                    email:'',
+                    password:'',
                     phone_number:'',
+                    birthday:'',
+                    gender:'',
+                    profile_picture:'',
                     user_type:'',
                     user_type_id:0,
+                    stor_fk:0,
                 },
 
                 nameRules: [
@@ -162,11 +243,21 @@
                     value => !!value || 'Archivo requerido',
                     value => !value || value.size < 2000000 || 'La imagen tiene que ser menor a 2 MB!',
                 ],
+                rules: {
+                        required: value => !!value || 'Requiredo.',
+                        min: v => v.length >= 8 || 'Min 8 caracteres',                        
+                        email: value => {
+                                const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                                return pattern.test(value) || 'E-mail inválido.'
+                                },
+                    },
 
             }
         },
         created() {            
             this.getUser();
+            this.getGenders();
+            this.getStores();
         },
         methods: {
             getUser() {
@@ -178,32 +269,78 @@
                         console.log(e);
                     })
             },
+            getGenders() {
+                axios.get('/clients/genders')
+                    .then(response => {                        
+                        this.genders = response.data.data
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    })
+            },
+            getStores() {
+                axios.get('/storeget')
+                    .then(response => {                        
+                        this.stores = response.data.data
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    })
+            },
             editarTipo(item) {
                 //this.editedIndexNeg = this.business.indexOf(item)
                 console.log(item)
                 
                 this.editado = Object.assign({}, item)
-                this.status = this.editado.user_type_id 
+                this.gender = this.editado.gender
+                this.store = this.editado.stor_fk
                 console.log(this.editado)
-                this.dialogForm = true                
+                this.dialog = true                
             },
             cancelar() {
                 this.dialogForm = false
                 this.editado = Object.assign({}, this.defaultItem)
             },
-            guardar() {                
-//                console.log(this.status)
-                this.editado.user_type_id = this.status
+            guardar() {            
+                this.editado.gender = this.gender;   
+                this.editado.stor_fk = this.store;
+                console.log(this.editado)
+                //this.editado.user_type_id = this.status
 
-                axios.put('/user/updateStatus', this.editado)
+                axios.post('signup', this.editado)
                     .then(response => {
-                        var statusObj=this.statuses.find(item => item.id === this.status);
-                        
-                        this.usuarios.find(item => item.id === this.editado.id).user_type=statusObj.name;
-                        this.dialogForm = false
-                        
+                        if(response.data.status.code == 200){
+                            alert(response.data.status.message)
+                            this.dialogForm = false
+                            this.getUser();
+                        }                        
+                        else{
+                            alert(response.data.status.message)
+                        }
+                    })                    
+            },
+
+            actualizar(){
+                this.editado.gender = this.gender;   
+                this.editado.stor_fk = this.store;
+                console.log(this.editado)
+
+                axios.post('/user/update', this.editado)
+                    .then(response => {
+                        if(response.data.status.code == 200){
+                            alert(response.data.status.message)
+                            this.dialogForm = false
+                            this.getUser();
+                        }                        
+                        else{
+                            alert(response.data.status.message)
+                        }
                     })
-                    
+
+            },
+            cancelarupdate() {
+                this.dialog = false
+                this.editado = Object.assign({}, this.defaultItem)
             },
         },
         computed: {

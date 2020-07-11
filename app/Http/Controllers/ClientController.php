@@ -45,6 +45,26 @@ class ClientController extends Controller
         ], 200);
     }
 
+    public function Genders(){
+        //$gender[];
+
+        $gender[0] = [
+            'id' => 1,
+            'name' => 'Masculino'
+        ];
+
+        $gender[1] = [
+            'id' => 2,
+            'name' => 'Femenino'
+        ];
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Genders loaded',
+            'data' => $gender,
+        ], 200);
+    }
+
     public function add(Request $request)
     {        
        

@@ -207,4 +207,47 @@ class LoginController extends ApiResponseController
         return response()->json(null, 204);
     }
 
+    public function signup(Request $request)
+    {
+        
+        $request->validate([
+            'name'     => 'required|string',
+            'email'    => 'required|string|email|unique:users',
+            'password' => 'required|string',
+        ]);
+        $user = new User([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => bcrypt($request->password),
+            'phone_number'=>$request->phone_number,
+            'gender'=>$request->gender,
+            'stor_fk'=>$request->stor_fk,
+        ]);
+
+        
+        $user->save();
+        
+        return $this->dbResponse("Agregado", 200, null, 'Guardado Correctamente');
+    }
+
+    public function update(Request $request)
+    {
+        
+        $request->validate([
+            'name'     => 'required|string',
+            'email'    => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+
+        $user = User::findOrFail($request->phone_number);   
+        
+        $user->name     = $request->name;
+        $user->email    = $request->email;
+        $user->gender   = $request->gender;
+        $user->stor_fk  = $request->stor_fk;        
+        $user->save();
+        dd($user);
+        return $this->dbResponse("Agregado", 200, null, 'Guardado Correctamente');
+    }
+
 }
