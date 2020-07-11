@@ -11,6 +11,7 @@ use App\System;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
 use App\Product;
+use Illuminate\Support\Facades\Auth;
 
 class ClientOrderController extends ApiResponseController
 {
@@ -59,17 +60,15 @@ class ClientOrderController extends ApiResponseController
         try {
             $vClientOrders = DB::table('client_orders AS CO')
             ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
+            ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
             ->select(
                 'CO.clor_pk AS PK_Order',
                 'CO.clor_identifier AS Identifier',
-                //'CO.clor_status',
-                'CO.created_at AS DateCreated'
-                //'C.clie_pk',
-                //'C.clie_identifier',
-                //'C.clie_name',
-                //'C.clie_rfc'
+                'CO.created_at AS DateCreated',
+                'S.stor_name AS Store'
             )
             ->where('clor_status', '=', 1)
+            ->orderByDesc('CO.created_at')
             ->get();
             
             return $this->dbResponse($vClientOrders, 200, null, 'Lista de Pedidos');
@@ -98,6 +97,9 @@ class ClientOrderController extends ApiResponseController
     {
         try {
 
+            //Sucursal al que pertenece el Usuario App
+            $vStore_PK = Auth::user()->stor_fk;
+
             //Buscar el folio consecutivo
             $vSystem = System::select('syst_clie_order')->first();
             $vsyst_clie_order = $vSystem->syst_clie_order;
@@ -105,9 +107,16 @@ class ClientOrderController extends ApiResponseController
             //Insersión de la tabla principal (Pedido del cliente)
             $vOrder = new ClientOrder();
             $vOrder->clie_fk = 1;
+            $vOrder->stor_fk = $vStore_PK;
             $vOrder->clor_identifier = "Ped_" . $vsyst_clie_order;
             $vOrder->save();
+
+            //Asignación de PK del Pedido
             $vclor_pk = $vOrder->clor_pk;
+
+            //Modificar Folio del Pedido
+            DB::table('systems')
+            ->update(['syst_clie_order' =>  $vsyst_clie_order + 1]);
 
 
             //Asignacion de variable de los Productos
@@ -135,9 +144,7 @@ class ClientOrderController extends ApiResponseController
                 ));
             }
 
-            //Modificar Folio del Pedido
-            DB::table('systems')
-            ->update(['syst_clie_order' =>  $vsyst_clie_order + 1]);
+            
        
             return $this->dbResponse("Ped_" . $vsyst_clie_order, 200, null, 'Pedido Guardado Correctamente');
         } catch (Exception $e) {
@@ -176,15 +183,14 @@ class ClientOrderController extends ApiResponseController
             $vClientOrder = ClientOrder::where('clor_pk', '=', $vclor_pk)
                             ->select(
                                 'clor_pk AS PK_Order',
-                                'clor_identifier AS Identifier',
-                                'created_at AS DateCreated'
+                                'clor_identifier AS Identifier'
                                 )
                             ->first();
 
             if($vClientOrder)
             { 
 
-                $vClientOrderDetail = DB::table('client_order_details AS COD')
+                $vClientOrderDetail = DB::table('client_order_details AS COD') 
                     ->join('products AS P', 'P.prod_pk', '=', 'COD.prod_fk')
                     ->join('measurements AS M', 'M.meas_pk', '=', 'COD.meas_fk')
                     ->join('product_categories AS PC', 'PC.prca_pk', '=', 'P.prca_fk')
@@ -192,14 +198,14 @@ class ClientOrderController extends ApiResponseController
                         'COD.clod_pk AS PK_OrderProduct',
                         'P.prod_pk AS PK_Product',
                         //'P.prod_identifier',
-                        'P.prod_name AS Product',
+                        'P.prod_name AS ProductName',
                         //'M.meas_pk',
                         'M.meas_name AS Measurement',
                         //'M.meas_abbreviation',
                         'PC.prca_name AS Category',
-                        'COD.clod_type AS Type',
+                        //'COD.clod_type AS Type',
                         'COD.clod_quantity AS Quantity',
-                        'COD.clod_price AS Price',
+                        'COD.clod_price AS Price'
                         //'COD.clod_discountrate',
                         //'COD.clod_ieps',
                         //'COD.clod_iva',

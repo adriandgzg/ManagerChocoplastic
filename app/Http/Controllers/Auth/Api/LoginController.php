@@ -166,7 +166,7 @@ class LoginController extends ApiResponseController
      */
     public function login(Request $request)
     {
-        $user = User::where(['phone_number' => $request->phone_number])->first();
+        $user = User::where(['phone_number' => $request->employee])->first();
         
         if (!$user) {
             return $this->dbResponse(null, 501, null, 'Usuario no encontrado');
@@ -183,7 +183,7 @@ class LoginController extends ApiResponseController
         if (!Hash::check($request->password, $user->password)){
             return $this->dbResponse(null, 501, null, 'Contraseña incorrecta, verifica e intenta de nuevo');
         }
-        $phone_number = $request->phone_number;
+        $phone_number = $request->employee;
         $password = $request->password;
         return $this->loginProxy->attemptLogin($phone_number, $password);
     }

@@ -20,6 +20,9 @@ class CreateClientOrdersTable extends Migration
             $table->bigInteger('clie_fk')->unsigned(); //Llave Foranea Catálogo de Clientes
             $table->foreign('clie_fk')->references('clie_pk')->on('clients')->onUpdate('cascade');
 
+            $table->bigInteger('stor_fk')->unsigned()->nullable(); //Llave Foranea Catálogo Tienda
+            $table->foreign('stor_fk')->references('stor_pk')->on('stores')->onUpdate('cascade');
+
             $table->string('clor_identifier', 20)->unique(); //Identificador Personalizado
             $table->smallInteger('clor_status')->default(1); //Estatus
             $table->timestamps();
