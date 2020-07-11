@@ -44,5 +44,29 @@ class ProductCategorySeeder extends Seeder
             'prca_pk' => 7,
             'prca_name' => "BOL"
         ]);
+        ProductCategory::create([
+            'prca_pk' => 8,
+            'prca_name' => "BYF"
+        ]);
+        ProductCategory::create([
+            'prca_pk' => 9,
+            'prca_name' => "CAF"
+        ]);
+        ProductCategory::create([
+            'prca_pk' => 10,
+            'prca_name' => "CHI"
+        ]);
+        ProductCategory::create([
+            'prca_pk' => 11,
+            'prca_name' => "DEB"
+        ]);
+        ProductCategory::create([
+            'prca_pk' => 12,
+            'prca_name' => "DED"
+        ]);
+        ProductCategory::create([
+            'prca_pk' => 13,
+            'prca_name' => "DEI"
+        ]);
     }
 }
