@@ -9,52 +9,50 @@ use App\Product;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
+use Illuminate\Support\Facades\Auth;
 
-class ProductController extends ApiResponseController
+class ProductController extends ApiResponseController 
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(int $stor_pk, int $prca_fk)
+    public function index(int $prca_fk)
     {
         try {
+            //Sucursal al que pertenece el Usuario App
+            $vStore_PK = Auth::user()->stor_fk;
 
-            $vStore = Store::where('stor_pk', '=', $stor_pk)->first();
+            $vStore = Store::where('stor_pk', '=', $vStore_PK)->first();
            
             $vProducts = DB::table('products AS P')
                 ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
                 ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
                 ->select(
                     'P.prod_pk AS PK_Product',
-                    //'P.prod_identifier',
-                    'P.prod_name AS Product',
+                    'P.prod_identifier AS ProductIdentifier',
+                    'P.prod_name AS ProductName',
+                    'P.prod_description AS ProductDescription',
                     'P.prod_image AS ProductImage',
-                    'P.prod_actualprice AS ActualPrice',
-                    'P.prod_eventualprice AS EventualPrice',
-                    'P.prod_preferentialprice AS PreferentialPrice',
-                    //'P.prod_packingquantity AS PackingQuantity',
+                    'P.prod_saleprice AS SalePrice',
+                    'P.prod_listprice AS ListPrice',
+                    'P.prod_bulk AS Bulk',
                     DB::raw("10 AS Stock"),
-                    //'PC.prca_pk', 
                     'PC.prca_name AS Category',
-                    //DB::raw("P.meas_fk_output AS meas_pk_output"), 
                     DB::raw("MO.meas_name AS Measurement"),
-                    //DB::raw("MO.meas_abbreviation AS meas_abbreviation_output"),
-                    //DB::raw("'$vStore->stor_pk' AS stor_pk"), 
                     DB::raw("'$vStore->stor_name' AS Store")
                 )
                 ->where('prod_status', '=', 1)
                 ->where('prca_fk', '=', $prca_fk)
+                ->orderBy('P.prod_pk')
                 ->get();
             
-        return $this->dbResponse($vProducts, 200, null, 'Lista de Productos, filtrada por Sucursal y Categoría');
+            return $this->dbResponse($vProducts, 200, null, 'Lista de Productos, filtrada por Sucursal y Categoría');
           
         } catch (Exception $e) {
             return $this->dbResponse(null, 500, $e, null);
         }
-
-
     }
 
     public function ProductList(){
@@ -74,6 +72,75 @@ class ProductController extends ApiResponseController
             'message' => 'Stores loaded',
             'data' => $stores,
         ], 200);
+    }
+    
+    public function search(int $isSKU, string $text)
+    {
+        try {
+            //Sucursal al que pertenece el Usuario App
+            $vStore_PK = Auth::user()->stor_fk;
+
+            $vStore = Store::where('stor_pk', '=', $vStore_PK)->first();
+           
+
+            if($isSKU == 1)
+            {
+                $vProducts = DB::table('products AS P')
+                    ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                    ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                    ->select(
+                        'P.prod_pk AS PK_Product',
+                        'P.prod_identifier AS ProductIdentifier',
+                        'P.prod_name AS ProductName',
+                        'P.prod_description AS ProductDescription',
+                        'P.prod_image AS ProductImage',
+                        'P.prod_saleprice AS SalePrice',
+                        'P.prod_listprice AS ListPrice',
+                        'P.prod_bulk AS Bulk',
+                        DB::raw("10 AS Stock"),
+                        'PC.prca_name AS Category',
+                        DB::raw("MO.meas_name AS Measurement"),
+                        DB::raw("'$vStore->stor_name' AS Store")
+                    )
+                    ->where('P.prod_status', '=', 1)
+                    ->Where('P.prod_identifier', 'LIKE', '%' . $text . '%')
+                    ->orderBy('P.prod_pk')
+                    ->get();
+            }
+            else
+            {
+                $vProducts = DB::table('products AS P')
+                    ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                    ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                    ->select(
+                        'P.prod_pk AS PK_Product',
+                        'P.prod_identifier AS ProductIdentifier',
+                        'P.prod_name AS ProductName',
+                        'P.prod_description AS ProductDescription',
+                        'P.prod_image AS ProductImage',
+                        'P.prod_saleprice AS SalePrice',
+                        'P.prod_listprice AS ListPrice',
+                        'P.prod_bulk AS Bulk',
+                        DB::raw("10 AS Stock"),
+                        'PC.prca_name AS Category',
+                        DB::raw("MO.meas_name AS Measurement"),
+                        DB::raw("'$vStore->stor_name' AS Store")
+                    )
+                    ->where('P.prod_status', '=', 1)
+                    ->Where('P.prod_identifier', 'LIKE', '%' . $text . '%')
+                    ->orWhere('P.prod_name', 'LIKE', '%' . $text . '%')
+                    ->orWhere('P.prod_description', 'LIKE', '%' . $text . '%')
+                    ->orderBy('P.prod_pk')
+                    ->get();
+
+            }
+
+            return $this->dbResponse($vProducts, 200, null, 'Resultado de Busqueda por texto');
+          
+        } catch (Exception $e) {
+            return $e;
+            return $this->dbResponse(null, 500, $e, null);
+        }
     }
 
     public function add(Request $request)

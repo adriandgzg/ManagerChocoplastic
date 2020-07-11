@@ -27,7 +27,7 @@ class LoginProxyController extends ApiResponseController
         ])->first();
 
         if (!is_null($user)) {
-            return $this->proxy($phonne_number,
+            return $this->proxy(
                 'password', [
                 'username' => $phonne_number,
                 'password' => $password
@@ -43,11 +43,11 @@ class LoginProxyController extends ApiResponseController
      * @param string $grantType what type of grant type should be proxied
      * @param array $data the data to send to the server
      */
-    public function proxy($phonne_number, $grantType, array $data = [])
+    public function proxy($grantType, array $data = [])
     {
         $data = array_merge($data, [
-            'client_id' => config('auth.password_client_id'),
-            'client_secret' => config('auth.password_client_secret'),
+            'client_id' => 2, //config('PASSWORD_CLIENT_ID'),
+            'client_secret' => "4NtvmAO4J5WfGWwe20PirddOk91XGNG57RQsZy7k", //config('PASSWORD_CLIENT_SECRET'),
             'grant_type' => $grantType
         ]);
 
@@ -57,17 +57,8 @@ class LoginProxyController extends ApiResponseController
         $result = json_decode($response->getContent());
         //dd($response->status());
 
-        $vUser = User::where('phone_number', '=', $phonne_number)->select('phone_number','stor_fk')->first();
 
-
-
-        return $this->dbResponse($vUser, 200, null, isset($result->error) ? $result->message : 'Login Exitoso');
-
-       /* return response()->json([
-            'success' => !isset($result->error),
-            'message' => ,
-            'data' => $result, 
-        ], 200);*/
+        return $this->dbResponse($result, 200, null, isset($result->error) ? $result->message : 'Login Exitoso');
     }
 
     /**

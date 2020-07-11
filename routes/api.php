@@ -24,16 +24,6 @@ use Illuminate\Http\Request;
 
 
  
-Route::get('/product/categories', 'ProductCategoryController@index'); //Lista de Categorias 
-Route::get('/products/{stor_pk}/{prca_fk}', 'ProductController@index'); //Lista de Producto filtados por sucursal y categoria
-
-
-//Route::get('/stores', 'StoreController@index');
-
-Route::post('/client/orders', 'ClientOrderController@store'); //Guardar Pedido 
-Route::get('/client/orders', 'ClientOrderController@clientorders');
-
-Route::get('/client/order/show', 'ClientOrderController@show');
 
 
 
@@ -59,8 +49,14 @@ Route::get('/faqs', 'FaqController@index');
 Route::middleware('auth:api')->group( function(){
     Route::get('/user',  function (Request $request) { return $request->user(); });
 
-   
-
+    Route::get('/product/categories', 'ProductCategoryController@index'); //Lista de Categorias 
+    Route::get('/products/{prca_fk}', 'ProductController@index'); //Lista de Producto filtados por sucursal y categoria
+    Route::get('/product/frequents', 'ProductFrequentController@index'); //Lista de Producto Frecuentes
+    Route::get('/products/search/{isSKU}/{text}', 'ProductController@search'); //Busqueda de Productos
+    
+    Route::post('/client/orders', 'ClientOrderController@store'); //Guardar Pedido 
+    Route::get('/client/orders', 'ClientOrderController@clientorders'); //Lista de Pedidos
+    Route::get('/client/order/show', 'ClientOrderController@show'); // Detalle de un pedido
 
 });
 
