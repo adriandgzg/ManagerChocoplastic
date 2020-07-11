@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\api\ApiResponseController;
+use PhpParser\Node\Stmt\TryCatch;
 
 /**
  * Class LoginController
@@ -230,23 +231,48 @@ class LoginController extends ApiResponseController
         return $this->dbResponse("Agregado", 200, null, 'Guardado Correctamente');
     }
 
-    public function update(Request $request)
-    {
-        
-        $request->validate([
+    public function update(Request $r)
+    { 
+        $r->validate([
+            'id'     => 'required|int',
             'name'     => 'required|string',
             'email'    => 'required|string|email',
+            'stor_fk'    => 'required|int',
         ]);
 
-        $user = User::findOrFail($request->phone_number);   
+        try {
+            $vUser = User::findOrFail($r->id);   
         
-        $user->name     = $request->name;
-        $user->email    = $request->email;
-        $user->gender   = $request->gender;
-        $user->stor_fk  = $request->stor_fk;  
-        dd($user)      ;
-        $user->save();
-        return $this->dbResponse("Agregado", 200, null, 'Guardado Correctamente');
+            $vUser->name     = $r->name;
+            $vUser->email    = $r->email;
+            $vUser->gender   = $r->gender;
+            $vUser->stor_fk  = $r->stor_fk;  
+            $vUser->save();
+            
+            return $this->dbResponse(null, 200, null, 'Usuario Modificado Correctamente');
+        } catch (\Throwable $th) {
+            return $this->dbResponse(null, 500, $th, $th);
+        }    
+    }
+
+
+
+    public function passwordchange(Request $r)
+    { 
+        $r->validate([
+            'id'     => 'required|int',
+            'password' => 'required|string'
+        ]);
+
+        try {
+            $vUser = User::findOrFail($r->id);   
+            $vUser->password = bcrypt($r->password); 
+            $vUser->save();
+            
+            return $this->dbResponse(null, 200, null, 'Contraseña de Usuario Modificada Correctamente');
+        } catch (\Throwable $th) {
+            return $this->dbResponse(null, 500, $th, $th);
+        }    
     }
 
 }
