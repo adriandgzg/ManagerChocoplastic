@@ -91,8 +91,12 @@ export default {
                         value: 'clor_identifier'
                     },
                     {
-                        text: 'Cliente',
-                        value: 'clie_name'
+                        text: 'Sucursal',
+                        value: 'stor_name'
+                    },
+                    {
+                        text: 'Fecha',
+                        value: 'created_at'
                     },
                      {
                         text: 'Estatus',
