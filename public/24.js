@@ -165,11 +165,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -806,30 +801,6 @@ var render = function() {
                                 _vm.$set(_vm.editado, "phone_number", $$v)
                               },
                               expression: "editado.phone_number"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Contraseña",
-                              maxlength: "300",
-                              rules: [_vm.rules.required, _vm.rules.min],
-                              "append-icon": _vm.show1
-                                ? "mdi-eye"
-                                : "mdi-eye-off",
-                              type: _vm.show1 ? "text" : "password"
-                            },
-                            on: {
-                              "click:append": function($event) {
-                                _vm.show1 = !_vm.show1
-                              }
-                            },
-                            model: {
-                              value: _vm.editado.password,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editado, "password", $$v)
-                              },
-                              expression: "editado.password"
                             }
                           }),
                           _vm._v(" "),

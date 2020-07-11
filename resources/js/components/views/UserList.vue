@@ -113,12 +113,7 @@
                                         :rules="[rules.required, rules.email]" required></v-text-field>
                 <v-text-field v-model="editado.phone_number" label="No. Empleado" maxlength="300"
                                         :rules="nameRules" required></v-text-field>      
-                <v-text-field v-model="editado.password" label="Contraseña" maxlength="300"
-                                        :rules="[rules.required, rules.min]" 
-                                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                                        :type="show1 ? 'text' : 'password'"
-                                        @click:append="show1 = !show1"
-                                        ></v-text-field>                           
+                              
                     <v-select
                                         
                                         v-model="gender"

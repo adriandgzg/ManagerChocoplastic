@@ -236,7 +236,6 @@ class LoginController extends ApiResponseController
         $request->validate([
             'name'     => 'required|string',
             'email'    => 'required|string|email',
-            'password' => 'required|string',
         ]);
 
         $user = User::findOrFail($request->phone_number);   
@@ -244,9 +243,9 @@ class LoginController extends ApiResponseController
         $user->name     = $request->name;
         $user->email    = $request->email;
         $user->gender   = $request->gender;
-        $user->stor_fk  = $request->stor_fk;        
+        $user->stor_fk  = $request->stor_fk;  
+        dd($user)      ;
         $user->save();
-        dd($user);
         return $this->dbResponse("Agregado", 200, null, 'Guardado Correctamente');
     }
 
