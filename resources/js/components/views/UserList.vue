@@ -5,7 +5,20 @@
                 <v-data-table :headers="headers" :items="usuarios" sort-by="id" class="elevation-3">
                     <template v-slot:top>
                         <v-system-bar color="indigo darken-2" dark></v-system-bar>
+                        
                         <v-toolbar flat color="indigo">
+                        <template v-slot:extension>
+                                <v-btn
+                                        fab
+                                        color="cyan accent-2"
+                                        bottom
+                                        left
+                                        absolute
+                                        @click="dialogForm = !dialogForm"
+                                >
+                                    <v-icon>mdi-plus</v-icon>
+                                </v-btn>
+                            </template>
                             <v-toolbar-title class="white--text">Usuarios</v-toolbar-title>
                             <v-divider class="mx-4" inset vertical></v-divider>
                             <v-spacer></v-spacer>
@@ -21,21 +34,38 @@
                 </v-data-table>
             </v-col>
         </v-row>
-         <!--  Modal del diálogo para Alta y Edicion    -->
-    <v-dialog v-model="dialogForm" max-width="1024px">
+    <!--  Modal del diálogo para Alta y Edicion    -->
+    <v-dialog v-model="dialogForm" max-width="800px">
         <template v-slot:activator="{ on }"></template>
 
         <v-card>
             <!-- para el EDICION-->
             <v-card-title class="cyan white--text">
-                <span class="headline">Tipo de usuario</span>
+                <span class="headline">Usuario</span>
             </v-card-title>
             
             <v-card-text>
                 <v-container>
+                <v-text-field v-model="editado.name" label="Nombre" maxlength="300"
+                                        :rules="nameRules" required></v-text-field>
+                <v-text-field v-model="editado.email" label="Email" maxlength="300"
+                                        :rules="nameRules" required></v-text-field>
+                <v-text-field v-model="editado.password" label="Contraseña" maxlength="300"
+                                        :rules="nameRules" required></v-text-field>                
                     <v-select
                                         
-                                        v-model="status"
+                                        v-model="gender"
+                                        :items="statuses"
+                                        item-text="name"
+                                        item-value="id"
+                                        filled
+                                        chips
+                                        label="Genero"
+                                        placeholder="Selecciona su genero"
+                                ></v-select>
+                    <v-select
+                                        
+                                        v-model="gender"
                                         :items="statuses"
                                         item-text="name"
                                         item-value="id"
@@ -70,7 +100,7 @@
                     {name:'Cliente',id:1},
                     {name:'Repartidor',id:2},
                 ],
-                status:'',
+                gender:'',
                 headers: [
                     {
                         text: 'ID',
@@ -95,11 +125,15 @@
                     },
                 ],                
                 usuarios: [],                
-                editado: {
-                    email:'',
+                editado: {                    
                     id: '',
                     name: '',
+                    email:'',
+                    password:'',
                     phone_number:'',
+                    birthday:'',
+                    gender:'',
+                    profile_picture:'',
                     user_type:'',
                     user_type_id:0,
                 },
@@ -111,6 +145,23 @@
                     user_type:'',
                     user_type_id:0,
                 },
+
+                nameRules: [
+                    value => !!value || 'Requerido.',
+                    value => (value && value.length >= 3) || 'Min 3 caracteres',
+                ],
+                phoneRules: [
+                        value => !!value || 'Requerido.',
+                        value => (value && value.length == 10 ) || 'Requiere 10 caracteres',
+                            ],
+                numberRules: [
+                    value => !!value || 'Requerido.',
+                    value => value > 0 || 'El número debe ser mayor a cero',
+                ],
+                rulesImage: [
+                    value => !!value || 'Archivo requerido',
+                    value => !value || value.size < 2000000 || 'La imagen tiene que ser menor a 2 MB!',
+                ],
 
             }
         },

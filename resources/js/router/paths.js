@@ -89,6 +89,10 @@ export default [{
         name: 'Cuentas por Pagar', 
         view: 'ClientDebts'
     },
-    
+    {
+        path: '/userlist',
+        name: 'Usuarios', 
+        view: 'UserList'
+    },
 
 ]
