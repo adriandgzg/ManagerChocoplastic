@@ -24,14 +24,15 @@ class ClientOrderController extends ApiResponseController
     {
 
         try {
-                $vClientOrders = DB::table('client_orders AS CO')
+            $vClientOrders = DB::table('client_orders AS CO')
                 ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
                 ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
                 ->select(
-                    'CO.clor_pk AS PK_Order',
-                    'CO.clor_identifier AS Identifier',
-                    'CO.created_at AS DateCreated',
-                    'S.stor_name AS Store'
+                    'CO.clor_pk',
+                    'CO.clor_identifier',
+                    'CO.created_at',
+                    'CO.clor_status',
+                    'S.stor_name'
                 )
                 ->where('clor_status', '=', 1)
                 ->get();
@@ -56,17 +57,17 @@ class ClientOrderController extends ApiResponseController
     {
         try {
             $vClientOrders = DB::table('client_orders AS CO')
-            ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
-            ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
-            ->select(
-                'CO.clor_pk AS PK_Order',
-                'CO.clor_identifier AS Identifier',
-                'CO.created_at AS DateCreated',
-                'S.stor_name AS Store'
-            )
-            ->where('clor_status', '=', 1)
-            ->orderByDesc('CO.created_at')
-            ->get();
+                ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
+                ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
+                ->select(
+                    'CO.clor_pk AS PK_Order',
+                    'CO.clor_identifier AS Identifier',
+                    'CO.created_at AS DateCreated',
+                    'S.stor_name AS Store'
+                )
+                ->where('clor_status', '=', 1)
+                ->orderByDesc('CO.created_at')
+                ->get();
             
             return $this->dbResponse($vClientOrders, 200, null, 'Lista de Pedidos');
         } catch (Exception $e) {
