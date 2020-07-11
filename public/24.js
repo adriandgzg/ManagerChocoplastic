@@ -201,7 +201,7 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Correo Electrónico',
         value: 'email'
       }, {
-        text: 'Teléfono',
+        text: 'No. Empleado',
         value: 'phone_number'
       }, {
         text: 'Tipo Usuario',
@@ -583,7 +583,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
-                              label: "Teléfono",
+                              label: "No. Empleado",
                               maxlength: "300",
                               rules: _vm.nameRules,
                               required: ""
@@ -795,7 +795,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
-                              label: "Teléfono",
+                              label: "No. Empleado",
                               maxlength: "300",
                               rules: _vm.nameRules,
                               required: ""

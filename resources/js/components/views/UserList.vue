@@ -50,7 +50,7 @@
                                         :rules="nameRules" required></v-text-field>
                 <v-text-field v-model="editado.email" label="Email" maxlength="300"
                                         :rules="[rules.required, rules.email]" required></v-text-field>
-                <v-text-field v-model="editado.phone_number" label="Teléfono" maxlength="300"
+                <v-text-field v-model="editado.phone_number" label="No. Empleado" maxlength="300"
                                         :rules="nameRules" required></v-text-field>  
                 <v-text-field v-model="editado.password" label="Contraseña" maxlength="300"
                                         :rules="[rules.required, rules.min]" 
@@ -111,7 +111,7 @@
                                         :rules="nameRules" required></v-text-field>
                 <v-text-field v-model="editado.email" label="Email" maxlength="300"
                                         :rules="[rules.required, rules.email]" required></v-text-field>
-                <v-text-field v-model="editado.phone_number" label="Teléfono" maxlength="300"
+                <v-text-field v-model="editado.phone_number" label="No. Empleado" maxlength="300"
                                         :rules="nameRules" required></v-text-field>      
                 <v-text-field v-model="editado.password" label="Contraseña" maxlength="300"
                                         :rules="[rules.required, rules.min]" 
@@ -188,7 +188,7 @@
                         text: 'Correo Electrónico',
                         value: 'email'
                     }, {
-                        text: 'Teléfono',
+                        text: 'No. Empleado',
                         value: 'phone_number'
                     }, {
                         text: 'Tipo Usuario',
