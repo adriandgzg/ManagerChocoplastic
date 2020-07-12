@@ -27,10 +27,10 @@
                                     filled chips label="Sucursal"
                                     placeholder="Selecciona sucursal"></v-select>
                             
-                            <v-select v-model="product" :items="products"
+                            <v-combobox v-model="product" :items="products"
                                     item-text="prod_name" item-value="prod_pk"
                                     filled chips label="Producto"
-                                    placeholder="Selecciona producto"></v-select>
+                                    placeholder="Selecciona producto"></v-combobox>
 
                         </v-card-text>
                         <v-card-actions>

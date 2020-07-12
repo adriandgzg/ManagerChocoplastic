@@ -409,7 +409,7 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
-                          _c("v-select", {
+                          _c("v-combobox", {
                             attrs: {
                               items: _vm.products,
                               "item-text": "prod_name",
