@@ -412,6 +412,7 @@ export default {
     },
     editar: function () {
         axios.put('/product/update', this.editado).then(response => {
+            console.log(response)
             if(response.data.code == 200){
             this.snackbar = true
             this.textMsg = '¡Actualización Exitosa!'

@@ -392,6 +392,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this5 = this;
 
       axios.put('/product/update', this.editado).then(function (response) {
+        console.log(response);
+
         if (response.data.code == 200) {
           _this5.snackbar = true;
           _this5.textMsg = '¡Actualización Exitosa!';

@@ -60,7 +60,7 @@ class ProductController extends ApiResponseController
         $stores = \DB::select("select m.meas_name as meas_fk_output_name, principal.* from(
             select p.prod_pk, p.prca_fk, c.prca_name, p.meas_fk_input, 
             m.meas_name as meas_fk_input_name,  p.meas_fk_output, p.prod_identifier, 
-            p.prod_name, p.prod_image, p.prod_actualprice, p.prod_eventualprice, 
+            p.prod_name, p.prod_description, p.prod_image, p.prod_actualprice, p.prod_eventualprice, 
             p.prod_preferentialprice, p.prod_saleprice, p.prod_listprice, 
             p.prod_packingquantity, p.prod_status, p.prod_bulk
             from products p LEFT JOIN product_categories c on p.prca_fk = c.prca_pk 
@@ -214,6 +214,7 @@ class ProductController extends ApiResponseController
         . ", meas_fk_output = " . $request->meas_fk_output
         . ", prod_identifier = '" . $request->prod_identifier 
         . "', prod_name = '" . $request->prod_name 
+        . "', prod_description = '" . $request->prod_description
         . "', prod_image = '" .  $urlImage . "'"
         . ", prod_actualprice = " . $request->prod_actualprice
         . ", prod_eventualprice = " . $request->prod_eventualprice
@@ -222,7 +223,12 @@ class ProductController extends ApiResponseController
         . ", prod_status = " . $request->prod_status
         . " where prod_pk = ". $request->prod_pk );
 
-        
+        return response()->json([
+            'code' => 200,
+            'success' => true,
+            'message' => 'Producto Modificado Correctamente',
+            'data' => null
+        ], 200);
 
     }
 
