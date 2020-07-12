@@ -30,6 +30,9 @@
                         <v-btn class="mr-2" fab dark small color="green" @click="editarTipo(item)">
                             <v-icon dark>mdi-account-arrow-right</v-icon>
                         </v-btn>
+                        <v-btn class="mr-2" fab dark small color="blue" @click="editarPassword(item)">
+                            <v-icon dark>mdi-account-key</v-icon>
+                        </v-btn>
                     </template>
                 </v-data-table>
             </v-col>
@@ -112,7 +115,7 @@
                 <v-text-field v-model="editado.email" label="Email" maxlength="300"
                                         :rules="[rules.required, rules.email]" required></v-text-field>
                 <v-text-field v-model="editado.phone_number" label="No. Empleado" maxlength="300"
-                                        :rules="nameRules" required></v-text-field>      
+                                        disabled></v-text-field>      
                               
                     <v-select
                                         
@@ -151,6 +154,40 @@
         </v-card>
     </v-dialog>
     <!--FIN-->
+
+    <!--  Modal del diálogo para Alta y Edicion    -->
+    <v-dialog v-model="dialogPassword" max-width="800px">
+        <template v-slot:activator="{ on }"></template>
+
+        <v-card>
+            <!-- para el EDICION-->
+            <v-card-title class="cyan white--text">
+                <span class="headline">Cambio de Contraseña</span>
+            </v-card-title>
+            <v-form v-model="validPassword" >
+            <v-card-text>
+                <v-container>
+                <v-text-field v-model="editado.password" label="Contraseña" maxlength="300"
+                                        :rules="[rules.required, rules.min]" 
+                                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :type="show1 ? 'text' : 'password'"
+                                        @click:append="show1 = !show1"
+                                        ></v-text-field>  
+                </v-container>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue-grey" class="ma-2 white--text" @click="cancelarPassword">
+                        Cancelar
+                    </v-btn>
+                    <v-btn :disabled="!validPassword" color="teal accent-4" class="ma-2 white--text" @click="actualizarPassword">
+                        Guardar
+                    </v-btn>
+                </v-card-actions>
+            </v-card-text>
+            </v-form>
+        </v-card>
+    </v-dialog>
+    <!--FIN-->
     </v-container>
 </template>
 <script>
@@ -160,6 +197,7 @@
             return {
                 dialogForm:false,
                 dialog:false,
+                dialogPassword:false,
                 show1: false,
                 statuses:[
                     {name:'Cliente',id:1},
@@ -167,6 +205,7 @@
                 ],
                 valid:false,
                 validUpdate:false,
+                validPassword:false,
                 genders:[],
                 gender:'',
                 store:'',
@@ -292,6 +331,10 @@
                 console.log(this.editado)
                 this.dialog = true                
             },
+            editarPassword(item){
+                this.editado = Object.assign({}, item)
+                this.dialogPassword = true
+            },
             cancelar() {
                 this.dialogForm = false
                 this.editado = Object.assign({}, this.defaultItem)
@@ -324,7 +367,22 @@
                     .then(response => {
                         if(response.data.status.code == 200){
                             alert(response.data.status.message)
-                            this.dialogForm = false
+                            this.dialog = false
+                            this.getUser();
+                        }                        
+                        else{
+                            alert(response.data.status.message)
+                        }
+                    })
+
+            },
+            actualizarPassword(){               
+
+                axios.post('/user/password/change', this.editado)
+                    .then(response => {
+                        if(response.data.status.code == 200){
+                            alert(response.data.status.message)
+                            this.dialogPassword = false
                             this.getUser();
                         }                        
                         else{
@@ -335,6 +393,10 @@
             },
             cancelarupdate() {
                 this.dialog = false
+                this.editado = Object.assign({}, this.defaultItem)
+            },
+            cancelarPassword() {
+                this.dialogPassword = false
                 this.editado = Object.assign({}, this.defaultItem)
             },
         },
