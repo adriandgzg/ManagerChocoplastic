@@ -94,5 +94,10 @@ export default [{
         name: 'Usuarios', 
         view: 'UserList'
     },
+    {
+        path: '/frequents',
+        name: 'Productos Frecuentes', 
+        view: 'Frequents'
+    },
 
 ]

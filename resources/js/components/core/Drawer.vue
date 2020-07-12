@@ -19,6 +19,13 @@
           <v-list-item-title>Venta (Cobro)</v-list-item-title>
         </v-list-item>
 
+        <v-list-item href="/frequents">
+          <v-list-item-action>
+            <v-icon>mdi-cart</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Productos Frecuentes</v-list-item-title>
+        </v-list-item>
+
         <v-list-item href="/userlist">
           <v-list-item-action>
             <v-icon>mdi-cart</v-icon>
