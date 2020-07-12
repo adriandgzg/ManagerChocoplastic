@@ -17,10 +17,11 @@ class SystemSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         System::create([
-            'syst_clie_order' => 0,
-            'syst_clie_sale' => 0,
-            'syst_prov_order' => 0,
-            'syst_prov_purchase' => 0
+            'syst_clie_order' => 1,
+            'syst_clie_sale' => 1,
+            'syst_prov_order' => 1,
+            'syst_prov_purchase' => 1,
+            'syst_prod_desc_availability' => 0
         ]);
     }
 }

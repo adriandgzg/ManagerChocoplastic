@@ -19,8 +19,8 @@ class CreateSystemsTable extends Migration
             $table->bigInteger('syst_clie_sale'); //Folio Cliente Venta
             $table->bigInteger('syst_prov_order'); //Folio Proveedor Orden de compra
             $table->bigInteger('syst_prov_purchase'); //Folio Proveedor Compra
+            $table->boolean('syst_prod_desc_availability'); //Disponibilidad de descripción del producto
             $table->timestamps();
-
         });
     }
 

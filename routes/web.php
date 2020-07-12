@@ -94,20 +94,6 @@ Route::get('/client/payments/{clde_fk}', 'ClientPaymentController@show'); //List
 
 
 
-Route::get('NewUser', function() {
-    $vUser = new App\User();
-    $vUser->name = 'Frank Alvarez';
-    $vUser->email = 'vendedor@chocoplastic.com';
-    $vUser->phone_number = '9934367727';
-    $vUser->stor_fk = 1;
-    $vUser->verified = 1;
-    $vUser->password = Hash::make('Abc123');
-    $vUser->save();
-    echo 'OK.';
-});
-
-
-
 
 
 

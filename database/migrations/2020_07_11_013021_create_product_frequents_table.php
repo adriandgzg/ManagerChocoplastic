@@ -19,6 +19,9 @@ class CreateProductFrequentsTable extends Migration
             $table->bigInteger('prod_fk')->unsigned(); //Llave Foranea Catálogo de Productos
             $table->foreign('prod_fk')->references('prod_pk')->on('products')->onUpdate('cascade');
 
+            $table->bigInteger('stor_fk')->unsigned()->nullable(); //Llave Foranea Catálogo Tienda
+            $table->foreign('stor_fk')->references('stor_pk')->on('stores')->onUpdate('cascade');
+
             $table->smallInteger('prfr_status')->default(1); //Estatus
             $table->timestamps();
 

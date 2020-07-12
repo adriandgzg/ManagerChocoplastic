@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Auth\Api;
 
-use App\Http\Controllers\Controller;
 use App\User;
+use App\System;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
 
 class LoginProxyController extends ApiResponseController
@@ -22,17 +23,14 @@ class LoginProxyController extends ApiResponseController
      */
     public function attemptLogin($phonne_number, $password)
     {
-        $user = User::where([
-            'phone_number' => $phonne_number
-        ])->first();
+        $user = User::where(['phone_number' => $phonne_number])->first();
 
         if (!is_null($user)) {
             return $this->proxy(
                 'password', [
                 'username' => $phonne_number,
                 'password' => $password
-            ])
-            ;
+            ]);
         }
 
     }
@@ -54,11 +52,14 @@ class LoginProxyController extends ApiResponseController
         $tokenRequest = Request::create('/oauth/token', 'POST', $data);
         $response = app()->handle($tokenRequest);
 
-        $result = json_decode($response->getContent());
-        //dd($response->status());
+        $vSystem = System::select('syst_prod_desc_availability')->first();
 
 
-        return $this->dbResponse($result, 200, null, isset($result->error) ? $result->message : 'Login Exitoso');
+        $vResult = json_decode($response->getContent());
+
+        $vResult->syst_prod_desc_availability = $vSystem->syst_prod_desc_availability;
+
+        return $this->dbResponse($vResult, 200, null, isset($vResult->error) ? $vResult->message : 'Login Exitoso');
     }
 
     /**

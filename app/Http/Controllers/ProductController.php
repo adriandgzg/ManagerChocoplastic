@@ -40,7 +40,7 @@ class ProductController extends ApiResponseController
                     'P.prod_bulk AS Bulk',
                     DB::raw("10 AS Stock"),
                     'PC.prca_name AS Category',
-                    DB::raw("MO.meas_name AS Measurement"),
+                    'MO.meas_name AS Measurement',
                     DB::raw("'$vStore->stor_name' AS Store")
                 )
                 ->where('prod_status', '=', 1)
@@ -99,11 +99,11 @@ class ProductController extends ApiResponseController
                         'P.prod_bulk AS Bulk',
                         DB::raw("10 AS Stock"),
                         'PC.prca_name AS Category',
-                        DB::raw("MO.meas_name AS Measurement"),
+                        'MO.meas_name AS Measurement',
                         DB::raw("'$vStore->stor_name' AS Store")
                     )
                     ->where('P.prod_status', '=', 1)
-                    ->Where('P.prod_identifier', 'LIKE', '%' . $text . '%')
+                    ->where('P.prod_identifier', '=', $text)
                     ->orderBy('P.prod_pk')
                     ->get();
             }
@@ -123,7 +123,7 @@ class ProductController extends ApiResponseController
                         'P.prod_bulk AS Bulk',
                         DB::raw("10 AS Stock"),
                         'PC.prca_name AS Category',
-                        DB::raw("MO.meas_name AS Measurement"),
+                        'MO.meas_name AS Measurement',
                         DB::raw("'$vStore->stor_name' AS Store")
                     )
                     ->where('P.prod_status', '=', 1)
