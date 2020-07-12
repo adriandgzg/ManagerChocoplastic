@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
 use DB;
-use App\ProductFrequent;
-use Illuminate\Http\Request;
-use App\Http\Controllers\api\ApiResponseController;
-use Illuminate\Support\Facades\Auth;
 use App\Store;
+use App\ProductFrequent;
+use Validator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\api\ApiResponseController;
 
 
 class ProductFrequentController extends ApiResponseController
@@ -18,7 +18,7 @@ class ProductFrequentController extends ApiResponseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index() 
     {
         try {
             //Sucursal al que pertenece el Usuario App
@@ -56,6 +56,41 @@ class ProductFrequentController extends ApiResponseController
         }
     }
 
+
+    public function list() 
+    {
+        try {
+
+            $vProducts = DB::table('product_frequents AS PF')
+                ->join('products AS P', 'P.prod_pk', '=', 'PF.prod_fk')
+                ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                ->join('stores AS S', 'S.stor_pk', '=', 'PF.stor_fk')
+                ->select(
+                    'PF.prfr_pk',
+                    'PF.created_at',
+                    'P.prod_pk',
+                    'P.prod_identifier',
+                    'P.prod_name',
+                    'P.prod_description',
+                    'P.prod_image',
+                    'P.prod_saleprice',
+                    'P.prod_bulk',
+                    'PC.prca_name',
+                    'S.stor_name'
+                )
+                ->where('P.prod_status', '=', 1)
+                ->where('PF.prfr_status', '=', 1)
+                ->orderByDesc('PF.prfr_pk')
+                ->get();
+            
+            return $this->dbResponse($vProducts, 200, null, 'Lista de Productos Frecuentes');
+          
+        } catch (\Throwable $e) {
+            return $this->dbResponse(null, 500, $e, null);
+        }
+    }
+    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -72,9 +107,35 @@ class ProductFrequentController extends ApiResponseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $r)
     {
-        //
+        try {
+            $vInput = $r->all();
+
+            $vVal = Validator::make($vInput, [
+                'prod_fk' => 'required|int', //PK Producto
+                'stor_fk' => 'required|int' //PK Sucursal
+            ]);
+
+
+            if ($vVal->fails()) {
+                return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+            }
+
+            //Asignacion de variables
+            $vprod_fk = $vInput['prod_fk'];
+            $vstor_fk = $vInput['stor_fk'];
+
+            $vPF = new ProductFrequent();        
+            $vPF->prod_fk = $vprod_fk;
+            $vPF->stor_fk = $vstor_fk;
+            $vPF->save();
+
+            
+            return $this->dbResponse(null, 200, null, 'Producto Frecuente Guardado Correctamente');
+        } catch (\Throwable $th) {
+            return $this->dbResponse(null, 500, $th, null);
+        }
     }
 
     /**
@@ -83,7 +144,7 @@ class ProductFrequentController extends ApiResponseController
      * @param  \App\ProductFrequent  $productFrequent
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductFrequent $productFrequent)
+    public function show(Request $r)
     {
         //
     }
@@ -94,9 +155,9 @@ class ProductFrequentController extends ApiResponseController
      * @param  \App\ProductFrequent  $productFrequent
      * @return \Illuminate\Http\Response
      */
-    public function edit(ProductFrequent $productFrequent)
+    public function edit(Request $r)
     {
-        //
+       
     }
 
     /**
@@ -106,9 +167,46 @@ class ProductFrequentController extends ApiResponseController
      * @param  \App\ProductFrequent  $productFrequent
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductFrequent $productFrequent)
+    public function update(Request $r)
     {
-        //
+        try {
+            $vInput = $r->all();
+
+            $vVal = Validator::make($vInput, [
+                'prfr_pk' => 'required|int', //PK Producto Frecuente
+                'prod_fk' => 'required|int', //PK Producto
+                'stor_fk' => 'required|int' //PK Sucursal
+            ]);
+
+            if ($vVal->fails()) {
+                return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+            }
+
+            //Asignacion de variables
+            $vprfr_pk = $vInput['prfr_pk'];
+            $vprod_fk = $vInput['prod_fk'];
+            $vstor_fk = $vInput['stor_fk'];
+
+            //Validar Si Existe Producuto Frecuente
+            $vPF = ProductFrequent::where('prfr_pk', '=', $vprfr_pk)->first();
+            if ($vPF) 
+            {
+                //Modificar Producto Frecuente
+                $vPFU = ProductFrequent::find($vprfr_pk);
+                $vPFU->prod_fk = $vprod_fk;
+                $vPFU->stor_fk = $vstor_fk;
+                $vPFU->save();
+                
+                return $this->dbResponse(null, 200, null, 'Producto Frecuente Modificado Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Producto Frecuente NO Encontrado');
+            }
+        } 
+        catch (\Throwable $th) {
+            return $this->dbResponse(null, 500, $th, null);
+        }
     }
 
     /**
@@ -117,8 +215,40 @@ class ProductFrequentController extends ApiResponseController
      * @param  \App\ProductFrequent  $productFrequent
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductFrequent $productFrequent)
+    public function destroy(Request $r)
     {
-        //
+        try {
+            $vInput = $r->all();
+
+            $vVal = Validator::make($vInput, [
+                'prfr_pk' => 'required|int', //PK Producto Frecuente
+            ]);
+
+            if ($vVal->fails()) {
+                return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+            }
+
+            //Asignacion de variables
+            $vprfr_pk = $vInput['prfr_pk'];
+
+            //Validar Si Existe Producuto Frecuente
+            $vPF = ProductFrequent::where('prfr_pk', '=', $vprfr_pk)->first();
+            if ($vPF) 
+            {
+                //Eliminar Producto Frecuente
+                $vPFU = ProductFrequent::find($vprfr_pk);
+                $vPFU->prfr_status = 0;
+                $vPFU->save();
+                
+                return $this->dbResponse(null, 200, null, 'Producto Frecuente Eliminado Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Producto Frecuente NO Encontrado');
+            }
+        } 
+        catch (\Throwable $th) {
+            return $this->dbResponse(null, 500, $th, null);
+        }
     }
 }

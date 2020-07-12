@@ -138,7 +138,6 @@ class ProductController extends ApiResponseController
             return $this->dbResponse($vProducts, 200, null, 'Resultado de Busqueda por texto');
           
         } catch (Exception $e) {
-            return $e;
             return $this->dbResponse(null, 500, $e, null);
         }
     }

@@ -81,8 +81,8 @@ Route::get('/clientsales', 'ClientSaleController@index'); ////Lista de Ventas (C
 Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente) 
 Route::post('/clientsales/update', 'ClientSaleController@update'); //Finalizar Venta (Cliente)
 
-Route::post('/client_sale_details/update', 'ClientSaleDetailController@update'); //Venta Producto Eliminar (Cliente)
-Route::post('/client_sale_details/destroy', 'ClientSaleDetailController@destroy'); //Venta Producto Modificar (Cliente)
+Route::post('/client_sale_details/update', 'ClientSaleDetailController@update'); //Venta Producto Modificar (Cliente)
+Route::post('/client_sale_details/destroy', 'ClientSaleDetailController@destroy'); //Venta Producto Eliminar (Cliente)
 
 
 
@@ -93,6 +93,13 @@ Route::get('/client/payments/{clde_fk}', 'ClientPaymentController@show'); //List
 
 
 
+
+
+//CRUD Productos Frecuentes
+Route::get('/product/frequents', 'ProductFrequentController@list'); 
+Route::post('/product/frequents', 'ProductFrequentController@store'); 
+Route::post('/product/frequents/update', 'ProductFrequentController@update'); 
+Route::post('/product/frequents/destroy', 'ProductFrequentController@destroy'); 
 
 
 
