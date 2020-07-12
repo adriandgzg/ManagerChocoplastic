@@ -165,12 +165,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       dialogForm: false,
       dialog: false,
+      dialogPassword: false,
       show1: false,
       statuses: [{
         name: 'Cliente',
@@ -181,6 +219,7 @@ __webpack_require__.r(__webpack_exports__);
       }],
       valid: false,
       validUpdate: false,
+      validPassword: false,
       genders: [],
       gender: '',
       store: '',
@@ -308,6 +347,10 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.editado);
       this.dialog = true;
     },
+    editarPassword: function editarPassword(item) {
+      this.editado = Object.assign({}, item);
+      this.dialogPassword = true;
+    },
     cancelar: function cancelar() {
       this.dialogForm = false;
       this.editado = Object.assign({}, this.defaultItem);
@@ -339,7 +382,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/user/update', this.editado).then(function (response) {
         if (response.data.status.code == 200) {
           alert(response.data.status.message);
-          _this5.dialogForm = false;
+          _this5.dialog = false;
 
           _this5.getUser();
         } else {
@@ -347,8 +390,26 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    actualizarPassword: function actualizarPassword() {
+      var _this6 = this;
+
+      axios.post('/user/password/change', this.editado).then(function (response) {
+        if (response.data.status.code == 200) {
+          alert(response.data.status.message);
+          _this6.dialogPassword = false;
+
+          _this6.getUser();
+        } else {
+          alert(response.data.status.message);
+        }
+      });
+    },
     cancelarupdate: function cancelarupdate() {
       this.dialog = false;
+      this.editado = Object.assign({}, this.defaultItem);
+    },
+    cancelarPassword: function cancelarPassword() {
+      this.dialogPassword = false;
       this.editado = Object.assign({}, this.defaultItem);
     }
   },
@@ -480,6 +541,30 @@ var render = function() {
                           [
                             _c("v-icon", { attrs: { dark: "" } }, [
                               _vm._v("mdi-account-arrow-right")
+                            ])
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-btn",
+                          {
+                            staticClass: "mr-2",
+                            attrs: {
+                              fab: "",
+                              dark: "",
+                              small: "",
+                              color: "blue"
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.editarPassword(item)
+                              }
+                            }
+                          },
+                          [
+                            _c("v-icon", { attrs: { dark: "" } }, [
+                              _vm._v("mdi-account-key")
                             ])
                           ],
                           1
@@ -792,8 +877,7 @@ var render = function() {
                             attrs: {
                               label: "No. Empleado",
                               maxlength: "300",
-                              rules: _vm.nameRules,
-                              required: ""
+                              disabled: ""
                             },
                             model: {
                               value: _vm.editado.phone_number,
@@ -873,6 +957,134 @@ var render = function() {
                                 color: "teal accent-4"
                               },
                               on: { click: _vm.actualizar }
+                            },
+                            [
+                              _vm._v(
+                                "\n                    Guardar\n                "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { "max-width": "800px" },
+          scopedSlots: _vm._u([
+            {
+              key: "activator",
+              fn: function(ref) {
+                var on = ref.on
+                return undefined
+              }
+            }
+          ]),
+          model: {
+            value: _vm.dialogPassword,
+            callback: function($$v) {
+              _vm.dialogPassword = $$v
+            },
+            expression: "dialogPassword"
+          }
+        },
+        [
+          _vm._v(" "),
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", { staticClass: "cyan white--text" }, [
+                _c("span", { staticClass: "headline" }, [
+                  _vm._v("Cambio de Contraseña")
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-form",
+                {
+                  model: {
+                    value: _vm.validPassword,
+                    callback: function($$v) {
+                      _vm.validPassword = $$v
+                    },
+                    expression: "validPassword"
+                  }
+                },
+                [
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(
+                        "v-container",
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Contraseña",
+                              maxlength: "300",
+                              rules: [_vm.rules.required, _vm.rules.min],
+                              "append-icon": _vm.show1
+                                ? "mdi-eye"
+                                : "mdi-eye-off",
+                              type: _vm.show1 ? "text" : "password"
+                            },
+                            on: {
+                              "click:append": function($event) {
+                                _vm.show1 = !_vm.show1
+                              }
+                            },
+                            model: {
+                              value: _vm.editado.password,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editado, "password", $$v)
+                              },
+                              expression: "editado.password"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: { color: "blue-grey" },
+                              on: { click: _vm.cancelarPassword }
+                            },
+                            [
+                              _vm._v(
+                                "\n                    Cancelar\n                "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: {
+                                disabled: !_vm.validPassword,
+                                color: "teal accent-4"
+                              },
+                              on: { click: _vm.actualizarPassword }
                             },
                             [
                               _vm._v(
