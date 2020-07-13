@@ -99,5 +99,10 @@ export default [{
         name: 'Productos Frecuentes', 
         view: 'Frequents'
     },
+    {
+        path: '/purchaseorder',
+        name: 'Compras', 
+        view: 'PurchaseOrder'
+    },
 
 ]
