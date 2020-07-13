@@ -131,8 +131,8 @@ class ProviderPurchaseOrderController extends ApiResponseController
         try {
 
             $vPPO = DB::table('provider_purchase_orders AS PPO')
-                ->join('providers AS P', 'P.prov_pk', '=', 'PPO.prov_fk')
-                ->join('stores AS S', 'S.stor_pk', '=', 'PPO.stor_fk')
+                ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PPO.prov_fk')
+                ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PPO.stor_fk')
                 ->select(
                     'PPO.prpo_pk',
                     'PPO.prpo_identifier',
