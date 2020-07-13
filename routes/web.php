@@ -103,6 +103,17 @@ Route::post('/product/frequents/destroy', 'ProductFrequentController@destroy');
 
 
 
+//CRUD Orden de Compra (Proveedor) 
+Route::get('provider/purchase/orders', 'ProviderPurchaseOrderController@index');  
+Route::get('provider/purchase/orders/{prpo_pk}', 'ProviderPurchaseOrderController@show');  
+Route::post('provider/purchase/orders', 'ProviderPurchaseOrderController@store'); 
+Route::post('provider/purchase/orders/destroy', 'ProviderPurchaseOrderController@destroy'); 
+
+Route::get('provider/purchase/order/details', 'ProviderPurchaseOrderDetailController@index');  
+Route::post('provider/purchase/order/details', 'ProviderPurchaseOrderDetailController@store'); 
+Route::post('provider/purchase/order/details/update', 'ProviderPurchaseOrderDetailController@update'); 
+Route::post('provider/purchase/order/details/destroy', 'ProviderPurchaseOrderDetailController@destroy'); 
+
 
 
 

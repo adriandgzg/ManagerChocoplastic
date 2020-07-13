@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use DB;
-use App\Store;
-use App\ProductFrequent;
 use Validator;
+use App\ProductFrequent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
@@ -117,7 +116,6 @@ class ProductFrequentController extends ApiResponseController
                 'stor_fk' => 'required|int' //PK Sucursal
             ]);
 
-
             if ($vVal->fails()) {
                 return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
             }
@@ -126,6 +124,7 @@ class ProductFrequentController extends ApiResponseController
             $vprod_fk = $vInput['prod_fk'];
             $vstor_fk = $vInput['stor_fk'];
 
+            //Guardar Producto Frecuente
             $vPF = new ProductFrequent();        
             $vPF->prod_fk = $vprod_fk;
             $vPF->stor_fk = $vstor_fk;
@@ -133,7 +132,9 @@ class ProductFrequentController extends ApiResponseController
 
             
             return $this->dbResponse(null, 200, null, 'Producto Frecuente Guardado Correctamente');
-        } catch (\Throwable $th) {
+        } 
+        catch (\Throwable $th) 
+        {
             return $this->dbResponse(null, 500, $th, null);
         }
     }

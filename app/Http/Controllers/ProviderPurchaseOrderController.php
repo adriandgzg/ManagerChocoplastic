@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\ProviderPurchaseOrder;
+use DB;
+use Validator;
+use App\System;
 use Illuminate\Http\Request;
+use App\ProviderPurchaseOrder;
+use App\Http\Controllers\api\ApiResponseController;
+use App\Product;
+use App\ProviderPurchaseOrderDetail;
 
-class ProviderPurchaseOrderController extends Controller
+class ProviderPurchaseOrderController extends ApiResponseController 
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +20,32 @@ class ProviderPurchaseOrderController extends Controller
      */
     public function index()
     {
-        //
+        try {
+
+            $vPPO = DB::table('provider_purchase_orders AS PPO')
+                ->join('providers AS P', 'P.prov_pk', '=', 'PPO.prov_fk')
+                ->join('stores AS S', 'S.stor_pk', '=', 'PPO.stor_fk')
+                ->select(
+                    'PPO.prpo_pk',
+                    'PPO.prpo_identifier',
+                    'PPO.prpo_status',
+                    'PPO.created_at',
+
+                    'P.prov_identifier',
+                    'P.prov_name',
+                    'P.prov_rfc',
+
+                    'S.stor_name'
+                )
+                ->where('PPO.prpo_status', '<>', 0)
+                ->orderByDesc('PPO.prpo_pk')
+                ->get();
+            
+            return $this->dbResponse($vPPO, 200, null, 'Lista de Ordenes de Compra de Proveedor');
+          
+        } catch (\Throwable $e) {
+            return $this->dbResponse(null, 500, $e, null);
+        }
     }
 
     /**
@@ -33,10 +64,61 @@ class ProviderPurchaseOrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $r)
     {
-        //
+        try 
+        {
+            $vInput = $r->all();
+
+            $vVal = Validator::make($vInput, [
+                'prpo_pk' => 'required|int', //PK Orden Compra 
+                'prov_fk' => 'required|int', //PK Proveedor
+                'stor_fk' => 'required|int', //PK Sucursal
+            ]);
+
+            if ($vVal->fails()) {
+                return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+            }
+
+            //Asignacion de variables
+            $vprpo_pk = $vInput['prpo_pk'];
+            $vprov_fk = $vInput['prov_fk'];
+            $vstor_fk = $vInput['stor_fk'];
+
+            //Buscar el folio consecutivo
+            $vSystem = System::select('syst_prov_order')->first();
+            $vsyst_prov_order = $vSystem->syst_prov_order;
+            $vprpo_identifier =  "POC_" . $vsyst_prov_order;
+
+            //Validar Si Existe Orden de Compra
+            $vPPO = ProviderPurchaseOrder::where('prpo_pk', '=', $vprpo_pk)->first();
+            if ($vPPO) 
+            {
+                //Modificar Orden de Compra Detalle
+                $vPPOU = ProviderPurchaseOrder::find($vprpo_pk);
+                $vPPOU->prov_fk = $vprov_fk;
+                $vPPOU->stor_fk = $vstor_fk;
+                $vPPOU->prpo_identifier = $vprpo_identifier;
+                $vPPOU->prpo_status = 1;
+                $vPPOU->save();
+
+                //Modificar Folio de la Orden de Compra del Proveedor
+                DB::table('systems')
+                ->update(['syst_prov_order' =>  $vsyst_prov_order + 1]);
+                    
+                return $this->dbResponse($vprpo_pk, 200, null, 'Orden Compra Guardado Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Orden Compra NO Encontrado');
+            }
+        } 
+        catch (\Throwable $th) 
+        {
+            return $this->dbResponse(null, 500, $th, null);
+        }
     }
+        
 
     /**
      * Display the specified resource.
@@ -44,9 +126,61 @@ class ProviderPurchaseOrderController extends Controller
      * @param  \App\ProviderPurchaseOrder  $providerPurchaseOrder
      * @return \Illuminate\Http\Response
      */
-    public function show(ProviderPurchaseOrder $providerPurchaseOrder)
+    public function show($prpo_pk)
     {
-        //
+        try {
+
+            $vPPO = DB::table('provider_purchase_orders AS PPO')
+                ->join('providers AS P', 'P.prov_pk', '=', 'PPO.prov_fk')
+                ->join('stores AS S', 'S.stor_pk', '=', 'PPO.stor_fk')
+                ->select(
+                    'PPO.prpo_pk',
+                    'PPO.prpo_identifier',
+                    'PPO.prpo_status',
+                    'PPO.created_at',
+
+                    'P.prov_identifier',
+                    'P.prov_name',
+                    'P.prov_rfc',
+
+                    'S.stor_name'
+                )
+                ->where('PPO.prpo_pk', '=', $prpo_pk)
+                ->get();
+
+
+            $vPPOD = DB::table('provider_purchase_order_details AS PPOD')
+                ->join('products AS P', 'P.prod_pk', '=', 'PPOD.prod_fk')
+                ->join('measurements AS M', 'M.meas_pk', '=', 'PPOD.meas_fk')
+                ->select(
+                    'PPOD.ppod_pk',
+                    'PPOD.created_at',
+                    'PPOD.ppod_quantity',
+                    'PPOD.ppod_providerprice',
+                    'PPOD.ppod_discountrate',
+
+                    'P.prod_pk',
+                    'P.prod_identifier',
+                    'P.prod_name',
+                    'P.prod_description',
+
+                    'M.meas_name'
+                )
+                ->where('PPOD.prpo_fk', '=', $prpo_pk)
+                ->where('PPOD.ppod_status', '=', 1)
+                ->get();
+
+            $vData = 
+            [
+                'provider_purchase_orders' => $vPPO, 
+                'provider_purchase_order_details' => $vPPOD
+            ];
+            
+            return $this->dbResponse($vData, 200, null, 'Orden de Compra de Proveedor');
+          
+        } catch (\Throwable $e) {
+            return $this->dbResponse(null, 500, $e, null);
+        }
     }
 
     /**
@@ -67,9 +201,8 @@ class ProviderPurchaseOrderController extends Controller
      * @param  \App\ProviderPurchaseOrder  $providerPurchaseOrder
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProviderPurchaseOrder $providerPurchaseOrder)
+    public function update(Request $r)
     {
-        //
     }
 
     /**
@@ -78,8 +211,43 @@ class ProviderPurchaseOrderController extends Controller
      * @param  \App\ProviderPurchaseOrder  $providerPurchaseOrder
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProviderPurchaseOrder $providerPurchaseOrder)
+    public function destroy(Request $r)
     {
-        //
+        try 
+        {
+            $vInput = $r->all();
+
+            $vVal = Validator::make($vInput, [
+                'prpo_pk' => 'required|int' //PK Orden Compra 
+            ]);
+
+            if ($vVal->fails()) {
+                return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+            }
+
+            //Asignacion de variables
+            $vprpo_pk = $vInput['prpo_pk'];
+
+            //Validar Si Existe Orden de Compra
+            $vPPO = ProviderPurchaseOrder::where('prpo_pk', '=', $vprpo_pk)->first();
+            if ($vPPO) 
+            {
+                //Eliminar Orden de Compra Detalle
+                $vPPOU = ProviderPurchaseOrder::find($vprpo_pk);
+                $vPPOU->prpo_status = 0;
+                $vPPOU->save();
+
+                    
+                return $this->dbResponse($vprpo_pk, 200, null, 'Orden Compra Eliminado Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Orden Compra NO Encontrado');
+            }
+        } 
+        catch (\Throwable $th) 
+        {
+            return $this->dbResponse(null, 500, $th, null);
+        }
     }
 }
