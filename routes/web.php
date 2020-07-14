@@ -69,6 +69,7 @@ Route::put('/paymentshapes/update', 'PaymentShapeController@update');
 Route::put('/paymentshapes/delete', 'PaymentShapeController@delete');
 
 Route::get('/productList', 'ProductController@ProductList');
+Route::get('/product/search', 'ProductController@ProductSearch');
 Route::post('/product/add', 'ProductController@add');
 Route::put('/product/update', 'ProductController@update');
 Route::put('/product/delete', 'ProductController@delete');

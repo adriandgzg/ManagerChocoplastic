@@ -73,7 +73,45 @@ class ProductController extends ApiResponseController
             'data' => $stores,
         ], 200);
     }
-    
+    public function ProductSearch(){
+
+        /*$vProducts = DB::table('products AS P')
+            ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+            ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+            ->select(
+                'P.prod_pk AS PK_Product',
+                'P.prod_identifier AS ProductIdentifier',
+                'P.prod_name AS ProductName',
+                'P.prod_description AS ProductDescription',
+                'P.prod_image AS ProductImage',
+                'P.prod_saleprice AS SalePrice',
+                'P.prod_listprice AS ListPrice',
+                'P.prod_bulk AS Bulk',
+                'PC.prca_name AS Category',
+                'MO.meas_name AS Measurement',
+
+            )
+            ->where('prod_status', '=', 1)            
+            ->orderBy('P.prod_pk')
+            ->get();*/
+
+            $vProducts = \DB::select("select m.meas_name as meas_fk_output_name, principal.* from(
+                select p.prod_pk, p.prca_fk, c.prca_name, p.meas_fk_input, 
+                m.meas_name as meas_fk_input_name,  p.meas_fk_output, p.prod_identifier, 
+                p.prod_name, p.prod_description, p.prod_image, p.prod_actualprice, p.prod_eventualprice, 
+                p.prod_preferentialprice, p.prod_saleprice, p.prod_listprice, 
+                p.prod_packingquantity, p.prod_status, p.prod_bulk
+                from products p LEFT JOIN product_categories c on p.prca_fk = c.prca_pk 
+                LEFT JOIN measurements m on p.meas_fk_input = m.meas_pk )as principal 
+                left join measurements m on principal.meas_fk_output = m.meas_pk
+                where principal.prod_status = 1 ");
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Products loaded',
+                'data' => $vProducts,
+            ], 200);
+    }
     public function search(int $isSKU, string $text)
     {
         try {

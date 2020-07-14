@@ -100,9 +100,15 @@ export default [{
         view: 'Frequents'
     },
     {
-        path: '/purchaseorder',
+        path: '/purchaseorder/:id',
         name: 'Compras', 
         view: 'PurchaseOrder'
     },
+    {
+        path: '/purchaseorderslist',
+        name: 'Compras', 
+        view: 'PurchaseOrdersList'
+    },
+    
 
 ]
