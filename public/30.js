@@ -327,13 +327,13 @@ var render = function() {
                                       fab: "",
                                       dark: "",
                                       small: "",
-                                      color: "cyan",
+                                      color: "pink",
                                       href: "/purchaseorder/" + item.prpo_pk
                                     }
                                   },
                                   [
                                     _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-cash-register")
+                                      _vm._v("mdi-shuffle")
                                     ])
                                   ],
                                   1

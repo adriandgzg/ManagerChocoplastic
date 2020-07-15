@@ -35,9 +35,9 @@
                     </template>
                      <template v-slot:item.action="{ item }">   
                                     
-                        <v-btn class="mr-2" fab dark small color="cyan" 
+                        <v-btn class="mr-2" fab dark small color="pink" 
                                :href="'/purchaseorder/'+item.prpo_pk">
-                            <v-icon dark>mdi-cash-register</v-icon>
+                            <v-icon dark>mdi-shuffle</v-icon>
                         </v-btn>
                         <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)">
                             <v-icon dark>mdi-delete</v-icon>
