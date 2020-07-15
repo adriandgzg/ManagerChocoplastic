@@ -195,6 +195,7 @@ export default {
                     },
          ],
         prpo_pk: this.$route.params.id,
+        prpu_pk:0,
         valid:false,
         stores:[],
         providers:[],
@@ -248,6 +249,7 @@ export default {
             prpd_discountrate:0,
         },   
         orderHeader:{
+            prpu_pk:0,
             prpo_pk:0,
             prov_fk:0,
             stor_fk:0,
@@ -358,7 +360,7 @@ export default {
         },
 
         delete: function () {
-            axios.post('/provider/purchase/order/details/destroy', this.editado).then(response => {
+            axios.post('/provider/purchase/details/destroy', this.editado).then(response => {
                 console.log(response);
                 if(response.data.status.code == 200){
                 this.snackbar = true;
@@ -378,6 +380,7 @@ export default {
                 .then(response => {
                     this.desserts = response.data.data.ProviderPurchaseDetail;
                     this.getTotal();
+                    this.prpu_pk = response.data.data.ProviderPurchase.prpu_pk;
                     //response.data.data.ProviderPurchaseDetail//
                     var i = 0;
                     for(i=0;i<this.providers.length; i++){
@@ -426,7 +429,7 @@ export default {
             this.detail.prpd_quantity = item.prpd_quantity;
             this.detail.prpd_price = item.prpd_price;
             this.detail.prpd_discountrate = item.prpd_discountrate;
-            axios.post('/provider/purchase/order/details/update', this.detail)
+            axios.post('/provider/purchase/details/update', this.detail)
                 .then(response => {
                   console.log(response)
                   if(response.data.status.code == 200){
@@ -472,14 +475,15 @@ this.subtotal = 0;
 
           var r = confirm("¿Está seguro de finalizar la venta?");
             if (r == true) {
-              this.orderHeader.prpo_pk = this.prpo_pk
+            this.orderHeader.prpu_pk =  this.prpu_pk
+            this.orderHeader.prpo_pk = this.prpo_pk
             this.orderHeader.prov_fk =this.selectProv.prov_pk
             this.orderHeader.stor_fk = this.selectStore.stor_pk
 
             console.log(this.orderHeader)
 
             
-          axios.post('/provider/purchase/orders', this.orderHeader)
+          axios.post('/provider/purchases/update', this.orderHeader)
                 .then(response => {
                   console.log(response)
                   if(response.data.status.code == 200){

@@ -198,6 +198,7 @@ __webpack_require__.r(__webpack_exports__);
         width: '20%'
       }],
       prpo_pk: this.$route.params.id,
+      prpu_pk: 0,
       valid: false,
       stores: [],
       providers: [],
@@ -251,6 +252,7 @@ __webpack_require__.r(__webpack_exports__);
         prpd_discountrate: 0
       },
       orderHeader: {
+        prpu_pk: 0,
         prpo_pk: 0,
         prov_fk: 0,
         stor_fk: 0
@@ -350,7 +352,7 @@ __webpack_require__.r(__webpack_exports__);
     "delete": function _delete() {
       var _this4 = this;
 
-      axios.post('/provider/purchase/order/details/destroy', this.editado).then(function (response) {
+      axios.post('/provider/purchase/details/destroy', this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
@@ -370,8 +372,9 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/provider/purchases?prpo_pk=' + this.prpo_pk + '').then(function (response) {
         _this5.desserts = response.data.data.ProviderPurchaseDetail;
 
-        _this5.getTotal(); //response.data.data.ProviderPurchaseDetail//
+        _this5.getTotal();
 
+        _this5.prpu_pk = response.data.data.ProviderPurchase.prpu_pk; //response.data.data.ProviderPurchaseDetail//
 
         var i = 0;
 
@@ -416,7 +419,7 @@ __webpack_require__.r(__webpack_exports__);
       this.detail.prpd_quantity = item.prpd_quantity;
       this.detail.prpd_price = item.prpd_price;
       this.detail.prpd_discountrate = item.prpd_discountrate;
-      axios.post('/provider/purchase/order/details/update', this.detail).then(function (response) {
+      axios.post('/provider/purchase/details/update', this.detail).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
@@ -457,11 +460,12 @@ __webpack_require__.r(__webpack_exports__);
       var r = confirm("¿Está seguro de finalizar la venta?");
 
       if (r == true) {
+        this.orderHeader.prpu_pk = this.prpu_pk;
         this.orderHeader.prpo_pk = this.prpo_pk;
         this.orderHeader.prov_fk = this.selectProv.prov_pk;
         this.orderHeader.stor_fk = this.selectStore.stor_pk;
         console.log(this.orderHeader);
-        axios.post('/provider/purchase/orders', this.orderHeader).then(function (response) {
+        axios.post('/provider/purchases/update', this.orderHeader).then(function (response) {
           console.log(response);
 
           if (response.data.status.code == 200) {
