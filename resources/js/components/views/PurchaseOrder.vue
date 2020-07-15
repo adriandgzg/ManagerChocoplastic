@@ -347,7 +347,8 @@ export default {
         },   
 
         borrar(item) {
-            const index = this.products.indexOf(item)
+            
+            console.log(item)
             this.editado = Object.assign({}, item)
             var r = confirm("¿Está seguro de borrar el registro?");
             if (r == true) {

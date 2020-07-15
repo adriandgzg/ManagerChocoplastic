@@ -169,7 +169,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     borrar: function borrar(item) {
-      var index = this.categories.indexOf(item);
       this.editado = Object.assign({}, item);
       var r = confirm("¿Está seguro de borrar el registro?--");
 
