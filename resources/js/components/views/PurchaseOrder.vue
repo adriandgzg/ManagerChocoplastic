@@ -186,7 +186,8 @@ export default {
                     {
                         text: 'Tipo',
                         value: 'bulk'
-                    },   
+                    },  
+                     
                     {
                         text: '',
                         value: 'action',

@@ -89,6 +89,9 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Fecha',
         value: 'created_at'
       }, {
+        text: 'Estado',
+        value: 'prpo_status'
+      }, {
         text: '',
         value: 'action',
         width: '20%'

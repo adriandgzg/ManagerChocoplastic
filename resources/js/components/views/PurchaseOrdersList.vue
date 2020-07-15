@@ -84,7 +84,10 @@ export default {
                         text: 'Fecha',
                         value: 'created_at'
                     },
-                     
+                     {
+                        text: 'Estado',
+                        value: 'prpo_status'
+                    },
                     {
                         text: '',
                         value: 'action',
