@@ -34,7 +34,7 @@ class ProviderPurchaseOrderController extends ApiResponseController
                     WHEN PPO.prpo_status = 0 THEN "Cancelado" 
                     WHEN PPO.prpo_status = 1 THEN "Pendiente" 
                     WHEN PPO.prpo_status = 2 THEN "Finalizado" 
-                    WHEN PPO.prpo_status = 3 THEN "Combra" 
+                    WHEN PPO.prpo_status = 3 THEN "Compra" 
                     ELSE "" END) AS prpo_status'),
 
                     'P.prov_identifier',
