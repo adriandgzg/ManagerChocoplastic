@@ -8,8 +8,6 @@ use App\System;
 use Illuminate\Http\Request;
 use App\ProviderPurchaseOrder;
 use App\Http\Controllers\api\ApiResponseController;
-use App\Product;
-use App\ProviderPurchaseOrderDetail;
 
 class ProviderPurchaseOrderController extends ApiResponseController 
 {
@@ -34,7 +32,7 @@ class ProviderPurchaseOrderController extends ApiResponseController
                     WHEN PPO.prpo_status = 0 THEN "Cancelado" 
                     WHEN PPO.prpo_status = 1 THEN "Pendiente" 
                     WHEN PPO.prpo_status = 2 THEN "Finalizado" 
-                    WHEN PPO.prpo_status = 3 THEN "Compra" 
+                    WHEN PPO.prpo_status = 3 THEN "Procesado" 
                     ELSE "" END) AS prpo_status_description'),
 
                     'P.prov_identifier',
