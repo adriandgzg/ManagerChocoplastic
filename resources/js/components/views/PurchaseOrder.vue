@@ -327,9 +327,10 @@ export default {
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
                     this.prpo_pk = response.data.data;                    
-                    alert("¡Actualizado correctamente!");
+                    //alert("¡Actualizado correctamente!");
                     this.createCompra();
                     this.dialog = false;
+                    this.getTotal();
                     
                   }
                   else{
@@ -411,7 +412,7 @@ export default {
                   if(response.data.status.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
-                    alert("¡Actualizado correctamente!");
+                    //alert("¡Actualizado correctamente!");
                     this.getTotal();
                   }
                   else{

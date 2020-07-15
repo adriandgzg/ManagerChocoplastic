@@ -324,12 +324,13 @@ __webpack_require__.r(__webpack_exports__);
         if (response.data.status.code == 200) {
           _this3.snackbar = true;
           _this3.textMsg = "¡Actualizado correctamente!";
-          _this3.prpo_pk = response.data.data;
-          alert("¡Actualizado correctamente!");
+          _this3.prpo_pk = response.data.data; //alert("¡Actualizado correctamente!");
 
           _this3.createCompra();
 
           _this3.dialog = false;
+
+          _this3.getTotal();
         } else {
           alert(response.data.message);
         }
@@ -404,8 +405,7 @@ __webpack_require__.r(__webpack_exports__);
 
         if (response.data.status.code == 200) {
           _this7.snackbar = true;
-          _this7.textMsg = "¡Actualizado correctamente!";
-          alert("¡Actualizado correctamente!");
+          _this7.textMsg = "¡Actualizado correctamente!"; //alert("¡Actualizado correctamente!");
 
           _this7.getTotal();
         } else {
