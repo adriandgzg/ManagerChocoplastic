@@ -62,6 +62,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -276,8 +287,40 @@ var render = function() {
                                 _vm._v(" "),
                                 _c(
                                   "v-toolbar",
-                                  { attrs: { flat: "", color: "indigo" } },
+                                  {
+                                    attrs: { flat: "", color: "indigo" },
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "extension",
+                                        fn: function() {
+                                          return [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                attrs: {
+                                                  fab: "",
+                                                  color: "cyan accent-2",
+                                                  bottom: "",
+                                                  left: "",
+                                                  absolute: "",
+                                                  href: "/purchaseorder/0"
+                                                }
+                                              },
+                                              [
+                                                _c("v-icon", [
+                                                  _vm._v("mdi-plus")
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ]
+                                        },
+                                        proxy: true
+                                      }
+                                    ])
+                                  },
                                   [
+                                    _vm._v(" "),
                                     _c("v-divider", {
                                       staticClass: "mx-4",
                                       attrs: { inset: "", vertical: "" }
