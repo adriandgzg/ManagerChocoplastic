@@ -23,13 +23,19 @@ class ProviderPurchaseOrderController extends ApiResponseController
         try {
 
             $vPPO = DB::table('provider_purchase_orders AS PPO')
-                ->join('providers AS P', 'P.prov_pk', '=', 'PPO.prov_fk')
-                ->join('stores AS S', 'S.stor_pk', '=', 'PPO.stor_fk')
+                ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PPO.prov_fk')
+                ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PPO.stor_fk')
                 ->select(
                     'PPO.prpo_pk',
                     'PPO.prpo_identifier',
-                    'PPO.prpo_status',
+                    //'PPO.prpo_status',
                     'PPO.created_at',
+                    DB::raw('(CASE 
+                    WHEN PPO.prpo_status = 0 THEN "Cancelado" 
+                    WHEN PPO.prpo_status = 1 THEN "Pendiente" 
+                    WHEN PPO.prpo_status = 2 THEN "Finalizado" 
+                    WHEN PPO.prpo_status = 3 THEN "Combra" 
+                    ELSE "" END) AS prpo_status'),
 
                     'P.prov_identifier',
                     'P.prov_name',
@@ -99,7 +105,7 @@ class ProviderPurchaseOrderController extends ApiResponseController
                 $vPPOU->prov_fk = $vprov_fk;
                 $vPPOU->stor_fk = $vstor_fk;
                 $vPPOU->prpo_identifier = $vprpo_identifier;
-                $vPPOU->prpo_status = 1;
+                $vPPOU->prpo_status = 2;
                 $vPPOU->save();
 
                 //Modificar Folio de la Orden de Compra del Proveedor
