@@ -176,8 +176,9 @@ class ProviderPurchaseController extends ApiResponseController
             else
             {
                 $vProviderPurchase = ProviderPurchase::where('prpo_fk', '=', $vprpo_pk)->first();
-
-                $vProviderPurchaseDetail = DB::table('provider_purchase_details AS PPD')
+                if($vProviderPurchase)
+                { 
+                    $vProviderPurchaseDetail = DB::table('provider_purchase_details AS PPD')
                     ->join('products AS P', 'P.prod_pk', '=', 'PPD.prod_fk')
                     ->join('measurements AS M', 'M.meas_pk', '=', 'PPD.meas_fk')
                     ->select(
@@ -202,8 +203,16 @@ class ProviderPurchaseController extends ApiResponseController
                     ->where('PPD.prpu_fk', '=', $vProviderPurchase->prpu_pk)
                     ->where('PPD.prpd_status', '=', 1)
                     ->get();
+                }
+                else
+                {
+                    $vProviderPurchaseDetail = null;
+                }
+
+                
 
 
+                
                 return response()->json([
                     'code' => 404,
                     'success' => false,
