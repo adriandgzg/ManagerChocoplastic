@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use DB;
 use Validator;
+use App\System;
 use App\ProviderPurchase;
 use Illuminate\Http\Request;
-use App\Http\Controllers\api\ApiResponseController;
-use App\ProviderPurchaseDetail;
 use App\ProviderPurchaseOrder;
 use App\ProviderPurchaseOrderDetail;
+use App\Http\Controllers\api\ApiResponseController;
 
 class ProviderPurchaseController extends ApiResponseController
 {
@@ -20,7 +20,51 @@ class ProviderPurchaseController extends ApiResponseController
      */
     public function index()
     {
-        //
+        try {
+
+            $vPO = DB::table('provider_purchases AS PP')
+                ->leftjoin('provider_purchase_orders AS PPO', 'PPO.prpo_pk', '=', 'PP.prpo_fk')
+                ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PP.prov_fk')
+                ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PP.stor_fk')
+                ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'PP.pame_fk')
+                ->select(
+                    'PP.prpu_pk',
+                    'PP.prpu_identifier',
+                    DB::raw('
+                        (CASE 
+                            WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
+                            WHEN PP.prpu_type = 2 THEN "Compra directa" 
+                            ELSE "" END
+                        ) AS prpu_type'),
+                    'PP.prpu_status',
+                    DB::raw('
+                        (CASE 
+                            WHEN PP.prpu_status = 0 THEN "Cancelada" 
+                            WHEN PP.prpu_status = 1 THEN "Pendiente" 
+                            WHEN PP.prpu_status = 2 THEN "En Proceso de Pago" 
+                            WHEN PP.prpu_status = 3 THEN "Pagado" 
+                            ELSE "" END
+                        ) AS prpu_status_description'),
+
+                    'PPO.prpo_identifier',
+
+                    'P.prov_identifier',
+                    'P.prov_name',
+                    'P.prov_rfc',
+
+                    'PM.pame_name',
+
+                    'S.stor_name'
+                )
+                //->where('PPO.prpo_status', '<>', 0)
+                ->orderByDesc('PP.prpu_pk')
+                ->get();
+            
+            return $this->dbResponse($vPO, 200, null, 'Lista de Compra de Proveedor');
+          
+        } catch (\Throwable $e) {
+            return $this->dbResponse(null, 500, $e, null);
+        }
     }
 
     /**
@@ -67,7 +111,7 @@ class ProviderPurchaseController extends ApiResponseController
                             'prov_fk', 
                             'stor_fk', 
                             DB::raw("1 AS prpu_type"),
-                            DB::raw("0 AS prpu_status"),
+                            DB::raw("1 AS prpu_status"),
                             DB::raw("NOW() AS created_at"),
                             DB::raw("NOW() AS updated_at")
                         )
@@ -259,9 +303,56 @@ class ProviderPurchaseController extends ApiResponseController
      * @param  \App\ProviderPurchase  $providerPurchase
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProviderPurchase $providerPurchase)
+    public function update(Request $r)
     {
-        //
+        try 
+        {
+            $vInput = $r->all();
+
+            $vVal = Validator::make($vInput, [
+                'prpu_pk' => 'required|int', //PK Compra 
+                'pame_fk' => 'required|int', //PK Metodo de Pago
+            ]);
+
+            if ($vVal->fails()) {
+                return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+            }
+
+            //Asignacion de variables
+            $vprpu_pk = $vInput['prpu_pk'];
+            $vpame_fk = $vInput['pame_fk'];
+
+            //Buscar el folio consecutivo
+            $vSystem = System::select('syst_prov_purchase')->first();
+            $vsyst_prov_purchase = $vSystem->syst_prov_purchase;
+            $vprpu_identifier =  "PPU_" . $vsyst_prov_purchase;
+
+            //Validar Si Existe la Compra
+            $vPP = ProviderPurchase::where('prpu_pk', '=', $vprpu_pk)->first();
+            if ($vPP) 
+            {
+                //Modificar Compra
+                $vPPU = ProviderPurchase::find($vprpu_pk);
+                $vPPU->pame_fk = $vpame_fk;
+                $vPPU->prpu_identifier = $vprpu_identifier;
+                $vPPU->prpu_status = 2;
+                $vPPU->save();
+
+                //Modificar Folio de la Orden de Compra del Proveedor
+                DB::table('systems')
+                ->update(['syst_prov_purchase' =>  $vsyst_prov_purchase + 1]);
+                    
+                return $this->dbResponse($vprpu_pk, 200, null, 'Compra Guardado Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Compra NO Encontrado');
+            }
+        } 
+        catch (\Throwable $th) 
+        {
+            return $this->dbResponse(null, 500, $th, null);
+        }
     }
 
     /**
@@ -270,8 +361,42 @@ class ProviderPurchaseController extends ApiResponseController
      * @param  \App\ProviderPurchase  $providerPurchase
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProviderPurchase $providerPurchase)
+    public function destroy(Request $r)
     {
-        //
+        try 
+        {
+            $vInput = $r->all();
+
+            $vVal = Validator::make($vInput, [
+                'prpu_pk' => 'required|int' //PK Compra 
+            ]);
+
+            if ($vVal->fails()) {
+                return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+            }
+
+            //Asignacion de variables
+            $vprpu_pk = $vInput['prpu_pk'];
+
+            //Validar Si Existe Orden de Compra
+            $vPP = ProviderPurchase::where('prpu_pk', '=', $vprpu_pk)->first();
+            if ($vPP) 
+            {
+                //Eliminar Compra
+                $vPPU = ProviderPurchase::find($vprpu_pk);
+                $vPPU->prpu_status = 0;
+                $vPPU->save();
+                    
+                return $this->dbResponse($vprpu_pk, 200, null, 'Compra Eliminado Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Compra NO Encontrado');
+            }
+        } 
+        catch (\Throwable $th) 
+        {
+            return $this->dbResponse(null, 500, $th, null);
+        }
     }
 }

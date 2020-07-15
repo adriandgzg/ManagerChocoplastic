@@ -118,13 +118,14 @@ Route::post('provider/purchase/order/details/destroy', 'ProviderPurchaseOrderDet
 
 
 //CRUD Compra
-Route::get('provider/purchases', 'ProviderPurchaseController@index');  
-Route::get('provider/purchases/{prpo_pk}', 'ProviderPurchaseController@show');  
-Route::post('provider/purchases', 'ProviderPurchaseController@store'); 
-Route::post('provider/purchases/destroy', 'ProviderPurchaseController@destroy'); 
+Route::get('provider/purchases', 'ProviderPurchaseController@index');   
+Route::get('provider/purchases/{prpu_pk}', 'ProviderPurchaseController@show');  
+Route::post('provider/purchases', 'ProviderPurchaseController@store'); //Convertir Orden de Compra a Compra (Proveedor)
+Route::post('provider/purchases/update', 'ProviderPurchaseController@update'); //Finalizar Compra
+Route::post('provider/purchases/destroy', 'ProviderPurchaseController@destroy'); //Cancelar Compra
 
-Route::get('provider/purchase/details', 'ProviderPurchaseDetailController@index');  
-Route::post('provider/purchase/details', 'ProviderPurchaseDetailController@store'); 
+//Route::get('provider/purchase/details', 'ProviderPurchaseDetailController@index');  
+//Route::post('provider/purchase/details', 'ProviderPurchaseDetailController@store'); 
 Route::post('provider/purchase/details/update', 'ProviderPurchaseDetailController@update'); 
 Route::post('provider/purchase/details/destroy', 'ProviderPurchaseDetailController@destroy'); 
 

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use Validator;
 use App\ProviderPurchaseDetail;
 use Illuminate\Http\Request;
+use App\Http\Controllers\api\ApiResponseController;
 
-class ProviderPurchaseDetailController extends Controller
+class ProviderPurchaseDetailController extends ApiResponseController
 {
     /**
      * Display a listing of the resource.
@@ -67,9 +70,50 @@ class ProviderPurchaseDetailController extends Controller
      * @param  \App\ProviderPurchaseDetail  $providerPurchaseDetail
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProviderPurchaseDetail $providerPurchaseDetail)
+    public function update(Request $r)
     {
-        //
+        try {
+            $vInput = $r->all();
+
+            $vVal = Validator::make($vInput, [
+                'prpd_pk' => 'required|int', //PK Compra Detalle
+                'prpd_quantity' => 'required|int', //Cantidad
+                'prpd_price' => 'required', //Precio
+                'prpd_discountrate' => 'required' //% Descuento
+            ]);
+
+            if ($vVal->fails()) {
+                return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+            }
+
+            //Asignacion de variables
+            $vprpd_pk = $vInput['prpd_pk'];
+            $vprpd_quantity = $vInput['prpd_quantity'];
+            $vprpd_price = $vInput['prpd_price'];
+            $vprpd_discountrate = $vInput['prpd_discountrate'];
+
+            //Validar Si Existe Compra Detalle
+            $vPPOD = ProviderPurchaseDetail::where('prpd_pk', '=', $vprpd_pk)->first();
+            if ($vPPOD) 
+            {
+                //Modificar Compra Detalle
+                $vPPDU = ProviderPurchaseDetail::find($vprpd_pk);
+                $vPPDU->prpd_quantity = $vprpd_quantity;
+                $vPPDU->prpd_price = $vprpd_price;
+                $vPPDU->prpd_discountrate = $vprpd_discountrate;
+                $vPPDU->save();
+                
+                return $this->dbResponse(null, 200, null, 'Compra Detalle Modificado Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Compra Detalle NO Encontrado');
+            }
+        } 
+        catch (\Throwable $th) 
+        {
+            return $this->dbResponse(null, 500, $th, null);
+        }
     }
 
     /**
@@ -78,8 +122,42 @@ class ProviderPurchaseDetailController extends Controller
      * @param  \App\ProviderPurchaseDetail  $providerPurchaseDetail
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProviderPurchaseDetail $providerPurchaseDetail)
+    public function destroy(Request $r)
     {
-        //
+        try {
+            $vInput = $r->all();
+
+            $vVal = Validator::make($vInput, [
+                'prpd_pk' => 'required|int', //PK Compra Detalle
+            ]);
+
+            if ($vVal->fails()) {
+                return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+            }
+
+            //Asignacion de variables
+            $vprpd_pk = $vInput['prpd_pk'];
+
+            //Validar Si Existe Compra Detalle
+            $vPPOD = ProviderPurchaseDetail::where('prpd_pk', '=', $vprpd_pk)->first();
+            if ($vPPOD) 
+            {
+                //Eliminar Compra Detalle
+                $vPPDU = ProviderPurchaseDetail::find($vprpd_pk);
+                $vPPDU->prpd_status = 0;
+                $vPPDU->save();
+                
+                return $this->dbResponse(null, 200, null, 'Compra Detalle Eliminado Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Compra Detalle NO Encontrado');
+            }
+        } 
+        catch (\Throwable $th) 
+        {
+            return $this->dbResponse(null, 500, $th, null);
+        }
+        
     }
 }
