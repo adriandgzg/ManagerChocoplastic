@@ -73,6 +73,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -89,8 +96,8 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Fecha',
         value: 'created_at'
       }, {
-        text: 'Estado',
-        value: 'prpo_status'
+        text: 'Estatus',
+        value: 'status'
       }, {
         text: '',
         value: 'action',
@@ -358,6 +365,77 @@ var render = function() {
                               ]
                             },
                             proxy: true
+                          },
+                          {
+                            key: "item.status",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                item.prpo_status == 0
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "red", dark: "" } },
+                                      [
+                                        _vm._v(
+                                          "  " +
+                                            _vm._s(
+                                              item.prpo_status_description
+                                            ) +
+                                            "  "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.prpo_status == 1
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "orange", dark: "" } },
+                                      [
+                                        _vm._v(
+                                          "  " +
+                                            _vm._s(
+                                              item.prpo_status_description
+                                            ) +
+                                            "  "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.prpo_status == 2
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "green", dark: "" } },
+                                      [
+                                        _vm._v(
+                                          "  " +
+                                            _vm._s(
+                                              item.prpo_status_description
+                                            ) +
+                                            "  "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.prpo_status == 3
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "blue", dark: "" } },
+                                      [
+                                        _vm._v(
+                                          "  " +
+                                            _vm._s(
+                                              item.prpo_status_description
+                                            ) +
+                                            "  "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ]
+                            }
                           },
                           {
                             key: "item.action",

@@ -44,6 +44,13 @@
                                           hide-details></v-text-field>
                         </v-col>
                     </template>
+                    <template v-slot:item.status="{ item }">                            
+                            <v-chip v-if="item.prpo_status == 0" color="red" dark>  {{item.prpo_status_description}}  </v-chip>
+                            <v-chip v-if="item.prpo_status == 1" color="orange" dark>  {{item.prpo_status_description}}  </v-chip>
+                            <v-chip v-if="item.prpo_status == 2" color="green" dark>  {{item.prpo_status_description}}  </v-chip>
+                            <v-chip v-if="item.prpo_status == 3" color="blue" dark>  {{item.prpo_status_description}}  </v-chip>
+                            
+                    </template>
                      <template v-slot:item.action="{ item }">   
                                     
                         <v-btn class="mr-2" fab dark small color="pink" 
@@ -85,8 +92,8 @@ export default {
                         value: 'created_at'
                     },
                      {
-                        text: 'Estado',
-                        value: 'prpo_status'
+                        text: 'Estatus',
+                        value: 'status'
                     },
                     {
                         text: '',
