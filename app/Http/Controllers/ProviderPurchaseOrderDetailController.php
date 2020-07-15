@@ -50,7 +50,7 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
                 'prod_fk' => 'required|int', //PK Producto
                 'ppod_quantity' => 'required|int', //Cantidad
                 'ppod_providerprice' => 'required', //Precio
-                'ppod_discountrate' => 'required|int' //% Descuento
+                'ppod_discountrate' => 'required' //% Descuento
             ]);
 
             if ($vVal->fails()) {
@@ -70,7 +70,7 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
                 $vPPO->prov_fk = null;
                 $vPPO->stor_fk = null;
                 $vPPO->prpo_identifier = null;
-                $vPPO->prpo_status = 0;
+                $vPPO->prpo_status = 1;
                 $vPPO->save();
 
                 //Asignación de PK de la Orden de Compra del Proveedor
@@ -139,7 +139,7 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
                 'prod_fk' => 'required|int', //PK Producto
                 'ppod_quantity' => 'required|int', //Cantidad
                 'ppod_providerprice' => 'required', //Precio
-                'ppod_discountrate' => 'required|int' //% Descuento
+                'ppod_discountrate' => 'required' //% Descuento
             ]);
 
             if ($vVal->fails()) {
