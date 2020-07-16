@@ -46,6 +46,7 @@ class ProviderPurchaseController extends ApiResponseController
                             ELSE "" END
                         ) AS prpu_status_description'),
 
+                    'PPO.prpo_pk',
                     'PPO.prpo_identifier',
 
                     'P.prov_identifier',
