@@ -70,8 +70,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       headers: [{
-        text: 'No. ID',
-        value: 'prpo_identifier'
+        text: 'ID Compra',
+        value: 'prpu_identifier'
       }, {
         text: 'Proveedor',
         value: 'prov_name'
@@ -81,6 +81,9 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'Tipo',
         value: 'prpu_type'
+      }, {
+        text: 'ID Orden de Compra',
+        value: 'prpo_identifier'
       }, {
         text: 'Estatus',
         value: 'status'

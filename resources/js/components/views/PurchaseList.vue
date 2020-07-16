@@ -62,9 +62,9 @@ export default {
          headers: [
                     
                     {
-                        text: 'No. ID',
-                        value: 'prpo_identifier'
-                    },
+                        text: 'ID Compra',
+                        value: 'prpu_identifier'
+                    },                    
                     {
                         text: 'Proveedor',
                         value: 'prov_name'
@@ -76,6 +76,10 @@ export default {
                     {
                         text: 'Tipo',
                         value: 'prpu_type'
+                    },
+                     {
+                        text: 'ID Orden de Compra',
+                        value: 'prpo_identifier'
                     },
                      {
                         text: 'Estatus',
