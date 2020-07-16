@@ -17,13 +17,13 @@ class CreateProviderPurchasesTable extends Migration
         Schema::create('provider_purchases', function (Blueprint $table) {
             $table->bigIncrements('prpu_pk'); //Llave Primaria 
 
-            $table->bigInteger('prov_fk')->unsigned(); //Llave Foranea Catálogo de Proveedores
+            $table->bigInteger('prov_fk')->unsigned()->nullable(); //Llave Foranea Catálogo de Proveedores
             $table->foreign('prov_fk')->references('prov_pk')->on('providers')->onUpdate('cascade');
 
             $table->bigInteger('prpo_fk')->unsigned()->nullable(); //Llave Foranea Ordenes de Compra
             $table->foreign('prpo_fk')->references('prpo_pk')->on('provider_purchase_orders')->onUpdate('cascade');
 
-            $table->bigInteger('stor_fk')->unsigned(); //Llave Foranea Catálogo Tienda
+            $table->bigInteger('stor_fk')->unsigned()->nullable(); //Llave Foranea Catálogo Tienda
             $table->foreign('stor_fk')->references('stor_pk')->on('stores')->onUpdate('cascade');
 
             $table->bigInteger('pame_fk')->unsigned()->nullable(); //Llave Foranea Catálogo Metodo de Pago

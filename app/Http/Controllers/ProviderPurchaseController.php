@@ -130,7 +130,52 @@ class ProviderPurchaseController extends ApiResponseController
                         ]
                     , $SelectPPO);
 
-                $vProviderPurchase = ProviderPurchase::orderBy('created_at', 'DESC')->first();
+                
+                
+                
+                    //$vProviderPurchase = ProviderPurchase::orderBy('created_at', 'DESC')->first();
+
+                    $vProviderPurchase = DB::table('provider_purchases AS PP')
+                    ->leftjoin('provider_purchase_orders AS PPO', 'PPO.prpo_pk', '=', 'PP.prpo_fk')
+                    ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PP.prov_fk')
+                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PP.stor_fk')
+                    ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'PP.pame_fk')
+                    ->select(
+                        'PP.prpu_pk',
+                        'PP.prpu_identifier',
+                        DB::raw('
+                            (CASE 
+                                WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
+                                WHEN PP.prpu_type = 2 THEN "Compra directa" 
+                                ELSE "" END
+                            ) AS prpu_type'),
+                        'PP.prpu_status',
+                        DB::raw('
+                            (CASE 
+                                WHEN PP.prpu_status = 0 THEN "Cancelada" 
+                                WHEN PP.prpu_status = 1 THEN "Pendiente" 
+                                WHEN PP.prpu_status = 2 THEN "En Proceso de Pago" 
+                                WHEN PP.prpu_status = 3 THEN "Pagado" 
+                                ELSE "" END
+                            ) AS prpu_status_description'),
+
+                        'PPO.prpo_pk',
+                        'PPO.prpo_identifier',
+
+                        'PP.prov_fk',
+                        'P.prov_identifier',
+                        'P.prov_name',
+                        'P.prov_rfc',
+
+                        'PP.pame_fk',
+                        'PM.pame_name',
+
+                        'PP.stor_fk',
+                        'S.stor_name'
+                    )
+                    ->where('prpo_fk', '=', $vprpo_pk)
+                    ->first();
+
 
                 //Insertar Detallado de Compra
 
@@ -220,7 +265,49 @@ class ProviderPurchaseController extends ApiResponseController
             }
             else
             {
-                $vProviderPurchase = ProviderPurchase::where('prpo_fk', '=', $vprpo_pk)->first();
+                //$vProviderPurchase = ProviderPurchase::where('prpo_fk', '=', $vprpo_pk)->first();
+
+                $vProviderPurchase = DB::table('provider_purchases AS PP')
+                ->leftjoin('provider_purchase_orders AS PPO', 'PPO.prpo_pk', '=', 'PP.prpo_fk')
+                ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PP.prov_fk')
+                ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PP.stor_fk')
+                ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'PP.pame_fk')
+                ->select(
+                    'PP.prpu_pk',
+                    'PP.prpu_identifier',
+                    DB::raw('
+                        (CASE 
+                            WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
+                            WHEN PP.prpu_type = 2 THEN "Compra directa" 
+                            ELSE "" END
+                        ) AS prpu_type'),
+                    'PP.prpu_status',
+                    DB::raw('
+                        (CASE 
+                            WHEN PP.prpu_status = 0 THEN "Cancelada" 
+                            WHEN PP.prpu_status = 1 THEN "Pendiente" 
+                            WHEN PP.prpu_status = 2 THEN "En Proceso de Pago" 
+                            WHEN PP.prpu_status = 3 THEN "Pagado" 
+                            ELSE "" END
+                        ) AS prpu_status_description'),
+
+                    'PPO.prpo_pk',
+                    'PPO.prpo_identifier',
+
+                    'PP.prov_fk',
+                    'P.prov_identifier',
+                    'P.prov_name',
+                    'P.prov_rfc',
+
+                    'PP.pame_fk',
+                    'PM.pame_name',
+
+                    'PP.stor_fk',
+                    'S.stor_name'
+                )
+                ->where('prpo_fk', '=', $vprpo_pk)
+                ->first();
+
                 if($vProviderPurchase)
                 { 
                     $vProviderPurchaseDetail = DB::table('provider_purchase_details AS PPD')
@@ -282,7 +369,46 @@ class ProviderPurchaseController extends ApiResponseController
 
         try {
 
-            $vPP = ProviderPurchase::where('prpu_pk', '=', $prpu_pk)->first();
+            $vPP = DB::table('provider_purchases AS PP')
+            ->leftjoin('provider_purchase_orders AS PPO', 'PPO.prpo_pk', '=', 'PP.prpo_fk')
+            ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PP.prov_fk')
+            ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PP.stor_fk')
+            ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'PP.pame_fk')
+            ->select(
+                'PP.prpu_pk',
+                'PP.prpu_identifier',
+                DB::raw('
+                    (CASE 
+                        WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
+                        WHEN PP.prpu_type = 2 THEN "Compra directa" 
+                        ELSE "" END
+                    ) AS prpu_type'),
+                'PP.prpu_status',
+                DB::raw('
+                    (CASE 
+                        WHEN PP.prpu_status = 0 THEN "Cancelada" 
+                        WHEN PP.prpu_status = 1 THEN "Pendiente" 
+                        WHEN PP.prpu_status = 2 THEN "En Proceso de Pago" 
+                        WHEN PP.prpu_status = 3 THEN "Pagado" 
+                        ELSE "" END
+                    ) AS prpu_status_description'),
+
+                'PPO.prpo_pk',
+                'PPO.prpo_identifier',
+
+                'PP.prov_fk',
+                'P.prov_identifier',
+                'P.prov_name',
+                'P.prov_rfc',
+
+                'PP.pame_fk',
+                'PM.pame_name',
+
+                'PP.stor_fk',
+                'S.stor_name'
+            )
+            ->where('prpu_pk', '=', $prpu_pk)
+            ->first();
 
             if($vPP)
             { 
@@ -309,7 +435,7 @@ class ProviderPurchaseController extends ApiResponseController
                         'PPD.prpd_iva',
                         'PPD.prpd_status'
                     )
-                    ->where('PPD.prpu_fk', '=', $vPP->prpu_pk)
+                    ->where('PPD.prpu_fk', '=', $prpu_pk)
                     ->where('PPD.prpd_status', '=', 1)
                     ->get();
 
