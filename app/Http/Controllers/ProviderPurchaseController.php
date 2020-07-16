@@ -30,12 +30,13 @@ class ProviderPurchaseController extends ApiResponseController
                 ->select(
                     'PP.prpu_pk',
                     'PP.prpu_identifier',
+                    'PP.prpu_type',
                     DB::raw('
                         (CASE 
                             WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
                             WHEN PP.prpu_type = 2 THEN "Compra directa" 
                             ELSE "" END
-                        ) AS prpu_type'),
+                        ) AS prpu_type_description'),
                     'PP.prpu_status',
                     DB::raw('
                         (CASE 

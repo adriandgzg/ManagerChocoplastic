@@ -48,35 +48,46 @@
       <v-col>
         <v-card>
         <v-row>
-            <v-col cols="4">
+            <!--<v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <v-combobox required v-model="selectProv"
-                    :items="providers"
-                    label="Proveedor"
-                    item-text="prov_name"
-                    item-value="prov_pk"
-                    filled
-                    chips
-                    disabled
-                    placeholder="Seleccionar una proveedor"
-                ></v-combobox>
+                
               </v-card-text>
             </v-col>
 
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <v-combobox required v-model="selectStore"
+                
+              </v-card-text>
+            </v-col> -->   
+            <v-col cols="4">
+              <v-card-text class="category d-inline-flex font-weight-light">
+              <v-label v-if="directa == 1"><h3>Proveedor:</h3> {{editadoHeader.prov_name}}</v-label>                
+              <v-combobox v-if="directa == 2" required v-model="selectStore"
                     :items="stores"
                     label="Sucursal"
                     item-text="stor_name"
                     item-value="stor_pk"
                     filled
                     chips
-                    disabled
                     placeholder="Seleccionar una sucursal"
                 ></v-combobox>
               </v-card-text>
-            </v-col>    
+            </v-col>
+
+            <v-col cols="4">
+              <v-card-text class="category d-inline-flex font-weight-light">
+              <v-label v-if="directa == 1"><h3>Sucursal:</h3> {{editadoHeader.stor_name}}</v-label>   
+              <v-combobox v-if="directa == 2" required v-model="selectProv"
+                    :items="providers"
+                    label="Proveedor"
+                    item-text="prov_name"
+                    item-value="prov_pk"
+                    filled
+                    chips
+                    placeholder="Seleccionar una proveedor"
+                ></v-combobox>             
+              </v-card-text>
+            </v-col>  
              <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
 
@@ -93,7 +104,10 @@
             </v-col>        
           </v-row>
           <v-row>
-            <v-col>                            
+            <v-col>       
+                    <v-btn class="ma-2" tile outlined color="blue" @click="buscar">
+                        <v-icon left>mdi-file-find</v-icon> Buscar Producto
+                    </v-btn>                        
                     <v-btn dark color="success" @click="finalizar" outlined>
                     <v-icon left>mdi-checkbox-marked-circle</v-icon> Finalizar
                     </v-btn>                
@@ -208,6 +222,7 @@ export default {
                     },
          ],
         prpo_pk: this.$route.params.id,
+        directa: this.$route.params.directa,
         prpu_pk:0,
         valid:false,
         stores:[],
@@ -225,6 +240,21 @@ export default {
         total:0,
         iva:0,
       textMsg: "",
+      editadoHeader:{
+            prpu_pk: 0,
+            prov_fk:0,
+            prov_name:'',
+            prpo_fk: 0,
+            stor_fk: 0,
+            store_name:'',
+            pame_fk: 0,
+            pame_name:'',
+            prpu_identifier: '',
+            prpu_type: 0,
+            prpu_status:0,
+            created_at: '',
+            updated_at: '',
+      },
         editado:{
             prpd_pk: 0,
             prpd_quantity: 0,
@@ -248,6 +278,10 @@ export default {
             meas_name: ''
         },
         detail:{
+            prpu_pk:0,
+            pame_fk:0,
+            prov_fk:0,
+            stor_fk:0,
             prpo_fk:0,
             prod_fk:0,
             prpd_pk:0,
@@ -341,18 +375,37 @@ export default {
             },
 
         agregar(item){
+            if(this.selectProv =='' || this.selectProv == null){
+              alert("Debe seleccionar un proveedor");
+              return;
+          }
+
+          if(this.selectStore =='' || this.selectStore == null){
+              alert("Debe seleccionar una sucursal");
+              return;
+          }
+
+          if(this.selectpame =='' || this.selectpame == null){
+              alert("Debe seleccionar una forma de pago");
+              return;
+          }
+
             if(this.desserts.length > 0){
-               this.detail.prpo_fk = this.prpo_pk;
+               this.detail.prpu_pk = this.prpo_pk;
             }
             else{
-                this.detail.prpo_fk = 0;
+                this.detail.prpu_pk = 0;
             }
             this.detail.prod_fk = item.prod_pk;
             this.detail.prpd_quantity = 1;
             this.detail.prpd_price = 0;
             this.detail.prpd_discountrate = 0;
 
-            axios.post('/provider/purchase/order/details', this.detail)
+            this.detail.prov_fk =this.selectProv.prov_pk
+            this.detail.stor_fk = this.selectStore.stor_pk
+            this.detail.pame_fk = this.selectpame.pame_pk
+
+            axios.post('/provider/purchase/details', this.detail)
                 .then(response => {
                   console.log(response)
                   if(response.data.status.code == 200){
@@ -405,34 +458,54 @@ export default {
 
         createCompra() {
 
-            axios.post('/provider/purchases?prpo_pk=' + this.prpo_pk + '')
+            if(this.directa == 1){
+                axios.post('/provider/purchases?prpo_pk=' + this.prpo_pk + '')
+                    .then(response => {
+                        this.desserts = response.data.data.ProviderPurchaseDetail;
+                        this.getTotal();
+                        this.prpu_pk = response.data.data.ProviderPurchase.prpu_pk;
+                        //response.data.data.ProviderPurchaseDetail//
+                        this.editadoHeader= response.data.data.ProviderPurchase;
+                        var i = 0;
+                        for(i=0;i<this.providers.length; i++){
+                            
+                            if(response.data.data.ProviderPurchase.prov_fk == this.providers[i].prov_pk){
+                                this.selectProv = this.providers[i];
+                            }
+                        }
+                        
+                        for(i=0;i<this.stores.length; i++){
+                            
+                            if(response.data.data.ProviderPurchase.stor_fk == this.stores[i].stor_pk){
+                                console.log(i)
+                                this.selectStore = this.stores[i];
+                            }
+                        }
+                        
+                    })
+                    .catch(e => {
+                        //this.errors.push(e)
+                        console.log(e)
+                        })
+            }
+            else{
+                axios.get('/provider/purchases/' + this.prpo_pk + '')
                 .then(response => {
+                    console.log(response)
                     this.desserts = response.data.data.ProviderPurchaseDetail;
                     this.getTotal();
                     this.prpu_pk = response.data.data.ProviderPurchase.prpu_pk;
                     //response.data.data.ProviderPurchaseDetail//
-                    var i = 0;
-                    for(i=0;i<this.providers.length; i++){
-                        
-                        if(response.data.data.ProviderPurchase.prov_fk == this.providers[i].prov_pk){
-                            this.selectProv = this.providers[i];
-                        }
-                    }
+                    this.editadoHeader= response.data.data.ProviderPurchase;
                     
-                    for(i=0;i<this.stores.length; i++){
-                        
-                        if(response.data.data.ProviderPurchase.stor_fk == this.stores[i].stor_pk){
-                            console.log(i)
-                            this.selectStore = this.stores[i];
-                        }
-                    }
                     
                 })
                 .catch(e => {
                     //this.errors.push(e)
                     console.log(e)
                     })
-                },
+            }
+        },
         cancelar() {
                 this.dialog = false
                 this.editado = Object.assign({}, this.defaultItem)

@@ -21,7 +21,24 @@
                 <v-card>
                     <v-data-table :headers="headers" :items="ordenescompra" :search="search" sort-by="id" class="elevation-3">
                     <template v-slot:top>
-                    <v-system-bar color="indigo darken-2" dark></v-system-bar>
+                    <v-system-bar color="indigo darken-2" dark>
+                    </v-system-bar>
+                        <v-toolbar flat color="indigo">
+                            <template v-slot:extension>
+                                <v-btn
+                                        fab
+                                        color="cyan accent-2"
+                                        bottom
+                                        left
+                                        absolute
+                                        :href="'/purchases/0/2'"
+                                >
+                                    <v-icon>mdi-plus</v-icon>
+                                </v-btn>
+                            </template>                            
+                            <v-divider class="mx-4" inset vertical></v-divider>
+                            <v-spacer></v-spacer>
+                        </v-toolbar>
                         
                         <v-col cols="12" sm="12">
                             <v-text-field v-model="search" append-icon="search" label="Buscar" single-line
@@ -38,8 +55,8 @@
                      <template v-slot:item.action="{ item }">   
                                     
                         
-                        <v-btn class="mr-2" fab dark small color="orange" :href="'/purchases/'+item.prpo_pk"
-                            v-if="item.prpu_status == 1">
+                        <v-btn class="mr-2" fab dark small color="orange" :href="'/purchases/'+item.prpo_pk+'/'+item.prpu_type"
+                            v-if="item.prpu_status == 1 && item.prpu_type == 1">
                             <v-icon dark>mdi-cloud-check</v-icon>
                         </v-btn>
                         
@@ -80,7 +97,7 @@ export default {
                     },
                     {
                         text: 'Tipo',
-                        value: 'prpu_type'
+                        value: 'prpu_type_description'
                     },
                      {
                         text: 'ID Orden de Compra',

@@ -71,6 +71,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -85,7 +102,7 @@ __webpack_require__.r(__webpack_exports__);
         value: 'stor_name'
       }, {
         text: 'Tipo',
-        value: 'prpu_type'
+        value: 'prpu_type_description'
       }, {
         text: 'ID Orden de Compra',
         value: 'prpo_identifier'
@@ -293,6 +310,52 @@ var render = function() {
                                 }),
                                 _vm._v(" "),
                                 _c(
+                                  "v-toolbar",
+                                  {
+                                    attrs: { flat: "", color: "indigo" },
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "extension",
+                                        fn: function() {
+                                          return [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                attrs: {
+                                                  fab: "",
+                                                  color: "cyan accent-2",
+                                                  bottom: "",
+                                                  left: "",
+                                                  absolute: "",
+                                                  href: "/purchases/0/2"
+                                                }
+                                              },
+                                              [
+                                                _c("v-icon", [
+                                                  _vm._v("mdi-plus")
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ]
+                                        },
+                                        proxy: true
+                                      }
+                                    ])
+                                  },
+                                  [
+                                    _vm._v(" "),
+                                    _c("v-divider", {
+                                      staticClass: "mx-4",
+                                      attrs: { inset: "", vertical: "" }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("v-spacer")
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
                                   "v-col",
                                   { attrs: { cols: "12", sm: "12" } },
                                   [
@@ -394,7 +457,7 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                item.prpu_status == 1
+                                item.prpu_status == 1 && item.prpu_type == 1
                                   ? _c(
                                       "v-btn",
                                       {
@@ -404,7 +467,11 @@ var render = function() {
                                           dark: "",
                                           small: "",
                                           color: "orange",
-                                          href: "/purchases/" + item.prpo_pk
+                                          href:
+                                            "/purchases/" +
+                                            item.prpo_pk +
+                                            "/" +
+                                            item.prpu_type
                                         }
                                       },
                                       [
