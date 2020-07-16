@@ -57,6 +57,7 @@
                     item-value="prov_pk"
                     filled
                     chips
+                    disabled
                     placeholder="Seleccionar una proveedor"
                 ></v-combobox>
               </v-card-text>
@@ -71,6 +72,7 @@
                     item-value="stor_pk"
                     filled
                     chips
+                    disabled
                     placeholder="Seleccionar una sucursal"
                 ></v-combobox>
               </v-card-text>
@@ -80,9 +82,9 @@
 
             <v-combobox required v-model="selectpame"
                             :items="payments"
-                            label="Forma de pago"
-                            item-text="pash_name"
-                            item-value="pash_pk"
+                            label="Método de pago"
+                            item-text="pame_name"
+                            item-value="pame_pk"
                             filled
                             chips
                             placeholder="Seleccionar una opción"
@@ -91,10 +93,7 @@
             </v-col>        
           </v-row>
           <v-row>
-            <v-col>
-                    <v-btn class="ma-2" tile outlined color="blue" @click="buscar">
-                        <v-icon left>mdi-file-find</v-icon> Buscar Producto
-                    </v-btn>                            
+            <v-col>                            
                     <v-btn dark color="success" @click="finalizar" outlined>
                     <v-icon left>mdi-checkbox-marked-circle</v-icon> Finalizar
                     </v-btn>                
@@ -217,6 +216,8 @@ export default {
         products:[],     
         selectProv:'',
         selectStore:'', 
+        payments:[],
+        selectpame:'',
         search:'',       
         snackbar: false,
         timeout: 2000,
@@ -267,6 +268,7 @@ export default {
             prpo_pk:0,
             prov_fk:0,
             stor_fk:0,
+            pame_pk:0,
         }   ,
       dialogcredito: false,
       dialogcontado: false,
@@ -283,6 +285,7 @@ export default {
        this.getStores();
        this.getProviders();
        this.createCompra();
+       this.getPayment();
    },
 
   methods: {
@@ -324,6 +327,18 @@ export default {
             });
 
         },
+
+        getPayment() {            
+            axios
+                .get("/paymentmethodsget")
+                .then(response => {
+                this.payments = response.data.data;   
+                })
+                .catch(e => {
+                console.log(e);
+                });
+            
+            },
 
         agregar(item){
             if(this.desserts.length > 0){
@@ -487,12 +502,18 @@ this.subtotal = 0;
               return;
           }
 
+          if(this.selectpame =='' || this.selectpame == null){
+              alert("Debe seleccionar una forma de pago");
+              return;
+          }
+
           var r = confirm("¿Está seguro de finalizar la venta?");
             if (r == true) {
             this.orderHeader.prpu_pk =  this.prpu_pk
             this.orderHeader.prpo_pk = this.prpo_pk
             this.orderHeader.prov_fk =this.selectProv.prov_pk
             this.orderHeader.stor_fk = this.selectStore.stor_pk
+            this.orderHeader.pame_pk = this.selectpame.pame_pk
 
             console.log(this.orderHeader)
 

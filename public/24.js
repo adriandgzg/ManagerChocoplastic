@@ -190,7 +190,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -220,6 +219,8 @@ __webpack_require__.r(__webpack_exports__);
       products: [],
       selectProv: '',
       selectStore: '',
+      payments: [],
+      selectpame: '',
       search: '',
       snackbar: false,
       timeout: 2000,
@@ -269,7 +270,8 @@ __webpack_require__.r(__webpack_exports__);
         prpu_pk: 0,
         prpo_pk: 0,
         prov_fk: 0,
-        stor_fk: 0
+        stor_fk: 0,
+        pame_pk: 0
       },
       dialogcredito: false,
       dialogcontado: false,
@@ -285,6 +287,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getStores();
     this.getProviders();
     this.createCompra();
+    this.getPayment();
   },
   methods: {
     formatMoney: function formatMoney(amount) {
@@ -321,8 +324,17 @@ __webpack_require__.r(__webpack_exports__);
         console.log(e);
       });
     },
-    agregar: function agregar(item) {
+    getPayment: function getPayment() {
       var _this3 = this;
+
+      axios.get("/paymentmethodsget").then(function (response) {
+        _this3.payments = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    agregar: function agregar(item) {
+      var _this4 = this;
 
       if (this.desserts.length > 0) {
         this.detail.prpo_fk = this.prpo_pk;
@@ -338,20 +350,20 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this3.snackbar = true;
-          _this3.textMsg = "¡Actualizado correctamente!";
-          _this3.prpo_pk = response.data.data; //alert("¡Actualizado correctamente!");
+          _this4.snackbar = true;
+          _this4.textMsg = "¡Actualizado correctamente!";
+          _this4.prpo_pk = response.data.data; //alert("¡Actualizado correctamente!");
 
-          _this3.createCompra();
+          _this4.createCompra();
 
-          _this3.dialog = false;
+          _this4.dialog = false;
 
-          _this3.getTotal();
+          _this4.getTotal();
         } else {
           alert(response.data.message);
         }
       })["catch"](function (e) {
-        _this3.errors.push(e);
+        _this4.errors.push(e);
       });
     },
     borrar: function borrar(item) {
@@ -364,44 +376,44 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     "delete": function _delete() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.post('/provider/purchase/details/destroy', this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this4.snackbar = true;
-          _this4.textMsg = "¡Eliminado correctamente!";
-          alert(_this4.textMsg);
+          _this5.snackbar = true;
+          _this5.textMsg = "¡Eliminado correctamente!";
+          alert(_this5.textMsg);
 
-          _this4.createCompra();
+          _this5.createCompra();
         } else {
           alert("Ocurrio un error al eliminar el producto");
         }
       });
     },
     createCompra: function createCompra() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.post('/provider/purchases?prpo_pk=' + this.prpo_pk + '').then(function (response) {
-        _this5.desserts = response.data.data.ProviderPurchaseDetail;
+        _this6.desserts = response.data.data.ProviderPurchaseDetail;
 
-        _this5.getTotal();
+        _this6.getTotal();
 
-        _this5.prpu_pk = response.data.data.ProviderPurchase.prpu_pk; //response.data.data.ProviderPurchaseDetail//
+        _this6.prpu_pk = response.data.data.ProviderPurchase.prpu_pk; //response.data.data.ProviderPurchaseDetail//
 
         var i = 0;
 
-        for (i = 0; i < _this5.providers.length; i++) {
-          if (response.data.data.ProviderPurchase.prov_fk == _this5.providers[i].prov_pk) {
-            _this5.selectProv = _this5.providers[i];
+        for (i = 0; i < _this6.providers.length; i++) {
+          if (response.data.data.ProviderPurchase.prov_fk == _this6.providers[i].prov_pk) {
+            _this6.selectProv = _this6.providers[i];
           }
         }
 
-        for (i = 0; i < _this5.stores.length; i++) {
-          if (response.data.data.ProviderPurchase.stor_fk == _this5.stores[i].stor_pk) {
+        for (i = 0; i < _this6.stores.length; i++) {
+          if (response.data.data.ProviderPurchase.stor_fk == _this6.stores[i].stor_pk) {
             console.log(i);
-            _this5.selectStore = _this5.stores[i];
+            _this6.selectStore = _this6.stores[i];
           }
         }
       })["catch"](function (e) {
@@ -415,18 +427,18 @@ __webpack_require__.r(__webpack_exports__);
       this.editedIndex = -1;
     },
     buscar: function buscar() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.get('/product/search').then(function (response) {
-        _this6.products = response.data.data;
-        _this6.dialog = true;
+        _this7.products = response.data.data;
+        _this7.dialog = true;
         console.log(response.data);
       })["catch"](function (e) {
-        _this6.errors.push(e);
+        _this7.errors.push(e);
       });
     },
     onQuantityChange: function onQuantityChange(item) {
-      var _this7 = this;
+      var _this8 = this;
 
       //this.editado = Object.assign({}, item)
       this.detail.prpd_pk = item.prpd_pk, this.detail.prod_fk = item.prod_pk;
@@ -437,15 +449,15 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this7.snackbar = true;
-          _this7.textMsg = "¡Actualizado correctamente!"; //alert("¡Actualizado correctamente!");
+          _this8.snackbar = true;
+          _this8.textMsg = "¡Actualizado correctamente!"; //alert("¡Actualizado correctamente!");
 
-          _this7.getTotal();
+          _this8.getTotal();
         } else {
           alert(response.data.status.message);
         }
       })["catch"](function (e) {
-        _this7.errors.push(e);
+        _this8.errors.push(e);
       });
     },
     getTotal: function getTotal() {
@@ -459,7 +471,7 @@ __webpack_require__.r(__webpack_exports__);
       this.total = this.subtotal + this.iva;
     },
     finalizar: function finalizar() {
-      var _this8 = this;
+      var _this9 = this;
 
       if (this.selectProv == '' || this.selectProv == null) {
         alert("Debe seleccionar un proveedor");
@@ -471,6 +483,11 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+      if (this.selectpame == '' || this.selectpame == null) {
+        alert("Debe seleccionar una forma de pago");
+        return;
+      }
+
       var r = confirm("¿Está seguro de finalizar la venta?");
 
       if (r == true) {
@@ -478,26 +495,27 @@ __webpack_require__.r(__webpack_exports__);
         this.orderHeader.prpo_pk = this.prpo_pk;
         this.orderHeader.prov_fk = this.selectProv.prov_pk;
         this.orderHeader.stor_fk = this.selectStore.stor_pk;
+        this.orderHeader.pame_pk = this.selectpame.pame_pk;
         console.log(this.orderHeader);
         axios.post('/provider/purchases/update', this.orderHeader).then(function (response) {
           console.log(response);
 
           if (response.data.status.code == 200) {
-            _this8.snackbar = true;
-            _this8.textMsg = "¡Actualizado correctamente!";
+            _this9.snackbar = true;
+            _this9.textMsg = "¡Actualizado correctamente!";
             alert("¡Actualizado correctamente!");
 
-            _this8.$router.push('/PurchaseOrdersList');
+            _this9.$router.push('/PurchaseOrdersList');
           } else {
             alert(response.data.message);
           }
         })["catch"](function (e) {
-          _this8.errors.push(e);
+          _this9.errors.push(e);
         });
       }
     },
     finalizarVenta: function finalizarVenta() {
-      var _this9 = this;
+      var _this10 = this;
 
       console.log(this.total + '-' + (this.efectivo + this.tarjeta));
       if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
@@ -514,28 +532,28 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.code == 200) {
-            _this9.snackbar = true;
-            _this9.textMsg = "¡Actualizado correctamente!";
+            _this10.snackbar = true;
+            _this10.textMsg = "¡Actualizado correctamente!";
             alert("¡Actualizado correctamente!");
 
-            _this9.$router.push('/sales');
+            _this10.$router.push('/sales');
           } else {
             alert(response.data.message);
           }
         })["catch"](function (e) {
-          _this9.errors.push(e);
+          _this10.errors.push(e);
         });
       }
     },
     actualizar: function actualizar(item) {
-      var _this10 = this;
+      var _this11 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this10.snackbar = true;
-        _this10.textMsg = "¡Actualizado correctamente!";
+        _this11.snackbar = true;
+        _this11.textMsg = "¡Actualizado correctamente!";
       })["catch"](function (e) {
-        _this10.errors.push(e);
+        _this11.errors.push(e);
       });
     }
   }
@@ -764,6 +782,7 @@ var render = function() {
                                       "item-value": "prov_pk",
                                       filled: "",
                                       chips: "",
+                                      disabled: "",
                                       placeholder: "Seleccionar una proveedor"
                                     },
                                     model: {
@@ -801,6 +820,7 @@ var render = function() {
                                       "item-value": "stor_pk",
                                       filled: "",
                                       chips: "",
+                                      disabled: "",
                                       placeholder: "Seleccionar una sucursal"
                                     },
                                     model: {
@@ -833,9 +853,9 @@ var render = function() {
                                     attrs: {
                                       required: "",
                                       items: _vm.payments,
-                                      label: "Forma de pago",
-                                      "item-text": "pash_name",
-                                      "item-value": "pash_pk",
+                                      label: "Método de pago",
+                                      "item-text": "pame_name",
+                                      "item-value": "pame_pk",
                                       filled: "",
                                       chips: "",
                                       placeholder: "Seleccionar una opción"
@@ -864,26 +884,6 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c(
-                                "v-btn",
-                                {
-                                  staticClass: "ma-2",
-                                  attrs: {
-                                    tile: "",
-                                    outlined: "",
-                                    color: "blue"
-                                  },
-                                  on: { click: _vm.buscar }
-                                },
-                                [
-                                  _c("v-icon", { attrs: { left: "" } }, [
-                                    _vm._v("mdi-file-find")
-                                  ]),
-                                  _vm._v(" Buscar Producto\n                ")
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
                               _c(
                                 "v-btn",
                                 {
