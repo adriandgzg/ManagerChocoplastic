@@ -177,6 +177,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -795,6 +809,43 @@ var render = function() {
                                         _vm.selectStore = $$v
                                       },
                                       expression: "selectStore"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "4" } },
+                            [
+                              _c(
+                                "v-card-text",
+                                {
+                                  staticClass:
+                                    "category d-inline-flex font-weight-light"
+                                },
+                                [
+                                  _c("v-combobox", {
+                                    attrs: {
+                                      required: "",
+                                      items: _vm.payments,
+                                      label: "Forma de pago",
+                                      "item-text": "pash_name",
+                                      "item-value": "pash_pk",
+                                      filled: "",
+                                      chips: "",
+                                      placeholder: "Seleccionar una opción"
+                                    },
+                                    model: {
+                                      value: _vm.selectpame,
+                                      callback: function($$v) {
+                                        _vm.selectpame = $$v
+                                      },
+                                      expression: "selectpame"
                                     }
                                   })
                                 ],

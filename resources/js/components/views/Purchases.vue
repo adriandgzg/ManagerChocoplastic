@@ -74,7 +74,21 @@
                     placeholder="Seleccionar una sucursal"
                 ></v-combobox>
               </v-card-text>
-            </v-col>             
+            </v-col>    
+             <v-col cols="4">
+              <v-card-text class="category d-inline-flex font-weight-light">
+
+            <v-combobox required v-model="selectpame"
+                            :items="payments"
+                            label="Forma de pago"
+                            item-text="pash_name"
+                            item-value="pash_pk"
+                            filled
+                            chips
+                            placeholder="Seleccionar una opción"
+                        ></v-combobox>   
+                        </v-card-text>
+            </v-col>        
           </v-row>
           <v-row>
             <v-col>

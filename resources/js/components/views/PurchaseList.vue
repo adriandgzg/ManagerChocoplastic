@@ -182,7 +182,7 @@ export default {
     },
 
     delete: function () {
-        axios.post('/provider/purchase/orders/destroy', this.editado).then(response => {
+        axios.post('/provider/purchases/destroy', this.editado).then(response => {
                 console.log(response);
                 if(response.data.status.code == 200){
                 this.snackbar = true;

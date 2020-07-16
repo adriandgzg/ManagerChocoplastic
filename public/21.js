@@ -179,7 +179,7 @@ __webpack_require__.r(__webpack_exports__);
     "delete": function _delete() {
       var _this3 = this;
 
-      axios.post('/provider/purchase/orders/destroy', this.editado).then(function (response) {
+      axios.post('/provider/purchases/destroy', this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
