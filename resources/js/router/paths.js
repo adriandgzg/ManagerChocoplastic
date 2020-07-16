@@ -119,6 +119,10 @@ export default [{
         name: 'Compras', 
         view: 'Purchases'
     },
-    
+    {
+        path: '/purchasesdetail/:id',
+        name: 'Detalle de Compra', 
+        view: 'PurchasesDetail'
+    },
 
 ]

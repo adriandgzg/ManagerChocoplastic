@@ -42,6 +42,11 @@
                             v-if="item.prpu_status == 1">
                             <v-icon dark>mdi-cloud-check</v-icon>
                         </v-btn>
+                        
+                        <v-btn class="mr-2" fab dark small color="purple" :href="'/purchasesdetail/'+item.prpu_pk"
+                            >
+                            <v-icon dark>mdi-eye</v-icon>
+                        </v-btn>
                         <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)"
                         v-if="item.prpu_status == 1">
                             <v-icon dark>mdi-delete</v-icon>
@@ -81,6 +86,10 @@ export default {
                         text: 'ID Orden de Compra',
                         value: 'prpo_identifier'
                     },
+                    {
+                        text: 'Método de pago',
+                        value: 'pame_name'
+                    },                    
                      {
                         text: 'Estatus',
                         value: 'status'

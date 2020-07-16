@@ -89590,6 +89590,10 @@ var map = {
 		"./resources/js/components/views/Purchases.vue",
 		24
 	],
+	"./PurchasesDetail.vue": [
+		"./resources/js/components/views/PurchasesDetail.vue",
+		33
+	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
 		25
@@ -89918,6 +89922,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/purchases/:id',
   name: 'Compras',
   view: 'Purchases'
+}, {
+  path: '/purchasesdetail/:id',
+  name: 'Detalle de Compra',
+  view: 'PurchasesDetail'
 }]);
 
 /***/ }),
