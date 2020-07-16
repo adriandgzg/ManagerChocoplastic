@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use DB;
 use Validator;
-use App\ProviderPurchaseDetail;
+use App\Product;
+use App\ProviderPurchase;
 use Illuminate\Http\Request;
+use App\ProviderPurchaseDetail;
 use App\Http\Controllers\api\ApiResponseController;
 
 class ProviderPurchaseDetailController extends ApiResponseController
@@ -36,9 +38,67 @@ class ProviderPurchaseDetailController extends ApiResponseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $r)
     {
-        //
+        $vInput = $r->all();
+
+        $vVal = Validator::make($vInput, [
+            'prpu_pk' => 'required|int', // PK Compra Proveedor
+            'prov_fk' => 'required|int', // PK Proveedor
+            'stor_fk' => 'required|int', // PK Sucursal
+            'prod_fk' => 'required|int', // PK Producto
+            'prpd_quantity' => 'required|int', //Cantidad
+            'prpd_price' => 'required', //Precio
+            'prpd_discountrate' => 'required' //% Descuento
+        ]);
+
+        if ($vVal->fails()) {
+            return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+        }
+
+        try {
+            //Asignacion de variables
+            $vprpu_pk = $vInput['prpu_pk'];
+            $vprov_fk = $vInput['prov_fk'];
+            $vstor_fk = $vInput['stor_fk'];
+            $vprod_fk = $vInput['prod_fk'];
+            $vprpd_quantity = $vInput['prpd_quantity'];
+            $vprpd_price = $vInput['prpd_price'];
+            $vprpd_discountrate = $vInput['prpd_discountrate'];
+
+            if ($vprpu_pk == 0) {
+                //Insersión de la tabla principal (Compra del Proveedor)
+                $vPP = new ProviderPurchase();
+                $vPP->prov_fk = $vprov_fk;
+                $vPP->stor_fk = $vstor_fk;
+                $vPP->prpu_status = 1;
+                $vPP->prpu_type = 2;
+                $vPP->save();
+
+                //Asignación de PK de la Compra del Proveedor
+                $vprpu_pk = $vPP->prpu_pk; 
+            } 
+
+            $vProd = Product::where('prod_pk', '=', $vprod_fk)->first();
+
+            //Insersión Artículos de la Orden de Compra del Proveedor
+            $vPPD = new ProviderPurchaseDetail();
+            $vPPD->prpu_fk = $vprpu_pk;
+            $vPPD->prod_fk = $vprod_fk;
+            $vPPD->meas_fk = $vProd->meas_fk_input;
+            $vPPD->prpd_quantity = $vprpd_quantity;
+            $vPPD->prpd_price = $vprpd_price;
+            $vPPD->prpd_discountrate = $vprpd_discountrate;
+            $vPPD->prpd_ieps = 0;
+            $vPPD->prpd_iva = 0;
+            $vPPD->save();
+            
+            return $this->dbResponse($vprpu_pk, 200, null, 'PC Detalle Guardado Correctamente');
+
+        } catch (\Throwable $th) {
+            //return $th;
+            return $this->dbResponse(null, 500, $th, null);
+        }
     }
 
     /**

@@ -125,7 +125,7 @@ Route::post('provider/purchases/update', 'ProviderPurchaseController@update'); /
 Route::post('provider/purchases/destroy', 'ProviderPurchaseController@destroy'); //Cancelar Compra
 
 //Route::get('provider/purchase/details', 'ProviderPurchaseDetailController@index');  
-//Route::post('provider/purchase/details', 'ProviderPurchaseDetailController@store'); 
+Route::post('provider/purchase/details', 'ProviderPurchaseDetailController@store'); 
 Route::post('provider/purchase/details/update', 'ProviderPurchaseDetailController@update'); 
 Route::post('provider/purchase/details/destroy', 'ProviderPurchaseDetailController@destroy'); 
 
