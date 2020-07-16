@@ -385,11 +385,20 @@ class ProviderPurchaseController extends ApiResponseController
             $vPP = ProviderPurchase::where('prpu_pk', '=', $vprpu_pk)->first();
             if ($vPP) 
             {
+                if ($vpame_fk == 1) {
+                    $vprpu_status = 3;
+                } 
+                else 
+                {
+                    
+                    $vprpu_status = 2;
+                }
+
                 //Modificar Compra
                 $vPPU = ProviderPurchase::find($vprpu_pk);
                 $vPPU->pame_fk = $vpame_fk;
                 $vPPU->prpu_identifier = $vprpu_identifier;
-                $vPPU->prpu_status = 2;
+                $vPPU->prpu_status = $vprpu_status;
                 $vPPU->save();
 
                 //Modificar Folio de la Orden de Compra del Proveedor
