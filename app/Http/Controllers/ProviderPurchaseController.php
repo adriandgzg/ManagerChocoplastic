@@ -254,10 +254,6 @@ class ProviderPurchaseController extends ApiResponseController
                     $vProviderPurchaseDetail = null;
                 }
 
-                
-
-
-                
                 return response()->json([
                     'code' => 404,
                     'success' => false,
@@ -269,8 +265,8 @@ class ProviderPurchaseController extends ApiResponseController
                             ]
                 ], 200);
             }
+
         } catch (\Throwable $th) {
-            return $th;
             return $this->dbResponse(null, 500, $th, null);
         }
     }
@@ -281,9 +277,66 @@ class ProviderPurchaseController extends ApiResponseController
      * @param  \App\ProviderPurchase  $providerPurchase
      * @return \Illuminate\Http\Response
      */
-    public function show(ProviderPurchase $providerPurchase)
+    public function show($prpu_pk)
     {
-        //
+
+        try {
+
+            $vPP = ProviderPurchase::where('prpu_pk', '=', $prpu_pk)->first();
+
+            if($vPP)
+            { 
+
+                $vProviderPurchaseDetail = DB::table('provider_purchase_details AS PPD')
+                    ->join('products AS P', 'P.prod_pk', '=', 'PPD.prod_fk')
+                    ->join('measurements AS M', 'M.meas_pk', '=', 'PPD.meas_fk')
+                    ->select(
+                        'PPD.prpd_pk',
+                        'PPD.prpu_fk',
+
+                        'P.prod_pk',
+                        'P.prod_identifier',
+                        'P.prod_name',
+
+                        'M.meas_pk',
+                        'M.meas_name',
+                        'M.meas_abbreviation',
+
+                        'PPD.prpd_quantity',
+                        'PPD.prpd_price',
+                        'PPD.prpd_discountrate',
+                        'PPD.prpd_ieps',
+                        'PPD.prpd_iva',
+                        'PPD.prpd_status'
+                    )
+                    ->where('PPD.prpu_fk', '=', $vPP->prpu_pk)
+                    ->where('PPD.prpd_status', '=', 1)
+                    ->get();
+
+                return response()->json([
+                    'code' => 200,
+                    'success' => true,
+                    'message' => 'Compra Detalle',
+                    'data' => 
+                            [
+                                'ProviderPurchase' => $vPP, 
+                                'ProviderPurchaseDetail' => $vProviderPurchaseDetail
+                            ]
+                ], 200);
+
+            }
+            else
+            {
+                return response()->json([
+                    'code' => 404,
+                    'success' => false,
+                    'message' => 'Compra No Encontrado'
+                ], 200);
+            }
+
+        } catch (\Throwable $th) {
+            return $this->dbResponse(null, 500, $th, null);
+        }
     }
 
     /**
