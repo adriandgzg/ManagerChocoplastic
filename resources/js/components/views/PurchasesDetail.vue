@@ -50,48 +50,19 @@
         <v-row>
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-              <v-label>Proveedor: {{editadoHeader.prov_name}}</v-label>
-                <!--<v-combobox required v-model="selectProv"
-                    :items="providers"
-                    label="Proveedor"
-                    item-text="prov_name"
-                    item-value="prov_pk"
-                    filled
-                    chips
-                    disabled
-                    placeholder="Seleccionar una proveedor"
-                ></v-combobox>-->
+              <v-label><h3>Proveedor:</h3> {{editadoHeader.prov_name}}</v-label>                
               </v-card-text>
             </v-col>
 
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-              <v-label>Sucursal: {{editadoHeader.stor_name}}</v-label>
-                <!--<v-combobox required v-model="selectStore"
-                    :items="stores"
-                    label="Sucursal"
-                    item-text="stor_name"
-                    item-value="stor_pk"
-                    filled
-                    chips
-                    disabled
-                    placeholder="Seleccionar una sucursal"
-                ></v-combobox>-->
+              <v-label><h3>Sucursal:</h3> {{editadoHeader.stor_name}}</v-label>                
               </v-card-text>
-            </v-col>    
+            </v-col>  
              <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <v-label>Método de pago: {{editadoHeader.pame_name}}</v-label>
-            <!--<v-combobox required v-model="selectpame"
-                            :items="payments"
-                            label="Método de pago"
-                            item-text="pame_name"
-                            item-value="pame_pk"
-                            filled
-                            chips
-                            placeholder="Seleccionar una opción"
-                        ></v-combobox>   -->
-                        </v-card-text>
+                <v-label><h3>Método de pago:</h3> {{editadoHeader.pame_name}}</v-label>
+                </v-card-text>
             </v-col>        
           </v-row>
         </v-card>

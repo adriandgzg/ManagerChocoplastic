@@ -148,35 +148,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -778,9 +749,9 @@ var render = function() {
                                 },
                                 [
                                   _c("v-label", [
+                                    _c("h3", [_vm._v("Proveedor:")]),
                                     _vm._v(
-                                      "Proveedor: " +
-                                        _vm._s(_vm.editadoHeader.prov_name)
+                                      " " + _vm._s(_vm.editadoHeader.prov_name)
                                     )
                                   ])
                                 ],
@@ -802,9 +773,9 @@ var render = function() {
                                 },
                                 [
                                   _c("v-label", [
+                                    _c("h3", [_vm._v("Sucursal:")]),
                                     _vm._v(
-                                      "Sucursal: " +
-                                        _vm._s(_vm.editadoHeader.stor_name)
+                                      " " + _vm._s(_vm.editadoHeader.stor_name)
                                     )
                                   ])
                                 ],
@@ -826,9 +797,9 @@ var render = function() {
                                 },
                                 [
                                   _c("v-label", [
+                                    _c("h3", [_vm._v("Método de pago:")]),
                                     _vm._v(
-                                      "Método de pago: " +
-                                        _vm._s(_vm.editadoHeader.pame_name)
+                                      " " + _vm._s(_vm.editadoHeader.pame_name)
                                     )
                                   ])
                                 ],
