@@ -271,7 +271,7 @@ __webpack_require__.r(__webpack_exports__);
         prpo_pk: 0,
         prov_fk: 0,
         stor_fk: 0,
-        pame_pk: 0
+        pame_fk: 0
       },
       dialogcredito: false,
       dialogcontado: false,
@@ -495,7 +495,7 @@ __webpack_require__.r(__webpack_exports__);
         this.orderHeader.prpo_pk = this.prpo_pk;
         this.orderHeader.prov_fk = this.selectProv.prov_pk;
         this.orderHeader.stor_fk = this.selectStore.stor_pk;
-        this.orderHeader.pame_pk = this.selectpame.pame_pk;
+        this.orderHeader.pame_fk = this.selectpame.pame_pk;
         console.log(this.orderHeader);
         axios.post('/provider/purchases/update', this.orderHeader).then(function (response) {
           console.log(response);
@@ -505,9 +505,9 @@ __webpack_require__.r(__webpack_exports__);
             _this9.textMsg = "¡Actualizado correctamente!";
             alert("¡Actualizado correctamente!");
 
-            _this9.$router.push('/PurchaseOrdersList');
+            _this9.$router.push('/purchaselist');
           } else {
-            alert(response.data.message);
+            alert("Ocurrio un error al finalizar la compra");
           }
         })["catch"](function (e) {
           _this9.errors.push(e);

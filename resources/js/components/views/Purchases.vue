@@ -268,7 +268,7 @@ export default {
             prpo_pk:0,
             prov_fk:0,
             stor_fk:0,
-            pame_pk:0,
+            pame_fk:0,
         }   ,
       dialogcredito: false,
       dialogcontado: false,
@@ -513,7 +513,7 @@ this.subtotal = 0;
             this.orderHeader.prpo_pk = this.prpo_pk
             this.orderHeader.prov_fk =this.selectProv.prov_pk
             this.orderHeader.stor_fk = this.selectStore.stor_pk
-            this.orderHeader.pame_pk = this.selectpame.pame_pk
+            this.orderHeader.pame_fk = this.selectpame.pame_pk
 
             console.log(this.orderHeader)
 
@@ -525,10 +525,10 @@ this.subtotal = 0;
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
                     alert("¡Actualizado correctamente!");
-                    this.$router.push('/PurchaseOrdersList') ; 
+                    this.$router.push('/purchaselist') ; 
                   }
                   else{
-                    alert(response.data.message);
+                    alert("Ocurrio un error al finalizar la compra");
                   }
                 
                 })
