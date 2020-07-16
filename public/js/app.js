@@ -2666,6 +2666,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -29956,6 +29962,21 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("v-list-item-title", [_vm._v("Ordenes de Compra")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/purchaselist" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Compras")])
                     ],
                     1
                   )
@@ -89553,46 +89574,50 @@ var map = {
 		"./resources/js/components/views/Proveedores.vue",
 		20
 	],
+	"./PurchaseList.vue": [
+		"./resources/js/components/views/PurchaseList.vue",
+		21
+	],
 	"./PurchaseOrder.vue": [
 		"./resources/js/components/views/PurchaseOrder.vue",
-		21
+		22
 	],
 	"./PurchaseOrdersList.vue": [
 		"./resources/js/components/views/PurchaseOrdersList.vue",
-		22
+		23
 	],
 	"./Purchases.vue": [
 		"./resources/js/components/views/Purchases.vue",
-		23
+		24
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
-		24
+		25
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
-		31,
-		25
+		32,
+		26
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		26
+		27
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		27
+		28
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		30
+		31
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		28
+		29
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		29
+		30
 	]
 };
 function webpackAsyncContext(req) {
@@ -89885,6 +89910,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/purchaseorderslist',
   name: 'Compras',
   view: 'PurchaseOrdersList'
+}, {
+  path: '/purchaselist',
+  name: 'Compras',
+  view: 'PurchaseList'
 }, {
   path: '/purchases/:id',
   name: 'Compras',

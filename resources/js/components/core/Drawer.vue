@@ -22,6 +22,12 @@
           </v-list-item-action>
           <v-list-item-title>Ordenes de Compra</v-list-item-title>
         </v-list-item>  
+        <v-list-item href="/purchaselist">
+          <v-list-item-action>
+            <v-icon>mdi-cart</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Compras</v-list-item-title>
+        </v-list-item>  
        </v-list-group>
 
         <v-list-group prepend-icon="account_circle" no-action>        

@@ -452,6 +452,11 @@ this.subtotal = 0;
               return;
           }
 
+          if(this.desserts.length <= 0){
+            alert("Debe agregar al menos un articulo para finalizar");
+              return;
+          }
+
           var r = confirm("¿Está seguro de finalizar la venta?");
             if (r == true) {
               this.orderHeader.prpo_pk = this.prpo_pk
