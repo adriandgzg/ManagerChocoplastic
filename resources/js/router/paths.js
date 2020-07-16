@@ -101,12 +101,12 @@ export default [{
     },
     {
         path: '/purchaseorder/:id',
-        name: 'Compras', 
+        name: 'Orden de Compra', 
         view: 'PurchaseOrder'
     },
     {
         path: '/purchaseorderslist',
-        name: 'Compras', 
+        name: 'Ordenes de Compra', 
         view: 'PurchaseOrdersList'
     },
     {

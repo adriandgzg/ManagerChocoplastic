@@ -89904,11 +89904,11 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   view: 'Frequents'
 }, {
   path: '/purchaseorder/:id',
-  name: 'Compras',
+  name: 'Orden de Compra',
   view: 'PurchaseOrder'
 }, {
   path: '/purchaseorderslist',
-  name: 'Compras',
+  name: 'Ordenes de Compra',
   view: 'PurchaseOrdersList'
 }, {
   path: '/purchaselist',
