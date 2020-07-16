@@ -38,7 +38,7 @@
                      <template v-slot:item.action="{ item }">   
                                     
                         
-                        <v-btn class="mr-2" fab dark small color="orange" :href="'/purchases/'+item.prpu_pk"
+                        <v-btn class="mr-2" fab dark small color="orange" :href="'/purchases/'+item.prpo_pk"
                             v-if="item.prpu_status == 1">
                             <v-icon dark>mdi-cloud-check</v-icon>
                         </v-btn>

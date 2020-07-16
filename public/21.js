@@ -393,7 +393,7 @@ var render = function() {
                                           dark: "",
                                           small: "",
                                           color: "orange",
-                                          href: "/purchases/" + item.prpu_pk
+                                          href: "/purchases/" + item.prpo_pk
                                         }
                                       },
                                       [
