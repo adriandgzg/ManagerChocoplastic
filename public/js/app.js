@@ -2672,6 +2672,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -29977,6 +29984,21 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("v-list-item-title", [_vm._v("Compras")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/providerdebts" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-tag")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Cuentas por cobrar")])
                     ],
                     1
                   )
@@ -89574,6 +89596,10 @@ var map = {
 		"./resources/js/components/views/Proveedores.vue",
 		20
 	],
+	"./ProviderDebts.vue": [
+		"./resources/js/components/views/ProviderDebts.vue",
+		35
+	],
 	"./PurchaseList.vue": [
 		"./resources/js/components/views/PurchaseList.vue",
 		21
@@ -89896,7 +89922,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   view: 'DetailOrder'
 }, {
   path: '/clientdebts',
-  name: 'Cuentas por Pagar',
+  name: 'Cuentas por Cobrar',
   view: 'ClientDebts'
 }, {
   path: '/userlist',
@@ -89926,6 +89952,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/purchasesdetail/:id',
   name: 'Detalle de Compra',
   view: 'PurchasesDetail'
+}, {
+  path: '/providerdebts',
+  name: 'Cuentas por Pagar',
+  view: 'ProviderDebts'
 }]);
 
 /***/ }),

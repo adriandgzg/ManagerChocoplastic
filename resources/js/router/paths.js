@@ -86,7 +86,7 @@ export default [{
     },
     {
         path: '/clientdebts',
-        name: 'Cuentas por Pagar', 
+        name: 'Cuentas por Cobrar', 
         view: 'ClientDebts'
     },
     {
@@ -123,6 +123,11 @@ export default [{
         path: '/purchasesdetail/:id',
         name: 'Detalle de Compra', 
         view: 'PurchasesDetail'
+    },
+    {
+        path: '/providerdebts',
+        name: 'Cuentas por Pagar', 
+        view: 'ProviderDebts'
     },
 
 ]

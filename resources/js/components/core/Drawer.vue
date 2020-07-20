@@ -28,6 +28,13 @@
           </v-list-item-action>
           <v-list-item-title>Compras</v-list-item-title>
         </v-list-item>  
+        <v-list-item href="/providerdebts">
+          <v-list-item-action>
+            <v-icon>mdi-tag</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Cuentas por cobrar</v-list-item-title>
+        </v-list-item>
+        
        </v-list-group>
 
         <v-list-group prepend-icon="account_circle" no-action>        
