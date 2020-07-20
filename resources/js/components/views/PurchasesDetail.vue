@@ -242,6 +242,7 @@ export default {
             prov_fk:0,
             stor_fk:0,
             pame_fk:0,
+            prpu_amount:0,
         }   ,
       dialogcredito: false,
       dialogcontado: false,
@@ -488,6 +489,7 @@ this.subtotal = 0;
             this.orderHeader.prov_fk =this.selectProv.prov_pk
             this.orderHeader.stor_fk = this.selectStore.stor_pk
             this.orderHeader.pame_fk = this.selectpame.pame_pk
+            this.orderHeader.prpu_amount =  this.total
 
             console.log(this.orderHeader)
 

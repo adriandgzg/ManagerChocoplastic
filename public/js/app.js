@@ -89592,36 +89592,36 @@ var map = {
 	],
 	"./PurchasesDetail.vue": [
 		"./resources/js/components/views/PurchasesDetail.vue",
-		33
+		25
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
-		25
+		26
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
-		32,
-		26
+		33,
+		27
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		27
+		28
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		28
+		29
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		31
+		32
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		29
+		30
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		30
+		31
 	]
 };
 function webpackAsyncContext(req) {
