@@ -88,10 +88,14 @@ Route::post('/client_sale_details/destroy', 'ClientSaleDetailController@destroy'
 
 
 Route::get('/client/debts', 'ClientDebtController@index'); //Lista de Deudas (Cliente)
-
 Route::post('/client/payments', 'ClientPaymentController@store'); //Guardar Pagos (Cliente)
-Route::get('/client/payments/{clde_fk}', 'ClientPaymentController@show'); //Lista de Pagos, filtado por deuda (Cliente)
+Route::get('/client/payments/{clde_fk}', 'ClientPaymentController@show'); //Lista de Pagos, filtrado por deuda (Cliente)
 
+
+//Cuentas por Pagar a Proveedor
+Route::get('/provider/debts', 'ProviderDebtController@index'); //Lista de Deudas (Proveedor) 
+Route::post('/provider/payments', 'ProviderPaymentController@store'); //Guardar Pagos (Proveedor) 
+Route::get('/provider/payments/{prde_fk}', 'ProviderPaymentController@show'); //Lista de Pagos, filtrado por deuda (Proveedor)
 
 
 

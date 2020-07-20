@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Validator;
 use App\System;
+use App\ProviderDebt;
 use App\ProviderPurchase;
 use Illuminate\Http\Request;
 use App\ProviderPurchaseOrder;
@@ -493,6 +494,8 @@ class ProviderPurchaseController extends ApiResponseController
             $vVal = Validator::make($vInput, [
                 'prpu_pk' => 'required|int', //PK Compra 
                 'pame_fk' => 'required|int', //PK Metodo de Pago
+                'prov_fk' => 'required|int', //PK Proveedor
+                'prpu_amount' => 'required' //Monto Total
             ]);
 
             if ($vVal->fails()) {
@@ -502,6 +505,8 @@ class ProviderPurchaseController extends ApiResponseController
             //Asignacion de variables
             $vprpu_pk = $vInput['prpu_pk'];
             $vpame_fk = $vInput['pame_fk'];
+            $vprov_fk = $vInput['prov_fk'];
+            $vprpu_amount = $vInput['prpu_amount'];
 
             //Buscar el folio consecutivo
             $vSystem = System::select('syst_prov_purchase')->first();
@@ -517,26 +522,39 @@ class ProviderPurchaseController extends ApiResponseController
                 } 
                 else 
                 {
-                    
                     $vprpu_status = 2;
                 }
 
                 //Modificar Compra
                 $vPPU = ProviderPurchase::find($vprpu_pk);
                 $vPPU->pame_fk = $vpame_fk;
+                $vPPU->prov_fk = $vprov_fk;
                 $vPPU->prpu_identifier = $vprpu_identifier;
                 $vPPU->prpu_status = $vprpu_status;
                 $vPPU->save();
 
+                $vprpu_fk = $vPPU->prpu_pk;
+
                 //Modificar Folio de la Orden de Compra del Proveedor
                 DB::table('systems')
                 ->update(['syst_prov_purchase' =>  $vsyst_prov_purchase + 1]);
-                    
-                return $this->dbResponse($vprpu_pk, 200, null, 'Compra Guardado Correctamente');
+
+
+                if ($vpame_fk == 2) {
+                    //Credito
+                    //Inserción de deuda al Proveedor
+                    $vPD = new ProviderDebt();        
+                    $vPD->prov_fk = $vprov_fk;
+                    $vPD->prpu_fk = $vprpu_fk;
+                    $vPD->prde_amount = $vprpu_amount;
+                    $vPD->save();
+                }
+
+                return $this->dbResponse($vprpu_pk, 200, null, 'Compra Guardada Correctamente');
             }
             else
             {
-                return $this->dbResponse(null, 404, null, 'Compra NO Encontrado');
+                return $this->dbResponse(null, 404, null, 'Compra NO Encontrada');
             }
         } 
         catch (\Throwable $th) 

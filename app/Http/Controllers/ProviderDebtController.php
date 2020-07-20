@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use Throwable;
+use Validator;
 use App\ProviderDebt;
 use Illuminate\Http\Request;
-
-class ProviderDebtController extends Controller
+use App\Http\Controllers\api\ApiResponseController;
+ 
+class ProviderDebtController extends ApiResponseController
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +18,31 @@ class ProviderDebtController extends Controller
      */
     public function index()
     {
-        //
-    }
+        try {
+            $vProvDebts = DB::table('provider_debts AS PD')
+                ->join('providers AS P', 'P.prov_pk', '=', 'PD.prov_fk')
+                ->join('provider_purchases AS PP', 'PP.prpu_pk', '=', 'PD.prpu_fk')
+                ->select(
+                    'PD.prde_pk',
+                    'PD.prde_amount',  //Monto de la deuda
+                    DB::raw('(SELECT IFNULL(SUM(prpa_amount), 0) AS prde_amount_paid FROM provider_payments WHERE prde_fk = PD.prde_pk) AS prde_amount_paid'),//Monto Pagado
+                    DB::raw('(SELECT PD.prde_amount - IFNULL(SUM(prpa_amount), 0) AS prde_amount_outstanding FROM provider_payments WHERE prde_fk = PD.prde_pk) AS prde_amount_outstanding'), //Monto Pendiente por pagar
+                    'PD.created_at',
+                    'P.prov_pk',
+                    'P.prov_identifier',
+                    'P.prov_name',
+                    'P.prov_rfc',
+                    'PP.prpu_identifier'       
+                )
+                ->where('PD.prde_status', '=', 1)
+                ->get();
+
+                return $this->dbResponse($vProvDebts, 200, null, 'Lista de Deudas del Proveedor');
+            
+        } catch (Throwable $vTh) {
+            return $this->dbResponse(null, 500, $vTh, "Detalle");
+        }
+    } 
 
     /**
      * Show the form for creating a new resource.

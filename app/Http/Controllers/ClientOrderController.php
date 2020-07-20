@@ -141,8 +141,6 @@ class ClientOrderController extends ApiResponseController
                     'updated_at' => Carbon::now()
                 ));
             }
-
-            
        
             return $this->dbResponse("Ped_" . $vsyst_clie_order, 200, null, 'Pedido Guardado Correctamente');
         } catch (Exception $e) {

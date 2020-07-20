@@ -388,8 +388,6 @@ class ClientSaleController extends Controller
                     }
                 }
 
-
-
                 //Modificar Folio del Venta
                 DB::table('systems')
                 ->update(['syst_clie_sale' =>  $vsyst_clie_sale + 1]);

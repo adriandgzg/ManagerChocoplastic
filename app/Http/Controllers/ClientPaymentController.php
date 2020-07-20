@@ -56,8 +56,6 @@ class ClientPaymentController extends Controller
             ], 200);
         }
 
-
-
         try {
             //Asignacion de variables
            $vclde_fk = $vInput['clde_fk'];
