@@ -105,8 +105,16 @@ class ClientReturnController extends ApiResponseController
 
             if($vClientSale)
             { 
-                //Insertar Encabezado de Devolución Cliente
-                $vSelCReturn = ClientSale::where('clsa_pk', '=', $vclsa_pk)
+                $vClientReturn = ClientReturn::where('clsa_fk', '=', $vclsa_pk)->first();
+
+                if($vClientReturn)
+                {
+
+                }
+                else
+                {
+                    //Insertar Encabezado de Devolución Cliente
+                    $vSelCReturn = ClientSale::where('clsa_pk', '=', $vclsa_pk)
                     ->select(
                         'clie_fk', 
                         'clsa_pk AS clsa_fk',
@@ -115,51 +123,57 @@ class ClientReturnController extends ApiResponseController
                         DB::raw("NOW() AS created_at"),
                         DB::raw("NOW() AS updated_at")
                     );
-                DB::table('client_returns')
-                    ->insertUsing(
-                        [
-                            'clie_fk', 
-                            'clsa_fk',
-                            'stor_fk', 
-                            'clre_status', 
-                            'created_at', 
-                            'updated_at'
-                        ]
-                    , $vSelCReturn);
+                    DB::table('client_returns')
+                        ->insertUsing(
+                            [
+                                'clie_fk', 
+                                'clsa_fk',
+                                'stor_fk', 
+                                'clre_status', 
+                                'created_at', 
+                                'updated_at'
+                            ]
+                        , $vSelCReturn);
+                }
 
 
-                    $vClientReturns = DB::table('client_returns AS CR')
-                        ->join('client_sales AS CS', 'CS.clsa_pk', '=', 'CR.clsa_fk')
-                        ->join('clients AS C', 'C.clie_pk', '=', 'CR.clie_fk')
-                        ->join('stores AS S', 'S.stor_pk', '=', 'CR.stor_fk')
-                        ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'CR.remo_fk')
-                        ->select(
-                            'CR.clre_pk',
-                            'CR.clre_observation',
-                            'CR.clre_status',
-                            'CR.created_at',
-                    
-                            'CS.clsa_pk',
-                            'CS.clsa_identifier',
+                $vClientReturns = DB::table('client_returns AS CR')
+                    ->join('client_sales AS CS', 'CS.clsa_pk', '=', 'CR.clsa_fk')
+                    ->join('clients AS C', 'C.clie_pk', '=', 'CR.clie_fk')
+                    ->join('stores AS S', 'S.stor_pk', '=', 'CR.stor_fk')
+                    ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'CR.remo_fk')
+                    ->select(
+                        'CR.clre_pk',
+                        'CR.clre_observation',
+                        'CR.clre_status',
+                        'CR.created_at',
+                
+                        'CS.clsa_pk',
+                        'CS.clsa_identifier',
 
-                            'C.clie_pk',
-                            'C.clie_identifier',
-                            'C.clie_name',
-                            'C.clie_rfc',                           
+                        'C.clie_pk',
+                        'C.clie_identifier',
+                        'C.clie_name',
+                        'C.clie_rfc',                           
 
-                            'S.stor_pk',
-                            'S.stor_name',
+                        'S.stor_pk',
+                        'S.stor_name',
 
-                            'RM.remo_pk',
-                            'RM.remo_description',
-                        )
-                        ->where('CR.clsa_fk', '=', $vclsa_pk)
-                        ->orderByDesc('CR.clre_pk')
-                        ->first();
+                        'RM.remo_pk',
+                        'RM.remo_description',
+                    )
+                    ->where('CR.clsa_fk', '=', $vclsa_pk)
+                    ->orderByDesc('CR.clre_pk')
+                    ->first();
 
+                if($vClientReturn)
+                {
 
-                //Insertar Detallado de Devolución
-                $vSelCSD = ClientSaleDetail::where('clsa_fk', '=', $vclsa_pk)->where('clsd_status', '=', 1)
+                }
+                else
+                {
+                    //Insertar Detallado de Devolución
+                    $vSelCSD = ClientSaleDetail::where('clsa_fk', '=', $vclsa_pk)->where('clsd_status', '=', 1)
                     ->select(
                         array(
                             DB::raw("$vClientReturns->clre_pk AS clre_fk"),
@@ -174,20 +188,21 @@ class ClientReturnController extends ApiResponseController
                         )
                     );
 
-                DB::table('client_return_details')
-                    ->insertUsing(
-                        [
-                            'clre_fk',
-                            'prod_fk', 
-                            'meas_fk',
-                            'clrd_quantity', 
-                            'clrd_quantity_sale', 
-                            'clrd_price', 
-                            'clrd_status', 
-                            'created_at', 
-                            'updated_at'
-                        ]
-                    , $vSelCSD);
+                    DB::table('client_return_details')
+                        ->insertUsing(
+                            [
+                                'clre_fk',
+                                'prod_fk', 
+                                'meas_fk',
+                                'clrd_quantity', 
+                                'clrd_quantity_sale', 
+                                'clrd_price', 
+                                'clrd_status', 
+                                'created_at', 
+                                'updated_at'
+                            ]
+                        , $vSelCSD);
+                }
 
                 $vClientReturnDetails = DB::table('client_return_details AS CRD')
                     ->join('products AS P', 'P.prod_pk', '=', 'CRD.prod_fk')
@@ -212,8 +227,7 @@ class ClientReturnController extends ApiResponseController
                     ->where('CRD.clre_fk', '=', $vClientReturns->clre_pk)
                     ->where('CRD.clrd_status', '=', 1)
                     ->get();
-
-
+                    
                 $vData =
                     [
                         'ClientReturns' => $vClientReturns, 
