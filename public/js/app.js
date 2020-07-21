@@ -89902,7 +89902,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   view: 'PaymentMethods'
 }, {
   path: '/paymentshapes',
-  name: 'Entidades Federativas',
+  name: 'Formas de Pago',
   view: 'PaymentShapes'
 }, {
   path: '/products',

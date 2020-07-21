@@ -61,7 +61,7 @@ export default [{
     },
     {
         path: '/paymentshapes',
-        name: 'Entidades Federativas',
+        name: 'Formas de Pago',
         view: 'PaymentShapes'
     },
     {
