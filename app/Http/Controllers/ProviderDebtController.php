@@ -35,6 +35,7 @@ class ProviderDebtController extends ApiResponseController
                     'PP.prpu_identifier'       
                 )
                 ->where('PD.prde_status', '=', 1)
+                ->orderByDesc('PD.prde_pk')
                 ->get();
 
                 return $this->dbResponse($vProvDebts, 200, null, 'Lista de Deudas del Proveedor');
