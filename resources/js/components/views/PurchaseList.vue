@@ -112,6 +112,10 @@ export default {
                         value: 'status'
                     },
                     {
+                        text: 'Fecha',
+                        value: 'created_at'
+                    },
+                    {
                         text: '',
                         value: 'action',
                         width: '20%'

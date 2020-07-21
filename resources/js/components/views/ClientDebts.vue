@@ -158,6 +158,10 @@ export default {
                         value: 'clde_amount_outstanding'
                     },
                     {
+                        text: 'Fecha',
+                        value: 'created_at'
+                    },
+                    {
                         text: '',
                         value: 'action',
                         width: '20%'

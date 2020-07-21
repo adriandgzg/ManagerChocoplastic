@@ -113,6 +113,9 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Estatus',
         value: 'status'
       }, {
+        text: 'Fecha',
+        value: 'created_at'
+      }, {
         text: '',
         value: 'action',
         width: '20%'

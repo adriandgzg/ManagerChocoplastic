@@ -71,12 +71,12 @@ export default {
                         value: 'stor_name'
                     },
                     {
-                        text: 'Fecha',
-                        value: 'created_at'
-                    },
-                    {
                         text: 'Metodo Pago',
                         value: 'pame_name'
+                    },
+                    {
+                        text: 'Fecha',
+                        value: 'created_at'
                     },
                      {
                         text: 'Estatus',

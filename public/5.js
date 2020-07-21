@@ -155,6 +155,9 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Monto Pendiente',
         value: 'clde_amount_outstanding'
       }, {
+        text: 'Fecha',
+        value: 'created_at'
+      }, {
         text: '',
         value: 'action',
         width: '20%'
