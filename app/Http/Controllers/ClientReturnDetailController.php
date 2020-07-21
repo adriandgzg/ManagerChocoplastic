@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use Validator;
+use Throwable;
 use App\ClientReturnDetail;
 use Illuminate\Http\Request;
+use App\Http\Controllers\api\ApiResponseController;
 
-class ClientReturnDetailController extends Controller
+class ClientReturnDetailController extends ApiResponseController
 {
     /**
      * Display a listing of the resource.
@@ -67,9 +71,46 @@ class ClientReturnDetailController extends Controller
      * @param  \App\ClientReturnDetail  $clientReturnDetail
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ClientReturnDetail $clientReturnDetail)
+    public function update(Request $r)
     {
-        //
+        $vInput = $r->all();
+
+        $vVal = Validator::make($vInput, [
+            'clrd_pk' => 'required|int', // PK Devolucion Detalle
+            'clrd_quantity' => 'required', // Cantidad
+        ]);
+
+        if($vVal->fails()) {
+            return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+        }
+
+        try {
+            //Asignacion de variables
+           $vclrd_pk = $vInput['clrd_pk'];
+           $vclrd_quantity = $vInput['clrd_quantity'];
+
+            $vCRD = ClientReturnDetail::where('clrd_pk', '=', $vclrd_pk)->first();
+
+            if($vCRD)
+            { 
+              
+                //Modificar Devolución Detalle
+                DB::table('client_return_details')
+                ->where('clrd_pk', '=', $vclrd_pk)
+                ->update([
+                    'clrd_quantity' =>  $vclrd_quantity
+                ]);
+
+                return $this->dbResponse($vclrd_pk, 200, null, 'Devolución Detalle Modificado Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse($vclrd_pk, 404, null, 'Devolución Detalle NO Encontrado');
+            }
+
+        } catch (Throwable $vTh) {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        }
     }
 
     /**
@@ -78,8 +119,43 @@ class ClientReturnDetailController extends Controller
      * @param  \App\ClientReturnDetail  $clientReturnDetail
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClientReturnDetail $clientReturnDetail)
+    public function destroy(Request $r)
     {
-        //
+        $vInput = $r->all();
+
+        $vVal = Validator::make($vInput, [
+            'clrd_pk' => 'required|int' // PK Devolucion Detalle
+        ]);
+
+        if($vVal->fails()) {
+            return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+        }
+
+        try {
+            //Asignacion de variables
+           $vclrd_pk = $vInput['clrd_pk'];
+
+            $vCRD = ClientReturnDetail::where('clrd_pk', '=', $vclrd_pk)->first();
+
+            if($vCRD)
+            { 
+              
+                //Eliminar Devolución Detalle
+                DB::table('client_return_details')
+                ->where('clrd_pk', '=', $vclrd_pk)
+                ->update([
+                    'clrd_status' => 0
+                ]);
+
+                return $this->dbResponse($vclrd_pk, 200, null, 'Devolución Detalle Eliminado Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse($vclrd_pk, 404, null, 'Devolución Detalle NO Encontrado');
+            }
+
+        } catch (Throwable $vTh) {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        }
     }
 }

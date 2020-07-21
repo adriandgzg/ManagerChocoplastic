@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use Validator;
+use Throwable;
 use App\ReturnMotive;
 use Illuminate\Http\Request;
+use App\Http\Controllers\api\ApiResponseController;
 
-class ReturnMotiveController extends Controller
-{
+class ReturnMotiveController extends ApiResponseController
+{ 
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +18,24 @@ class ReturnMotiveController extends Controller
      */
     public function index()
     {
-        //
+        try {
+
+            $vRM = DB::table('return_motives AS RM')
+                ->select(
+                    'RM.remo_pk',
+                    'RM.remo_description',
+                    'RM.created_at'
+                )
+                ->where('remo_status', '=', '1')
+                ->get();
+            
+            return $this->dbResponse($vRM, 200, null, 'Lista de Motivos de Devoluciones');
+          
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        }
     }
 
     /**

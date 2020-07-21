@@ -23,13 +23,13 @@ class CreateClientReturnsTable extends Migration
             $table->bigInteger('clsa_fk')->unsigned(); //Llave Foranea Venta 
             $table->foreign('clsa_fk')->references('clsa_pk')->on('client_sales')->onUpdate('cascade');
 
-            $table->bigInteger('stor_fk')->unsigned(); //Llave Foranea Catálogo Tienda
+            $table->bigInteger('stor_fk')->unsigned()->nullable(); //Llave Foranea Catálogo Tienda
             $table->foreign('stor_fk')->references('stor_pk')->on('stores')->onUpdate('cascade');
 
-            $table->bigInteger('remo_fk')->unsigned(); //Llave Foranea Motivo de Devolución
+            $table->bigInteger('remo_fk')->unsigned()->nullable(); //Llave Foranea Motivo de Devolución
             $table->foreign('remo_fk')->references('remo_pk')->on('return_motives')->onUpdate('cascade');
 
-            $table->text('clre_observation'); //Observación
+            $table->text('clre_observation')->nullable(); //Observación
             $table->smallInteger('clre_status')->default(1); //Estatus
             $table->timestamps();
         });

@@ -2,19 +2,69 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use Validator;
+use Throwable;
 use App\ClientReturn;
+use App\ClientSale;
+use App\ClientSaleDetail;
 use Illuminate\Http\Request;
+use App\Http\Controllers\api\ApiResponseController;
 
-class ClientReturnController extends Controller
+class ClientReturnController extends ApiResponseController
 {
-    /**
+    /** 
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        try {
+
+            $vClientReturns = DB::table('client_returns AS CR')
+                        ->join('client_sales AS CS', 'CS.clsa_pk', '=', 'CR.clsa_fk')
+                        ->join('clients AS C', 'C.clie_pk', '=', 'CR.clie_fk')
+                        ->join('stores AS S', 'S.stor_pk', '=', 'CR.stor_fk')
+                        ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'CR.remo_fk')
+                        ->select(
+                            'CR.clre_pk',
+                            'CR.clre_observation',
+                            'CR.clre_status',
+                            DB::raw('
+                                (CASE 
+                                    WHEN CR.clre_status = 0 THEN "Cancelada" 
+                                    WHEN CR.clre_status = 1 THEN "Pendiente" 
+                                    WHEN CR.clre_status = 2 THEN "Finalizada" 
+                                    ELSE "" END
+                                ) AS clre_status_description'),
+                            'CR.created_at',
+                    
+                            'CS.clsa_pk',
+                            'CS.clsa_identifier',
+
+                            'C.clie_pk',
+                            'C.clie_identifier',
+                            'C.clie_name',
+                            'C.clie_rfc',                           
+
+                            'S.stor_pk',
+                            'S.stor_name',
+
+                            'RM.remo_pk',
+                            'RM.remo_description',
+                        )
+                        //->where('CR.clre_status', '<>', 0)
+                        ->orderByDesc('CR.clre_pk')
+                        ->get();
+            
+            return $this->dbResponse($vClientReturns, 200, null, 'Lista de Devoluciones de Clientes');
+          
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        }
     }
 
     /**
@@ -33,9 +83,150 @@ class ClientReturnController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $r)
     {
-        //
+        $vInput = $r->all();
+
+        $vVal = Validator::make($vInput, [
+            'clsa_pk' => 'required|int' // PK Venta Cliente
+        ]);
+
+        if ($vVal->fails()) {
+            return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+        }
+
+        try {
+            //Asignacion de variables
+           $vclsa_pk = $vInput['clsa_pk'];
+
+            $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)
+                        ->whereIn('clsa_status', [2, 3])
+                        ->first();
+
+            if($vClientSale)
+            { 
+                //Insertar Encabezado de Devolución Cliente
+                $vSelCReturn = ClientSale::where('clsa_pk', '=', $vclsa_pk)
+                    ->select(
+                        'clie_fk', 
+                        'clsa_pk AS clsa_fk',
+                        'stor_fk', 
+                        DB::raw("1 AS clre_status"),
+                        DB::raw("NOW() AS created_at"),
+                        DB::raw("NOW() AS updated_at")
+                    );
+                DB::table('client_returns')
+                    ->insertUsing(
+                        [
+                            'clie_fk', 
+                            'clsa_fk',
+                            'stor_fk', 
+                            'clre_status', 
+                            'created_at', 
+                            'updated_at'
+                        ]
+                    , $vSelCReturn);
+
+
+                    $vClientReturns = DB::table('client_returns AS CR')
+                        ->join('client_sales AS CS', 'CS.clsa_pk', '=', 'CR.clsa_fk')
+                        ->join('clients AS C', 'C.clie_pk', '=', 'CR.clie_fk')
+                        ->join('stores AS S', 'S.stor_pk', '=', 'CR.stor_fk')
+                        ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'CR.remo_fk')
+                        ->select(
+                            'CR.clre_pk',
+                            'CR.clre_observation',
+                            'CR.clre_status',
+                            'CR.created_at',
+                    
+                            'CS.clsa_pk',
+                            'CS.clsa_identifier',
+
+                            'C.clie_pk',
+                            'C.clie_identifier',
+                            'C.clie_name',
+                            'C.clie_rfc',                           
+
+                            'S.stor_pk',
+                            'S.stor_name',
+
+                            'RM.remo_pk',
+                            'RM.remo_description',
+                        )
+                        ->where('CR.clsa_fk', '=', $vclsa_pk)
+                        ->orderByDesc('CR.clre_pk')
+                        ->first();
+
+
+                //Insertar Detallado de Devolución
+                $vSelCSD = ClientSaleDetail::where('clsa_fk', '=', $vclsa_pk)->where('clsd_status', '=', 1)
+                    ->select(
+                        array(
+                            DB::raw("$vClientReturns->clre_pk AS clre_fk"),
+                            'prod_fk AS prod_fk',
+                            'meas_fk AS meas_fk',
+                            'clsd_quantity AS clrd_quantity',
+                            'clsd_price AS clrd_price',
+                            DB::raw("1 AS clrd_status"),
+                            DB::raw("NOW() AS created_at"),
+                            DB::raw("NOW() AS updated_at")
+                        )
+                    );
+
+                DB::table('client_return_details')
+                    ->insertUsing(
+                        [
+                            'clre_fk',
+                            'prod_fk', 
+                            'meas_fk',
+                            'clrd_quantity', 
+                            'clrd_price', 
+                            'clrd_status', 
+                            'created_at', 
+                            'updated_at'
+                        ]
+                    , $vSelCSD);
+
+                $vClientReturnDetails = DB::table('client_return_details AS CRD')
+                    ->join('products AS P', 'P.prod_pk', '=', 'CRD.prod_fk')
+                    ->join('measurements AS M', 'M.meas_pk', '=', 'CRD.meas_fk')
+                    ->select(
+                        'CRD.clrd_pk',
+                        'CRD.clre_fk',
+
+                        'P.prod_pk',
+                        'P.prod_identifier',
+                        'P.prod_name',
+
+                        'M.meas_pk',
+                        'M.meas_name',
+                        'M.meas_abbreviation',
+
+                        'CRD.clrd_quantity',
+                        'CRD.clrd_price',
+                        'CRD.clrd_status'
+                    )
+                    ->where('CRD.clre_fk', '=', $vClientReturns->clre_pk)
+                    ->where('CRD.clrd_status', '=', 1)
+                    ->get();
+
+
+                $vData =
+                    [
+                        'ClientReturns' => $vClientReturns, 
+                        'ClientReturnDetails' => $vClientReturnDetails
+                    ];
+
+                return $this->dbResponse($vData, 200, null, 'Devolución de Cliente');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Venta No Encontrada');
+            }
+
+        } catch (Throwable $vTh) {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        }
     }
 
     /**
@@ -67,9 +258,49 @@ class ClientReturnController extends Controller
      * @param  \App\ClientReturn  $clientReturn
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ClientReturn $clientReturn)
+    public function update(Request $r)
     {
-        //
+        $vInput = $r->all();
+
+        $vVal = Validator::make($vInput, [
+            'clre_pk' => 'required|int', // PK Devolucion Cliente
+            'remo_fk' => 'required|int', // PK Motivo Devolucion
+        ]);
+
+        if ($vVal->fails()) {
+            return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+        }
+
+        try {
+            //Asignacion de variables
+           $vclre_pk = $vInput['clre_pk'];
+           $vremo_fk = $vInput['remo_fk'];
+           $vclre_observation = $vInput['clre_observation'];
+
+            $vClientReturn = ClientReturn::where('clre_pk', '=', $vclre_pk)->first();
+
+            if($vClientReturn)
+            { 
+              
+                //Modificar Devolución (Finalizar)
+                DB::table('client_returns')
+                ->where('clre_pk', '=', $vclre_pk)
+                ->update([
+                    'clre_status' =>  2, 
+                    'remo_fk' =>  $vremo_fk, 
+                    'clre_observation' =>  $vclre_observation
+                ]);
+
+                return $this->dbResponse($vclre_pk, 200, null, 'Devolución Finalizada Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse($vclre_pk, 404, null, 'Devolución NO Encontrada');
+            }
+
+        } catch (Throwable $vTh) {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        }
     }
 
     /**

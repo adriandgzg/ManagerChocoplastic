@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Throwable;
 use Validator;
 use App\System;
 use App\ProviderDebt;
@@ -133,9 +134,6 @@ class ProviderPurchaseController extends ApiResponseController
                         ]
                     , $SelectPPO);
 
-                
-                
-                
                     //$vProviderPurchase = ProviderPurchase::orderBy('created_at', 'DESC')->first();
 
                     $vProviderPurchase = DB::table('provider_purchases AS PP')
@@ -251,9 +249,6 @@ class ProviderPurchaseController extends ApiResponseController
                     ->where('PPD.prpd_status', '=', 1)
                     ->get();
 
-
-
-
                 return response()->json([
                     'code' => 200,
                     'success' => true,
@@ -356,8 +351,10 @@ class ProviderPurchaseController extends ApiResponseController
                 ], 200);
             }
 
-        } catch (\Throwable $th) {
-            return $this->dbResponse(null, 500, $th, null);
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
         }
     }
 
