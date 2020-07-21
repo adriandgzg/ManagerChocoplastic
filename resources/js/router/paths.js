@@ -129,5 +129,10 @@ export default [{
         name: 'Cuentas por Pagar', 
         view: 'ProviderDebts'
     },
+    {
+        path: '/orderdetail/:id',
+        name: 'Detalle de Orden de Compra', 
+        view: 'OrderDetail'
+    },
 
 ]

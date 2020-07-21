@@ -375,7 +375,8 @@ __webpack_require__.r(__webpack_exports__);
         _this6.getTotal();
 
         _this6.prpu_pk = response.data.data.ProviderPurchase.prpu_pk;
-        _this6.editadoHeader = response.data.data.ProviderPurchase; //response.data.data.ProviderPurchaseDetail//
+        _this6.editadoHeader = response.data.data.ProviderPurchase;
+        console.log(response.data); //response.data.data.ProviderPurchaseDetail//
 
         /*var i = 0;
         for(i=0;i<this.providers.length; i++){

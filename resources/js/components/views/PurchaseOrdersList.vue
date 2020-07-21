@@ -62,6 +62,10 @@
                             v-if="item.prpo_status == 2">
                             <v-icon dark>mdi-cloud-check</v-icon>
                         </v-btn>
+                        <v-btn class="mr-2" fab dark small color="purple" :href="'/orderdetail/'+item.prpo_pk"
+                            >
+                            <v-icon dark>mdi-eye</v-icon>
+                        </v-btn>
                         <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)"
                         v-if="item.prpo_status == 1">
                             <v-icon dark>mdi-delete</v-icon>

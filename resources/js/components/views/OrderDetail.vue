@@ -1,4 +1,4 @@
-<template>
+4<template>
     <v-app>
         <v-container>
         <v-snackbar color="#000000"
@@ -58,12 +58,7 @@
               <v-card-text class="category d-inline-flex font-weight-light">
               <v-label><h3>Sucursal:</h3> {{editadoHeader.stor_name}}</v-label>                
               </v-card-text>
-            </v-col>  
-             <v-col cols="4">
-              <v-card-text class="category d-inline-flex font-weight-light">
-                <v-label><h3>Método de pago:</h3> {{editadoHeader.pame_name}}</v-label>
-                </v-card-text>
-            </v-col>        
+            </v-col>     
           </v-row>
         </v-card>
         
@@ -91,10 +86,10 @@
                   <td>{{ item.prod_identifier }}</td>
                   <td>{{ item.prod_name }}</td>
                   <td>{{ item.meas_name }}</td>
-                  <td>{{ item.prpd_quantity }}</td>
-                  <td>{{ item.prpd_price }}</td>
-                  <td>{{ item.prpd_discountrate }}</td>
-                <td>${{ formatMoney((item.prpd_quantity * item.prpd_price)*(1- (item.prpd_discountrate/100))) }}</td>
+                  <td>{{ item.ppod_quantity }}</td>
+                  <td>{{ item.ppod_providerprice }}</td>
+                  <td>{{ item.ppod_discountrate }}</td>
+                <td>${{ formatMoney((item.ppod_quantity * item.ppod_providerprice)*(1- (item.ppod_discountrate/100))) }}</td>
                   
                 </tr>
                 <tr>
@@ -184,7 +179,15 @@ export default {
         iva:0,
       textMsg: "",
       editadoHeader:{
-            prpu_pk: 0,
+            created_at: '',
+            prov_identifier: '',
+            prov_name: '',
+            prov_rfc: '',
+            prpo_identifier: '',
+            prpo_pk: 0,
+            prpo_status: 0,
+            stor_name: '',
+           /* prpu_pk: 0,
             prov_fk:0,
             prov_name:'',
             prpo_fk: 0,
@@ -196,13 +199,13 @@ export default {
             prpu_type: 0,
             prpu_status:0,
             created_at: '',
-            updated_at: '',
+            updated_at: '',*/
       },
         editado:{
-            prpd_pk: 0,
-            prpd_quantity: 0,
-            prpd_price: 0,
-            prpd_discountrate: 0,
+            ppod_pk: 0,
+            ppod_quantity: 0,
+            ppod_providerprice: 0,
+            ppod_discountrate: 0,
             prod_pk: 0,
             prod_identifier: 0,
             prod_name: '',
@@ -210,10 +213,10 @@ export default {
             meas_name: ''
         },
         defaultItem:{
-            prpd_pk: 0,
-            prpd_quantity: 0,
-            prpd_price: 0,
-            prpd_discountrate: 0,
+            ppod_pk: 0,
+            ppod_quantity: 0,
+            ppod_providerprice: 0,
+            ppod_discountrate: 0,
             prod_pk: 0,
             prod_identifier: 0,
             prod_name: '',
@@ -223,18 +226,18 @@ export default {
         detail:{
             prpo_fk:0,
             prod_fk:0,
-            prpd_pk:0,
-            prpd_quantity:0,
-            prpd_price:0,
-            prpd_discountrate:0,
+            ppod_pk:0,
+            ppod_quantity:0,
+            ppod_providerprice:0,
+            ppod_discountrate:0,
         },   
         detailDefault:{
             prpo_fk:0,
             prod_fk:0,
-            prpd_pk:0,
-            prpd_quantity:0,
-            prpd_price:0,
-            prpd_discountrate:0,
+            ppod_pk:0,
+            ppod_quantity:0,
+            ppod_providerprice:0,
+            ppod_discountrate:0,
         },   
         orderHeader:{
             prpu_pk:0,
@@ -256,10 +259,10 @@ export default {
     };
   },
    created() {
-       this.getStores();
-       this.getProviders();
+      /* this.getStores();
+       this.getProviders();*/
        this.createCompra();
-       this.getPayment();
+       //this.getPayment();
    },
 
   methods: {
@@ -322,9 +325,9 @@ export default {
                 this.detail.prpo_fk = 0;
             }
             this.detail.prod_fk = item.prod_pk;
-            this.detail.prpd_quantity = 1;
-            this.detail.prpd_price = 0;
-            this.detail.prpd_discountrate = 0;
+            this.detail.ppod_quantity = 1;
+            this.detail.ppod_providerprice = 0;
+            this.detail.ppod_discountrate = 0;
 
             axios.post('/provider/purchase/order/details', this.detail)
                 .then(response => {
@@ -378,34 +381,20 @@ export default {
         },   
 
         createCompra() {
-
-            axios.get('/provider/purchases/' + this.prpo_pk + '')
+            console.log('/provider/purchase/orders/' + this.prpo_pk + '')
+            axios.get('/provider/purchase/orders/' + this.prpo_pk + '')
                 .then(response => {
-                    this.desserts = response.data.data.ProviderPurchaseDetail;
-                    this.getTotal();
-                    this.prpu_pk = response.data.data.ProviderPurchase.prpu_pk;
-                    this.editadoHeader= response.data.data.ProviderPurchase;
                     console.log(response.data)
-                    //response.data.data.ProviderPurchaseDetail//
-                    /*var i = 0;
-                    for(i=0;i<this.providers.length; i++){
-                        
-                        if(response.data.data.ProviderPurchase.prov_fk == this.providers[i].prov_pk){
-                            this.selectProv = this.providers[i];
-                        }
-                    }
+                    this.desserts = response.data.data.provider_purchase_order_details;
                     
-                    for(i=0;i<this.stores.length; i++){
-                        
-                        if(response.data.data.ProviderPurchase.stor_fk == this.stores[i].stor_pk){
-                            console.log(i)
-                            this.selectStore = this.stores[i];
-                        }
-                    }*/
+                    this.prpu_pk = response.data.data.provider_purchase_orders.prpu_pk;
+                    this.editadoHeader= response.data.data.provider_purchase_orders[0];
+console.log(this.editadoHeader)
+                    this.getTotal();
+                    
                     
                 })
                 .catch(e => {
-                    //this.errors.push(e)
                     console.log(e)
                     })
                 },
@@ -429,11 +418,11 @@ export default {
 
         onQuantityChange(item){
             //this.editado = Object.assign({}, item)
-            this.detail.prpd_pk = item.prpd_pk,
+            this.detail.ppod_pk = item.ppod_pk,
             this.detail.prod_fk = item.prod_pk;
-            this.detail.prpd_quantity = item.prpd_quantity;
-            this.detail.prpd_price = item.prpd_price;
-            this.detail.prpd_discountrate = item.prpd_discountrate;
+            this.detail.ppod_quantity = item.ppod_quantity;
+            this.detail.ppod_providerprice = item.ppod_providerprice;
+            this.detail.ppod_discountrate = item.ppod_discountrate;
             axios.post('/provider/purchase/details/update', this.detail)
                 .then(response => {
                   console.log(response)
@@ -459,7 +448,7 @@ export default {
 this.subtotal = 0;
             for (var i = 0; i < this.desserts.length; i++) {
                 
-                this.subtotal = this.subtotal + ((this.desserts[i].prpd_price * this.desserts[i].prpd_quantity) * (1 - (this.desserts[i].prpd_discountrate/100)));
+                this.subtotal = this.subtotal + ((this.desserts[i].ppod_providerprice * this.desserts[i].ppod_quantity) * (1 - (this.desserts[i].ppod_discountrate/100)));
                 console.log(this.subtotal);
             }
 

@@ -89576,6 +89576,10 @@ var map = {
 		"./resources/js/components/views/Notifications.vue",
 		15
 	],
+	"./OrderDetail.vue": [
+		"./resources/js/components/views/OrderDetail.vue",
+		34
+	],
 	"./PaymentMethods.vue": [
 		"./resources/js/components/views/PaymentMethods.vue",
 		16
@@ -89956,6 +89960,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/providerdebts',
   name: 'Cuentas por Pagar',
   view: 'ProviderDebts'
+}, {
+  path: '/orderdetail/:id',
+  name: 'Detalle de Orden de Compra',
+  view: 'OrderDetail'
 }]);
 
 /***/ }),
