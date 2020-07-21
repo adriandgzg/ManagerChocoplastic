@@ -89946,7 +89946,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   view: 'PurchaseList'
 }, {
   path: '/purchases/:id/:directa',
-  name: 'Compras',
+  name: 'Compra Directa',
   view: 'Purchases'
 }, {
   path: '/purchasesdetail/:id',

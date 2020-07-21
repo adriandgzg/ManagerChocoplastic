@@ -480,7 +480,8 @@ var render = function() {
                                           dark: "",
                                           small: "",
                                           color: "orange",
-                                          href: "/purchases/" + item.prpo_pk
+                                          href:
+                                            "/purchases/" + item.prpo_pk + "/1"
                                         }
                                       },
                                       [
