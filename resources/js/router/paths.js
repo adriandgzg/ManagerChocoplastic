@@ -134,5 +134,16 @@ export default [{
         name: 'Detalle de Orden de Compra', 
         view: 'OrderDetail'
     },
+    {
+        path: '/clientsreturn/:id',
+        name: 'Devoluciones', 
+        view: 'ClientsReturn'
+    },
+    {
+        path: '/clientsreturnlist',
+        name: 'Lista de Devoluciones', 
+        view: 'ClientsReturnList'
+    },
+    
 
 ]

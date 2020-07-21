@@ -63,6 +63,13 @@
             <v-list-item-title>Venta (Cobro)</v-list-item-title>
           </v-list-item>
 
+          <v-list-item href="/clientsreturnlist">
+            <v-list-item-action>
+              <v-icon>mdi-cart</v-icon>
+            </v-list-item-action>
+            <v-list-item-title>Devoluciones</v-list-item-title>
+          </v-list-item>
+
         </v-list-group>
 
 
