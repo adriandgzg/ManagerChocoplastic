@@ -980,25 +980,29 @@ var render = function() {
                           _c(
                             "v-col",
                             [
-                              _c(
-                                "v-btn",
-                                {
-                                  staticClass: "ma-2",
-                                  attrs: {
-                                    tile: "",
-                                    outlined: "",
-                                    color: "blue"
-                                  },
-                                  on: { click: _vm.buscar }
-                                },
-                                [
-                                  _c("v-icon", { attrs: { left: "" } }, [
-                                    _vm._v("mdi-file-find")
-                                  ]),
-                                  _vm._v(" Buscar Producto\n                ")
-                                ],
-                                1
-                              ),
+                              _vm.directa == 2
+                                ? _c(
+                                    "v-btn",
+                                    {
+                                      staticClass: "ma-2",
+                                      attrs: {
+                                        tile: "",
+                                        outlined: "",
+                                        color: "blue"
+                                      },
+                                      on: { click: _vm.buscar }
+                                    },
+                                    [
+                                      _c("v-icon", { attrs: { left: "" } }, [
+                                        _vm._v("mdi-file-find")
+                                      ]),
+                                      _vm._v(
+                                        " Buscar Producto\n                "
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e(),
                               _vm._v(" "),
                               _c(
                                 "v-btn",

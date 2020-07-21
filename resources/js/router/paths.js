@@ -116,7 +116,7 @@ export default [{
     },
     {
         path: '/purchases/:id/:directa',
-        name: 'Compra Directa', 
+        name: 'Compra', 
         view: 'Purchases'
     },
     {

@@ -105,7 +105,7 @@
           </v-row>
           <v-row>
             <v-col>       
-                    <v-btn class="ma-2" tile outlined color="blue" @click="buscar">
+                    <v-btn v-if="directa == 2" class="ma-2" tile outlined color="blue" @click="buscar">
                         <v-icon left>mdi-file-find</v-icon> Buscar Producto
                     </v-btn>                        
                     <v-btn dark color="success" @click="finalizar" outlined>

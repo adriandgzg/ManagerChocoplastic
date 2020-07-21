@@ -30032,7 +30032,7 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Cuentas por Pagar")])
+                      _c("v-list-item-title", [_vm._v("Cuentas por Cobrar")])
                     ],
                     1
                   ),
@@ -89946,7 +89946,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   view: 'PurchaseList'
 }, {
   path: '/purchases/:id/:directa',
-  name: 'Compra Directa',
+  name: 'Compra',
   view: 'Purchases'
 }, {
   path: '/purchasesdetail/:id',

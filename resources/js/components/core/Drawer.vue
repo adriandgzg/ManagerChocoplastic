@@ -46,7 +46,7 @@
             <v-list-item-action>
               <v-icon>mdi-cart</v-icon>
             </v-list-item-action>
-            <v-list-item-title>Cuentas por Pagar</v-list-item-title>
+            <v-list-item-title>Cuentas por Cobrar</v-list-item-title>
           </v-list-item>
 
            <v-list-item href="/orders">
