@@ -166,6 +166,7 @@ class ClientReturnController extends ApiResponseController
                             'prod_fk AS prod_fk',
                             'meas_fk AS meas_fk',
                             'clsd_quantity AS clrd_quantity',
+                            'clsd_quantity AS clrd_quantity_sale',
                             'clsd_price AS clrd_price',
                             DB::raw("1 AS clrd_status"),
                             DB::raw("NOW() AS created_at"),
@@ -180,6 +181,7 @@ class ClientReturnController extends ApiResponseController
                             'prod_fk', 
                             'meas_fk',
                             'clrd_quantity', 
+                            'clrd_quantity_sale', 
                             'clrd_price', 
                             'clrd_status', 
                             'created_at', 
@@ -203,6 +205,7 @@ class ClientReturnController extends ApiResponseController
                         'M.meas_abbreviation',
 
                         'CRD.clrd_quantity',
+                        'CRD.clrd_quantity_sale',
                         'CRD.clrd_price',
                         'CRD.clrd_status'
                     )

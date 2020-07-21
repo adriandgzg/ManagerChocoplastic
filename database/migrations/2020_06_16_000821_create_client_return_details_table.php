@@ -27,7 +27,8 @@ class CreateClientReturnDetailsTable extends Migration
             $table->foreign('meas_fk')->references('meas_pk')->on('measurements')->onUpdate('cascade');
 
             $table->integer('clrd_quantity'); //Cantidad
-            $table->decimal('clrd_price', 12, 2); //Precio Compra
+            $table->integer('clrd_quantity_sale'); //Cantidad Venta (Validar cantidad maxima)
+            $table->decimal('clrd_price', 12, 2); //Precio Compra 
             $table->smallInteger('clrd_status')->default(1); //Estatus
             $table->timestamps();
         });
