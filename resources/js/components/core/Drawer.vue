@@ -34,7 +34,12 @@
           </v-list-item-action>
           <v-list-item-title>Cuentas por cobrar</v-list-item-title>
         </v-list-item>
-        
+        <v-list-item href="/providersreturnlist">
+          <v-list-item-action>
+            <v-icon>mdi-tag</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Devoluciones Proveedor</v-list-item-title>
+        </v-list-item>
         
        </v-list-group>
 

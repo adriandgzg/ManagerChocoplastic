@@ -65,8 +65,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -207,162 +205,126 @@ var render = function() {
                   _c(
                     "v-card",
                     [
-                      _c(
-                        "v-data-table",
-                        {
-                          staticClass: "elevation-3",
-                          attrs: {
-                            headers: _vm.headers,
-                            items: _vm.sales,
-                            search: _vm.search,
-                            "sort-by": "id"
-                          },
-                          scopedSlots: _vm._u([
-                            {
-                              key: "top",
-                              fn: function() {
-                                return [
-                                  _c("v-system-bar", {
-                                    attrs: {
-                                      color: "indigo darken-2",
-                                      dark: ""
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-toolbar",
-                                    { attrs: { flat: "", color: "indigo" } },
-                                    [
-                                      _c("v-divider", {
-                                        staticClass: "mx-4",
-                                        attrs: { inset: "", vertical: "" }
-                                      }),
-                                      _vm._v(" "),
-                                      _c("v-spacer")
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-col",
-                                    { attrs: { cols: "12", sm: "12" } },
-                                    [
-                                      _c("v-text-field", {
-                                        attrs: {
-                                          "append-icon": "search",
-                                          label: "Buscar",
-                                          "single-line": "",
-                                          "hide-details": ""
-                                        },
-                                        model: {
-                                          value: _vm.search,
-                                          callback: function($$v) {
-                                            _vm.search = $$v
-                                          },
-                                          expression: "search"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ]
-                              },
-                              proxy: true
-                            },
-                            {
-                              key: "item.status",
-                              fn: function(ref) {
-                                var item = ref.item
-                                return [
-                                  item.prre_status == "Pendiente"
-                                    ? _c(
-                                        "v-chip",
-                                        { attrs: { color: "gray", dark: "" } },
-                                        [
-                                          _vm._v(
-                                            "  " +
-                                              _vm._s(
-                                                item.prre_status_description
-                                              ) +
-                                              "  "
-                                          )
-                                        ]
-                                      )
-                                    : _c(
-                                        "v-chip",
-                                        { attrs: { color: "green", dark: "" } },
-                                        [
-                                          _vm._v(
-                                            _vm._s(item.prre_status_description)
-                                          )
-                                        ]
-                                      )
-                                ]
-                              }
-                            },
-                            {
-                              key: "item.action",
-                              fn: function(ref) {
-                                var item = ref.item
-                                return [
-                                  item.prre_status == "Pendiente"
-                                    ? _c(
-                                        "v-btn",
-                                        {
-                                          staticClass: "mr-2",
-                                          attrs: {
-                                            fab: "",
-                                            dark: "",
-                                            small: "",
-                                            color: "pink",
-                                            href:
-                                              "/providersreturn/" + item.clsa_pk
-                                          }
-                                        },
-                                        [
-                                          _c(
-                                            "v-icon",
-                                            { attrs: { dark: "" } },
-                                            [
-                                              _vm._v(
-                                                "mdi-arrow-left-bold-circle"
-                                              )
-                                            ]
-                                          )
-                                        ],
-                                        1
-                                      )
-                                    : _vm._e()
-                                ]
-                              }
-                            }
-                          ])
+                      _c("v-data-table", {
+                        staticClass: "elevation-3",
+                        attrs: {
+                          headers: _vm.headers,
+                          items: _vm.sales,
+                          search: _vm.search,
+                          "sort-by": "id"
                         },
-                        [
-                          _vm._v(" "),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              staticClass: "mr-2",
-                              attrs: {
-                                fab: "",
-                                dark: "",
-                                small: "",
-                                color: "pink",
-                                href: "/providersreturn/" + _vm.item.prpu_pk
-                              }
+                        scopedSlots: _vm._u([
+                          {
+                            key: "top",
+                            fn: function() {
+                              return [
+                                _c("v-system-bar", {
+                                  attrs: { color: "indigo darken-2", dark: "" }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "v-toolbar",
+                                  { attrs: { flat: "", color: "indigo" } },
+                                  [
+                                    _c("v-divider", {
+                                      staticClass: "mx-4",
+                                      attrs: { inset: "", vertical: "" }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("v-spacer")
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-col",
+                                  { attrs: { cols: "12", sm: "12" } },
+                                  [
+                                    _c("v-text-field", {
+                                      attrs: {
+                                        "append-icon": "search",
+                                        label: "Buscar",
+                                        "single-line": "",
+                                        "hide-details": ""
+                                      },
+                                      model: {
+                                        value: _vm.search,
+                                        callback: function($$v) {
+                                          _vm.search = $$v
+                                        },
+                                        expression: "search"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ]
                             },
-                            [
-                              _c("v-icon", { attrs: { dark: "" } }, [
-                                _vm._v("mdi-arrow-left-bold-circle")
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
+                            proxy: true
+                          },
+                          {
+                            key: "item.status",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                item.prre_status == "Pendiente"
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "gray", dark: "" } },
+                                      [
+                                        _vm._v(
+                                          "  " +
+                                            _vm._s(
+                                              item.prre_status_description
+                                            ) +
+                                            "  "
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "v-chip",
+                                      { attrs: { color: "green", dark: "" } },
+                                      [
+                                        _vm._v(
+                                          _vm._s(item.prre_status_description)
+                                        )
+                                      ]
+                                    )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.action",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                item.prre_status == "Pendiente"
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        staticClass: "mr-2",
+                                        attrs: {
+                                          fab: "",
+                                          dark: "",
+                                          small: "",
+                                          color: "pink",
+                                          href:
+                                            "/providersreturn/" + item.prpu_pk
+                                        }
+                                      },
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-arrow-left-bold-circle")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e()
+                              ]
+                            }
+                          }
+                        ])
+                      })
                     ],
                     1
                   )

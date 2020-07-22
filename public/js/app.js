@@ -2687,6 +2687,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -30007,6 +30012,23 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("v-list-item-title", [_vm._v("Cuentas por cobrar")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/providersreturnlist" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-tag")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [
+                        _vm._v("Devoluciones Proveedor")
+                      ])
                     ],
                     1
                   )

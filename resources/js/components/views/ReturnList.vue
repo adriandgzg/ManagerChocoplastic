@@ -37,16 +37,14 @@
                             <v-chip v-else color="green" dark>{{item.prre_status_description}}</v-chip>                        
                     </template>
 
-                    <v-btn class="mr-2" fab dark small color="pink"  
-                               :href="'/providersreturn/'+item.prpu_pk">
-                            <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
-                        </v-btn>
+                    
                    
                      <template v-slot:item.action="{ item }">   
+                         
                         <v-btn class="mr-2" fab dark small color="pink"  v-if="item.prre_status == 'Pendiente'"
-                               :href="'/providersreturn/'+item.clsa_pk">
+                               :href="'/providersreturn/'+item.prpu_pk">
                             <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
-                        </v-btn>      
+                        </v-btn>  
                     </template>
                 </v-data-table>
                 </v-card>
