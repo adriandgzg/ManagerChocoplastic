@@ -2679,6 +2679,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -30063,6 +30070,21 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("v-list-item-title", [_vm._v("Venta (Cobro)")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/clientsreturnlist" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Devoluciones")])
                     ],
                     1
                   )
@@ -89539,25 +89561,33 @@ var map = {
 		"./resources/js/components/views/Clients.vue",
 		7
 	],
+	"./ClientsReturn.vue": [
+		"./resources/js/components/views/ClientsReturn.vue",
+		8
+	],
+	"./ClientsReturnList.vue": [
+		"./resources/js/components/views/ClientsReturnList.vue",
+		37
+	],
 	"./Coverages.vue": [
 		"./resources/js/components/views/Coverages.vue",
-		8
+		9
 	],
 	"./Dashboard.vue": [
 		"./resources/js/components/views/Dashboard.vue",
-		9
+		10
 	],
 	"./DetailOrder.vue": [
 		"./resources/js/components/views/DetailOrder.vue",
-		10
+		11
 	],
 	"./Entities.vue": [
 		"./resources/js/components/views/Entities.vue",
-		11
+		12
 	],
 	"./Frequents.vue": [
 		"./resources/js/components/views/Frequents.vue",
-		12
+		13
 	],
 	"./Maps.vue": [
 		"./resources/js/components/views/Maps.vue",
@@ -89565,93 +89595,93 @@ var map = {
 	],
 	"./Measurements.vue": [
 		"./resources/js/components/views/Measurements.vue",
-		13
+		14
 	],
 	"./Missions.vue": [
 		"./resources/js/components/views/Missions.vue",
 		0,
-		14
+		15
 	],
 	"./Notifications.vue": [
 		"./resources/js/components/views/Notifications.vue",
-		15
+		16
 	],
 	"./OrderDetail.vue": [
 		"./resources/js/components/views/OrderDetail.vue",
-		34
+		17
 	],
 	"./PaymentMethods.vue": [
 		"./resources/js/components/views/PaymentMethods.vue",
-		16
+		18
 	],
 	"./PaymentShapes.vue": [
 		"./resources/js/components/views/PaymentShapes.vue",
-		17
+		19
 	],
 	"./PointOfSale.vue": [
 		"./resources/js/components/views/PointOfSale.vue",
-		18
+		20
 	],
 	"./Product.vue": [
 		"./resources/js/components/views/Product.vue",
-		19
+		21
 	],
 	"./Proveedores.vue": [
 		"./resources/js/components/views/Proveedores.vue",
-		20
+		22
 	],
 	"./ProviderDebts.vue": [
 		"./resources/js/components/views/ProviderDebts.vue",
-		35
+		23
 	],
 	"./PurchaseList.vue": [
 		"./resources/js/components/views/PurchaseList.vue",
-		21
+		24
 	],
 	"./PurchaseOrder.vue": [
 		"./resources/js/components/views/PurchaseOrder.vue",
-		22
+		25
 	],
 	"./PurchaseOrdersList.vue": [
 		"./resources/js/components/views/PurchaseOrdersList.vue",
-		23
+		26
 	],
 	"./Purchases.vue": [
 		"./resources/js/components/views/Purchases.vue",
-		24
+		27
 	],
 	"./PurchasesDetail.vue": [
 		"./resources/js/components/views/PurchasesDetail.vue",
-		25
+		28
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
-		26
+		29
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
-		33,
-		27
+		36,
+		30
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		28
+		31
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		29
+		32
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		32
+		35
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		30
+		33
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		31
+		34
 	]
 };
 function webpackAsyncContext(req) {
@@ -89964,6 +89994,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/orderdetail/:id',
   name: 'Detalle de Orden de Compra',
   view: 'OrderDetail'
+}, {
+  path: '/clientsreturn/:id',
+  name: 'Devoluciones',
+  view: 'ClientsReturn'
+}, {
+  path: '/clientsreturnlist',
+  name: 'Lista de Devoluciones',
+  view: 'ClientsReturnList'
 }]);
 
 /***/ }),

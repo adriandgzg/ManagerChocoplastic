@@ -384,8 +384,10 @@ export default {
             }
       },
       createsale() {
+        
             axios.post('/clientsales?clor_pk=' + this.clor_pk + '')
                 .then(response => {
+                  console.log(response.data)
                     this.sales = response.data.data;
                     this.saleHeader = response.data.data.sale;
                     this.desserts =  this.sales.sale_details;
@@ -393,7 +395,8 @@ export default {
                     this.getTotal();
                 })
                 .catch(e => {
-                    this.errors.push(e)
+                    //this.errors.push(e)
+                    console.log(e)
                     })
                 },
     getTotal(){
