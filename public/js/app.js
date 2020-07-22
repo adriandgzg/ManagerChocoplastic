@@ -29920,7 +29920,7 @@ var render = function() {
   return _c(
     "v-navigation-drawer",
     {
-      attrs: { id: "app-drawer", app: "", width: "260", src: _vm.background },
+      attrs: { id: "app-drawer", app: "", width: "300", src: _vm.background },
       model: {
         value: _vm.inputValue,
         callback: function($$v) {

@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer id="app-drawer" v-model="inputValue" app width="260" :src="background">
+  <v-navigation-drawer id="app-drawer" v-model="inputValue" app width="300" :src="background">
     <v-img :gradient="sidebarOverlayGradiant" height="100%">
       <v-list dense nav>
         <v-list-item>
