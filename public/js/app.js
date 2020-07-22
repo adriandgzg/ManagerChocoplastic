@@ -2686,6 +2686,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -89567,27 +89568,27 @@ var map = {
 	],
 	"./ClientsReturnList.vue": [
 		"./resources/js/components/views/ClientsReturnList.vue",
-		37
+		9
 	],
 	"./Coverages.vue": [
 		"./resources/js/components/views/Coverages.vue",
-		9
+		10
 	],
 	"./Dashboard.vue": [
 		"./resources/js/components/views/Dashboard.vue",
-		10
+		11
 	],
 	"./DetailOrder.vue": [
 		"./resources/js/components/views/DetailOrder.vue",
-		11
+		12
 	],
 	"./Entities.vue": [
 		"./resources/js/components/views/Entities.vue",
-		12
+		13
 	],
 	"./Frequents.vue": [
 		"./resources/js/components/views/Frequents.vue",
-		13
+		14
 	],
 	"./Maps.vue": [
 		"./resources/js/components/views/Maps.vue",
@@ -89595,93 +89596,105 @@ var map = {
 	],
 	"./Measurements.vue": [
 		"./resources/js/components/views/Measurements.vue",
-		14
+		15
 	],
 	"./Missions.vue": [
 		"./resources/js/components/views/Missions.vue",
 		0,
-		15
+		16
 	],
 	"./Notifications.vue": [
 		"./resources/js/components/views/Notifications.vue",
-		16
+		17
 	],
 	"./OrderDetail.vue": [
 		"./resources/js/components/views/OrderDetail.vue",
-		17
+		18
 	],
 	"./PaymentMethods.vue": [
 		"./resources/js/components/views/PaymentMethods.vue",
-		18
+		19
 	],
 	"./PaymentShapes.vue": [
 		"./resources/js/components/views/PaymentShapes.vue",
-		19
+		20
 	],
 	"./PointOfSale.vue": [
 		"./resources/js/components/views/PointOfSale.vue",
-		20
+		21
 	],
 	"./Product.vue": [
 		"./resources/js/components/views/Product.vue",
-		21
+		22
 	],
 	"./Proveedores.vue": [
 		"./resources/js/components/views/Proveedores.vue",
-		22
+		23
 	],
 	"./ProviderDebts.vue": [
 		"./resources/js/components/views/ProviderDebts.vue",
-		23
+		24
+	],
+	"./ProvidersReturn.vue": [
+		"./resources/js/components/views/ProvidersReturn.vue",
+		39
+	],
+	"./ProvidersReturnList.vue": [
+		"./resources/js/components/views/ProvidersReturnList.vue",
+		25
 	],
 	"./PurchaseList.vue": [
 		"./resources/js/components/views/PurchaseList.vue",
-		24
+		26
 	],
 	"./PurchaseOrder.vue": [
 		"./resources/js/components/views/PurchaseOrder.vue",
-		25
+		27
 	],
 	"./PurchaseOrdersList.vue": [
 		"./resources/js/components/views/PurchaseOrdersList.vue",
-		26
+		28
 	],
 	"./Purchases.vue": [
 		"./resources/js/components/views/Purchases.vue",
-		27
+		29
 	],
 	"./PurchasesDetail.vue": [
 		"./resources/js/components/views/PurchasesDetail.vue",
-		28
+		30
+	],
+	"./ReturnList.vue": [
+		"./resources/js/components/views/ReturnList.vue",
+		40
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
-		29
+		31
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
-		36,
-		30
+		38,
+		32
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		31
+		33
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		32
+		34
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		35
+		37
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		33
+		35
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		34
+		36
 	]
 };
 function webpackAsyncContext(req) {
@@ -90002,6 +90015,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/clientsreturnlist',
   name: 'Lista de Devoluciones',
   view: 'ClientsReturnList'
+}, {
+  path: '/providersreturn/:id',
+  name: 'Devoluciones Proveedor',
+  view: 'ProvidersReturn'
+}, {
+  path: '/providersreturnlist',
+  name: 'Lista Devoluciones Proveedor',
+  view: 'ReturnList'
 }]);
 
 /***/ }),

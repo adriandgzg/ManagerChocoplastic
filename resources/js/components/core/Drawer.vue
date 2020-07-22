@@ -35,6 +35,7 @@
           <v-list-item-title>Cuentas por cobrar</v-list-item-title>
         </v-list-item>
         
+        
        </v-list-group>
 
         <v-list-group prepend-icon="account_circle" no-action>        
