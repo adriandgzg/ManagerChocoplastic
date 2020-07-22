@@ -1,6 +1,10 @@
 <template>
     <v-app>
         <v-container>
+        <v-alert v-model="alert" dismissible transition="fade-transition" type="info">
+      {{ textMsg }}
+    </v-alert>
+  
         <v-snackbar color="#000000"
                     v-model="snackbar"
                     :timeout="timeout">
@@ -66,6 +70,9 @@
       </v-col>
     </v-row>
     <v-row>
+    <v-alert v-model="alertError" dismissible transition="fade-transition" type="error" timeout="400">
+      {{ textMsg }}
+    </v-alert>
       <v-col>
         <v-card>
           <v-simple-table>
@@ -225,6 +232,8 @@ export default {
         prpu_pk: this.$route.params.id,
         prre_observation:'',
         valid:false,
+        alert:false, 
+        alertError:false,
         sales:[],
         stores:[],
         returns:[],
@@ -370,7 +379,15 @@ export default {
       onQuantityChange(item){
             this.editado = Object.assign({}, item)
             console.log(this.editado)
-           
+           if(this.editado.prrd_quantity > this.editado.prrd_quantity_purchase )
+           {
+             this.textMsg = "¡El cantidad devuelta no puede ser mayor a la cantidad comprada!";
+             this.alertError = true;
+             setTimeout(()=>{
+                this.alertError=false
+              },3000)
+             return;
+           }
             axios.post('/provider/return/details/update', this.editado)
                 .then(response => {
                   console.log(response)

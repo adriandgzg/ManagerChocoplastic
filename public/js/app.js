@@ -89659,11 +89659,11 @@ var map = {
 	],
 	"./ProvidersReturn.vue": [
 		"./resources/js/components/views/ProvidersReturn.vue",
-		39
+		25
 	],
 	"./ProvidersReturnList.vue": [
 		"./resources/js/components/views/ProvidersReturnList.vue",
-		25
+		40
 	],
 	"./PurchaseList.vue": [
 		"./resources/js/components/views/PurchaseList.vue",
@@ -89687,36 +89687,36 @@ var map = {
 	],
 	"./ReturnList.vue": [
 		"./resources/js/components/views/ReturnList.vue",
-		40
+		31
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
-		31
+		32
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
-		38,
-		32
+		39,
+		33
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		33
+		34
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		34
+		35
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		37
+		38
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		35
+		36
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		36
+		37
 	]
 };
 function webpackAsyncContext(req) {
