@@ -333,7 +333,7 @@ __webpack_require__.r(__webpack_exports__);
             _this2.textMsg = "¡Actualizado correctamente!";
             alert("¡Actualizado correctamente!");
 
-            _this2.$router.push('/sales');
+            _this2.$router.push('/purchaselist');
           } else {
             alert(response.data.message);
           }

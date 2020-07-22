@@ -327,7 +327,7 @@ export default {
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
                     alert("¡Actualizado correctamente!");
-                    this.$router.push('/sales') ; 
+                    this.$router.push('/purchaselist') ; 
                   }
                   else{
                     alert(response.data.message);
