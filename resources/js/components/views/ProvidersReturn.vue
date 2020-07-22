@@ -304,7 +304,7 @@ export default {
               return;
           }
 
-          this.editadoSale.prre_pk = this.saleHeader.prpu_pk;
+          this.editadoSale.prre_pk = this.saleHeader.prre_pk;
           this.editadoSale.remo_fk = this.selectReturn.remo_pk;
           this.editadoSale.prre_observation = this.prre_observation;
   
