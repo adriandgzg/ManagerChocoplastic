@@ -68,6 +68,11 @@ Route::post('/paymentshapes/add', 'PaymentShapeController@add');
 Route::put('/paymentshapes/update', 'PaymentShapeController@update');
 Route::put('/paymentshapes/delete', 'PaymentShapeController@delete');
 
+Route::get('/returnmotivesList', 'ReturnMotiveController@ReturnMotivesList');
+Route::post('/returnmotives/add', 'ReturnMotiveController@add'); 
+Route::put('/returnmotives/update', 'ReturnMotiveController@update');
+Route::put('/returnmotives/delete', 'ReturnMotiveController@delete');
+
 Route::get('/productList', 'ProductController@ProductList');
 Route::get('/product/search', 'ProductController@ProductSearch');
 Route::post('/product/add', 'ProductController@add');

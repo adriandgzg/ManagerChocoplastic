@@ -165,6 +165,12 @@
             </v-list-item-action>
             <v-list-item-title>Formas de Pago</v-list-item-title>
           </v-list-item>
+          <v-list-item href="/returnmotives ">
+            <v-list-item-action>
+              <v-icon>mdi-cart</v-icon>
+            </v-list-item-action>
+            <v-list-item-title>Motivo de Cancelación</v-list-item-title>
+          </v-list-item>
 
             
           </v-list-group>

@@ -65,6 +65,11 @@ export default [{
         view: 'PaymentShapes'
     },
     {
+        path: '/returnmotives',
+        name: 'Motivos de Devolución',
+        view: 'ReturnMotives'
+    },
+    {
         path: '/products',
         name: 'Productos',
         view: 'Product'
@@ -83,6 +88,11 @@ export default [{
         path: '/detaiorder/:id',
         name: 'Detalle de Orden', 
         view: 'DetailOrder'
+    },    
+    {
+        path: '/detailsale/:id',
+        name: 'Detalle de Venta', 
+        view: 'DetailSale'
     },
     {
         path: '/clientdebts',
@@ -133,7 +143,7 @@ export default [{
         path: '/orderdetail/:id',
         name: 'Detalle de Orden de Compra', 
         view: 'OrderDetail'
-    },
+    },    
     {
         path: '/clientsreturn/:id',
         name: 'Devoluciones', 

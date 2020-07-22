@@ -17,47 +17,56 @@
       <v-col>
         <v-card>
             <v-form v-model="valid">
-          <v-card-title class="subheading font-weight-bold"><H2>{{saleHeader.clsa_identifier}}</H2></v-card-title>
+          <v-card-title class="subheading font-weight-bold">No. Pedido: {{saleHeader.clor_fk}}</v-card-title>
           <v-divider></v-divider>
           <v-row>
             <v-col cols="4">
-              <v-card-text class="category d-inline-flex font-weight-light">                
-                <v-label><h4>Cliente:</h4> {{saleHeader.clie_name}}</v-label>  
+              <v-card-text class="category d-inline-flex font-weight-light">
+                <v-combobox v-model="selectClient" :items="clients" label="Cliente"
+                item-text="clie_name" item-value="clie_pk" filled chips 
+                placeholder="Seleccionar Cliente"></v-combobox>
               </v-card-text>
             </v-col>
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <v-label><h4>Sucursal:</h4> {{saleHeader.stor_name}}</v-label>                  
+                <span class="subheading font-weight-bold">Vendedor:</span>&nbsp; Carlos Jiménez Martinez
               </v-card-text>
             </v-col>
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <v-label><h4>Fecha:</h4> {{saleHeader.created_at}}</v-label> 
+                <span class="subheading font-weight-bold">Fecha:</span>&nbsp; 10/10/2020
               </v-card-text>
             </v-col>
-          </v-row> 
+          </v-row>
           <v-row>
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <v-combobox required v-model="selectReturn"
-            :items="returns"
-            label="Motivo de devolución"
-            item-text="remo_description"
-            item-value="remo_pk"
+                <v-combobox required v-model="selectStore"
+            :items="stores"
+            label="Sucursal"
+            item-text="stor_name"
+            item-value="stor_pk"
             filled
             chips
             placeholder="Seleccionar Cliente"
           ></v-combobox>
               </v-card-text>
             </v-col>
-            <v-col cols="8">
+          
+            <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                
-                <v-textarea v-model="clre_observation" auto-grow
-                    filled color="deep-purple" label="Observaciones" rows="3"></v-textarea>
+                <v-combobox required v-model="selectpame"
+            :items="payments"
+            label="Métodos de pago"
+            item-text="pame_name"
+            item-value="pame_pk"
+            filled
+            chips
+            placeholder="Seleccionar Cliente"
+          ></v-combobox>
               </v-card-text>
             </v-col>
-          </v-row>        
+          </v-row>
             </v-form>
         </v-card>
         <v-card justify="end">
@@ -66,9 +75,6 @@
       </v-col>
     </v-row>
     <v-row>
-    <v-alert v-model="alertError" dismissible transition="fade-transition" type="error" timeout="400">
-      {{ textMsg }}
-    </v-alert>
       <v-col>
         <v-card>
           <v-simple-table>
@@ -79,7 +85,6 @@
                   <th class="text-left">Producto</th>
                   <th class="text-left">Unidad Medida</th>
                   <th class="text-left">Cantidad</th>
-                  <th class="text-left">Cantidad Devuelta</th>
                   <th class="text-left">Precio</th>
                   <th class="text-left">Importe</th>
                   <th></th>
@@ -92,13 +97,11 @@
                   <td>{{ item.prod_name }}</td>
                   <td>{{ item.meas_name }}</td>
                   <td>
-                  {{item.clrd_quantity_sale}}
-                  <td>
-                  <v-text-field v-model="item.clrd_quantity" label=""
+                  <v-text-field v-model="item.clsd_quantity" label=""
                         @change="onQuantityChange(item)" required></v-text-field>
                   </td>
-                  <td>${{ formatMoney(item.clrd_price) }}</td>
-                  <td>${{ formatMoney(item.clrd_quantity * item.clrd_price) }}</td>
+                  <td>${{ formatMoney(item.clsd_price) }}</td>
+                  <td>${{ formatMoney(item.clsd_quantity * item.clsd_price) }}</td>
                   <td>
                     <v-icon @click="borrar(item)" small>mdi-delete</v-icon>
                   </td>
@@ -225,19 +228,16 @@
 export default {
   data() {
     return {
-        alert:false, 
-        alertError:false,
-        clsa_pk: this.$route.params.id,
-        clre_observation:'',
+        clor_pk: this.$route.params.id,
         valid:false,
         sales:[],
         stores:[],
-        returns:[],
+        clients:[],
         payments:[],
         saleHeader:'',
         saleDetail:[],
         desserts:[],
-        selectReturn:'',
+        selectClient:'',
         selectStore:'',
         selectpame:'',
         snackbar: false,
@@ -249,13 +249,17 @@ export default {
         tarjeta:0,
       textMsg: "",
         editado:{
-            clrd_pk:0,
-            clrd_quantity:0,
+            clsd_pk:0,
+            clsd_quantity:0,
         },
         editadoSale:{
-            clre_pk:0,
-            remo_fk:0,
-            clre_observation:'',
+            clsa_pk:0,
+            clie_fk:0,
+            pame_fk:0,
+            stor_fk:0,
+            clde_amount:0,
+            clpa_amount_cash:0,
+            clpa_amount_transfer:0,
         },
         
       dialogcredito: false,
@@ -270,7 +274,9 @@ export default {
   },
    created() {
        this.createsale();
-       this.getMotivos();
+       this.getClients();
+       this.getPayment();
+       this.getStores();
    },
 
   methods: {
@@ -290,50 +296,55 @@ export default {
             console.log(e)
           }
         },
-      getMotivos(){
-            axios.get("/return/motives")
-            .then(response => {
-            this.returns = response.data.data;
-            this.selectReturn = this.returns[0];
 
-            })
-            .catch(e => {
-            console.log(e);
-            });
 
-        },
-      finalizar(){
-          
-          if(this.selectReturn =='' || this.selectReturn == null){
-              alert("Debe seleccionar un motivo de devolución");
-              return;
-          }
-
-          this.editadoSale.clre_pk = this.saleHeader.clre_pk;
-          this.editadoSale.remo_fk = this.selectReturn.remo_pk;
-          this.editadoSale.clre_observation = this.clre_observation;
-  
-         var r = confirm("¿Está seguro de finalizar la venta?");
-            if (r == true) {
-              
-          axios.post('/client/returns/update', this.editadoSale)
+      formatPrice(value) {
+                        let val = (value/1).toFixed(2).replace(',', '.')
+                        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                    },
+        onQuantityChange(item){
+            this.editado = Object.assign({}, item)
+            axios.post('/client_sale_details/update', this.editado)
                 .then(response => {
-                  console.log(response)
-                  if(response.data.status.code == 200){
                     this.snackbar = true;
-                    this.textMsg = "¡Actualizado correctamente!";
-                    alert("¡Actualizado correctamente!");
-                    this.$router.push('/clientsreturnlist') ; 
-                  }
-                  else{
-                    alert(response.data.message);
-                  }
-                
+                this.textMsg = "¡Actualizado correctamente!";
+                console.log("¡Actualizado correctamente!")
+                this.getTotal();
                 })
                 .catch(e => {
                     this.errors.push(e)
                     })
-            }
+
+        },
+      finalizar(){
+          console.log(this.selectClient);
+          this.efectivo = 0;
+          this.tarjeta = 0;
+          
+          if(this.selectClient =='' || this.selectClient == null){
+              alert("Debe seleccionar un cliente");
+              return;
+          }
+
+          if(this.selectpame =='' || this.selectpame == null){
+              alert("Debe seleccionar un método de pago");
+              return;
+          }
+
+          if(this.selectStore =='' || this.selectStore == null){
+              alert("Debe seleccionar una sucursal");
+              return;
+          }
+
+          this.editadoSale.clsa_pk = this.saleHeader.clsa_pk;
+          this.editadoSale.clie_fk = this.selectClient.clie_pk;
+          this.editadoSale.pame_fk = this.selectpame.pame_pk;
+          this.editadoSale.stor_fk = this.selectStore.stor_pk;
+
+          if(this.editadoSale.pame_fk == 1)
+          this.dialogcontado = true;
+          else
+          this.dialogcredito = true;
 
             
       },
@@ -372,41 +383,19 @@ export default {
                     })
             }
       },
-      onQuantityChange(item){
-            this.editado = Object.assign({}, item)
-            console.log(this.editado)
-            console.log('this.editado')
-           if(this.editado.clrd_quantity > this.editado.clrd_quantity_sale )
-           {
-             this.textMsg = "¡El cantidad devuelta no puede ser mayor a la cantidad comprada!";
-             this.alertError = true;
-             setTimeout(()=>{
-                this.alertError=false
-              },3000)
-
-              this.createsale();
-             return;
-           }
-
-            axios.post('/client/return/details/update', this.editado)
-                .then(response => {
-                  console.log(response)
-                console.log("¡Actualizado correctamente!")
-                this.getTotal();
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                    })
-
-        },
       createsale() {
-        console.log('/client/returns?clsa_pk=' + this.clsa_pk + '')
-            axios.post('/client/returns?clsa_pk=' + this.clsa_pk + '')
+        /*
+        <v-col cols="4">
+              <v-card-text class="category d-inline-flex font-weight-light">
+              <v-label><h3>Proveedor:</h3> {{editadoHeader.prov_name}}</v-label>                
+              </v-card-text>
+            </v-col>*/
+            axios.post('/provider/purchases/' + this.clor_pk + '')
                 .then(response => {
                   console.log(response.data)
                     this.sales = response.data.data;
-                    this.saleHeader = response.data.data.ClientReturns;
-                    this.desserts =  this.sales.ClientReturnDetails;
+                    this.saleHeader = response.data.data.sale;
+                    this.desserts =  this.sales.sale_details;
 
                     this.getTotal();
                 })
@@ -418,26 +407,58 @@ export default {
     getTotal(){
 
             for (var i = 0; i < this.desserts.length; i++) {
-                this.subtotal = this.subtotal + (this.desserts[i].clrd_price * this.desserts[i].clrd_quantity );
+                this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity );
             }
             //this.iva =  this.subtotal * 0.16;
 
             this.total = this.subtotal + this.iva;
     },
-    
-    borrar(item) {
+    getClients(){
+            axios.get("/clientsget")
+            .then(response => {
+            this.clients = response.data.data;
+            this.selectClient = this.clients[0];
+
+            })
+            .catch(e => {
+            console.log(e);
+            });
+
+        },
+        getPayment() {
+            axios
+                .get("/paymentmethodsget")
+                .then(response => {
+                this.payments = response.data.data;   
+                })
+                .catch(e => {
+                console.log(e);
+                });
+            },
+        getStores(){
+            axios.get("/storeget")
+            .then(response => {
+            this.stores = response.data.data;
+            })
+            .catch(e => {
+            console.log(e);
+            });
+
+        },
+        
+        borrar(item) {
         
             this.editado = Object.assign({}, item)
             var r = confirm("¿Está seguro de borrar el registro?");
             if (r == true) {
-                this.editado.clrd_pk = item.clrd_pk;
+                this.editado.clsd_pk = item.clsd_pk;
                 this.delete()
             }
         },
 
         delete: function () {
             
-            axios.post('/client/return/details/destroy', this.editado).then(response => {
+            axios.post('/client_sale_details/destroy', this.editado).then(response => {
               
                 this.snackbar = true;
                 this.textMsg = "¡Eliminado correctamente!";

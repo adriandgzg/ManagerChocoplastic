@@ -38,69 +38,39 @@ class ReturnMotiveController extends ApiResponseController
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function ReturnMotivesList(){
+        $payment = ReturnMotive::all();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => ' loaded',
+            'data' => $payment,
+        ], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function add(Request $request)
+    {        
+       
+        $payment = new ReturnMotive();        
+        $payment->remo_description = $request->remo_description;
+        $payment->remo_status = $request->remo_status;
+
+        $payment->save();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\ReturnMotive  $returnMotive
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ReturnMotive $returnMotive)
-    {
-        //
+    public function update(Request $request)
+    {        
+        
+        \DB::update("update return_motives set"
+        . "   remo_description = '" . $request->remo_description 
+        . "', remo_status = " .  $request->remo_status
+        . " where remo_pk = ". $request->remo_pk);
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ReturnMotive  $returnMotive
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ReturnMotive $returnMotive)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ReturnMotive  $returnMotive
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ReturnMotive $returnMotive)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\ReturnMotive  $returnMotive
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ReturnMotive $returnMotive)
-    {
-        //
+    public function delete(Request $request)
+    { 
+        \DB::update("update return_motives set remo_status = '0' where remo_pk = ". $request->remo_pk );
     }
 }

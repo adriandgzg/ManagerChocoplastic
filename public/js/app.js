@@ -2692,6 +2692,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -30307,6 +30313,21 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("v-list-item-title", [_vm._v("Formas de Pago")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/returnmotives " } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Motivo de Cancelación")])
                     ],
                     1
                   )
@@ -89604,6 +89625,10 @@ var map = {
 		"./resources/js/components/views/DetailOrder.vue",
 		12
 	],
+	"./DetailSale.vue": [
+		"./resources/js/components/views/DetailSale.vue",
+		41
+	],
 	"./Entities.vue": [
 		"./resources/js/components/views/Entities.vue",
 		13
@@ -89688,6 +89713,10 @@ var map = {
 	"./ReturnList.vue": [
 		"./resources/js/components/views/ReturnList.vue",
 		31
+	],
+	"./ReturnMotives.vue": [
+		"./resources/js/components/views/ReturnMotives.vue",
+		43
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
@@ -89974,6 +90003,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   name: 'Formas de Pago',
   view: 'PaymentShapes'
 }, {
+  path: '/returnmotives',
+  name: 'Motivos de Devolución',
+  view: 'ReturnMotives'
+}, {
   path: '/products',
   name: 'Productos',
   view: 'Product'
@@ -89989,6 +90022,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/detaiorder/:id',
   name: 'Detalle de Orden',
   view: 'DetailOrder'
+}, {
+  path: '/detailsale/:id',
+  name: 'Detalle de Venta',
+  view: 'DetailSale'
 }, {
   path: '/clientdebts',
   name: 'Cuentas por Cobrar',
