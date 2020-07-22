@@ -385,6 +385,7 @@ __webpack_require__.r(__webpack_exports__);
         setTimeout(function () {
           _this4.alertError = false;
         }, 3000);
+        this.createsale();
         return;
       }
 

@@ -66,6 +66,9 @@
       </v-col>
     </v-row>
     <v-row>
+    <v-alert v-model="alertError" dismissible transition="fade-transition" type="error" timeout="400">
+      {{ textMsg }}
+    </v-alert>
       <v-col>
         <v-card>
           <v-simple-table>
@@ -222,6 +225,8 @@
 export default {
   data() {
     return {
+        alert:false, 
+        alertError:false,
         clsa_pk: this.$route.params.id,
         clre_observation:'',
         valid:false,
@@ -370,12 +375,22 @@ export default {
       onQuantityChange(item){
             this.editado = Object.assign({}, item)
             console.log(this.editado)
-           
+            console.log('this.editado')
+           if(this.editado.clrd_quantity > this.editado.clrd_quantity_sale )
+           {
+             this.textMsg = "¡El cantidad devuelta no puede ser mayor a la cantidad comprada!";
+             this.alertError = true;
+             setTimeout(()=>{
+                this.alertError=false
+              },3000)
+
+              this.createsale();
+             return;
+           }
+
             axios.post('/client/return/details/update', this.editado)
                 .then(response => {
                   console.log(response)
-                   // this.snackbar = true;
-                //this.textMsg = "¡Actualizado correctamente!";
                 console.log("¡Actualizado correctamente!")
                 this.getTotal();
                 })

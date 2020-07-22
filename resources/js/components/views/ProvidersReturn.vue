@@ -386,6 +386,7 @@ export default {
              setTimeout(()=>{
                 this.alertError=false
               },3000)
+              this.createsale()
              return;
            }
             axios.post('/provider/return/details/update', this.editado)

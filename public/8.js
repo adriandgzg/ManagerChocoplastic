@@ -229,9 +229,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      alert: false,
+      alertError: false,
       clsa_pk: this.$route.params.id,
       clre_observation: '',
       valid: false,
@@ -369,10 +374,20 @@ __webpack_require__.r(__webpack_exports__);
 
       this.editado = Object.assign({}, item);
       console.log(this.editado);
-      axios.post('/client/return/details/update', this.editado).then(function (response) {
-        console.log(response); // this.snackbar = true;
-        //this.textMsg = "¡Actualizado correctamente!";
+      console.log('this.editado');
 
+      if (this.editado.clrd_quantity > this.editado.clrd_quantity_sale) {
+        this.textMsg = "¡El cantidad devuelta no puede ser mayor a la cantidad comprada!";
+        this.alertError = true;
+        setTimeout(function () {
+          _this4.alertError = false;
+        }, 3000);
+        this.createsale();
+        return;
+      }
+
+      axios.post('/client/return/details/update', this.editado).then(function (response) {
+        console.log(response);
         console.log("¡Actualizado correctamente!");
 
         _this4.getTotal();
@@ -719,6 +734,26 @@ var render = function() {
           _c(
             "v-row",
             [
+              _c(
+                "v-alert",
+                {
+                  attrs: {
+                    dismissible: "",
+                    transition: "fade-transition",
+                    type: "error",
+                    timeout: "400"
+                  },
+                  model: {
+                    value: _vm.alertError,
+                    callback: function($$v) {
+                      _vm.alertError = $$v
+                    },
+                    expression: "alertError"
+                  }
+                },
+                [_vm._v("\n  " + _vm._s(_vm.textMsg) + "\n")]
+              ),
+              _vm._v(" "),
               _c(
                 "v-col",
                 [
