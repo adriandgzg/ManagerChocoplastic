@@ -38,7 +38,7 @@
                     </template>
                    
                      <template v-slot:item.action="{ item }">   
-                        <v-btn class="mr-2" fab dark small color="pink"  
+                        <v-btn class="mr-2" fab dark small color="pink" v-if="item.clsa_status != 'Pendiente'" 
                                :href="'/clientsreturn/'+item.clor_pk">
                             <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
                         </v-btn>            

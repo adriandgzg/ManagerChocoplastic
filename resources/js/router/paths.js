@@ -76,7 +76,7 @@ export default [{
     },
     {
         path: '/orders',
-        name: 'Ordenes',
+        name: 'Pedidos',
         view: 'ClientOrders'
     },
     {

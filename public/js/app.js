@@ -89983,7 +89983,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   view: 'Sales'
 }, {
   path: '/orders',
-  name: 'Ordenes',
+  name: 'Pedidos',
   view: 'ClientOrders'
 }, {
   path: '/detaiorder/:id',
