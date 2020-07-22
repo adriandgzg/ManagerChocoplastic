@@ -315,7 +315,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      this.editadoSale.clre_pk = this.saleHeader.clsa_pk;
+      this.editadoSale.clre_pk = this.saleHeader.clre_pk;
       this.editadoSale.remo_fk = this.selectReturn.remo_pk;
       this.editadoSale.clre_observation = this.clre_observation;
       var r = confirm("¿Está seguro de finalizar la venta?");
