@@ -13,7 +13,7 @@ class CreateProviderReturnsTable extends Migration
      */
     public function up()
     {
-        //Proveedor || Devolución
+        //Proveedor || Devolución  
         Schema::create('provider_returns', function (Blueprint $table) {
             $table->bigIncrements('prre_pk'); //Llave Primaria
 
@@ -26,10 +26,10 @@ class CreateProviderReturnsTable extends Migration
             $table->bigInteger('stor_fk')->unsigned(); //Llave Foranea Catálogo Tienda
             $table->foreign('stor_fk')->references('stor_pk')->on('stores')->onUpdate('cascade');
 
-            $table->bigInteger('remo_fk')->unsigned(); //Llave Foranea Motivo de Devolución
+            $table->bigInteger('remo_fk')->unsigned()->nullable(); //Llave Foranea Motivo de Devolución
             $table->foreign('remo_fk')->references('remo_pk')->on('return_motives')->onUpdate('cascade');
 
-            $table->text('prre_observation'); //Observación
+            $table->text('prre_observation')->nullable(); //Observación
             $table->smallInteger('prre_status')->default(1); //Estatus
             $table->timestamps();
         });

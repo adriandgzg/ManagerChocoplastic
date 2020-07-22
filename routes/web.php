@@ -145,6 +145,13 @@ Route::post('client/return/details/update', 'ClientReturnDetailController@update
 Route::post('client/return/details/destroy', 'ClientReturnDetailController@destroy'); 
 
 
+Route::get('provider/returns', 'ProviderReturnController@index');  //Listado de Devoluciones (Proveedor)
+Route::post('provider/returns', 'ProviderReturnController@store');  //Convertir una venta a Devolución (Proveedor)
+Route::post('provider/returns/update', 'ProviderReturnController@update');  //Finalizar una Devolución (Proveedor)
+Route::post('provider/return/details/update', 'ProviderReturnDetailController@update'); 
+Route::post('provider/return/details/destroy', 'ProviderReturnDetailController@destroy'); 
+
+
 /****** *************/
 Auth::routes(['register' => false, 'reset' => false]);
 Route::get('/logout', 'Auth\LoginController@logout');

@@ -27,6 +27,7 @@ class CreateProviderReturnDetailsTable extends Migration
             $table->foreign('meas_fk')->references('meas_pk')->on('measurements')->onUpdate('cascade');
 
             $table->integer('prrd_quantity'); //Cantidad
+            $table->integer('prrd_quantity_purchase'); //Cantidad Compra (Validar cantidad maxima)
             $table->decimal('prrd_price', 12, 2); //Precio Compra
             $table->smallInteger('prrd_status')->default(1); //Estatus
             $table->timestamps();
