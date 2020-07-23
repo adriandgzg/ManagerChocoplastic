@@ -5,7 +5,7 @@
         <v-list-item>
           <v-list-item-avatar color="white">
             <v-img :src="logo" height="34" contain />
-          </v-list-item-avatar>
+          </v-list-item-avatar> 
 
           <v-list-item-title class="title">Chocoplastic</v-list-item-title>
         </v-list-item>
@@ -32,7 +32,7 @@
           <v-list-item-action>
             <v-icon>mdi-tag</v-icon>
           </v-list-item-action>
-          <v-list-item-title>Cuentas por cobrar</v-list-item-title>
+          <v-list-item-title>Cuentas por Pagar</v-list-item-title>
         </v-list-item>
         <v-list-item href="/providersreturnlist">
           <v-list-item-action>

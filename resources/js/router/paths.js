@@ -150,6 +150,11 @@ export default [{
         view: 'ClientsReturn'
     },
     {
+        path: '/clientsreturndetail/:id',
+        name: 'Detalle Devolución', 
+        view: 'ClientsReturnDetails'
+    },
+    {
         path: '/clientsreturnlist',
         name: 'Lista de Devoluciones', 
         view: 'ClientsReturnList'

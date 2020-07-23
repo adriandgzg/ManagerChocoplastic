@@ -30017,7 +30017,7 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Cuentas por cobrar")])
+                      _c("v-list-item-title", [_vm._v("Cuentas por Pagar")])
                     ],
                     1
                   ),
@@ -89609,33 +89609,37 @@ var map = {
 		"./resources/js/components/views/ClientsReturn.vue",
 		8
 	],
+	"./ClientsReturnDetails.vue": [
+		"./resources/js/components/views/ClientsReturnDetails.vue",
+		9
+	],
 	"./ClientsReturnList.vue": [
 		"./resources/js/components/views/ClientsReturnList.vue",
-		9
+		10
 	],
 	"./Coverages.vue": [
 		"./resources/js/components/views/Coverages.vue",
-		10
+		11
 	],
 	"./Dashboard.vue": [
 		"./resources/js/components/views/Dashboard.vue",
-		11
+		12
 	],
 	"./DetailOrder.vue": [
 		"./resources/js/components/views/DetailOrder.vue",
-		12
+		13
 	],
 	"./DetailSale.vue": [
 		"./resources/js/components/views/DetailSale.vue",
-		41
+		14
 	],
 	"./Entities.vue": [
 		"./resources/js/components/views/Entities.vue",
-		13
+		15
 	],
 	"./Frequents.vue": [
 		"./resources/js/components/views/Frequents.vue",
-		14
+		16
 	],
 	"./Maps.vue": [
 		"./resources/js/components/views/Maps.vue",
@@ -89643,109 +89647,109 @@ var map = {
 	],
 	"./Measurements.vue": [
 		"./resources/js/components/views/Measurements.vue",
-		15
+		17
 	],
 	"./Missions.vue": [
 		"./resources/js/components/views/Missions.vue",
 		0,
-		16
+		18
 	],
 	"./Notifications.vue": [
 		"./resources/js/components/views/Notifications.vue",
-		17
+		19
 	],
 	"./OrderDetail.vue": [
 		"./resources/js/components/views/OrderDetail.vue",
-		18
+		20
 	],
 	"./PaymentMethods.vue": [
 		"./resources/js/components/views/PaymentMethods.vue",
-		19
+		21
 	],
 	"./PaymentShapes.vue": [
 		"./resources/js/components/views/PaymentShapes.vue",
-		20
+		22
 	],
 	"./PointOfSale.vue": [
 		"./resources/js/components/views/PointOfSale.vue",
-		21
+		23
 	],
 	"./Product.vue": [
 		"./resources/js/components/views/Product.vue",
-		22
+		24
 	],
 	"./Proveedores.vue": [
 		"./resources/js/components/views/Proveedores.vue",
-		23
+		25
 	],
 	"./ProviderDebts.vue": [
 		"./resources/js/components/views/ProviderDebts.vue",
-		24
+		26
 	],
 	"./ProvidersReturn.vue": [
 		"./resources/js/components/views/ProvidersReturn.vue",
-		25
+		27
 	],
 	"./ProvidersReturnList.vue": [
 		"./resources/js/components/views/ProvidersReturnList.vue",
-		40
+		28
 	],
 	"./PurchaseList.vue": [
 		"./resources/js/components/views/PurchaseList.vue",
-		26
+		29
 	],
 	"./PurchaseOrder.vue": [
 		"./resources/js/components/views/PurchaseOrder.vue",
-		27
+		30
 	],
 	"./PurchaseOrdersList.vue": [
 		"./resources/js/components/views/PurchaseOrdersList.vue",
-		28
+		31
 	],
 	"./Purchases.vue": [
 		"./resources/js/components/views/Purchases.vue",
-		29
+		32
 	],
 	"./PurchasesDetail.vue": [
 		"./resources/js/components/views/PurchasesDetail.vue",
-		30
+		33
 	],
 	"./ReturnList.vue": [
 		"./resources/js/components/views/ReturnList.vue",
-		31
+		34
 	],
 	"./ReturnMotives.vue": [
 		"./resources/js/components/views/ReturnMotives.vue",
-		43
+		35
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
-		32
+		36
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
-		39,
-		33
+		43,
+		37
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		34
+		38
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		35
+		39
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		38
+		42
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		36
+		40
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		37
+		41
 	]
 };
 function webpackAsyncContext(req) {
@@ -90070,6 +90074,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/clientsreturn/:id',
   name: 'Devoluciones',
   view: 'ClientsReturn'
+}, {
+  path: '/clientsreturndetail/:id',
+  name: 'Detalle Devolución',
+  view: 'ClientsReturnDetails'
 }, {
   path: '/clientsreturnlist',
   name: 'Lista de Devoluciones',
