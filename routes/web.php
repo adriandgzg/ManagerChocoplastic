@@ -58,6 +58,7 @@ Route::put('/entities/delete', 'FederalEntityController@delete');
 
 Route::get('/paymentmethodsList', 'PaymentMethodController@PaymentMethodsList');
 Route::get('/paymentmethodsget', 'PaymentMethodController@PaymentMethods');
+Route::get('/paymentmethodsshow/{id}', 'PaymentMethodController@PaymentMethodsShow');
 Route::post('/paymentmethods/add', 'PaymentMethodController@add');
 Route::put('/paymentmethods/update', 'PaymentMethodController@update');
 Route::put('/paymentmethods/delete', 'PaymentMethodController@delete');

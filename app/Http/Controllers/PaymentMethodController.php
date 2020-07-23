@@ -42,6 +42,21 @@ class PaymentMethodController extends Controller
             'data' => $payment,
         ], 200);
     }
+    public function PaymentMethodsShow(int $id)
+    {
+        $payment = DB::table('payment_methods AS P')
+        ->where('P.pame_status','=','1')
+        ->where('P.pame_pk','=',$id)
+        ->get();
+    
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'entities loaded',
+            'data' => $payment,
+        ], 200);
+    }
 
     public function add(Request $request)
     {        

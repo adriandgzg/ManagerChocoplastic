@@ -235,6 +235,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -244,6 +245,7 @@ __webpack_require__.r(__webpack_exports__);
       stores: [],
       clients: [],
       payments: [],
+      paymentsOriginal: [],
       saleHeader: '',
       saleDetail: [],
       desserts: [],
@@ -283,7 +285,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.createsale();
     this.getClients();
-    this.getPayment();
+    this.getPaymentShow();
     this.getStores();
   },
   methods: {
@@ -320,6 +322,15 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (e) {
         _this.errors.push(e);
       });
+    },
+    onChangeClient: function onChangeClient() {
+      if (this.selectClient.clie_pk == 1) {
+        console.log('getPaymentShow');
+        this.getPaymentShow();
+      } else {
+        console.log('getPayment');
+        this.getPayment();
+      }
     },
     finalizar: function finalizar() {
       console.log(this.selectClient);
@@ -420,11 +431,20 @@ __webpack_require__.r(__webpack_exports__);
         console.log(e);
       });
     },
-    getStores: function getStores() {
+    getPaymentShow: function getPaymentShow() {
       var _this6 = this;
 
+      axios.get("/paymentmethodsshow/1").then(function (response) {
+        _this6.payments = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    getStores: function getStores() {
+      var _this7 = this;
+
       axios.get("/storeget").then(function (response) {
-        _this6.stores = response.data.data;
+        _this7.stores = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -439,24 +459,24 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     "delete": function _delete() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.post('/client_sale_details/destroy', this.editado).then(function (response) {
-        _this7.snackbar = true;
-        _this7.textMsg = "¡Eliminado correctamente!";
+        _this8.snackbar = true;
+        _this8.textMsg = "¡Eliminado correctamente!";
 
-        _this7.createsale();
+        _this8.createsale();
       });
     },
     actualizar: function actualizar(item) {
-      var _this8 = this;
+      var _this9 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this8.snackbar = true;
-        _this8.textMsg = "¡Actualizado correctamente!";
+        _this9.snackbar = true;
+        _this9.textMsg = "¡Actualizado correctamente!";
       })["catch"](function (e) {
-        _this8.errors.push(e);
+        _this9.errors.push(e);
       });
     }
   }
@@ -575,6 +595,11 @@ var render = function() {
                                           filled: "",
                                           chips: "",
                                           placeholder: "Seleccionar Cliente"
+                                        },
+                                        on: {
+                                          change: function($event) {
+                                            return _vm.onChangeClient()
+                                          }
                                         },
                                         model: {
                                           value: _vm.selectClient,

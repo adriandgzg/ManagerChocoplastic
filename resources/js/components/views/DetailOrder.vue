@@ -24,6 +24,7 @@
               <v-card-text class="category d-inline-flex font-weight-light">
                 <v-combobox v-model="selectClient" :items="clients" label="Cliente"
                 item-text="clie_name" item-value="clie_pk" filled chips 
+                @change="onChangeClient()"
                 placeholder="Seleccionar Cliente"></v-combobox>
               </v-card-text>
             </v-col>
@@ -234,6 +235,7 @@ export default {
         stores:[],
         clients:[],
         payments:[],
+        paymentsOriginal:[],
         saleHeader:'',
         saleDetail:[],
         desserts:[],
@@ -275,7 +277,7 @@ export default {
    created() {
        this.createsale();
        this.getClients();
-       this.getPayment();
+       this.getPaymentShow();
        this.getStores();
    },
 
@@ -315,6 +317,16 @@ export default {
                     this.errors.push(e)
                     })
 
+        },
+        onChangeClient(){
+          if(this.selectClient.clie_pk == 1){
+            console.log('getPaymentShow')
+            this.getPaymentShow()
+          }
+          else{
+            console.log('getPayment')
+            this.getPayment()
+          }
         },
       finalizar(){
           console.log(this.selectClient);
@@ -420,9 +432,19 @@ export default {
             });
 
         },
-        getPayment() {
+        getPayment() {            
             axios
                 .get("/paymentmethodsget")
+                .then(response => {
+                this.payments = response.data.data;  
+                })
+                .catch(e => {
+                console.log(e);
+                });
+            },
+          getPaymentShow() {            
+            axios
+                .get("/paymentmethodsshow/1")
                 .then(response => {
                 this.payments = response.data.data;   
                 })
