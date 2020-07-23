@@ -133,7 +133,6 @@ Route::post('provider/purchases', 'ProviderPurchaseController@store'); //Convert
 Route::post('provider/purchases/update', 'ProviderPurchaseController@update'); //Finalizar Compra
 Route::post('provider/purchases/destroy', 'ProviderPurchaseController@destroy'); //Cancelar Compra
 
-//Route::get('provider/purchase/details', 'ProviderPurchaseDetailController@index');  
 Route::post('provider/purchase/details', 'ProviderPurchaseDetailController@store'); 
 Route::post('provider/purchase/details/update', 'ProviderPurchaseDetailController@update'); 
 Route::post('provider/purchase/details/destroy', 'ProviderPurchaseDetailController@destroy'); 
@@ -144,6 +143,7 @@ Route::post('provider/purchase/details/destroy', 'ProviderPurchaseDetailControll
 Route::get('return/motives', 'ReturnMotiveController@index');  //Lista de Motivos de Devoluciones
 
 Route::get('client/returns', 'ClientReturnController@index');  //Listado de Devoluciones (Cliente)
+Route::get('client/returns/{clre_pk}', 'ClientReturnController@show');  //Vista detalle de Devoluciones (Cliente)
 Route::post('client/returns', 'ClientReturnController@store');  //Convertir una venta a Devolución (Cliente)
 Route::post('client/returns/update', 'ClientReturnController@update');  //Finalizar una Devolución (Cliente)
 Route::post('client/return/details/update', 'ClientReturnDetailController@update'); 
@@ -151,6 +151,7 @@ Route::post('client/return/details/destroy', 'ClientReturnDetailController@destr
 
 
 Route::get('provider/returns', 'ProviderReturnController@index');  //Listado de Devoluciones (Proveedor)
+Route::get('provider/returns/{prre_pk}', 'ProviderReturnController@show');  //Vista detalle de Devoluciones (Proveedor)
 Route::post('provider/returns', 'ProviderReturnController@store');  //Convertir una venta a Devolución (Proveedor)
 Route::post('provider/returns/update', 'ProviderReturnController@update');  //Finalizar una Devolución (Proveedor)
 Route::post('provider/return/details/update', 'ProviderReturnDetailController@update'); 

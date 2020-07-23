@@ -135,7 +135,6 @@ class ProviderReturnController extends ApiResponseController
                         , $vSelPP);
                 }
 
-
                 $vProviderReturns = DB::table('provider_returns AS PR')
                     ->join('provider_purchases AS PP', 'PP.prpu_pk', '=', 'PR.prpu_fk')
                     ->join('providers AS P', 'P.prov_pk', '=', 'PR.prov_fk')
@@ -246,7 +245,9 @@ class ProviderReturnController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Compra No Encontrada');
             }
 
-        } catch (Throwable $vTh) {
+        } 
+        catch (Throwable $vTh) 
+        {
             return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
         }
     }
@@ -257,9 +258,98 @@ class ProviderReturnController extends ApiResponseController
      * @param  \App\ProviderReturn  $providerReturn
      * @return \Illuminate\Http\Response
      */
-    public function show(ProviderReturn $providerReturn)
+    public function show($prre_pk)
     {
-        //
+
+        try {
+            //Asignacion de variables
+            $vprre_pk = $prre_pk;
+
+            if ($vprre_pk == '' || $vprre_pk == 0) {
+                return $this->dbResponse(null, 500, null, 'Ingresar Llave Primaria Devolución');
+            }
+
+            $vPR = DB::table('provider_returns AS PR')
+                ->join('provider_purchases AS PP', 'PP.prpu_pk', '=', 'PR.prpu_fk')
+                ->join('providers AS P', 'P.prov_pk', '=', 'PR.prov_fk')
+                ->join('stores AS S', 'S.stor_pk', '=', 'PR.stor_fk')
+                ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'PR.remo_fk')
+                ->select(
+                    'PR.prre_pk',
+                    'PR.prre_observation',
+                    'PR.prre_status',
+                    DB::raw('
+                        (CASE 
+                            WHEN PR.prre_status = 0 THEN "Cancelada" 
+                            WHEN PR.prre_status = 1 THEN "Pendiente" 
+                            WHEN PR.prre_status = 2 THEN "Finalizada" 
+                            ELSE "" END
+                        ) AS prre_status_description'),
+                    'PR.created_at',
+            
+                    'PP.prpu_pk',
+                    'PP.prpu_identifier',
+
+                    'P.prov_pk',
+                    'P.prov_identifier',
+                    'P.prov_name',
+                    'P.prov_rfc',                           
+
+                    'S.stor_pk',
+                    'S.stor_name',
+
+                    'RM.remo_pk',
+                    'RM.remo_description',
+                )
+                ->where('PR.prre_pk', '=', $vprre_pk)
+                ->first();
+
+                if($vPR)
+                {
+                    $vPRD = DB::table('provider_return_details AS PRD')
+                        ->join('products AS P', 'P.prod_pk', '=', 'PRD.prod_fk')
+                        ->join('measurements AS M', 'M.meas_pk', '=', 'PRD.meas_fk')
+                        ->select(
+                            'PRD.prrd_pk',
+                            'PRD.prre_fk',
+
+                            'P.prod_pk',
+                            'P.prod_identifier',
+                            'P.prod_name',
+
+                            'M.meas_pk',
+                            'M.meas_name',
+                            'M.meas_abbreviation',
+
+                            'PRD.prrd_quantity',
+                            'PRD.prrd_quantity_purchase',
+                            'PRD.prrd_price',
+                            'PRD.prrd_status'
+                        )
+                        ->where('PRD.prre_fk', '=', $vprre_pk)
+                        ->where('PRD.prrd_status', '=', 1)
+                        ->get();
+                        
+                    $vData =
+                        [
+                            'ProviderReturns' => $vPR, 
+                            'ProviderReturnDetails' => $vPRD
+                        ];
+
+                    return $this->dbResponse($vData, 200, null, 'Devolución de Proveedor');
+
+                }
+                else
+                {
+                    return $this->dbResponse(null, 404, null, 'Devolución de Proveedor NO Encontrada');
+                }
+
+
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        }
     }
 
     /**

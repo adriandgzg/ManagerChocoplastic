@@ -241,7 +241,9 @@ class ClientReturnController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Venta No Encontrada');
             }
 
-        } catch (Throwable $vTh) {
+        } 
+        catch (Throwable $vTh) 
+        {
             return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
         }
     }
@@ -252,9 +254,88 @@ class ClientReturnController extends ApiResponseController
      * @param  \App\ClientReturn  $clientReturn
      * @return \Illuminate\Http\Response
      */
-    public function show(ClientReturn $clientReturn)
+    public function show($clre_pk)
     {
-        //
+        try 
+        {
+            //Asignacion de variables
+            $vclre_pk = $clre_pk;
+
+            if ($vclre_pk == '' || $vclre_pk == 0) {
+                return $this->dbResponse(null, 500, null, 'Ingresar Llave Primaria Devolución');
+            }
+
+            $vCR = DB::table('client_returns AS CR')
+                ->join('client_sales AS CS', 'CS.clsa_pk', '=', 'CR.clsa_fk')
+                ->join('clients AS C', 'C.clie_pk', '=', 'CR.clie_fk')
+                ->join('stores AS S', 'S.stor_pk', '=', 'CR.stor_fk')
+                ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'CR.remo_fk')
+                ->select
+                (
+                    'CR.clre_pk',
+                    'CR.clre_observation',
+                    'CR.clre_status',
+                    'CR.created_at',
+            
+                    'CS.clsa_pk',
+                    'CS.clsa_identifier',
+
+                    'C.clie_pk',
+                    'C.clie_identifier',
+                    'C.clie_name',
+                    'C.clie_rfc',                           
+
+                    'S.stor_pk',
+                    'S.stor_name',
+
+                    'RM.remo_pk',
+                    'RM.remo_description',
+                )
+                ->where('CR.clre_pk', '=', $vclre_pk)
+                ->first();
+
+            if($vCR)
+            {
+                $vCRD = DB::table('client_return_details AS CRD')
+                    ->join('products AS P', 'P.prod_pk', '=', 'CRD.prod_fk')
+                    ->join('measurements AS M', 'M.meas_pk', '=', 'CRD.meas_fk')
+                    ->select(
+                        'CRD.clrd_pk',
+                        'CRD.clre_fk',
+
+                        'P.prod_pk',
+                        'P.prod_identifier',
+                        'P.prod_name',
+
+                        'M.meas_pk',
+                        'M.meas_name',
+                        'M.meas_abbreviation',
+
+                        'CRD.clrd_quantity',
+                        'CRD.clrd_quantity_sale',
+                        'CRD.clrd_price',
+                        'CRD.clrd_status'
+                    )
+                    ->where('CRD.clre_fk', '=', $vclre_pk)
+                    ->where('CRD.clrd_status', '=', 1)
+                    ->get();
+                        
+                    $vData =
+                        [
+                            'ClientReturns' => $vCR, 
+                            'ClientReturnDetails' => $vCRD
+                        ];
+
+                return $this->dbResponse($vData, 200, null, 'Devolución de Cliente');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Devolución de Cliente NO Encontrada');
+            }
+        } 
+        catch (Throwable $vTh) {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        }
     }
 
     /**
