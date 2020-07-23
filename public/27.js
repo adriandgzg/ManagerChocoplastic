@@ -9,6 +9,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! crip-vue-notice */ "./node_modules/crip-vue-notice/lib/crip-vue-notice.js");
+/* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(crip_vue_notice__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -236,6 +238,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -315,7 +318,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       if (this.selectReturn == '' || this.selectReturn == null) {
-        alert("Debe seleccionar un motivo de devolución");
+        this.normal('Notificación', "Debe seleccionar un motivo de devolución", "error");
         return;
       }
 
@@ -331,11 +334,12 @@ __webpack_require__.r(__webpack_exports__);
           if (response.data.status.code == 200) {
             _this2.snackbar = true;
             _this2.textMsg = "¡Actualizado correctamente!";
-            alert("¡Actualizado correctamente!");
+
+            _this2.normal('Notificación', '¡Actualizado correctamente!', "success");
 
             _this2.$router.push('/purchaselist');
           } else {
-            alert(response.data.message);
+            _this2.normal('Notificación', response.data.message, "error");
           }
         })["catch"](function (e) {
           _this2.errors.push(e);
@@ -347,7 +351,7 @@ __webpack_require__.r(__webpack_exports__);
 
       console.log(this.total + '-' + (this.efectivo + this.tarjeta));
       if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
-        alert("Los montos de pago deben ser igual al total");
+        this.normal('Notificación', "Los montos de pago deben ser igual al total", "error");
         return;
       }
       var r = confirm("¿Está seguro de finalizar la venta?");
@@ -362,11 +366,12 @@ __webpack_require__.r(__webpack_exports__);
           if (response.data.code == 200) {
             _this3.snackbar = true;
             _this3.textMsg = "¡Actualizado correctamente!";
-            alert("¡Actualizado correctamente!");
+
+            _this3.normal('Notificación', '¡Actualizado correctamente!', "success");
 
             _this3.$router.push('/sales');
           } else {
-            alert(response.data.message);
+            _this3.normal('Notificación', response.data.message, "error");
           }
         })["catch"](function (e) {
           _this3.errors.push(e);
@@ -452,6 +457,16 @@ __webpack_require__.r(__webpack_exports__);
         _this7.textMsg = "¡Actualizado correctamente!";
       })["catch"](function (e) {
         _this7.errors.push(e);
+      });
+    },
+    normal: function normal(Title, Description, Type) {
+      this.notice = new crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default.a({
+        title: Title,
+        description: Description,
+        className: "open-normal",
+        closable: true,
+        duration: 3,
+        type: Type
       });
     }
   }

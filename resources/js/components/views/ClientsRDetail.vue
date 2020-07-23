@@ -208,6 +208,7 @@
     </v-app>
 </template>
 <script>
+import CripNotice from "crip-vue-notice";
 export default {
   data() {
     return {
@@ -290,8 +291,8 @@ export default {
         },
       finalizar(){
           
-          if(this.selectReturn =='' || this.selectReturn == null){
-              alert("Debe seleccionar un motivo de devolución");
+          if(this.selectReturn =='' || this.selectReturn == null){              
+              this.normal('Notificación', "Debe seleccionar un motivo de devolución","success");
               return;
           }
 
@@ -308,11 +309,12 @@ export default {
                   if(response.data.status.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
-                    alert("¡Actualizado correctamente!");
+                    this.normal('Notificación', this.textMsg,"success");
                     this.$router.push('/clientsreturnlist') ; 
                   }
                   else{
-                    alert(response.data.message);
+                    this.normal('Notificación', response.data.message,"success");
+                    
                   }
                 
                 })
@@ -330,8 +332,8 @@ export default {
           {
 
           }
-          else{
-            alert("Los montos de pago deben ser igual al total");
+          else{            
+            this.normal('Notificación', "Los montos de pago deben ser igual al total","error");
               return;
           }
           var r = confirm("¿Está seguro de finalizar la venta?");
@@ -345,11 +347,11 @@ export default {
                   if(response.data.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
-                    alert("¡Actualizado correctamente!");
+                    this.normal('Notificación', this.textMsg,"success");
                     this.$router.push('/sales') ; 
                   }
                   else{
-                    alert(response.data.message);
+                    this.normal('Notificación', response.data.message,"success");                    
                   }
                 
                 })
@@ -365,10 +367,11 @@ export default {
            if(this.editado.clrd_quantity > this.editado.clrd_quantity_sale )
            {
              this.textMsg = "¡El cantidad devuelta no puede ser mayor a la cantidad comprada!";
-             this.alertError = true;
+             this.normal('Notificación', this.textMsg,"error");
+             /*this.alertError = true;
              setTimeout(()=>{
                 this.alertError=false
-              },3000)
+              },3000)*/
 
               this.createsale();
              return;
@@ -376,8 +379,6 @@ export default {
 
             axios.post('/client/return/details/update', this.editado)
                 .then(response => {
-                  console.log(response)
-                console.log("¡Actualizado correctamente!")
                 this.getTotal();
                 })
                 .catch(e => {
@@ -443,10 +444,16 @@ export default {
                     this.errors.push(e)
                     })
         },
-
-       
-
-        
+        normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
     }
 }
 </script>

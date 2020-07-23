@@ -226,6 +226,7 @@
     </v-app>
 </template>
 <script>
+import CripNotice from "crip-vue-notice";
 export default {
   data() {
     return {
@@ -308,8 +309,8 @@ export default {
         },
       finalizar(){
           
-          if(this.selectReturn =='' || this.selectReturn == null){
-              alert("Debe seleccionar un motivo de devolución");
+          if(this.selectReturn =='' || this.selectReturn == null){              
+              this.normal('Notificación', "Debe seleccionar un motivo de devolución","error");
               return;
           }
 
@@ -326,11 +327,11 @@ export default {
                   if(response.data.status.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
-                    alert("¡Actualizado correctamente!");
+                    this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.$router.push('/purchaselist') ; 
                   }
                   else{
-                    alert(response.data.message);
+                    this.normal('Notificación', response.data.message,"error");
                   }
                 
                 })
@@ -349,7 +350,7 @@ export default {
 
           }
           else{
-            alert("Los montos de pago deben ser igual al total");
+            this.normal('Notificación', "Los montos de pago deben ser igual al total","error");
               return;
           }
           var r = confirm("¿Está seguro de finalizar la venta?");
@@ -363,11 +364,11 @@ export default {
                   if(response.data.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
-                    alert("¡Actualizado correctamente!");
+                    this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.$router.push('/sales') ; 
                   }
                   else{
-                    alert(response.data.message);
+                    this.normal('Notificación', response.data.message,"error");
                   }
                 
                 })
@@ -461,8 +462,16 @@ export default {
                     })
         },
 
-       
-
+        normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
         
     }
 }

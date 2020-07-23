@@ -89595,55 +89595,65 @@ var map = {
 	],
 	"./ClientDebts.vue": [
 		"./resources/js/components/views/ClientDebts.vue",
-		5
+		5,
+		29
 	],
 	"./ClientOrders.vue": [
 		"./resources/js/components/views/ClientOrders.vue",
-		6
+		5,
+		46
 	],
 	"./Clients.vue": [
 		"./resources/js/components/views/Clients.vue",
-		7
+		5,
+		6
 	],
 	"./ClientsRDetail.vue": [
 		"./resources/js/components/views/ClientsRDetail.vue",
-		45
+		5,
+		9
 	],
 	"./ClientsReturn.vue": [
 		"./resources/js/components/views/ClientsReturn.vue",
-		8
+		5,
+		7
 	],
 	"./ClientsReturnDetails.vue": [
 		"./resources/js/components/views/ClientsReturnDetails.vue",
-		9
+		5,
+		8
 	],
 	"./ClientsReturnList.vue": [
 		"./resources/js/components/views/ClientsReturnList.vue",
+		5,
 		10
 	],
 	"./Coverages.vue": [
 		"./resources/js/components/views/Coverages.vue",
-		11
+		12
 	],
 	"./Dashboard.vue": [
 		"./resources/js/components/views/Dashboard.vue",
-		12
+		13
 	],
 	"./DetailOrder.vue": [
 		"./resources/js/components/views/DetailOrder.vue",
-		13
+		5,
+		14
 	],
 	"./DetailSale.vue": [
 		"./resources/js/components/views/DetailSale.vue",
-		14
+		5,
+		42
 	],
 	"./Entities.vue": [
 		"./resources/js/components/views/Entities.vue",
-		15
+		16
 	],
 	"./Frequents.vue": [
 		"./resources/js/components/views/Frequents.vue",
-		16
+		5,
+		15
 	],
 	"./Maps.vue": [
 		"./resources/js/components/views/Maps.vue",
@@ -89651,113 +89661,125 @@ var map = {
 	],
 	"./Measurements.vue": [
 		"./resources/js/components/views/Measurements.vue",
-		17
+		18
 	],
 	"./Missions.vue": [
 		"./resources/js/components/views/Missions.vue",
 		0,
-		18
+		19
 	],
 	"./Notifications.vue": [
 		"./resources/js/components/views/Notifications.vue",
-		19
+		20
 	],
 	"./OrderDetail.vue": [
 		"./resources/js/components/views/OrderDetail.vue",
-		20
+		5,
+		17
 	],
 	"./PaymentMethods.vue": [
 		"./resources/js/components/views/PaymentMethods.vue",
-		21
+		22
 	],
 	"./PaymentShapes.vue": [
 		"./resources/js/components/views/PaymentShapes.vue",
-		22
+		23
 	],
 	"./PointOfSale.vue": [
 		"./resources/js/components/views/PointOfSale.vue",
-		23
+		24
 	],
 	"./Product.vue": [
 		"./resources/js/components/views/Product.vue",
-		24
+		5,
+		21
 	],
 	"./Proveedores.vue": [
 		"./resources/js/components/views/Proveedores.vue",
-		25
+		26
 	],
 	"./ProviderDebts.vue": [
 		"./resources/js/components/views/ProviderDebts.vue",
-		26
+		5,
+		25
 	],
 	"./ProvidersReturn.vue": [
 		"./resources/js/components/views/ProvidersReturn.vue",
+		5,
 		27
 	],
 	"./ProvidersReturnDetail.vue": [
 		"./resources/js/components/views/ProvidersReturnDetail.vue",
-		44
+		5,
+		47
 	],
 	"./ProvidersReturnList.vue": [
 		"./resources/js/components/views/ProvidersReturnList.vue",
-		28
+		30
 	],
 	"./PurchaseList.vue": [
 		"./resources/js/components/views/PurchaseList.vue",
-		29
+		5,
+		28
 	],
 	"./PurchaseOrder.vue": [
 		"./resources/js/components/views/PurchaseOrder.vue",
-		30
+		5,
+		31
 	],
 	"./PurchaseOrdersList.vue": [
 		"./resources/js/components/views/PurchaseOrdersList.vue",
-		31
+		5,
+		32
 	],
 	"./Purchases.vue": [
 		"./resources/js/components/views/Purchases.vue",
-		32
+		5,
+		33
 	],
 	"./PurchasesDetail.vue": [
 		"./resources/js/components/views/PurchasesDetail.vue",
-		33
+		5,
+		34
 	],
 	"./ReturnList.vue": [
 		"./resources/js/components/views/ReturnList.vue",
-		34
+		36
 	],
 	"./ReturnMotives.vue": [
 		"./resources/js/components/views/ReturnMotives.vue",
-		35
+		37
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
-		36
+		38
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
-		43,
-		37
+		5,
+		39,
+		35
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		38
+		40
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		39
+		41
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		42
+		44
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		40
+		5,
+		11
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		41
+		43
 	]
 };
 function webpackAsyncContext(req) {

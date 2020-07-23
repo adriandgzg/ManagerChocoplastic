@@ -147,6 +147,7 @@
     </v-app>
 </template>
 <script>
+import CripNotice from "crip-vue-notice";
 export default {
   data() {
     return {
@@ -403,7 +404,7 @@ export default {
             this.getProducts();
             }
             else{
-                alert(response.data.status.technicaldetail.errorInfo[2]);
+                this.normal('Notificación', response.data.status.technicaldetail.errorInfo[2],"error");
             }
         })
         .catch(e => {
@@ -419,7 +420,8 @@ export default {
             this.getProducts();
             }
             else{
-                alert(response.data.message);
+                
+                this.normal('Notificación', response.data.message,"error");
             }
         })
         .catch(e => {
@@ -461,6 +463,16 @@ export default {
         fileReader.readAsDataURL(files[0])
         this.image = files[0]
     },
+    normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
 
 },
 computed: {

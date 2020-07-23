@@ -105,6 +105,7 @@
     </v-app>
 </template>
 <script>
+import CripNotice from "crip-vue-notice";
 export default {
   data() {
     return {
@@ -304,6 +305,16 @@ export default {
             this.getClients();
         });
     },
+    normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
 
 },
 computed: {

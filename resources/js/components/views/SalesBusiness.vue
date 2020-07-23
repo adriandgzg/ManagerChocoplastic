@@ -225,7 +225,7 @@
 </template>
 <script>
     import {mapGetters} from "vuex";
-
+import CripNotice from "crip-vue-notice";
     export default {
         data() {
             return {
@@ -411,7 +411,7 @@
                     })
                 }
                 else{
-                    alert("No se puede continuar, no cuenta con productos en el pedido");
+                     this.normal('Notificación',"No se puede continuar, no cuenta con productos en el pedido","error");
                 }
             },
             updateSaleDelivery() {
@@ -544,7 +544,17 @@
             cancel() {
                 this.resolve(false)
                 this.confirm = false
-            }
+            },
+            normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
         },
     }
 </script>

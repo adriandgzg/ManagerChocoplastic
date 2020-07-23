@@ -225,6 +225,7 @@
     </v-app>
 </template>
 <script>
+import CripNotice from "crip-vue-notice";
 export default {
   data() {
     return {
@@ -321,18 +322,18 @@ export default {
           this.efectivo = 0;
           this.tarjeta = 0;
           
-          if(this.selectClient =='' || this.selectClient == null){
-              alert("Debe seleccionar un cliente");
+          if(this.selectClient =='' || this.selectClient == null){              
+               this.normal('Notificación', "Debe seleccionar un cliente","error");
               return;
           }
 
-          if(this.selectpame =='' || this.selectpame == null){
-              alert("Debe seleccionar un método de pago");
+          if(this.selectpame =='' || this.selectpame == null){              
+               this.normal('Notificación', "Debe seleccionar un método de pago","error");
               return;
           }
 
-          if(this.selectStore =='' || this.selectStore == null){
-              alert("Debe seleccionar una sucursal");
+          if(this.selectStore =='' || this.selectStore == null){              
+               this.normal('Notificación', "Debe seleccionar una sucursal","error");
               return;
           }
 
@@ -355,8 +356,8 @@ export default {
           {
 
           }
-          else{
-            alert("Los montos de pago deben ser igual al total");
+          else{            
+            this.normal('Notificación', "Los montos de pago deben ser igual al total","error");
               return;
           }
           var r = confirm("¿Está seguro de finalizar la venta?");
@@ -370,11 +371,11 @@ export default {
                   if(response.data.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
-                    alert("¡Actualizado correctamente!");
+                    this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.$router.push('/sales') ; 
                   }
-                  else{
-                    alert(response.data.message);
+                  else{                    
+                    this.normal('Notificación', response.data.message,"error");
                   }
                 
                 })
@@ -479,8 +480,16 @@ export default {
                     })
         },
 
-       
-
+        normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
         
     }
 }

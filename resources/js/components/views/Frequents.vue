@@ -93,6 +93,7 @@
     </v-app>
 </template>
 <script>
+import CripNotice from "crip-vue-notice";
 export default {
   data() {
     return {
@@ -260,8 +261,8 @@ export default {
             
             this.getFrequents();
             }
-            else{
-                alert(response.data.status.technicaldetail.errorInfo[2]);
+            else{                
+                this.normal('Notificación', response.data.status.technicaldetail.errorInfo[2],"error");
             }
         })
         .catch(e => {
@@ -285,6 +286,16 @@ export default {
             this.getFrequents();
         });
     },
+    normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
 
     
 

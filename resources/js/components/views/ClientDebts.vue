@@ -108,6 +108,7 @@
     </v-app>
 </template>
 <script>
+import CripNotice from "crip-vue-notice";
 export default {
   data() {
     return {
@@ -280,7 +281,8 @@ this.editado.clsa_identifier = item.clsa_identifier
         this.editado.pash_fk = this.selectpame.pash_pk;
        
         if(this.selectpame =='' || this.selectpame == null){
-              alert("Debe seleccionar un método de pago");
+              
+              this.normal('Notificación', "Debe seleccionar un método de pago","success");
               return;
           }
           
@@ -291,12 +293,12 @@ this.editado.clsa_identifier = item.clsa_identifier
                   if(response.data.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
-                    alert("¡Actualizado correctamente!");
+                    this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.getClientesPago();
                     this.cancelar()
                   }
                   else{
-                    alert(response.data.message);
+                    this.normal('Notificación',response.data.message ,"success");
                   }
                 
                 })
@@ -320,7 +322,17 @@ this.editado.clsa_identifier = item.clsa_identifier
     },
     cancelardetalle(){
         this.dialogdetail = false
-    }
+    },
+    normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
 
 },
 computed: {

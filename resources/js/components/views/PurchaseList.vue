@@ -81,6 +81,7 @@
     </v-app>
 </template>
 <script>
+import CripNotice from "crip-vue-notice";
 export default {
   data() {
     return {
@@ -220,14 +221,24 @@ export default {
                 if(response.data.status.code == 200){
                 this.snackbar = true;
                 this.textMsg = "¡Eliminado correctamente!";
-                alert(this.textMsg);
+                this.normal('Notificación', this.textMsg,"success");
                 this.getCategories();
                 }
                 else{
-                    alert("Ocurrio un error al eliminar el producto");
+                    this.normal('Notificación', "Ocurrio un error al eliminar el producto","error");
                 }
             });
     },
+    normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
 
 },
 computed: {

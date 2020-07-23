@@ -192,6 +192,7 @@
 </template>
 <script>
     import {mapGetters} from "vuex";
+import CripNotice from "crip-vue-notice";
     export default {
         data() {
             return {
@@ -348,12 +349,12 @@
                 axios.post('signup', this.editado)
                     .then(response => {
                         if(response.data.status.code == 200){
-                            alert(response.data.status.message)
+                            this.normal('Notificación',response.data.status.message ,"success");
                             this.dialogForm = false
                             this.getUser();
                         }                        
                         else{
-                            alert(response.data.status.message)
+                            this.normal('Notificación',response.data.status.message ,"success");
                         }
                     })                    
             },
@@ -366,12 +367,12 @@
                 axios.post('/user/update', this.editado)
                     .then(response => {
                         if(response.data.status.code == 200){
-                            alert(response.data.status.message)
+                            this.normal('Notificación',response.data.status.message ,"success");
                             this.dialog = false
                             this.getUser();
                         }                        
                         else{
-                            alert(response.data.status.message)
+                            this.normal('Notificación',response.data.status.message ,"success");
                         }
                     })
 
@@ -381,12 +382,12 @@
                 axios.post('/user/password/change', this.editado)
                     .then(response => {
                         if(response.data.status.code == 200){
-                            alert(response.data.status.message)
+                            this.normal('Notificación',response.data.status.message ,"success");
                             this.dialogPassword = false
                             this.getUser();
                         }                        
                         else{
-                            alert(response.data.status.message)
+                            this.normal('Notificación',response.data.status.message ,"success");
                         }
                     })
 
@@ -399,6 +400,16 @@
                 this.dialogPassword = false
                 this.editado = Object.assign({}, this.defaultItem)
             },
+            normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
         },
         computed: {
             formTitle() {

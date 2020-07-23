@@ -226,6 +226,7 @@
     </v-app>
 </template>
 <script>
+import CripNotice from "crip-vue-notice";
 export default {
   data() {
     return {
@@ -275,6 +276,7 @@ export default {
     };
   },
    created() {
+      
        this.createsale();
        this.getClients();
        this.getPaymentShow();
@@ -334,17 +336,17 @@ export default {
           this.tarjeta = 0;
           
           if(this.selectClient =='' || this.selectClient == null){
-              alert("Debe seleccionar un cliente");
+              this.normal('Alerta','Debe seleccionar un cliente' ,"error");
               return;
           }
 
           if(this.selectpame =='' || this.selectpame == null){
-              alert("Debe seleccionar un método de pago");
+              this.normal('Alerta','Debe seleccionar un método de pago' ,"error");
               return;
           }
 
           if(this.selectStore =='' || this.selectStore == null){
-              alert("Debe seleccionar una sucursal");
+              this.normal('Alerta','Debe seleccionar una sucursal' ,"error");
               return;
           }
 
@@ -367,8 +369,8 @@ export default {
           {
 
           }
-          else{
-            alert("Los montos de pago deben ser igual al total");
+          else{            
+            this.normal('Notificación','Los montos de pago deben ser igual al total' ,"success");
               return;
           }
           var r = confirm("¿Está seguro de finalizar la venta?");
@@ -382,11 +384,11 @@ export default {
                   if(response.data.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
-                    alert("¡Actualizado correctamente!");
+                    this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.$router.push('/sales') ; 
                   }
                   else{
-                    alert(response.data.message);
+                    this.normal('Notificación',response.data.message ,"error");                    
                   }
                 
                 })
@@ -494,11 +496,17 @@ export default {
                 .catch(e => {
                     this.errors.push(e)
                     })
-        },
-
-       
-
-        
+        },    
+        normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
     }
 }
 </script>

@@ -133,6 +133,7 @@
     </v-app>
 </template>
 <script>
+import CripNotice from "crip-vue-notice";
 export default {
   data() {
     return {
@@ -336,14 +337,14 @@ export default {
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
                     this.prpo_pk = response.data.data;                    
-                    //alert("¡Actualizado correctamente!");
+                    //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.createCompra();
                     this.dialog = false;
                     this.getTotal();
                     
                   }
                   else{
-                    alert(response.data.message);
+                    this.normal('Notificación', response.data.message,"error");
                   }
                 
                 })
@@ -371,11 +372,12 @@ export default {
                 if(response.data.status.code == 200){
                 this.snackbar = true;
                 this.textMsg = "¡Eliminado correctamente!";
-                alert(this.textMsg);
+                
+                this.normal('Notificación', this.textMsg,"error");
                 this.createCompra();
                 }
                 else{
-                    alert("Ocurrio un error al eliminar el producto");
+                    this.normal('Notificación', "Ocurrio un error al eliminar el producto","error");
                 }
             });
         },   
@@ -429,11 +431,11 @@ console.log(this.editadoHeader)
                   if(response.data.status.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
-                    //alert("¡Actualizado correctamente!");
+                    //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.getTotal();
                   }
                   else{
-                    alert(response.data.status.message);
+                    this.normal('Notificación', response.data.status.message,"error");
                   }
                 
                 })
@@ -458,17 +460,20 @@ this.subtotal = 0;
       finalizar(){
           
           if(this.selectProv =='' || this.selectProv == null){
-              alert("Debe seleccionar un proveedor");
+              
+              this.normal('Notificación', "Debe seleccionar un proveedor","error");
               return;
           }
 
           if(this.selectStore =='' || this.selectStore == null){
-              alert("Debe seleccionar una sucursal");
+              
+              this.normal('Notificación', "Debe seleccionar una sucursal","error");
               return;
           }
 
           if(this.selectpame =='' || this.selectpame == null){
-              alert("Debe seleccionar una forma de pago");
+              
+              this.normal('Notificación', "Debe seleccionar una forma de pago","error");
               return;
           }
 
@@ -490,11 +495,11 @@ this.subtotal = 0;
                   if(response.data.status.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
-                    alert("¡Actualizado correctamente!");
+                    this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.$router.push('/purchaselist') ; 
                   }
                   else{
-                    alert("Ocurrio un error al finalizar la compra");
+                    this.normal('Notificación', "Ocurrio un error al finalizar la compra","error");
                   }
                 
                 })
@@ -515,7 +520,7 @@ this.subtotal = 0;
 
           }
           else{
-            alert("Los montos de pago deben ser igual al total");
+            this.normal('Notificación', "Los montos de pago deben ser igual al total","error");
               return;
           }
           var r = confirm("¿Está seguro de finalizar la venta?");
@@ -529,11 +534,11 @@ this.subtotal = 0;
                   if(response.data.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
-                    alert("¡Actualizado correctamente!");
+                    this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.$router.push('/sales') ; 
                   }
                   else{
-                    alert(response.data.message);
+                    this.normal('Notificación', response.data.message,"error");
                   }
                 
                 })
@@ -542,13 +547,6 @@ this.subtotal = 0;
                     })
             }
       },
-      
-    
-    
-        
-        
-        
-
         actualizar(item) {
         
             this.editado = Object.assign({}, item)
@@ -562,8 +560,16 @@ this.subtotal = 0;
                     })
         },
 
-       
-
+        normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
         
     }
 }
