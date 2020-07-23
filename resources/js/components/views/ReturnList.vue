@@ -45,6 +45,10 @@
                                :href="'/providersreturn/'+item.prpu_pk">
                             <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
                         </v-btn>  
+                        <v-btn class="mr-2" fab dark small color="purple" :href="'/providersreturndetail/'+item.prre_pk"
+                            >
+                            <v-icon dark>mdi-eye</v-icon>
+                        </v-btn>                        
                     </template>
                 </v-data-table>
                 </v-card>

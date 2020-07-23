@@ -41,7 +41,11 @@
                         <v-btn class="mr-2" fab dark small color="pink"  v-if="item.clsa_status == 'Pendiente'"
                                :href="'/clientsreturn/'+item.clsa_pk">
                             <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
-                        </v-btn>      
+                        </v-btn> 
+                        <v-btn class="mr-2" fab dark small color="purple" :href="'/clientsrdetail/'+item.clre_pk"
+                            >
+                            <v-icon dark>mdi-eye</v-icon>
+                        </v-btn>       
                     </template>
                 </v-data-table>
                 </v-card>

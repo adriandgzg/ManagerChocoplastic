@@ -89605,6 +89605,10 @@ var map = {
 		"./resources/js/components/views/Clients.vue",
 		7
 	],
+	"./ClientsRDetail.vue": [
+		"./resources/js/components/views/ClientsRDetail.vue",
+		45
+	],
 	"./ClientsReturn.vue": [
 		"./resources/js/components/views/ClientsReturn.vue",
 		8
@@ -89689,6 +89693,10 @@ var map = {
 	"./ProvidersReturn.vue": [
 		"./resources/js/components/views/ProvidersReturn.vue",
 		27
+	],
+	"./ProvidersReturnDetail.vue": [
+		"./resources/js/components/views/ProvidersReturnDetail.vue",
+		44
 	],
 	"./ProvidersReturnList.vue": [
 		"./resources/js/components/views/ProvidersReturnList.vue",
@@ -90075,9 +90083,13 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   name: 'Devoluciones',
   view: 'ClientsReturn'
 }, {
-  path: '/clientsreturndetail/:id',
+  path: '/clientsreturn/:id',
+  name: 'Devoluciones',
+  view: 'ClientsReturn'
+}, {
+  path: '/clientsrdetail/:id',
   name: 'Detalle Devolución',
-  view: 'ClientsReturnDetails'
+  view: 'ClientsRDetail'
 }, {
   path: '/clientsreturnlist',
   name: 'Lista de Devoluciones',
@@ -90090,6 +90102,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/providersreturnlist',
   name: 'Lista Devoluciones Proveedor',
   view: 'ReturnList'
+}, {
+  path: '/providersreturndetail/:id',
+  name: 'Detalle Devolución Proveedor',
+  view: 'ProvidersReturnDetail'
 }]);
 
 /***/ }),

@@ -150,9 +150,14 @@ export default [{
         view: 'ClientsReturn'
     },
     {
-        path: '/clientsreturndetail/:id',
+        path: '/clientsreturn/:id',
+        name: 'Devoluciones', 
+        view: 'ClientsReturn'
+    },    
+    {
+        path: '/clientsrdetail/:id',
         name: 'Detalle Devolución', 
-        view: 'ClientsReturnDetails'
+        view: 'ClientsRDetail'
     },
     {
         path: '/clientsreturnlist',
@@ -168,5 +173,10 @@ export default [{
         path: '/providersreturnlist',
         name: 'Lista Devoluciones Proveedor', 
         view: 'ReturnList'
+    },
+    {
+        path: '/providersreturndetail/:id',
+        name: 'Detalle Devolución Proveedor', 
+        view: 'ProvidersReturnDetail'
     },
 ]

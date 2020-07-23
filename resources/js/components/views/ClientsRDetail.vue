@@ -1,10 +1,6 @@
 <template>
     <v-app>
         <v-container>
-        <v-alert v-model="alert" dismissible transition="fade-transition" type="info">
-      {{ textMsg }}
-    </v-alert>
-  
         <v-snackbar color="#000000"
                     v-model="snackbar"
                     :timeout="timeout">
@@ -21,12 +17,12 @@
       <v-col>
         <v-card>
             <v-form v-model="valid">
-          <v-card-title class="subheading font-weight-bold"><H2>{{saleHeader.prpu_identifier}}</H2></v-card-title>
+          <v-card-title class="subheading font-weight-bold"><H2>{{saleHeader.clsa_identifier}}</H2></v-card-title>
           <v-divider></v-divider>
           <v-row>
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">                
-                <v-label><h4>Cliente:</h4> {{saleHeader.prov_name}}</v-label>  
+                <v-label><h4>Cliente:</h4> {{saleHeader.clie_name}}</v-label>  
               </v-card-text>
             </v-col>
             <v-col cols="4">
@@ -43,29 +39,16 @@
           <v-row>
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <v-combobox required v-model="selectReturn"
-            :items="returns"
-            label="Motivo de devolución"
-            item-text="remo_description"
-            item-value="remo_pk"
-            filled
-            chips
-            placeholder="Seleccionar Cliente"
-          ></v-combobox>
+                <v-label><h4>Motivo de devolución:</h4> {{saleHeader.remo_description}}</v-label> 
               </v-card-text>
             </v-col>
             <v-col cols="8">
               <v-card-text class="category d-inline-flex font-weight-light">
-                
-                <v-textarea v-model="prre_observation" auto-grow
-                    filled color="deep-purple" label="Observaciones" rows="3"></v-textarea>
+                <v-label><h4>Observaciones:</h4> {{saleHeader.clre_observation}}</v-label>                 
               </v-card-text>
             </v-col>
           </v-row>        
             </v-form>
-        </v-card>
-        <v-card justify="end">
-          <v-btn :disabled="!valid" dark color="success" @click="finalizar">FINALIZAR</v-btn>
         </v-card>
       </v-col>
     </v-row>
@@ -96,15 +79,14 @@
                   <td>{{ item.prod_name }}</td>
                   <td>{{ item.meas_name }}</td>
                   <td>
-                  {{item.prrd_quantity_purchase}}
+                  {{item.clrd_quantity_sale}}
                   <td>
-                  <v-text-field v-model="item.prrd_quantity" label=""
-                        @change="onQuantityChange(item)" required></v-text-field>
+                  {{item.clrd_quantity}}                  
                   </td>
-                  <td>${{ formatMoney(item.prrd_price) }}</td>
-                  <td>${{ formatMoney(item.prrd_quantity * item.prrd_price) }}</td>
+                  <td>${{ formatMoney(item.clrd_price) }}</td>
+                  <td>${{ formatMoney(item.clrd_quantity * item.clrd_price) }}</td>
                   <td>
-                    <v-icon @click="borrar(item)" small>mdi-delete</v-icon>
+                    
                   </td>
                 </tr>
                 <tr>
@@ -229,11 +211,11 @@
 export default {
   data() {
     return {
-        prpu_pk: this.$route.params.id,
-        prre_observation:'',
-        valid:false,
         alert:false, 
         alertError:false,
+        clre_pk: this.$route.params.id,
+        clre_observation:'',
+        valid:false,
         sales:[],
         stores:[],
         returns:[],
@@ -253,13 +235,13 @@ export default {
         tarjeta:0,
       textMsg: "",
         editado:{
-            prrd_pk:0,
-            prrd_quantity:0,
+            clrd_pk:0,
+            clrd_quantity:0,
         },
         editadoSale:{
-            prre_pk:0,
+            clre_pk:0,
             remo_fk:0,
-            prre_observation:'',
+            clre_observation:'',
         },
         
       dialogcredito: false,
@@ -313,21 +295,21 @@ export default {
               return;
           }
 
-          this.editadoSale.prre_pk = this.saleHeader.prre_pk;
+          this.editadoSale.clre_pk = this.saleHeader.clre_pk;
           this.editadoSale.remo_fk = this.selectReturn.remo_pk;
-          this.editadoSale.prre_observation = this.prre_observation;
+          this.editadoSale.clre_observation = this.clre_observation;
   
          var r = confirm("¿Está seguro de finalizar la venta?");
             if (r == true) {
               
-          axios.post('/provider/returns/update', this.editadoSale)
+          axios.post('/client/returns/update', this.editadoSale)
                 .then(response => {
                   console.log(response)
                   if(response.data.status.code == 200){
                     this.snackbar = true;
                     this.textMsg = "¡Actualizado correctamente!";
                     alert("¡Actualizado correctamente!");
-                    this.$router.push('/purchaselist') ; 
+                    this.$router.push('/clientsreturnlist') ; 
                   }
                   else{
                     alert(response.data.message);
@@ -379,21 +361,22 @@ export default {
       onQuantityChange(item){
             this.editado = Object.assign({}, item)
             console.log(this.editado)
-           if(this.editado.prrd_quantity > this.editado.prrd_quantity_purchase )
+            console.log('this.editado')
+           if(this.editado.clrd_quantity > this.editado.clrd_quantity_sale )
            {
              this.textMsg = "¡El cantidad devuelta no puede ser mayor a la cantidad comprada!";
              this.alertError = true;
              setTimeout(()=>{
                 this.alertError=false
               },3000)
-              this.createsale()
+
+              this.createsale();
              return;
            }
-            axios.post('/provider/return/details/update', this.editado)
+
+            axios.post('/client/return/details/update', this.editado)
                 .then(response => {
                   console.log(response)
-                   // this.snackbar = true;
-                //this.textMsg = "¡Actualizado correctamente!";
                 console.log("¡Actualizado correctamente!")
                 this.getTotal();
                 })
@@ -403,13 +386,13 @@ export default {
 
         },
       createsale() {
-        console.log('/provider/returns?prpu_pk=' + this.prpu_pk + '')
-            axios.post('/provider/returns?prpu_pk=' + this.prpu_pk + '')
+        console.log('/client/returns/' + this.clre_pk + ' --> get')
+            axios.get('/client/returns/' + this.clre_pk + '')
                 .then(response => {
                   console.log(response.data)
                     this.sales = response.data.data;
-                    this.saleHeader = response.data.data.ProviderReturns;
-                    this.desserts =  this.sales.ProviderReturnDetails;
+                    this.saleHeader = response.data.data.ClientReturns;
+                    this.desserts =  this.sales.ClientReturnDetails;
 
                     this.getTotal();
                 })
@@ -421,7 +404,7 @@ export default {
     getTotal(){
 
             for (var i = 0; i < this.desserts.length; i++) {
-                this.subtotal = this.subtotal + (this.desserts[i].prrd_price * this.desserts[i].prrd_quantity );
+                this.subtotal = this.subtotal + (this.desserts[i].clrd_price * this.desserts[i].clrd_quantity );
             }
             //this.iva =  this.subtotal * 0.16;
 
@@ -433,14 +416,14 @@ export default {
             this.editado = Object.assign({}, item)
             var r = confirm("¿Está seguro de borrar el registro?");
             if (r == true) {
-                this.editado.prrd_pk = item.prrd_pk;
+                this.editado.clrd_pk = item.clrd_pk;
                 this.delete()
             }
         },
 
         delete: function () {
             
-            axios.post('/provider/return/details/destroy', this.editado).then(response => {
+            axios.post('/client/return/details/destroy', this.editado).then(response => {
               
                 this.snackbar = true;
                 this.textMsg = "¡Eliminado correctamente!";

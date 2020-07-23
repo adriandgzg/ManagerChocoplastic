@@ -43,29 +43,16 @@
           <v-row>
             <v-col cols="4">
               <v-card-text class="category d-inline-flex font-weight-light">
-                <v-combobox required v-model="selectReturn"
-            :items="returns"
-            label="Motivo de devolución"
-            item-text="remo_description"
-            item-value="remo_pk"
-            filled
-            chips
-            placeholder="Seleccionar Cliente"
-          ></v-combobox>
+                <v-label><h4>Motivo Devolución:</h4> {{saleHeader.remo_description}}</v-label>
               </v-card-text>
             </v-col>
             <v-col cols="8">
               <v-card-text class="category d-inline-flex font-weight-light">
-                
-                <v-textarea v-model="prre_observation" auto-grow
-                    filled color="deep-purple" label="Observaciones" rows="3"></v-textarea>
+              <v-label><h4>Observaciones:</h4> {{saleHeader.prre_observation}}</v-label> 
               </v-card-text>
             </v-col>
           </v-row>        
             </v-form>
-        </v-card>
-        <v-card justify="end">
-          <v-btn :disabled="!valid" dark color="success" @click="finalizar">FINALIZAR</v-btn>
         </v-card>
       </v-col>
     </v-row>
@@ -98,13 +85,12 @@
                   <td>
                   {{item.prrd_quantity_purchase}}
                   <td>
-                  <v-text-field v-model="item.prrd_quantity" label=""
-                        @change="onQuantityChange(item)" required></v-text-field>
+                  {{item.prrd_quantity}}                 
                   </td>
                   <td>${{ formatMoney(item.prrd_price) }}</td>
                   <td>${{ formatMoney(item.prrd_quantity * item.prrd_price) }}</td>
                   <td>
-                    <v-icon @click="borrar(item)" small>mdi-delete</v-icon>
+                   
                   </td>
                 </tr>
                 <tr>
@@ -274,7 +260,7 @@ export default {
   },
    created() {
        this.createsale();
-       this.getMotivos();
+       //this.getMotivos();
    },
 
   methods: {
@@ -403,8 +389,7 @@ export default {
 
         },
       createsale() {
-        console.log('/provider/returns?prpu_pk=' + this.prpu_pk + '')
-            axios.post('/provider/returns?prpu_pk=' + this.prpu_pk + '')
+            axios.get('/provider/returns/' + this.prpu_pk + '')
                 .then(response => {
                   console.log(response.data)
                     this.sales = response.data.data;
