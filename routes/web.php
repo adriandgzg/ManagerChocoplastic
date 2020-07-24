@@ -82,6 +82,7 @@ Route::put('/product/delete', 'ProductController@delete');
 
 
 Route::get('/clientorders', 'ClientOrderController@index'); //Lista de Pedidos (Cliente)
+Route::get('/client/orders/{clor_pk}', 'ClientOrderController@showmanager'); //Detalle de Pedidos (Cliente) 
 Route::post('/client/orders/destroy', 'ClientOrderController@destroy'); //Cancelar Pedido (Cliente)
 
 Route::get('/clientsales', 'ClientSaleController@index'); ////Lista de Ventas (Cliente)

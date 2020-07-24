@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Throwable;
 use Validator;
 use DB;
 use Carbon\Carbon;
@@ -34,7 +35,7 @@ class ClientOrderController extends ApiResponseController
                     'CO.clor_status',
                     'S.stor_name'
                 )
-                ->where('clor_status', '=', 1)
+                //->where('clor_status', '=', 1)
                 ->get();
 
             return response()->json([
@@ -229,6 +230,83 @@ class ClientOrderController extends ApiResponseController
             
         } catch (Exception $e) {
             return $this->dbResponse(null, 500, $e, null);
+        }
+    }
+
+    public function showmanager($clor_pk)
+    {
+       
+        if ($clor_pk == '' || $clor_pk == 0) {
+            return $this->dbResponse(null, 500, null, 'PK Obligatorio');
+        }
+
+        try {
+            //Asignacion de variables
+           $vclor_pk = $clor_pk;
+
+            $vClientOrder = DB::table('client_orders AS CO') 
+                ->leftjoin('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
+                ->leftjoin('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
+                ->select(
+                    'CO.clor_pk',
+                    'CO.clor_identifier',
+
+                    'C.clie_pk',
+                    'C.clie_identifier',
+                    'C.clie_name',
+                    'C.clie_rfc',                           
+
+                    'S.stor_pk',
+                    'S.stor_name'
+                    )
+                ->where('CO.clor_pk', '=', $vclor_pk)
+                ->first();
+
+            if($vClientOrder)
+            { 
+
+                $vClientOrderDetail = DB::table('client_order_details AS COD') 
+                    ->join('products AS P', 'P.prod_pk', '=', 'COD.prod_fk')
+                    ->join('measurements AS M', 'M.meas_pk', '=', 'COD.meas_fk')
+                    ->join('product_categories AS PC', 'PC.prca_pk', '=', 'P.prca_fk')
+                    ->select(
+                        'COD.clod_pk',
+
+                        'P.prod_pk',
+                        'P.prod_identifier',
+                        'P.prod_name',
+                        
+                        'M.meas_pk',
+                        'M.meas_name',
+                        'M.meas_abbreviation',
+                        'PC.prca_name',
+                        
+                        'COD.clod_quantity',
+                        'COD.clod_price'
+                    )
+                    ->where('COD.clor_fk', '=', $vclor_pk)
+                    ->where('COD.clod_status', '=', 1)
+                    ->get();
+   
+
+                $vData = 
+                [
+                    'order' => $vClientOrder, 
+                    'order_details' => $vClientOrderDetail
+                ];
+
+                return $this->dbResponse($vData, 200, null, 'Pedido Encontrado');
+
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Pedido No Encontrado');
+            }
+            
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
         }
     }
 
