@@ -291,8 +291,9 @@ export default {
 
     delete: function () {
         axios.put('/providers/delete', this.editadoProveedor).then(response => {
-            this.snackbar = true;
+            
             this.textMsg = "¡Eliminado correctamente!";
+            this.normal('Notificación', this.textMsg,"success");
             this.getProviders();
         });
     },

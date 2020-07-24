@@ -226,7 +226,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       axios.put('/categories/delete', this.editado).then(function (response) {
-        _this4.snackbar = true;
         _this4.textMsg = "¡Eliminado correctamente!";
 
         _this4.getCategories();

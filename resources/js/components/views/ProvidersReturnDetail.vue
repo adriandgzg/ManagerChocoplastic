@@ -311,7 +311,7 @@ export default {
                 .then(response => {
                   console.log(response)
                   if(response.data.status.code == 200){
-                    this.snackbar = true;
+                    
                     this.textMsg = "¡Actualizado correctamente!";
                     this.normal('Notificación',this.textMsg,"success");
                     this.$router.push('/purchaselist') ; 
@@ -349,7 +349,7 @@ export default {
                 .then(response => {
                   console.log(response)
                   if(response.data.code == 200){
-                    this.snackbar = true;
+                    
                     this.textMsg = "¡Actualizado correctamente!";
                     this.normal('Notificación',this.textMsg,"success");
                     this.$router.push('/sales') ; 
@@ -380,8 +380,6 @@ export default {
             axios.post('/provider/return/details/update', this.editado)
                 .then(response => {
                   console.log(response)
-                   // this.snackbar = true;
-                //this.textMsg = "¡Actualizado correctamente!";
                 console.log("¡Actualizado correctamente!")
                 this.getTotal();
                 })
@@ -429,8 +427,9 @@ export default {
             
             axios.post('/provider/return/details/destroy', this.editado).then(response => {
               
-                this.snackbar = true;
+                
                 this.textMsg = "¡Eliminado correctamente!";
+                this.normal('Notificación', this.textMsg,"success");
                this.createsale();
             });
         },
@@ -440,7 +439,6 @@ export default {
             this.editado = Object.assign({}, item)
             axios.post('/client_sale_details/update', this.editado)
                 .then(response => {
-                    this.snackbar = true;
                 this.textMsg = "¡Actualizado correctamente!";
                 })
                 .catch(e => {

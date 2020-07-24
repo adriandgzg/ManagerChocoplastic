@@ -294,7 +294,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.code == 200) {
-          _this3.snackbar = true;
           _this3.textMsg = "¡Actualizado correctamente!";
 
           _this3.normal('Notificación', '¡Actualizado correctamente!', "success");

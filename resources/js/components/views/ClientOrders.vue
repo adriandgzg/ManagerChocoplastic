@@ -202,8 +202,9 @@ export default {
         axios.post('/client/orders/destroy', this.editado).then(response => {
             console.log(response)
             if(response.data.code == 200){
-            this.snackbar = true;
+            
             this.textMsg = "¡Eliminado correctamente!";
+            this.normal('Notificación', this.textMsg,"error");
             this.getCategories();
             }
             else{

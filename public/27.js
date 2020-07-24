@@ -294,8 +294,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       axios.put('/providers/delete', this.editadoProveedor).then(function (response) {
-        _this5.snackbar = true;
         _this5.textMsg = "¡Eliminado correctamente!";
+
+        _this5.normal('Notificación', _this5.textMsg, "success");
 
         _this5.getProviders();
       });

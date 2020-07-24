@@ -291,7 +291,7 @@ this.editado.clsa_identifier = item.clsa_identifier
                 .then(response => {
                   console.log(response)
                   if(response.data.code == 200){
-                    this.snackbar = true;
+                    
                     this.textMsg = "¡Actualizado correctamente!";
                     this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.getClientesPago();

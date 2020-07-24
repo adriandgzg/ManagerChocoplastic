@@ -219,7 +219,7 @@ export default {
 
     delete: function () {
         axios.put('/categories/delete', this.editado).then(response => {
-            this.snackbar = true;
+            
             this.textMsg = "¡Eliminado correctamente!";
             this.getCategories();
         });

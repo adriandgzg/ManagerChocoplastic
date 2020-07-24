@@ -216,8 +216,9 @@ export default {
 
     delete: function () {
         axios.put('/entities/delete', this.editado).then(response => {
-            this.snackbar = true;
+            
             this.textMsg = "¡Eliminado correctamente!";
+            this.normal('Notificación', this.textMsg,"success");
             this.getEntities();
         });
     },

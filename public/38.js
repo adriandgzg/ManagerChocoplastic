@@ -224,8 +224,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       axios.put('/returnmotives/delete', this.editado).then(function (response) {
-        _this4.snackbar = true;
         _this4.textMsg = "¡Eliminado correctamente!";
+
+        _this4.normal('Notificación', _this4.textMsg, "success");
 
         _this4.getPayments();
       });

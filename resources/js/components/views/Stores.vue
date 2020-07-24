@@ -258,8 +258,9 @@ export default {
 
     delete: function () {
         axios.put('/store/delete', this.editado).then(response => {
-            this.snackbar = true;
+            
             this.textMsg = "¡Eliminado correctamente!";
+            this.normal('Notificación', this.textMsg,"error");
             this.getStores();
         });
     },

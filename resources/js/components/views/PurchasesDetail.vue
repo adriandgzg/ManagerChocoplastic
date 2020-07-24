@@ -331,7 +331,7 @@ export default {
                 .then(response => {
                   console.log(response)
                   if(response.data.status.code == 200){
-                    this.snackbar = true;
+                    
                     this.textMsg = "¡Actualizado correctamente!";
                     this.prpo_pk = response.data.data;                    
                     //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
@@ -367,7 +367,7 @@ export default {
             axios.post('/provider/purchase/details/destroy', this.editado).then(response => {
                 console.log(response);
                 if(response.data.status.code == 200){
-                this.snackbar = true;
+                
                 this.textMsg = "¡Eliminado correctamente!";
                 
                 this.normal('Notificación', this.textMsg,"success");
@@ -440,7 +440,7 @@ export default {
                 .then(response => {
                   console.log(response)
                   if(response.data.status.code == 200){
-                    this.snackbar = true;
+                    
                     this.textMsg = "¡Actualizado correctamente!";
                     //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.getTotal();
@@ -501,7 +501,7 @@ this.subtotal = 0;
                 .then(response => {
                   console.log(response)
                   if(response.data.status.code == 200){
-                    this.snackbar = true;
+                    
                     this.textMsg = "¡Actualizado correctamente!";
                     this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.$router.push('/purchaselist') ; 
@@ -540,7 +540,7 @@ this.subtotal = 0;
                 .then(response => {
                   console.log(response)
                   if(response.data.code == 200){
-                    this.snackbar = true;
+                    
                     this.textMsg = "¡Actualizado correctamente!";
                     this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.$router.push('/sales') ; 
@@ -561,7 +561,6 @@ this.subtotal = 0;
             this.editado = Object.assign({}, item)
             axios.post('/client_sale_details/update', this.editado)
                 .then(response => {
-                    this.snackbar = true;
                 this.textMsg = "¡Actualizado correctamente!";
                 })
                 .catch(e => {

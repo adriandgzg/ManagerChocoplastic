@@ -307,7 +307,7 @@ export default {
             this.editado = Object.assign({}, item)
             axios.post('/client_sale_details/update', this.editado)
                 .then(response => {
-                    this.snackbar = true;
+                    
                 this.textMsg = "¡Actualizado correctamente!";
                 console.log("¡Actualizado correctamente!")
                 this.getTotal();
@@ -369,7 +369,7 @@ export default {
                 .then(response => {
                   console.log(response)
                   if(response.data.code == 200){
-                    this.snackbar = true;
+                    
                     this.textMsg = "¡Actualizado correctamente!";
                     this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.$router.push('/sales') ; 
@@ -461,8 +461,8 @@ export default {
             
             axios.post('/client_sale_details/destroy', this.editado).then(response => {
               
-                this.snackbar = true;
                 this.textMsg = "¡Eliminado correctamente!";
+                this.normal('Notificación', this.textMsg,"success");
                this.createsale();
             });
         },
@@ -472,8 +472,8 @@ export default {
             this.editado = Object.assign({}, item)
             axios.post('/client_sale_details/update', this.editado)
                 .then(response => {
-                    this.snackbar = true;
                 this.textMsg = "¡Actualizado correctamente!";
+                this.normal('Notificación', this.textMsg,"success");
                 })
                 .catch(e => {
                     this.errors.push(e)

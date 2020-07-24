@@ -422,8 +422,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this6 = this;
 
       axios.put('/product/delete', this.editado).then(function (response) {
-        _this6.snackbar = true;
         _this6.textMsg = "¡Eliminado correctamente!";
+
+        _this6.normal('Notificación', _this6.textMsg, "success");
 
         _this6.getProducts();
       });

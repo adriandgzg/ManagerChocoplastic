@@ -406,7 +406,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this4.snackbar = true;
           _this4.textMsg = "¡Actualizado correctamente!";
           _this4.prpo_pk = response.data.data; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
 
@@ -438,7 +437,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this5.snackbar = true;
           _this5.textMsg = "¡Eliminado correctamente!";
 
           _this5.normal('Notificación', _this5.textMsg, "success");
@@ -523,7 +521,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this8.snackbar = true;
           _this8.textMsg = "¡Actualizado correctamente!"; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
 
           _this8.getTotal();
@@ -577,7 +574,6 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.status.code == 200) {
-            _this9.snackbar = true;
             _this9.textMsg = "¡Actualizado correctamente!";
 
             _this9.normal('Notificación', '¡Actualizado correctamente!', "success");
@@ -609,7 +605,6 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.code == 200) {
-            _this10.snackbar = true;
             _this10.textMsg = "¡Actualizado correctamente!";
 
             _this10.normal('Notificación', '¡Actualizado correctamente!', "success");
@@ -628,7 +623,6 @@ __webpack_require__.r(__webpack_exports__);
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this11.snackbar = true;
         _this11.textMsg = "¡Actualizado correctamente!";
       })["catch"](function (e) {
         _this11.errors.push(e);

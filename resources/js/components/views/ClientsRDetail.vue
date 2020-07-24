@@ -307,7 +307,7 @@ export default {
                 .then(response => {
                   console.log(response)
                   if(response.data.status.code == 200){
-                    this.snackbar = true;
+                    
                     this.textMsg = "¡Actualizado correctamente!";
                     this.normal('Notificación', this.textMsg,"success");
                     this.$router.push('/clientsreturnlist') ; 
@@ -345,13 +345,13 @@ export default {
                 .then(response => {
                   console.log(response)
                   if(response.data.code == 200){
-                    this.snackbar = true;
+                    
                     this.textMsg = "¡Actualizado correctamente!";
                     this.normal('Notificación', this.textMsg,"success");
                     this.$router.push('/sales') ; 
                   }
                   else{
-                    this.normal('Notificación', response.data.message,"success");                    
+                    this.normal('Notificación', response.data.message,"error");                    
                   }
                 
                 })
@@ -424,10 +424,10 @@ export default {
 
         delete: function () {
             
-            axios.post('/client/return/details/destroy', this.editado).then(response => {
-              
-                this.snackbar = true;
+            axios.post('/client/return/details/destroy', this.editado).then(response => {             
+               
                 this.textMsg = "¡Eliminado correctamente!";
+                this.normal('Notificación', this.textMsg,"success");
                this.createsale();
             });
         },
@@ -437,8 +437,9 @@ export default {
             this.editado = Object.assign({}, item)
             axios.post('/client_sale_details/update', this.editado)
                 .then(response => {
-                    this.snackbar = true;
+                    
                 this.textMsg = "¡Actualizado correctamente!";
+                this.normal('Notificación', this.textMsg,"success");
                 })
                 .catch(e => {
                     this.errors.push(e)

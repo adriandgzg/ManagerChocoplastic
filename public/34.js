@@ -207,7 +207,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this3.snackbar = true;
           _this3.textMsg = "¡Eliminado correctamente!";
 
           _this3.normal('Notificación', textMsg, "success");

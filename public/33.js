@@ -325,7 +325,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this3.snackbar = true;
           _this3.textMsg = "¡Actualizado correctamente!";
           _this3.prpo_pk = response.data.data; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
 
@@ -357,7 +356,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this4.snackbar = true;
           _this4.textMsg = "¡Eliminado correctamente!";
 
           _this4.normal('Notificación', _this4.textMsg, "error");
@@ -408,7 +406,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this7.snackbar = true;
           _this7.textMsg = "¡Actualizado correctamente!"; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
 
           _this7.getTotal();
@@ -458,7 +455,6 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.status.code == 200) {
-            _this8.snackbar = true;
             _this8.textMsg = "¡Actualizado correctamente!";
 
             _this8.normal('Notificación', '¡Actualizado correctamente!', "success");
@@ -490,7 +486,6 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.code == 200) {
-            _this9.snackbar = true;
             _this9.textMsg = "¡Actualizado correctamente!";
 
             _this9.normal('Notificación', '¡Actualizado correctamente!', "success");
@@ -509,7 +504,6 @@ __webpack_require__.r(__webpack_exports__);
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this10.snackbar = true;
         _this10.textMsg = "¡Actualizado correctamente!";
       })["catch"](function (e) {
         _this10.errors.push(e);

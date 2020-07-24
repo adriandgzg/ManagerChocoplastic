@@ -315,7 +315,6 @@ __webpack_require__.r(__webpack_exports__);
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this.snackbar = true;
         _this.textMsg = "¡Actualizado correctamente!";
         console.log("¡Actualizado correctamente!");
 
@@ -368,7 +367,6 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.code == 200) {
-            _this2.snackbar = true;
             _this2.textMsg = "¡Actualizado correctamente!";
 
             _this2.normal('Notificación', '¡Actualizado correctamente!', "success");
@@ -452,8 +450,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this7 = this;
 
       axios.post('/client_sale_details/destroy', this.editado).then(function (response) {
-        _this7.snackbar = true;
         _this7.textMsg = "¡Eliminado correctamente!";
+
+        _this7.normal('Notificación', _this7.textMsg, "success");
 
         _this7.createsale();
       });
@@ -463,8 +462,9 @@ __webpack_require__.r(__webpack_exports__);
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this8.snackbar = true;
         _this8.textMsg = "¡Actualizado correctamente!";
+
+        _this8.normal('Notificación', _this8.textMsg, "success");
       })["catch"](function (e) {
         _this8.errors.push(e);
       });

@@ -290,7 +290,7 @@ this.dialog = true
                 .then(response => {
                   console.log(response)
                   if(response.data.status.code == 200){
-                    this.snackbar = true;
+                    
                     this.textMsg = "¡Actualizado correctamente!";                    
                     this.normal('Notificación', response.data.status.message,"success");
                     this.getClientesPago();
