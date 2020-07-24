@@ -66,6 +66,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -309,6 +313,26 @@ var render = function() {
                                       1
                                     )
                                   : _vm._e(),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    staticClass: "mr-2",
+                                    attrs: {
+                                      fab: "",
+                                      dark: "",
+                                      small: "",
+                                      color: "purple",
+                                      href: "/salesdetail/" + item.clsa_pk
+                                    }
+                                  },
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-eye")
+                                    ])
+                                  ],
+                                  1
+                                ),
                                 _vm._v(" "),
                                 item.clsa_status == "Pendiente"
                                   ? _c(

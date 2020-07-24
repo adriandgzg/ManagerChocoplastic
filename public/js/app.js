@@ -89641,6 +89641,11 @@ var map = {
 		0,
 		15
 	],
+	"./DetailOrderRead.vue": [
+		"./resources/js/components/views/DetailOrderRead.vue",
+		0,
+		48
+	],
 	"./DetailSale.vue": [
 		"./resources/js/components/views/DetailSale.vue",
 		0,
@@ -89759,6 +89764,11 @@ var map = {
 		0,
 		46,
 		40
+	],
+	"./SalesDetail.vue": [
+		"./resources/js/components/views/SalesDetail.vue",
+		0,
+		49
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
@@ -90057,9 +90067,17 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   name: 'Detalle de Orden',
   view: 'DetailOrder'
 }, {
+  path: '/detaiorderread/:id',
+  name: 'Detalle de la Orden',
+  view: 'DetailOrderRead'
+}, {
   path: '/detailsale/:id',
   name: 'Detalle de Venta',
   view: 'DetailSale'
+}, {
+  path: '/salesdetail/:id',
+  name: 'Detalle de la Venta',
+  view: 'SalesDetail'
 }, {
   path: '/clientdebts',
   name: 'Cuentas por Cobrar',

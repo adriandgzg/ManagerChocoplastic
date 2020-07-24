@@ -64,6 +64,10 @@
                                :href="'/detaiorder/'+item.clor_pk">
                             <v-icon dark>mdi-cash-register</v-icon>
                         </v-btn>
+                        <v-btn class="mr-2" fab dark small color="purple"  
+                               :href="'/detaiorderread/'+item.clor_pk">
+                            <v-icon dark>mdi-eye</v-icon>
+                        </v-btn>  
                         <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)">
                             <v-icon dark>mdi-delete</v-icon>
                         </v-btn>

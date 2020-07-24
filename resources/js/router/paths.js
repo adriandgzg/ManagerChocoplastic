@@ -88,11 +88,22 @@ export default [{
         path: '/detaiorder/:id',
         name: 'Detalle de Orden', 
         view: 'DetailOrder'
-    },    
+    },
+    {
+        path: '/detaiorderread/:id',
+        name: 'Detalle de la Orden', 
+        view: 'DetailOrderRead'
+    },
+    
     {
         path: '/detailsale/:id',
         name: 'Detalle de Venta', 
         view: 'DetailSale'
+    },
+    {
+        path: '/salesdetail/:id',
+        name: 'Detalle de la Venta', 
+        view: 'SalesDetail'
     },
     {
         path: '/clientdebts',
