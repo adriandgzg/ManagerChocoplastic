@@ -59,7 +59,7 @@
                             v-if="item.prpu_status == 1 && item.prpu_type == 1">
                             <v-icon dark>mdi-cloud-check</v-icon>
                         </v-btn>
-                        <v-btn class="mr-2" fab dark small color="pink"  
+                        <v-btn class="mr-2" fab dark small color="pink" v-if="item.prpu_status_description != 'Pendiente' || item.prpu_status_description == 'Cancelada'" 
                                :href="'/providersreturn/'+item.prpu_pk">
                             <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
                         </v-btn>

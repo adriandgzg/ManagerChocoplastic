@@ -30083,7 +30083,7 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Ordenes")])
+                      _c("v-list-item-title", [_vm._v("Pedidos")])
                     ],
                     1
                   ),
@@ -89583,203 +89583,203 @@ __webpack_require__.r(__webpack_exports__);
 var map = {
 	"./Administration.vue": [
 		"./resources/js/components/views/Administration.vue",
-		2
+		3
 	],
 	"./Business.vue": [
 		"./resources/js/components/views/Business.vue",
-		3
+		4
 	],
 	"./Categorie.vue": [
 		"./resources/js/components/views/Categorie.vue",
-		4
+		5
 	],
 	"./ClientDebts.vue": [
 		"./resources/js/components/views/ClientDebts.vue",
-		5,
-		29
+		0,
+		6
 	],
 	"./ClientOrders.vue": [
 		"./resources/js/components/views/ClientOrders.vue",
-		5,
-		46
+		0,
+		7
 	],
 	"./Clients.vue": [
 		"./resources/js/components/views/Clients.vue",
-		5,
-		6
+		0,
+		8
 	],
 	"./ClientsRDetail.vue": [
 		"./resources/js/components/views/ClientsRDetail.vue",
-		5,
+		0,
 		9
 	],
 	"./ClientsReturn.vue": [
 		"./resources/js/components/views/ClientsReturn.vue",
-		5,
-		7
+		0,
+		10
 	],
 	"./ClientsReturnDetails.vue": [
 		"./resources/js/components/views/ClientsReturnDetails.vue",
-		5,
-		8
+		0,
+		11
 	],
 	"./ClientsReturnList.vue": [
 		"./resources/js/components/views/ClientsReturnList.vue",
-		5,
-		10
+		0,
+		12
 	],
 	"./Coverages.vue": [
 		"./resources/js/components/views/Coverages.vue",
-		12
+		13
 	],
 	"./Dashboard.vue": [
 		"./resources/js/components/views/Dashboard.vue",
-		13
+		14
 	],
 	"./DetailOrder.vue": [
 		"./resources/js/components/views/DetailOrder.vue",
-		5,
-		14
+		0,
+		15
 	],
 	"./DetailSale.vue": [
 		"./resources/js/components/views/DetailSale.vue",
-		5,
-		42
+		0,
+		16
 	],
 	"./Entities.vue": [
 		"./resources/js/components/views/Entities.vue",
-		16
+		17
 	],
 	"./Frequents.vue": [
 		"./resources/js/components/views/Frequents.vue",
-		5,
-		15
+		0,
+		18
 	],
 	"./Maps.vue": [
 		"./resources/js/components/views/Maps.vue",
-		1
+		2
 	],
 	"./Measurements.vue": [
 		"./resources/js/components/views/Measurements.vue",
-		18
+		19
 	],
 	"./Missions.vue": [
 		"./resources/js/components/views/Missions.vue",
-		0,
-		19
+		1,
+		20
 	],
 	"./Notifications.vue": [
 		"./resources/js/components/views/Notifications.vue",
-		20
+		21
 	],
 	"./OrderDetail.vue": [
 		"./resources/js/components/views/OrderDetail.vue",
-		5,
-		17
+		0,
+		22
 	],
 	"./PaymentMethods.vue": [
 		"./resources/js/components/views/PaymentMethods.vue",
-		22
+		23
 	],
 	"./PaymentShapes.vue": [
 		"./resources/js/components/views/PaymentShapes.vue",
-		23
+		24
 	],
 	"./PointOfSale.vue": [
 		"./resources/js/components/views/PointOfSale.vue",
-		24
+		25
 	],
 	"./Product.vue": [
 		"./resources/js/components/views/Product.vue",
-		5,
-		21
+		0,
+		26
 	],
 	"./Proveedores.vue": [
 		"./resources/js/components/views/Proveedores.vue",
-		26
+		27
 	],
 	"./ProviderDebts.vue": [
 		"./resources/js/components/views/ProviderDebts.vue",
-		5,
-		25
+		0,
+		28
 	],
 	"./ProvidersReturn.vue": [
 		"./resources/js/components/views/ProvidersReturn.vue",
-		5,
-		27
+		0,
+		29
 	],
 	"./ProvidersReturnDetail.vue": [
 		"./resources/js/components/views/ProvidersReturnDetail.vue",
-		5,
-		47
+		0,
+		30
 	],
 	"./ProvidersReturnList.vue": [
 		"./resources/js/components/views/ProvidersReturnList.vue",
-		30
+		31
 	],
 	"./PurchaseList.vue": [
 		"./resources/js/components/views/PurchaseList.vue",
-		5,
-		28
+		0,
+		32
 	],
 	"./PurchaseOrder.vue": [
 		"./resources/js/components/views/PurchaseOrder.vue",
-		5,
-		31
+		0,
+		33
 	],
 	"./PurchaseOrdersList.vue": [
 		"./resources/js/components/views/PurchaseOrdersList.vue",
-		5,
-		32
+		0,
+		34
 	],
 	"./Purchases.vue": [
 		"./resources/js/components/views/Purchases.vue",
-		5,
-		33
+		0,
+		35
 	],
 	"./PurchasesDetail.vue": [
 		"./resources/js/components/views/PurchasesDetail.vue",
-		5,
-		34
+		0,
+		36
 	],
 	"./ReturnList.vue": [
 		"./resources/js/components/views/ReturnList.vue",
-		36
+		37
 	],
 	"./ReturnMotives.vue": [
 		"./resources/js/components/views/ReturnMotives.vue",
-		37
+		38
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
-		38
+		39
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
-		5,
-		39,
-		35
+		0,
+		46,
+		40
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		40
+		41
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		41
+		42
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		44
+		45
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		5,
-		11
+		0,
+		43
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		43
+		44
 	]
 };
 function webpackAsyncContext(req) {
