@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\ClientDebt;
 use Exception;
+use Throwable;
 use Validator;
+use DB;
+use App\ClientDebt;
 use App\System;
 use App\ClientSale;
 use App\ClientOrder;
 use App\ClientOrderDetail;
 use App\ClientPayment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\api\ApiResponseController;
 
-class ClientSaleController extends Controller
+class ClientSaleController extends ApiResponseController
 {
     /**
      * Display a listing of the resource.
@@ -262,9 +264,92 @@ class ClientSaleController extends Controller
      * @param  \App\ClientSale  $clientSale
      * @return \Illuminate\Http\Response
      */
-    public function show(ClientSale $clientSale)
+    public function show($clsa_pk)
     {
-        //
+        try {
+
+            //Asignacion de variables
+            $vclsa_pk = $clsa_pk;
+
+
+            if ($vclsa_pk == '' || $vclsa_pk == 0) {
+                return $this->dbResponse(null, 500, null, 'PK Obligatorio');
+            }
+
+            $vCS = DB::table('client_sales AS CS')
+                ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
+                ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
+                ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
+                ->select(
+                    'CS.clsa_pk',
+                    'CS.clsa_identifier',
+                    'CS.clor_fk AS clor_pk',
+                    DB::raw('(CASE 
+                        WHEN CS.clsa_status = 0 THEN "Pendiente" 
+                        WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
+                        WHEN CS.clsa_status = 3 THEN "Pagado" 
+                        ELSE "" END) AS clsa_status'),
+                    'CS.created_at',
+
+                    'C.clie_pk',
+                    'C.clie_identifier',
+                    'C.clie_name',
+                    'C.clie_rfc',
+
+                    'PM.pame_pk',
+                    'PM.pame_name',
+
+                    'S.stor_pk',
+                    'S.stor_name',
+                )
+                ->where('CS.clsa_pk', '=', $vclsa_pk)
+                ->first();
+
+            if($vCS)
+            {
+                $vCSD = DB::table('client_sale_details AS CSD')
+                    ->join('products AS P', 'P.prod_pk', '=', 'CSD.prod_fk')
+                    ->join('measurements AS M', 'M.meas_pk', '=', 'CSD.meas_fk')
+                    ->select(
+                        'CSD.clsd_pk',
+
+                        //'CSD.clsa_fk',
+
+                        'P.prod_pk',
+                        'P.prod_identifier',
+                        'P.prod_name',
+
+                        'M.meas_pk',
+                        'M.meas_name',
+                        'M.meas_abbreviation',
+
+                        'CSD.clsd_quantity',
+                        'CSD.clsd_price',
+                        'CSD.clsd_discountrate'
+                        //'CSD.clsd_ieps',
+                        //'CSD.clsd_iva'
+                    )
+                    ->where('CSD.clsa_fk', '=', $vclsa_pk)
+                    ->where('clsd_status', '=', 1)
+                    ->get();
+
+                $vData = 
+                [
+                    'client_sales' => $vCS, 
+                    'client_sale_details' => $vCSD
+                ];
+
+                return $this->dbResponse($vData, 200, null, 'Venta Encontrada');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Venta No Encontrada');
+            }
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        }
     }
 
     /**

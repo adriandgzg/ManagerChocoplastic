@@ -85,7 +85,9 @@ Route::get('/clientorders', 'ClientOrderController@index'); //Lista de Pedidos (
 Route::get('/client/orders/{clor_pk}', 'ClientOrderController@showmanager'); //Detalle de Pedidos (Cliente) 
 Route::post('/client/orders/destroy', 'ClientOrderController@destroy'); //Cancelar Pedido (Cliente)
 
+
 Route::get('/clientsales', 'ClientSaleController@index'); ////Lista de Ventas (Cliente)
+Route::get('/client/sales/{clsa_pk}', 'ClientSaleController@show'); //Detalle de Venta (Cliente)  
 Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente) 
 Route::post('/clientsales/update', 'ClientSaleController@update'); //Finalizar Venta (Cliente)
 

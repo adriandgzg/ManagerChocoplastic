@@ -36,6 +36,7 @@ class ClientOrderController extends ApiResponseController
                     'S.stor_name'
                 )
                 //->where('clor_status', '=', 1)
+                ->orderByDesc('CO.clor_pk')
                 ->get();
 
             return response()->json([

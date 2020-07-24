@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
 
 class ClientReturnController extends ApiResponseController
-{
+{ 
     /**  
      * Display a listing of the resource.
      *
