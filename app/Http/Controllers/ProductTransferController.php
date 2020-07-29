@@ -31,6 +31,7 @@ class ProductTransferController extends ApiResponseController
                 ->join('stores AS SI', 'SI.stor_pk', '=', 'PT.stor_fk_input')
                 ->select(
                     'PT.prtr_pk',
+                    'PT.prtr_identifier',
                     'PT.prtr_quantity',
                     'PT.prtr_observation',
                     'PT.created_at',
