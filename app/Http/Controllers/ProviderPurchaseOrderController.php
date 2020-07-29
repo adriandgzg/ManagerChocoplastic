@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Validator;
+use Throwable;
 use App\System;
 use Illuminate\Http\Request;
 use App\ProviderPurchaseOrder;
@@ -49,8 +50,10 @@ class ProviderPurchaseOrderController extends ApiResponseController
             
             return $this->dbResponse($vPPO, 200, null, 'Lista de Ordenes de Compra de Proveedor');
           
-        } catch (\Throwable $e) {
-            return $this->dbResponse(null, 500, $e, null);
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -119,9 +122,9 @@ class ProviderPurchaseOrderController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Orden Compra NO Encontrado');
             }
         } 
-        catch (\Throwable $th) 
+        catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $th, null);
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
         
@@ -184,8 +187,10 @@ class ProviderPurchaseOrderController extends ApiResponseController
             
             return $this->dbResponse($vData, 200, null, 'Orden de Compra de Proveedor');
           
-        } catch (\Throwable $e) {
-            return $this->dbResponse(null, 500, $e, null);
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -251,9 +256,9 @@ class ProviderPurchaseOrderController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Orden Compra NO Encontrado');
             }
         } 
-        catch (\Throwable $th) 
+        catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $th, null);
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 }

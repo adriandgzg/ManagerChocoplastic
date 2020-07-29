@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Validator;
+use Throwable;
 use App\ProductFrequent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,8 +51,10 @@ class ProductFrequentController extends ApiResponseController
             
             return $this->dbResponse($vProducts, 200, null, 'Lista de Productos Frecuentes');
           
-        } catch (\Throwable $e) {
-            return $this->dbResponse(null, 500, $e, null);
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, null);
         }
     }
 
@@ -84,8 +87,10 @@ class ProductFrequentController extends ApiResponseController
             
             return $this->dbResponse($vProducts, 200, null, 'Lista de Productos Frecuentes');
           
-        } catch (\Throwable $e) {
-            return $this->dbResponse(null, 500, $e, null);
+        }
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, null);
         }
     }
     
@@ -205,8 +210,9 @@ class ProductFrequentController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Producto Frecuente NO Encontrado');
             }
         } 
-        catch (\Throwable $th) {
-            return $this->dbResponse(null, 500, $th, null);
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, null);
         }
     }
 
@@ -248,8 +254,9 @@ class ProductFrequentController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Producto Frecuente NO Encontrado');
             }
         } 
-        catch (\Throwable $th) {
-            return $this->dbResponse(null, 500, $th, null);
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 }
