@@ -162,6 +162,17 @@ Route::post('provider/return/details/update', 'ProviderReturnDetailController@up
 Route::post('provider/return/details/destroy', 'ProviderReturnDetailController@destroy'); 
 
 
+
+
+
+
+
+
+
+
+//Inventario de Productos
+Route::get('product/inventories', 'ProductInventoryController@index');  //Inventario Total
+
 /****** *************/
 Auth::routes(['register' => false, 'reset' => false]);
 Route::get('/logout', 'Auth\LoginController@logout');
@@ -174,21 +185,6 @@ Route::get('/logout','Auth\LoginController@logout');
 Route::get('/', 'Auth\LoginController@login'); 
 
 Route::group(['middleware' => 'auth'], function () {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     Route::get('/auth/user', function() { return Auth::user(); });
     Route::get('/users', 'AdminController@users');
