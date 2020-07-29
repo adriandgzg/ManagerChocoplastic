@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use App\ProviderPurchaseOrder;
 use App\ProviderPurchaseOrderDetail;
 use App\Http\Controllers\api\ApiResponseController;
+use App\ProductInventory;
+use App\ProviderPurchaseDetail;
 
 class ProviderPurchaseController extends ApiResponseController
 {
@@ -67,8 +69,10 @@ class ProviderPurchaseController extends ApiResponseController
             
             return $this->dbResponse($vPO, 200, null, 'Lista de Compra de Proveedor');
           
-        } catch (\Throwable $e) {
-            return $this->dbResponse(null, 500, $e, null);
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -354,7 +358,7 @@ class ProviderPurchaseController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -460,8 +464,10 @@ class ProviderPurchaseController extends ApiResponseController
                 ], 200);
             }
 
-        } catch (\Throwable $th) {
-            return $this->dbResponse(null, 500, $th, null);
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -548,6 +554,48 @@ class ProviderPurchaseController extends ApiResponseController
                     $vPD->save();
                 }
 
+
+                /////////////////////////////////Anexo de Inventario
+                $vPPD = ProviderPurchaseDetail::where('prpu_fk', '=', $vprpu_pk)
+                        ->where('prpd_status', '=', 1)
+                        ->get();
+                
+                foreach($vPPD as $vP)
+                {
+                    $vProduct = $vP->prod_fk;
+                    $vprpd_quantity = $vP->prpd_quantity;
+
+                    //Buscar Producto en el Inventario 
+                    $vPI = ProductInventory::where('prod_fk', '=', $vProduct)
+                            ->where('prin_status', '=', 1)
+                            ->where('stor_fk', '=', $vPP->stor_fk)
+                            ->first();
+
+                    if ($vPI) 
+                    {
+                        $vprin_pk = $vPI->prin_pk; //Llave primaria del Inventario
+                        $vprin_stock = $vPI->prin_stock; //Stock actual
+
+                        //Modificar Producto Inventario
+                        $vPIU = ProductInventory::find($vprin_pk);
+                        $vPIU->prin_stock = $vprin_stock + $vprpd_quantity;
+                        $vPIU->save();
+                        
+                    } 
+                    else 
+                    {
+                        //Insertar Producto Inventario
+                        $vPI = new ProductInventory();        
+                        $vPI->prod_fk = $vProduct;
+                        $vPI->stor_fk = $vPP->stor_fk;
+                        $vPI->prin_stock = $vprpd_quantity;
+                        $vPI->save();
+                    }
+                }
+
+
+
+
                 return $this->dbResponse($vprpu_pk, 200, null, 'Compra Guardada Correctamente');
             }
             else
@@ -555,9 +603,9 @@ class ProviderPurchaseController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Compra NO Encontrada');
             }
         } 
-        catch (\Throwable $th) 
+        catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $th, null);
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -600,9 +648,9 @@ class ProviderPurchaseController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Compra NO Encontrado');
             }
         } 
-        catch (\Throwable $th) 
+        catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $th, null);
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 }

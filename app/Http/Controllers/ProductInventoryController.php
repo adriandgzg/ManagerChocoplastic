@@ -50,7 +50,7 @@ class ProductInventoryController extends ApiResponseController
         }
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, null);
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
