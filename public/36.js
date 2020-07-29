@@ -583,7 +583,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      var r = confirm("¿Está seguro de finalizar la venta?.");
+      var r = confirm("¿Está seguro de finalizar la compra?.");
 
       if (r == true) {
         this.orderHeader.prpu_pk = this.prpu_pk;
@@ -619,7 +619,7 @@ __webpack_require__.r(__webpack_exports__);
         this.normal('Notificación', "Los montos de pago deben ser igual al total", "error");
         return;
       }
-      var r = confirm("¿Está seguro de finalizar la venta?");
+      var r = confirm("¿Está seguro de finalizar la compra?");
 
       if (r == true) {
         this.editadoSale.clde_amount = this.total;

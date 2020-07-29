@@ -608,7 +608,7 @@ this.subtotal = 0;
               return;
           }
 
-          var r = confirm("¿Está seguro de finalizar la venta?.");
+          var r = confirm("¿Está seguro de finalizar la compra?.");
             if (r == true) {
             this.orderHeader.prpu_pk =  this.prpu_pk
             this.orderHeader.prpo_pk = this.prpo_pk
@@ -654,7 +654,7 @@ console.log('this.orderHeader')
             this.normal('Notificación', "Los montos de pago deben ser igual al total","error");
               return;
           }
-          var r = confirm("¿Está seguro de finalizar la venta?");
+          var r = confirm("¿Está seguro de finalizar la compra?");
             if (r == true) {
               this.editadoSale.clde_amount = this.total
             this.editadoSale.clpa_amount_cash=this.efectivo

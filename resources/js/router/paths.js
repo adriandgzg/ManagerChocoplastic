@@ -85,6 +85,11 @@ export default [{
         view: 'ClientOrders'
     },
     {
+        path: '/inventory',
+        name: 'Inventario',
+        view: 'Inventory'
+    },
+    {
         path: '/detaiorder/:id',
         name: 'Detalle de Orden', 
         view: 'DetailOrder'
