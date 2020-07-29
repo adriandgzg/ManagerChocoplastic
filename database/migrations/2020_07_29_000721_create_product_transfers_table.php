@@ -26,7 +26,8 @@ class CreateProductTransfersTable extends Migration
             $table->foreign('stor_fk_input')->references('stor_pk')->on('stores')->onUpdate('cascade');
 
             $table->string('prtr_identifier', 20)->unique(); //Identificador
-
+            $table->integer('prtr_quantity'); //Cantidad
+            $table->string('prtr_observation', 5000)->nullable(); //Observación
             $table->smallInteger('prtr_status')->default(1); //Estatus
 
             $table->timestamps();

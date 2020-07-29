@@ -21,7 +21,8 @@ class SystemSeeder extends Seeder
             'syst_clie_sale' => 1,
             'syst_prov_order' => 1,
             'syst_prov_purchase' => 1,
-            'syst_prod_desc_availability' => 0
+            'syst_prod_desc_availability' => 0,
+            'syst_transfer' => 1
         ]);
     }
 }

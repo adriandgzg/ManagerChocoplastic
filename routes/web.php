@@ -171,7 +171,13 @@ Route::post('provider/return/details/destroy', 'ProviderReturnDetailController@d
 
 
 //Inventario de Productos
-Route::get('product/inventories', 'ProductInventoryController@index');  //Inventario Total
+Route::get('product/inventories', 'ProductInventoryController@index');  //Inventario 
+
+
+//Traspaso de Productos
+Route::get('product/transfers', 'ProductTransferController@index');  //Consulta General
+Route::post('product/transfers', 'ProductTransferController@store'); //Guardar
+
 
 /****** *************/
 Auth::routes(['register' => false, 'reset' => false]);
