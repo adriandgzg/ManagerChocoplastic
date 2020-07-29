@@ -145,7 +145,17 @@
 
     <!-- Dialog -->
 
-    
+    <v-dialog v-model="dialogQuestion" persistent max-width="290">
+                  <v-card>
+                    <v-card-title class="headline">Información</v-card-title>
+                    <v-card-text>{{messageQuestion}}.</v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="green darken-1" text @click="dialogQuestion = false">Cancelar</v-btn>
+                      <v-btn color="green darken-1" text @click="guardaFinalizar">Continuar</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
     <v-dialog v-model="dialogcredito" max-width="500">
       <v-card>
         <v-card-title>Crédito:</v-card-title>
@@ -265,6 +275,8 @@ export default {
         
       dialogcredito: false,
       dialogcontado: false,
+      dialogQuestion:false,
+      messageQuestion:'',
 
       minNumberRules: [
                     value => !!value || 'Requerido.',
@@ -314,12 +326,19 @@ export default {
               return;
           }
 
-          this.editadoSale.prre_pk = this.saleHeader.prre_pk;
+           this.messageQuestion = '¿Está seguro de finalizar la compra?';          
+
+         this.dialogQuestion = true
+
+
+          
+            
+      },
+      guardaFinalizar(){ 
+        this.editadoSale.prre_pk = this.saleHeader.prre_pk;
           this.editadoSale.remo_fk = this.selectReturn.remo_pk;
           this.editadoSale.prre_observation = this.prre_observation;
   
-         var r = confirm("¿Está seguro de finalizar la venta?");
-            if (r == true) {
               
           axios.post('/provider/returns/update', this.editadoSale)
                 .then(response => {
@@ -338,9 +357,6 @@ export default {
                 .catch(e => {
                     this.errors.push(e)
                     })
-            }
-
-            
       },
       finalizarVenta(){
         console.log((this.total + '-' + (this.efectivo + this.tarjeta)));

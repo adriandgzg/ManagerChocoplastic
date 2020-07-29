@@ -82,6 +82,7 @@
 </template>
 <script>
 import CripNotice from "crip-vue-notice";
+
 export default {
   data() {
     return {
@@ -201,7 +202,7 @@ export default {
                 console.log(response.data);
             })
             .catch(e => {
-                this.errors.push(e)
+                console.log(e)
             })
     },
     
@@ -237,7 +238,7 @@ export default {
                 duration: 3,
                 type: Type,
             })            
-          },  
+          }, 
 
 },
 computed: {

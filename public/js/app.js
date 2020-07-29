@@ -89583,7 +89583,7 @@ __webpack_require__.r(__webpack_exports__);
 var map = {
 	"./Administration.vue": [
 		"./resources/js/components/views/Administration.vue",
-		0,
+		51,
 		3
 	],
 	"./Business.vue": [
@@ -89596,37 +89596,37 @@ var map = {
 	],
 	"./ClientDebts.vue": [
 		"./resources/js/components/views/ClientDebts.vue",
-		0,
+		51,
 		6
 	],
 	"./ClientOrders.vue": [
 		"./resources/js/components/views/ClientOrders.vue",
-		0,
+		51,
 		7
 	],
 	"./Clients.vue": [
 		"./resources/js/components/views/Clients.vue",
-		0,
+		51,
 		8
 	],
 	"./ClientsRDetail.vue": [
 		"./resources/js/components/views/ClientsRDetail.vue",
-		0,
+		51,
 		9
 	],
 	"./ClientsReturn.vue": [
 		"./resources/js/components/views/ClientsReturn.vue",
-		0,
+		51,
 		10
 	],
 	"./ClientsReturnDetails.vue": [
 		"./resources/js/components/views/ClientsReturnDetails.vue",
-		0,
+		51,
 		11
 	],
 	"./ClientsReturnList.vue": [
 		"./resources/js/components/views/ClientsReturnList.vue",
-		0,
+		51,
 		12
 	],
 	"./Coverages.vue": [
@@ -89639,17 +89639,17 @@ var map = {
 	],
 	"./DetailOrder.vue": [
 		"./resources/js/components/views/DetailOrder.vue",
-		0,
+		51,
 		15
 	],
 	"./DetailOrderRead.vue": [
 		"./resources/js/components/views/DetailOrderRead.vue",
-		0,
+		51,
 		16
 	],
 	"./DetailSale.vue": [
 		"./resources/js/components/views/DetailSale.vue",
-		0,
+		51,
 		17
 	],
 	"./Entities.vue": [
@@ -89658,7 +89658,7 @@ var map = {
 	],
 	"./Frequents.vue": [
 		"./resources/js/components/views/Frequents.vue",
-		0,
+		51,
 		19
 	],
 	"./Inventory.vue": [
@@ -89684,7 +89684,7 @@ var map = {
 	],
 	"./OrderDetail.vue": [
 		"./resources/js/components/views/OrderDetail.vue",
-		0,
+		51,
 		23
 	],
 	"./PaymentMethods.vue": [
@@ -89701,7 +89701,7 @@ var map = {
 	],
 	"./Product.vue": [
 		"./resources/js/components/views/Product.vue",
-		0,
+		51,
 		27
 	],
 	"./ProductInventory.vue": [
@@ -89714,17 +89714,17 @@ var map = {
 	],
 	"./ProviderDebts.vue": [
 		"./resources/js/components/views/ProviderDebts.vue",
-		0,
+		51,
 		29
 	],
 	"./ProvidersReturn.vue": [
 		"./resources/js/components/views/ProvidersReturn.vue",
-		0,
+		51,
 		30
 	],
 	"./ProvidersReturnDetail.vue": [
 		"./resources/js/components/views/ProvidersReturnDetail.vue",
-		0,
+		51,
 		31
 	],
 	"./ProvidersReturnList.vue": [
@@ -89733,27 +89733,27 @@ var map = {
 	],
 	"./PurchaseList.vue": [
 		"./resources/js/components/views/PurchaseList.vue",
-		0,
+		51,
 		33
 	],
 	"./PurchaseOrder.vue": [
 		"./resources/js/components/views/PurchaseOrder.vue",
-		0,
+		51,
 		34
 	],
 	"./PurchaseOrdersList.vue": [
 		"./resources/js/components/views/PurchaseOrdersList.vue",
-		0,
+		51,
 		35
 	],
 	"./Purchases.vue": [
 		"./resources/js/components/views/Purchases.vue",
-		0,
+		51,
 		36
 	],
 	"./PurchasesDetail.vue": [
 		"./resources/js/components/views/PurchasesDetail.vue",
-		0,
+		51,
 		37
 	],
 	"./ReturnList.vue": [
@@ -89770,13 +89770,13 @@ var map = {
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
-		0,
+		51,
 		48,
 		41
 	],
 	"./SalesDetail.vue": [
 		"./resources/js/components/views/SalesDetail.vue",
-		0,
+		51,
 		42
 	],
 	"./Stores.vue": [
@@ -89793,7 +89793,7 @@ var map = {
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		0,
+		51,
 		45
 	],
 	"./UserProfile.vue": [
