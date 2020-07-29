@@ -10,7 +10,6 @@
                 :items="users"
                 item-key="id"
                 class="elevation-1"
-                v-if="can('user')"
         >
           <template v-slot:top>
             <v-system-bar color="indigo darken-2" dark></v-system-bar>
@@ -23,7 +22,6 @@
                             left
                             absolute
                             @click="dialog = !dialog"
-                            v-if="user.store_id == null"
                     >
                         <v-icon>mdi-plus</v-icon>
                     </v-btn>
@@ -180,13 +178,10 @@
 
               <v-select  
                :items="stores" v-model="selectStore" label="Seleccione una tienda" single-line
-                                item-text="name" item-value="id" return-object persistent-hint 
-                                v-on:change="changeBusiness(`${selectStore.id}`)"></v-select>
-              
-              <v-select  
-               :items="business" v-model="selectBusiness" label="Seleccione una tienda" single-line
-                                item-text="businessName" item-value="id" return-object persistent-hint 
+                                item-text="stor_name" item-value="stor_pk" return-object persistent-hint 
                                 ></v-select>
+              
+              
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -205,6 +200,7 @@
 
 <script>
 import {mapGetters} from "vuex";
+import CripNotice from "crip-vue-notice";
 export default {
   data () {
     return{
@@ -291,7 +287,7 @@ export default {
   },
   methods:{
     getstores(){
-      axios.get('/storeList/0')
+      axios.get('/storeget')
                     .then(response => {
                         this.stores = response.data.data
                         console.log(this.stores)
@@ -477,16 +473,25 @@ export default {
             },
     editarBusAdmin: function () {
                 if(this.editadoBusiness.checkB)
-                  this.editadoBusiness.idBusiness = this.selectBusiness.id
+                  this.editadoBusiness.idBusiness = this.selectStore.stor_pk
                 else
                   this.editadoBusiness.idBusiness = null
 
                 console.log(this.editadoBusiness)
                 axios.put('/admin/updateBusiness', this.editadoBusiness).then(response => {
-                    this.textMsg = '¡Alta exitosa!'
-                    this.snackbar = true
+                    this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                 });
             },
+    normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
   },
   computed: {
     ...mapGetters('auth', ['can'])

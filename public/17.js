@@ -237,6 +237,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -274,6 +275,7 @@ __webpack_require__.r(__webpack_exports__);
         clpa_amount_cash: 0,
         clpa_amount_transfer: 0
       },
+      enabledStore: false,
       dialogcredito: false,
       dialogcontado: false,
       minNumberRules: [function (value) {
@@ -288,8 +290,25 @@ __webpack_require__.r(__webpack_exports__);
     this.getClients();
     this.getPayment();
     this.getStores();
+    this.getUsers();
   },
   methods: {
+    getUsers: function getUsers() {
+      var _this = this;
+
+      axios.get('/users').then(function (response) {
+        _this.users = response.data.data;
+
+        if (_this.users[0].store_id > 0) {
+          _this.enabledStore = true;
+          _this.selectStore = _this.stores.find(function (item) {
+            return item.stor_pk == _this.users[0].store_id;
+          });
+        } else _this.enabledStore = false;
+      })["catch"](function (e) {
+        _this.errors.push(e);
+      });
+    },
     formatMoney: function formatMoney(amount) {
       var decimalCount = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
       var decimal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ".";
@@ -311,16 +330,16 @@ __webpack_require__.r(__webpack_exports__);
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
     onQuantityChange: function onQuantityChange(item) {
-      var _this = this;
+      var _this2 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this.textMsg = "¡Actualizado correctamente!";
+        _this2.textMsg = "¡Actualizado correctamente!";
         console.log("¡Actualizado correctamente!");
 
-        _this.getTotal();
+        _this2.getTotal();
       })["catch"](function (e) {
-        _this.errors.push(e);
+        _this2.errors.push(e);
       });
     },
     finalizar: function finalizar() {
@@ -350,7 +369,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.editadoSale.pame_fk == 1) this.dialogcontado = true;else this.dialogcredito = true;
     },
     finalizarVenta: function finalizarVenta() {
-      var _this2 = this;
+      var _this3 = this;
 
       console.log(this.total + '-' + (this.efectivo + this.tarjeta));
       if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
@@ -367,21 +386,21 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.code == 200) {
-            _this2.textMsg = "¡Actualizado correctamente!";
+            _this3.textMsg = "¡Actualizado correctamente!";
 
-            _this2.normal('Notificación', '¡Actualizado correctamente!', "success");
+            _this3.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-            _this2.$router.push('/sales');
+            _this3.$router.push('/sales');
           } else {
-            _this2.normal('Notificación', response.data.message, "error");
+            _this3.normal('Notificación', response.data.message, "error");
           }
         })["catch"](function (e) {
-          _this2.errors.push(e);
+          _this3.errors.push(e);
         });
       }
     },
     createsale: function createsale() {
-      var _this3 = this;
+      var _this4 = this;
 
       /*
       <v-col cols="4">
@@ -391,11 +410,11 @@ __webpack_require__.r(__webpack_exports__);
           </v-col>*/
       axios.post('/provider/purchases/' + this.clor_pk + '').then(function (response) {
         console.log(response.data);
-        _this3.sales = response.data.data;
-        _this3.saleHeader = response.data.data.sale;
-        _this3.desserts = _this3.sales.sale_details;
+        _this4.sales = response.data.data;
+        _this4.saleHeader = response.data.data.sale;
+        _this4.desserts = _this4.sales.sale_details;
 
-        _this3.getTotal();
+        _this4.getTotal();
       })["catch"](function (e) {
         //this.errors.push(e)
         console.log(e);
@@ -410,29 +429,29 @@ __webpack_require__.r(__webpack_exports__);
       this.total = this.subtotal + this.iva;
     },
     getClients: function getClients() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get("/clientsget").then(function (response) {
-        _this4.clients = response.data.data;
-        _this4.selectClient = _this4.clients[0];
+        _this5.clients = response.data.data;
+        _this5.selectClient = _this5.clients[0];
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPayment: function getPayment() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.get("/paymentmethodsget").then(function (response) {
-        _this5.payments = response.data.data;
+        _this6.payments = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getStores: function getStores() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.get("/storeget").then(function (response) {
-        _this6.stores = response.data.data;
+        _this7.stores = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -447,26 +466,26 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     "delete": function _delete() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.post('/client_sale_details/destroy', this.editado).then(function (response) {
-        _this7.textMsg = "¡Eliminado correctamente!";
+        _this8.textMsg = "¡Eliminado correctamente!";
 
-        _this7.normal('Notificación', _this7.textMsg, "success");
+        _this8.normal('Notificación', _this8.textMsg, "success");
 
-        _this7.createsale();
+        _this8.createsale();
       });
     },
     actualizar: function actualizar(item) {
-      var _this8 = this;
+      var _this9 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this8.textMsg = "¡Actualizado correctamente!";
+        _this9.textMsg = "¡Actualizado correctamente!";
 
-        _this8.normal('Notificación', _this8.textMsg, "success");
+        _this9.normal('Notificación', _this9.textMsg, "success");
       })["catch"](function (e) {
-        _this8.errors.push(e);
+        _this9.errors.push(e);
       });
     },
     normal: function normal(Title, Description, Type) {
@@ -686,6 +705,7 @@ var render = function() {
                                         attrs: {
                                           required: "",
                                           items: _vm.stores,
+                                          disabled: _vm.enabledStore,
                                           label: "Sucursal",
                                           "item-text": "stor_name",
                                           "item-value": "stor_pk",

@@ -179,6 +179,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -258,6 +259,7 @@ __webpack_require__.r(__webpack_exports__);
         prov_fk: 0,
         stor_fk: 0
       },
+      enabledStore: false,
       dialogcredito: false,
       dialogcontado: false,
       dialog: false,
@@ -272,8 +274,25 @@ __webpack_require__.r(__webpack_exports__);
     this.getStores();
     this.getProviders();
     this.createCompra();
+    this.getUsers();
   },
   methods: {
+    getUsers: function getUsers() {
+      var _this = this;
+
+      axios.get('/users').then(function (response) {
+        _this.users = response.data.data;
+
+        if (_this.users[0].store_id > 0) {
+          _this.enabledStore = true;
+          _this.selectStore = _this.stores.find(function (item) {
+            return item.stor_pk == _this.users[0].store_id;
+          });
+        } else _this.enabledStore = false;
+      })["catch"](function (e) {
+        _this.errors.push(e);
+      });
+    },
     formatMoney: function formatMoney(amount) {
       var decimalCount = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
       var decimal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ".";
@@ -291,25 +310,25 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getStores: function getStores() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get("/storeget").then(function (response) {
-        _this.stores = response.data.data;
+        _this2.stores = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getProviders: function getProviders() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("/providerlist").then(function (response) {
-        _this2.providers = response.data.data;
+        _this3.providers = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     agregar: function agregar(item) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (this.desserts.length > 0) {
         this.detail.prpo_fk = this.prpo_pk;
@@ -325,19 +344,19 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this3.textMsg = "¡Actualizado correctamente!";
-          _this3.prpo_pk = response.data.data; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+          _this4.textMsg = "¡Actualizado correctamente!";
+          _this4.prpo_pk = response.data.data; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
 
-          _this3.createCompra();
+          _this4.createCompra();
 
-          _this3.dialog = false;
+          _this4.dialog = false;
 
-          _this3.getTotal();
+          _this4.getTotal();
         } else {
-          _this3.normal('Notificación', response.data.message, "error");
+          _this4.normal('Notificación', response.data.message, "error");
         }
       })["catch"](function (e) {
-        _this3.errors.push(e);
+        _this4.errors.push(e);
       });
     },
     borrar: function borrar(item) {
@@ -350,32 +369,32 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     "delete": function _delete() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.post('/provider/purchase/order/details/destroy', this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this4.textMsg = "¡Eliminado correctamente!";
+          _this5.textMsg = "¡Eliminado correctamente!";
 
-          _this4.normal('Notificación', _this4.textMsg, "error");
+          _this5.normal('Notificación', _this5.textMsg, "error");
 
-          _this4.createCompra();
+          _this5.createCompra();
         } else {
-          _this4.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
+          _this5.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
         }
       });
     },
     createCompra: function createCompra() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.get('/provider/purchase/orders/' + this.prpo_pk + '').then(function (response) {
         console.log(response);
-        _this5.desserts = response.data.data.provider_purchase_order_details;
+        _this6.desserts = response.data.data.provider_purchase_order_details;
 
-        _this5.getTotal();
+        _this6.getTotal();
       })["catch"](function (e) {
-        _this5.errors.push(e);
+        _this6.errors.push(e);
       });
     },
     cancelar: function cancelar() {
@@ -384,18 +403,18 @@ __webpack_require__.r(__webpack_exports__);
       this.editedIndex = -1;
     },
     buscar: function buscar() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.get('/product/search').then(function (response) {
-        _this6.products = response.data.data;
-        _this6.dialog = true;
+        _this7.products = response.data.data;
+        _this7.dialog = true;
         console.log(response.data);
       })["catch"](function (e) {
-        _this6.errors.push(e);
+        _this7.errors.push(e);
       });
     },
     onQuantityChange: function onQuantityChange(item) {
-      var _this7 = this;
+      var _this8 = this;
 
       //this.editado = Object.assign({}, item)
       this.detail.ppod_pk = item.ppod_pk, this.detail.prod_fk = item.prod_pk;
@@ -406,14 +425,14 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this7.textMsg = "¡Actualizado correctamente!"; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+          _this8.textMsg = "¡Actualizado correctamente!"; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
 
-          _this7.getTotal();
+          _this8.getTotal();
         } else {
-          _this7.normal('Notificación', response.data.status.message, "success");
+          _this8.normal('Notificación', response.data.status.message, "success");
         }
       })["catch"](function (e) {
-        _this7.errors.push(e);
+        _this8.errors.push(e);
       });
     },
     getTotal: function getTotal() {
@@ -427,7 +446,12 @@ __webpack_require__.r(__webpack_exports__);
       this.total = this.subtotal + this.iva;
     },
     finalizar: function finalizar() {
-      var _this8 = this;
+      var _this9 = this;
+
+      if (this.total <= 0) {
+        this.normal('Notificación', "La orden de compra no puede ser menor o igual a cero", "error");
+        return;
+      }
 
       if (this.selectProv == '' || this.selectProv == null) {
         this.normal('Notificación', "Debe seleccionar un proveedor", "error");
@@ -455,21 +479,21 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.status.code == 200) {
-            _this8.textMsg = "¡Actualizado correctamente!";
+            _this9.textMsg = "¡Actualizado correctamente!";
 
-            _this8.normal('Notificación', '¡Actualizado correctamente!', "success");
+            _this9.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-            _this8.$router.push('/PurchaseOrdersList');
+            _this9.$router.push('/PurchaseOrdersList');
           } else {
-            _this8.normal('Notificación', response.data.message, "error");
+            _this9.normal('Notificación', response.data.message, "error");
           }
         })["catch"](function (e) {
-          _this8.errors.push(e);
+          _this9.errors.push(e);
         });
       }
     },
     finalizarVenta: function finalizarVenta() {
-      var _this9 = this;
+      var _this10 = this;
 
       console.log(this.total + '-' + (this.efectivo + this.tarjeta));
       if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
@@ -486,27 +510,27 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.code == 200) {
-            _this9.textMsg = "¡Actualizado correctamente!";
+            _this10.textMsg = "¡Actualizado correctamente!";
 
-            _this9.normal('Notificación', '¡Actualizado correctamente!', "success");
+            _this10.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-            _this9.$router.push('/sales');
+            _this10.$router.push('/sales');
           } else {
-            _this9.normal('Notificación', response.data.message, "error");
+            _this10.normal('Notificación', response.data.message, "error");
           }
         })["catch"](function (e) {
-          _this9.errors.push(e);
+          _this10.errors.push(e);
         });
       }
     },
     actualizar: function actualizar(item) {
-      var _this10 = this;
+      var _this11 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this10.textMsg = "¡Actualizado correctamente!";
+        _this11.textMsg = "¡Actualizado correctamente!";
       })["catch"](function (e) {
-        _this10.errors.push(e);
+        _this11.errors.push(e);
       });
     },
     normal: function normal(Title, Description, Type) {
@@ -777,6 +801,7 @@ var render = function() {
                                     attrs: {
                                       required: "",
                                       items: _vm.stores,
+                                      disabled: _vm.enabledStore,
                                       label: "Sucursal",
                                       "item-text": "stor_name",
                                       "item-value": "stor_pk",

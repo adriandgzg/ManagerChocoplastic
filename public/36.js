@@ -544,6 +544,11 @@ __webpack_require__.r(__webpack_exports__);
     finalizar: function finalizar() {
       var _this9 = this;
 
+      if (this.total <= 0) {
+        this.normal('Notificación', "La orden de compra no puede ser menor o igual a cero", "error");
+        return;
+      }
+
       if (this.selectProv == '' || this.selectProv == null) {
         this.normal('Notificación', "Debe seleccionar un proveedor", "error");
         return;

@@ -43,6 +43,7 @@
               <v-card-text class="category d-inline-flex font-weight-light">
                 <v-combobox required v-model="selectStore"
             :items="stores"
+            :disabled = "enabledStore"
             label="Sucursal"
             item-text="stor_name"
             item-value="stor_pk"
@@ -262,7 +263,7 @@ export default {
             clpa_amount_cash:0,
             clpa_amount_transfer:0,
         },
-        
+       enabledStore:false,    
       dialogcredito: false,
       dialogcontado: false,
 
@@ -278,9 +279,26 @@ export default {
        this.getClients();
        this.getPayment();
        this.getStores();
+       this.getUsers();
    },
 
   methods: {
+      getUsers(){
+      axios.get('/users')
+        .then(response => {
+          this.users = response.data.data
+          if(this.users[0].store_id > 0){
+            this.enabledStore = true
+            this.selectStore = this.stores.find(item => item.stor_pk == this.users[0].store_id)
+          }
+          else
+            this.enabledStore = false
+         
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
+    },
     
       formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
           try {
