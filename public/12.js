@@ -319,7 +319,9 @@ var render = function() {
                                           dark: "",
                                           small: "",
                                           color: "pink",
-                                          href: "/clientsreturn/" + item.clsa_pk
+                                          href:
+                                            "/clientsreturn/" + item.clsa_pk,
+                                          title: "Continuar devolución"
                                         }
                                       },
                                       [
@@ -340,7 +342,8 @@ var render = function() {
                                       dark: "",
                                       small: "",
                                       color: "purple",
-                                      href: "/clientsrdetail/" + item.clre_pk
+                                      href: "/clientsrdetail/" + item.clre_pk,
+                                      title: "Detalle de devolución"
                                     }
                                   },
                                   [

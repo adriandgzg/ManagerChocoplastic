@@ -22,7 +22,7 @@ class RedirectIfAuthenticated
                 return redirect('/sales');
             }
             else{
-                return redirect('/salesbusiness');
+                return redirect('/sales');
             }
         }
 

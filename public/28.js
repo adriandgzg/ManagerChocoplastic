@@ -688,12 +688,6 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(" "),
-                                    _c(
-                                      "v-toolbar-title",
-                                      { staticClass: "white--text" },
-                                      [_vm._v("Lista de Proveedores")]
-                                    ),
-                                    _vm._v(" "),
                                     _c("v-divider", {
                                       staticClass: "mx-4",
                                       attrs: { inset: "", vertical: "" }

@@ -217,7 +217,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -613,12 +612,6 @@ var render = function() {
                             ])
                           },
                           [
-                            _vm._v(" "),
-                            _c(
-                              "v-toolbar-title",
-                              { staticClass: "white--text" },
-                              [_vm._v("Administración")]
-                            ),
                             _vm._v(" "),
                             _c("v-divider", {
                               staticClass: "mx-4",

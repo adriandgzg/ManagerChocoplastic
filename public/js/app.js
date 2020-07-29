@@ -30098,7 +30098,7 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Venta (Cobro)")])
+                      _c("v-list-item-title", [_vm._v("Venta")])
                     ],
                     1
                   ),

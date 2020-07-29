@@ -490,7 +490,8 @@ var render = function() {
                                             "/purchases/" +
                                             item.prpo_pk +
                                             "/" +
-                                            item.prpu_type
+                                            item.prpu_type,
+                                          title: "Continuar compra"
                                         }
                                       },
                                       [
@@ -514,7 +515,8 @@ var render = function() {
                                           small: "",
                                           color: "pink",
                                           href:
-                                            "/providersreturn/" + item.prpu_pk
+                                            "/providersreturn/" + item.prpu_pk,
+                                          title: "Devolución"
                                         }
                                       },
                                       [
@@ -535,7 +537,8 @@ var render = function() {
                                       dark: "",
                                       small: "",
                                       color: "purple",
-                                      href: "/purchasesdetail/" + item.prpu_pk
+                                      href: "/purchasesdetail/" + item.prpu_pk,
+                                      title: "Detalle de compra"
                                     }
                                   },
                                   [
@@ -555,7 +558,8 @@ var render = function() {
                                           fab: "",
                                           dark: "",
                                           small: "",
-                                          color: "error"
+                                          color: "error",
+                                          title: "Eliminar"
                                         },
                                         on: {
                                           click: function($event) {

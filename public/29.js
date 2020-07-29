@@ -713,7 +713,8 @@ var render = function() {
                                       fab: "",
                                       dark: "",
                                       small: "",
-                                      color: "cyan"
+                                      color: "cyan",
+                                      title: "Agregar pago"
                                     },
                                     on: {
                                       click: function($event) {
@@ -737,7 +738,8 @@ var render = function() {
                                       fab: "",
                                       dark: "",
                                       small: "",
-                                      color: "cyan"
+                                      color: "cyan",
+                                      title: "Detalle"
                                     },
                                     on: {
                                       click: function($event) {

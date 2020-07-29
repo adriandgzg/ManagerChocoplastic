@@ -488,6 +488,7 @@ var render = function() {
                                       dark: "",
                                       small: "",
                                       color: "cyan",
+                                      title: "Convertir Orden en Venta",
                                       href: "/detaiorder/" + item.clor_pk
                                     }
                                   },
@@ -508,6 +509,7 @@ var render = function() {
                                       dark: "",
                                       small: "",
                                       color: "purple",
+                                      title: "Detalle de orden",
                                       href: "/detaiorderread/" + item.clor_pk
                                     }
                                   },
@@ -527,7 +529,8 @@ var render = function() {
                                       fab: "",
                                       dark: "",
                                       small: "",
-                                      color: "error"
+                                      color: "error",
+                                      title: "Eliminar orden"
                                     },
                                     on: {
                                       click: function($event) {

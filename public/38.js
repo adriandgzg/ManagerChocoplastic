@@ -313,7 +313,8 @@ var render = function() {
                                           small: "",
                                           color: "pink",
                                           href:
-                                            "/providersreturn/" + item.prpu_pk
+                                            "/providersreturn/" + item.prpu_pk,
+                                          title: "Devolución"
                                         }
                                       },
                                       [
@@ -334,6 +335,7 @@ var render = function() {
                                       dark: "",
                                       small: "",
                                       color: "purple",
+                                      title: "Detalle de devolución",
                                       href:
                                         "/providersreturndetail/" + item.prre_pk
                                     }

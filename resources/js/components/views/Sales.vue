@@ -39,14 +39,14 @@
                    
                      <template v-slot:item.action="{ item }">   
                         <v-btn class="mr-2" fab dark small color="pink" v-if="item.clsa_status != 'Pendiente'" 
-                               :href="'/clientsreturn/'+item.clor_pk">
+                               :href="'/clientsreturn/'+item.clor_pk" title="Devolución">
                             <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
                         </v-btn>            
-                        <v-btn class="mr-2" fab dark small color="purple"  
+                        <v-btn class="mr-2" fab dark small color="purple"  title="Detalle de venta"
                                :href="'/salesdetail/'+item.clsa_pk">
                             <v-icon dark>mdi-eye</v-icon>
                         </v-btn>  
-                        <v-btn class="mr-2" fab dark small color="cyan"  v-if="item.clsa_status == 'Pendiente'"
+                        <v-btn class="mr-2" fab dark small color="cyan"  title="Continuar venta" v-if="item.clsa_status == 'Pendiente'"
                                :href="'/detaiorder/'+item.clor_pk">
                             <v-icon dark>mdi-cash-register</v-icon>
                         </v-btn>

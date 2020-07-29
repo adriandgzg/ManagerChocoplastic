@@ -323,7 +323,9 @@ var render = function() {
                                           dark: "",
                                           small: "",
                                           color: "pink",
-                                          href: "/clientsreturn/" + item.clor_pk
+                                          href:
+                                            "/clientsreturn/" + item.clor_pk,
+                                          title: "Devolución"
                                         }
                                       },
                                       [
@@ -344,6 +346,7 @@ var render = function() {
                                       dark: "",
                                       small: "",
                                       color: "purple",
+                                      title: "Detalle de venta",
                                       href: "/salesdetail/" + item.clsa_pk
                                     }
                                   },
@@ -365,6 +368,7 @@ var render = function() {
                                           dark: "",
                                           small: "",
                                           color: "cyan",
+                                          title: "Continuar venta",
                                           href: "/detaiorder/" + item.clor_pk
                                         }
                                       },

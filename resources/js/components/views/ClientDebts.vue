@@ -91,11 +91,11 @@
                      <template v-slot:item.action="{ item }">   
                                     
                         
-                        <v-btn class="mr-2" fab dark small color="cyan" @click="abonar(item)">
+                        <v-btn class="mr-2" fab dark small color="cyan" @click="abonar(item)"  title="Agregar pago">
                             <v-icon dark>mdi-coin</v-icon>
                         </v-btn>
 
-                        <v-btn class="mr-2" fab dark small color="cyan" @click="detalle(item)">
+                        <v-btn class="mr-2" fab dark small color="cyan" @click="detalle(item)"  title="Detalle de pagos">
                             <v-icon dark>mdi-parking</v-icon>
                         </v-btn>
                     </template>

@@ -60,15 +60,15 @@
                     </template>
                      <template v-slot:item.action="{ item }">   
                                     
-                        <v-btn class="mr-2" fab dark small color="cyan" 
+                        <v-btn class="mr-2" fab dark small color="cyan"  title="Convertir Orden en Venta"
                                :href="'/detaiorder/'+item.clor_pk">
                             <v-icon dark>mdi-cash-register</v-icon>
                         </v-btn>
-                        <v-btn class="mr-2" fab dark small color="purple"  
+                        <v-btn class="mr-2" fab dark small color="purple"   title="Detalle de orden"
                                :href="'/detaiorderread/'+item.clor_pk">
                             <v-icon dark>mdi-eye</v-icon>
                         </v-btn>  
-                        <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)">
+                        <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)" title="Eliminar orden">
                             <v-icon dark>mdi-delete</v-icon>
                         </v-btn>
                     </template>

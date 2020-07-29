@@ -829,7 +829,8 @@ var render = function() {
                                   fab: "",
                                   dark: "",
                                   small: "",
-                                  color: "green"
+                                  color: "green",
+                                  title: "Agregar producto"
                                 },
                                 on: {
                                   click: function($event) {

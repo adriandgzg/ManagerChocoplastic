@@ -36,7 +36,7 @@
                         <v-chip v-else color="red" outlined>NA Granel</v-chip>
                     </template>
                     <template v-slot:item.action="{ item }">                                        
-                        <v-btn class="mr-2" fab dark small color="green" @click="agregar(item)">
+                        <v-btn class="mr-2" fab dark small color="green" @click="agregar(item)"  title="Agregar producto">
                             <v-icon dark>mdi-checkbox-marked-circle</v-icon>
                         </v-btn>
                     </template>

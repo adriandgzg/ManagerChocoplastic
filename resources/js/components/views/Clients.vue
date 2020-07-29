@@ -74,7 +74,7 @@
                                     <v-icon>mdi-plus</v-icon>
                                 </v-btn>
                             </template>
-                            <v-toolbar-title class="white--text">Lista de Clientes</v-toolbar-title>
+                            
                             <v-divider class="mx-4" inset vertical></v-divider>
                             <v-spacer></v-spacer>
 

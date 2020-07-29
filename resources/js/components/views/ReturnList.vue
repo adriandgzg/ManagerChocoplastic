@@ -42,10 +42,10 @@
                      <template v-slot:item.action="{ item }">   
                          
                         <v-btn class="mr-2" fab dark small color="pink"  v-if="item.prre_status == 'Pendiente'"
-                               :href="'/providersreturn/'+item.prpu_pk">
+                               :href="'/providersreturn/'+item.prpu_pk" title="Devolución">
                             <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
                         </v-btn>  
-                        <v-btn class="mr-2" fab dark small color="purple" :href="'/providersreturndetail/'+item.prre_pk"
+                        <v-btn class="mr-2" fab dark small color="purple" title="Detalle de devolución" :href="'/providersreturndetail/'+item.prre_pk"
                             >
                             <v-icon dark>mdi-eye</v-icon>
                         </v-btn>                        

@@ -56,18 +56,18 @@
                                     
                         
                         <v-btn class="mr-2" fab dark small color="orange" :href="'/purchases/'+item.prpo_pk+'/'+item.prpu_type"
-                            v-if="item.prpu_status == 1 && item.prpu_type == 1">
+                            v-if="item.prpu_status == 1 && item.prpu_type == 1" title="Continuar compra">
                             <v-icon dark>mdi-cloud-check</v-icon>
                         </v-btn>
                         <v-btn class="mr-2" fab dark small color="pink" v-if="item.prpu_status_description != 'Pendiente' || item.prpu_status_description == 'Cancelada'" 
-                               :href="'/providersreturn/'+item.prpu_pk">
+                               :href="'/providersreturn/'+item.prpu_pk" title="Devolución">
                             <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
                         </v-btn>
                         <v-btn class="mr-2" fab dark small color="purple" :href="'/purchasesdetail/'+item.prpu_pk"
-                            >
+                            title="Detalle de compra">
                             <v-icon dark>mdi-eye</v-icon>
                         </v-btn>
-                        <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)"
+                        <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)" title="Eliminar"
                         v-if="item.prpu_status == 1">
                             <v-icon dark>mdi-delete</v-icon>
                         </v-btn>
