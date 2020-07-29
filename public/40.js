@@ -102,10 +102,12 @@ __webpack_require__.r(__webpack_exports__);
       estado: true,
       editedIndex: -1,
       sales: [],
+      sales0: [],
       search: "",
       dialog: false,
       snackbar: false,
       timeout: 2000,
+      idUserStore: 0,
       textMsg: "",
       folioRules: [function (value) {
         return !!value || "Requerido.";
@@ -125,15 +127,34 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    this.getSales();
+    this.getUsers(); //this.getSales();
   },
   methods: {
-    getSales: function getSales() {
+    getUsers: function getUsers() {
       var _this = this;
 
+      axios.get('/users').then(function (response) {
+        _this.users = response.data.data;
+        _this.idUserStore = _this.users[0].store_id;
+        console.log(_this.users[0].store_id);
+
+        _this.getSales();
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    getSales: function getSales() {
+      var _this2 = this;
+
       axios.get("/clientsales").then(function (response) {
-        console.log(response.data);
-        _this.sales = response.data.data;
+        //this.sales = response.data.data;   
+        var products = response.data.data;
+        _this2.sales = products.filter(function (sale) {
+          return sale.stor_pk == _this2.idUserStore;
+        }); //this.sales =  this.salesO.find(item => item.stor_pk == this.idUserStore)     
+
+        console.log('this.sales' + _this2.idUserStore);
+        console.log(_this2.sales);
       })["catch"](function (e) {
         console.log(e);
       });
