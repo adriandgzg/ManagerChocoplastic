@@ -35,10 +35,12 @@ class ProviderPurchaseOrderController extends ApiResponseController
                     WHEN PPO.prpo_status = 3 THEN "Procesado" 
                     ELSE "" END) AS prpo_status_description'),
 
+                    'P.prov_pk',
                     'P.prov_identifier',
                     'P.prov_name',
                     'P.prov_rfc',
 
+                    'S.stor_pk',
                     'S.stor_name'
                 )
                 ->where('PPO.prpo_status', '<>', 0)
@@ -67,7 +69,7 @@ class ProviderPurchaseOrderController extends ApiResponseController
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
+     */ 
     public function store(Request $r)
     {
         try 

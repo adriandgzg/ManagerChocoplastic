@@ -28,7 +28,8 @@ class CreateAdminsTable extends Migration
             array(
                 'name' => 'SuperAdmin',
                 'email' => 'admin@admin.com',
-                'password' => Hash::make('admin')
+                'password' => Hash::make('admin'),
+                'store_id' => 1
             )
         );
 
