@@ -75,6 +75,9 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Sucursal',
         value: 'stor_name'
       }, {
+        text: 'Stock',
+        value: 'prin_stock'
+      }, {
         text: '',
         value: 'action',
         width: '20%'

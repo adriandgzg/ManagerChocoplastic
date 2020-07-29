@@ -70,6 +70,10 @@ export default {
                         value: 'stor_name'
                     },
                     {
+                        text: 'Stock',
+                        value: 'prin_stock'
+                    },
+                    {
                         text: '',
                         value: 'action',
                         width: '20%'
