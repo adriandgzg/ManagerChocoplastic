@@ -206,6 +206,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -311,6 +312,7 @@ __webpack_require__.r(__webpack_exports__);
         pame_fk: 0,
         prpu_amount: 0
       },
+      enabledStore: false,
       dialogcredito: false,
       dialogcontado: false,
       dialog: false,
@@ -326,8 +328,25 @@ __webpack_require__.r(__webpack_exports__);
     this.getProviders();
     this.createCompra();
     this.getPayment();
+    this.getUsers();
   },
   methods: {
+    getUsers: function getUsers() {
+      var _this = this;
+
+      axios.get('/users').then(function (response) {
+        _this.users = response.data.data;
+
+        if (_this.users[0].store_id > 0) {
+          _this.enabledStore = true;
+          _this.selectStore = _this.stores.find(function (item) {
+            return item.stor_pk == _this.users[0].store_id;
+          });
+        } else _this.enabledStore = false;
+      })["catch"](function (e) {
+        _this.errors.push(e);
+      });
+    },
     formatMoney: function formatMoney(amount) {
       var decimalCount = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
       var decimal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ".";
@@ -345,34 +364,34 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getStores: function getStores() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get("/storeget").then(function (response) {
-        _this.stores = response.data.data;
+        _this2.stores = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getProviders: function getProviders() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("/providerlist").then(function (response) {
-        _this2.providers = response.data.data;
+        _this3.providers = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPayment: function getPayment() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get("/paymentmethodsget").then(function (response) {
-        _this3.payments = response.data.data;
+        _this4.payments = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     agregar: function agregar(item) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.selectProv == '' || this.selectProv == null) {
         this.normal('Notificación', "Debe seleccionar un proveedor", "error");
@@ -406,19 +425,19 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this4.textMsg = "¡Actualizado correctamente!";
-          _this4.prpo_pk = response.data.data; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+          _this5.textMsg = "¡Actualizado correctamente!";
+          _this5.prpo_pk = response.data.data; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
 
-          _this4.createCompra();
+          _this5.createCompra();
 
-          _this4.dialog = false;
+          _this5.dialog = false;
 
-          _this4.getTotal();
+          _this5.getTotal();
         } else {
-          _this4.normal('Notificación', response.data.message, "error");
+          _this5.normal('Notificación', response.data.message, "error");
         }
       })["catch"](function (e) {
-        _this4.errors.push(e);
+        _this5.errors.push(e);
       });
     },
     borrar: function borrar(item) {
@@ -431,46 +450,46 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     "delete": function _delete() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.post('/provider/purchase/details/destroy', this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this5.textMsg = "¡Eliminado correctamente!";
+          _this6.textMsg = "¡Eliminado correctamente!";
 
-          _this5.normal('Notificación', _this5.textMsg, "success");
+          _this6.normal('Notificación', _this6.textMsg, "success");
 
-          _this5.createCompra();
+          _this6.createCompra();
         } else {
-          _this5.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
+          _this6.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
         }
       });
     },
     createCompra: function createCompra() {
-      var _this6 = this;
+      var _this7 = this;
 
       if (this.directa == 1) {
         axios.post('/provider/purchases?prpo_pk=' + this.prpo_pk + '').then(function (response) {
-          _this6.desserts = response.data.data.ProviderPurchaseDetail;
+          _this7.desserts = response.data.data.ProviderPurchaseDetail;
 
-          _this6.getTotal();
+          _this7.getTotal();
 
-          _this6.prpu_pk = response.data.data.ProviderPurchase.prpu_pk; //response.data.data.ProviderPurchaseDetail//
+          _this7.prpu_pk = response.data.data.ProviderPurchase.prpu_pk; //response.data.data.ProviderPurchaseDetail//
 
-          _this6.editadoHeader = response.data.data.ProviderPurchase;
+          _this7.editadoHeader = response.data.data.ProviderPurchase;
           var i = 0;
 
-          for (i = 0; i < _this6.providers.length; i++) {
-            if (response.data.data.ProviderPurchase.prov_fk == _this6.providers[i].prov_pk) {
-              _this6.selectProv = _this6.providers[i];
+          for (i = 0; i < _this7.providers.length; i++) {
+            if (response.data.data.ProviderPurchase.prov_fk == _this7.providers[i].prov_pk) {
+              _this7.selectProv = _this7.providers[i];
             }
           }
 
-          for (i = 0; i < _this6.stores.length; i++) {
-            if (response.data.data.ProviderPurchase.stor_fk == _this6.stores[i].stor_pk) {
+          for (i = 0; i < _this7.stores.length; i++) {
+            if (response.data.data.ProviderPurchase.stor_fk == _this7.stores[i].stor_pk) {
               console.log(i);
-              _this6.selectStore = _this6.stores[i];
+              _this7.selectStore = _this7.stores[i];
             }
           }
         })["catch"](function (e) {
@@ -480,13 +499,13 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         axios.get('/provider/purchases/' + this.prpo_pk + '').then(function (response) {
           console.log(response);
-          _this6.desserts = response.data.data.ProviderPurchaseDetail;
+          _this7.desserts = response.data.data.ProviderPurchaseDetail;
 
-          _this6.getTotal();
+          _this7.getTotal();
 
-          _this6.prpu_pk = response.data.data.ProviderPurchase.prpu_pk; //response.data.data.ProviderPurchaseDetail//
+          _this7.prpu_pk = response.data.data.ProviderPurchase.prpu_pk; //response.data.data.ProviderPurchaseDetail//
 
-          _this6.editadoHeader = response.data.data.ProviderPurchase;
+          _this7.editadoHeader = response.data.data.ProviderPurchase;
         })["catch"](function (e) {
           //this.errors.push(e)
           console.log(e);
@@ -499,18 +518,18 @@ __webpack_require__.r(__webpack_exports__);
       this.editedIndex = -1;
     },
     buscar: function buscar() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.get('/product/search').then(function (response) {
-        _this7.products = response.data.data;
-        _this7.dialog = true;
+        _this8.products = response.data.data;
+        _this8.dialog = true;
         console.log(response.data);
       })["catch"](function (e) {
-        _this7.errors.push(e);
+        _this8.errors.push(e);
       });
     },
     onQuantityChange: function onQuantityChange(item) {
-      var _this8 = this;
+      var _this9 = this;
 
       //this.editado = Object.assign({}, item)
       this.detail.prpd_pk = item.prpd_pk, this.detail.prod_fk = item.prod_pk;
@@ -521,14 +540,14 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this8.textMsg = "¡Actualizado correctamente!"; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+          _this9.textMsg = "¡Actualizado correctamente!"; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
 
-          _this8.getTotal();
+          _this9.getTotal();
         } else {
-          _this8.normal('Notificación', response.data.status.message, "success");
+          _this9.normal('Notificación', response.data.status.message, "success");
         }
       })["catch"](function (e) {
-        _this8.errors.push(e);
+        _this9.errors.push(e);
       });
     },
     getTotal: function getTotal() {
@@ -542,7 +561,7 @@ __webpack_require__.r(__webpack_exports__);
       this.total = this.subtotal + this.iva;
     },
     finalizar: function finalizar() {
-      var _this9 = this;
+      var _this10 = this;
 
       if (this.total <= 0) {
         this.normal('Notificación', "La orden de compra no puede ser menor o igual a cero", "error");
@@ -579,21 +598,21 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.status.code == 200) {
-            _this9.textMsg = "¡Actualizado correctamente!";
+            _this10.textMsg = "¡Actualizado correctamente!";
 
-            _this9.normal('Notificación', '¡Actualizado correctamente!', "success");
+            _this10.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-            _this9.$router.push('/purchaselist');
+            _this10.$router.push('/purchaselist');
           } else {
-            _this9.normal('Notificación', "Ocurrio un error al finalizar la compra", "error");
+            _this10.normal('Notificación', "Ocurrio un error al finalizar la compra", "error");
           }
         })["catch"](function (e) {
-          _this9.errors.push(e);
+          _this10.errors.push(e);
         });
       }
     },
     finalizarVenta: function finalizarVenta() {
-      var _this10 = this;
+      var _this11 = this;
 
       console.log(this.total + '-' + (this.efectivo + this.tarjeta));
       if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
@@ -610,27 +629,27 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.code == 200) {
-            _this10.textMsg = "¡Actualizado correctamente!";
+            _this11.textMsg = "¡Actualizado correctamente!";
 
-            _this10.normal('Notificación', '¡Actualizado correctamente!', "success");
+            _this11.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-            _this10.$router.push('/sales');
+            _this11.$router.push('/sales');
           } else {
-            _this10.normal('Notificación', response.data.message, "error");
+            _this11.normal('Notificación', response.data.message, "error");
           }
         })["catch"](function (e) {
-          _this10.errors.push(e);
+          _this11.errors.push(e);
         });
       }
     },
     actualizar: function actualizar(item) {
-      var _this11 = this;
+      var _this12 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this11.textMsg = "¡Actualizado correctamente!";
+        _this12.textMsg = "¡Actualizado correctamente!";
       })["catch"](function (e) {
-        _this11.errors.push(e);
+        _this12.errors.push(e);
       });
     },
     normal: function normal(Title, Description, Type) {
@@ -876,6 +895,7 @@ var render = function() {
                                           required: "",
                                           items: _vm.stores,
                                           label: "Sucursal",
+                                          disabled: _vm.enabledStore,
                                           "item-text": "stor_name",
                                           "item-value": "stor_pk",
                                           filled: "",

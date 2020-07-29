@@ -65,6 +65,7 @@
               <v-combobox v-if="directa == 2" required v-model="selectStore"
                     :items="stores"
                     label="Sucursal"
+                    :disabled = "enabledStore"
                     item-text="stor_name"
                     item-value="stor_pk"
                     filled
@@ -306,6 +307,7 @@ export default {
             pame_fk:0,
             prpu_amount:0,
         }   ,
+        enabledStore:false, 
       dialogcredito: false,
       dialogcontado: false,
       dialog:false,
@@ -322,10 +324,26 @@ export default {
        this.getProviders();
        this.createCompra();
        this.getPayment();
+       this.getUsers();
    },
 
   methods: {
-    
+    getUsers(){
+      axios.get('/users')
+        .then(response => {
+          this.users = response.data.data
+          if(this.users[0].store_id > 0){
+            this.enabledStore = true
+            this.selectStore = this.stores.find(item => item.stor_pk == this.users[0].store_id)
+          }
+          else
+            this.enabledStore = false
+         
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
+    },
       formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
           try {
             decimalCount = Math.abs(decimalCount);

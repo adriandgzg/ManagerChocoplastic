@@ -101,10 +101,12 @@ export default {
          estado:true,
          editedIndex: -1,
          sales:[],
+         sales0:[],
           search:"",
           dialog: false,
         snackbar: false,
         timeout: 2000,
+        idUserStore:0,
       textMsg: "",      
       folioRules: [
         value => !!value || "Requerido.",
@@ -121,17 +123,40 @@ export default {
     };
   },
   created() {
-       this.getSales();
+      this.getUsers();
+       //this.getSales();
    },
 
   methods: {
 
+      getUsers(){
+      axios.get('/users')
+        .then(response => {
+         this.users = response.data.data    
+          this.idUserStore = this.users[0].store_id
+          console.log(this.users[0].store_id)   
+          this.getSales()
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+
       getSales() {
+
+          
       axios
         .get("/clientsales")
         .then(response => {
-            console.log(response.data)
-          this.sales = response.data.data;          
+            
+          //this.sales = response.data.data;   
+        const products = response.data.data;   
+  
+           this.sales = products.filter(sale => sale.stor_pk ==(this.idUserStore))  
+
+           //this.sales =  this.salesO.find(item => item.stor_pk == this.idUserStore)     
+           console.log('this.sales' + this.idUserStore)  
+           console.log(this.sales)  
         })
         .catch(e => {
           console.log(e);

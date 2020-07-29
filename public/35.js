@@ -158,16 +158,28 @@ __webpack_require__.r(__webpack_exports__);
       }]
     };
   },
-  created: function created() {
-    this.getCategories();
+  created: function created() {//this.getCategories();
   },
   methods: {
-    getCategories: function getCategories() {
+    getUsers: function getUsers() {
       var _this = this;
+
+      axios.get('/users').then(function (response) {
+        _this.users = response.data.data;
+        _this.idUserStore = _this.users[0].store_id;
+        console.log(_this.users[0].store_id);
+
+        _this.getCategories();
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    getCategories: function getCategories() {
+      var _this2 = this;
 
       axios.get("/provider/purchase/orders").then(function (response) {
         console.log(response.data);
-        _this.ordenescompra = response.data.data;
+        _this2.ordenescompra = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -183,13 +195,13 @@ __webpack_require__.r(__webpack_exports__);
       this.createsale(item.clor_pk);
     },
     createsale: function createsale(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.post('/clientsales?clor_pk=' + id + '').then(function (response) {
-        _this2.sales = response.data;
+        _this3.sales = response.data;
         console.log(response.data);
       })["catch"](function (e) {
-        _this2.errors.push(e);
+        _this3.errors.push(e);
       });
     },
     borrar: function borrar(item) {
@@ -201,19 +213,19 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     "delete": function _delete() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post('/provider/purchase/orders/destroy', this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this3.textMsg = "¡Eliminado correctamente!";
+          _this4.textMsg = "¡Eliminado correctamente!";
 
-          _this3.normal('Notificación', textMsg, "success");
+          _this4.normal('Notificación', textMsg, "success");
 
-          _this3.getCategories();
+          _this4.getCategories();
         } else {
-          _this3.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
+          _this4.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
         }
       });
     },
