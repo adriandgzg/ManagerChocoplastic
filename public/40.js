@@ -318,7 +318,7 @@ var render = function() {
                                           small: "",
                                           color: "pink",
                                           href:
-                                            "/clientsreturn/" + item.clor_pk,
+                                            "/clientsreturn/" + item.clsa_pk,
                                           title: "Devolución"
                                         }
                                       },

@@ -39,7 +39,7 @@
                    
                      <template v-slot:item.action="{ item }">   
                         <v-btn class="mr-2" fab dark small color="pink" v-if="item.clsa_status != 'Pendiente'" 
-                               :href="'/clientsreturn/'+item.clor_pk" title="Devolución">
+                               :href="'/clientsreturn/'+item.clsa_pk" title="Devolución">
                             <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
                         </v-btn>            
                         <v-btn class="mr-2" fab dark small color="purple"  title="Detalle de venta"
@@ -149,7 +149,7 @@ export default {
         .get("/clientsales")
         .then(response => {            
           this.sales = response.data.data;      
-          
+
         })
         .catch(e => {
           console.log(e);

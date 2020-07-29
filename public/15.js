@@ -239,6 +239,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -280,6 +290,8 @@ __webpack_require__.r(__webpack_exports__);
       enabledStore: false,
       dialogcredito: false,
       dialogcontado: false,
+      dialogQuestion: false,
+      messageQuestion: '',
       storeUser: '',
       minNumberRules: [function (value) {
         return !!value || 'Requerido.';
@@ -381,35 +393,35 @@ __webpack_require__.r(__webpack_exports__);
       if (this.editadoSale.pame_fk == 1) this.dialogcontado = true;else this.dialogcredito = true;
     },
     finalizarVenta: function finalizarVenta() {
-      var _this3 = this;
-
       console.log(this.total + '-' + (this.efectivo + this.tarjeta));
       if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
         this.normal('Notificación', 'Los montos de pago deben ser igual al total', "success");
         return;
       }
-      var r = confirm("¿Está seguro de finalizar la venta?");
+      this.messageQuestion = '¿Desea finalizar la operación?';
+      this.dialogQuestion = true;
+    },
+    guardaFinalizar: function guardaFinalizar() {
+      var _this3 = this;
 
-      if (r == true) {
-        this.editadoSale.clde_amount = this.total;
-        this.editadoSale.clpa_amount_cash = this.efectivo;
-        this.editadoSale.clpa_amount_transfer = this.tarjeta;
-        axios.post('/clientsales/update', this.editadoSale).then(function (response) {
-          console.log(response);
+      this.editadoSale.clde_amount = this.total;
+      this.editadoSale.clpa_amount_cash = this.efectivo;
+      this.editadoSale.clpa_amount_transfer = this.tarjeta;
+      axios.post('/clientsales/update', this.editadoSale).then(function (response) {
+        console.log(response);
 
-          if (response.data.code == 200) {
-            _this3.textMsg = "¡Actualizado correctamente!";
+        if (response.data.code == 200) {
+          _this3.textMsg = "¡Actualizado correctamente!";
 
-            _this3.normal('Notificación', '¡Actualizado correctamente!', "success");
+          _this3.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-            _this3.$router.push('/sales');
-          } else {
-            _this3.normal('Notificación', response.data.message, "error");
-          }
-        })["catch"](function (e) {
-          _this3.errors.push(e);
-        });
-      }
+          _this3.$router.push('/sales');
+        } else {
+          _this3.normal('Notificación', response.data.message, "error");
+        }
+      })["catch"](function (e) {
+        _this3.errors.push(e);
+      });
     },
     createsale: function createsale() {
       var _this4 = this;
@@ -553,9 +565,9 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
+                "\n                   " +
                   _vm._s(_vm.textMsg) +
-                  "\n                "
+                  "\n                   "
               ),
               _c(
                 "v-btn",
@@ -567,7 +579,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\n                       Cerrar\n                   ")]
               )
             ],
             1
@@ -670,7 +682,7 @@ var render = function() {
                                         [_vm._v("Vendedor:")]
                                       ),
                                       _vm._v(
-                                        "  Carlos Jiménez Martinez\n          "
+                                        "  Carlos Jiménez Martinez\n             "
                                       )
                                     ]
                                   )
@@ -697,7 +709,7 @@ var render = function() {
                                         },
                                         [_vm._v("Fecha:")]
                                       ),
-                                      _vm._v("  10/10/2020\n          ")
+                                      _vm._v("  10/10/2020\n             ")
                                     ]
                                   )
                                 ],
@@ -1030,6 +1042,66 @@ var render = function() {
                           }
                         ])
                       })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "290" },
+              model: {
+                value: _vm.dialogQuestion,
+                callback: function($$v) {
+                  _vm.dialogQuestion = $$v
+                },
+                expression: "dialogQuestion"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "headline" }, [
+                    _vm._v("Información")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-card-text", [
+                    _vm._v(_vm._s(_vm.messageQuestion) + ".")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialogQuestion = false
+                            }
+                          }
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: { click: _vm.guardaFinalizar }
+                        },
+                        [_vm._v("Continuar")]
+                      )
                     ],
                     1
                   )

@@ -234,6 +234,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -276,7 +288,9 @@ __webpack_require__.r(__webpack_exports__);
         return !!value || 'Requerido.';
       }, function (value) {
         return value > 0 || 'El número debe ser mayor o igual a cero';
-      }]
+      }],
+      dialogQuestion: false,
+      messageQuestion: ''
     };
   },
   created: function created() {
@@ -311,35 +325,35 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     finalizar: function finalizar() {
-      var _this2 = this;
-
       if (this.selectReturn == '' || this.selectReturn == null) {
         this.normal('Notificación', "Debe seleccionar un motivo de devolución", "error");
         return;
       }
 
+      this.messageQuestion = '¿Desea finalizar la devolución?';
+      this.dialogQuestion = true;
+    },
+    guardaFinalizar: function guardaFinalizar() {
+      var _this2 = this;
+
       this.editadoSale.clre_pk = this.saleHeader.clre_pk;
       this.editadoSale.remo_fk = this.selectReturn.remo_pk;
       this.editadoSale.clre_observation = this.clre_observation;
-      var r = confirm("¿Está seguro de finalizar la venta?");
+      axios.post('/client/returns/update', this.editadoSale).then(function (response) {
+        console.log(response);
 
-      if (r == true) {
-        axios.post('/client/returns/update', this.editadoSale).then(function (response) {
-          console.log(response);
+        if (response.data.status.code == 200) {
+          _this2.textMsg = "¡Actualizado correctamente!";
 
-          if (response.data.status.code == 200) {
-            _this2.textMsg = "¡Actualizado correctamente!";
+          _this2.normal('Notificación', _this2.textMsg, "success");
 
-            _this2.normal('Notificación', _this2.textMsg, "success");
-
-            _this2.$router.push('/clientsreturnlist');
-          } else {
-            _this2.normal('Notificación', response.data.message, "error");
-          }
-        })["catch"](function (e) {
-          _this2.errors.push(e);
-        });
-      }
+          _this2.$router.push('/clientsreturnlist');
+        } else {
+          _this2.normal('Notificación', response.data.message, "error");
+        }
+      })["catch"](function (e) {
+        _this2.errors.push(e);
+      });
     },
     finalizarVenta: function finalizarVenta() {
       var _this3 = this;
@@ -987,6 +1001,66 @@ var render = function() {
                           }
                         ])
                       })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "290" },
+              model: {
+                value: _vm.dialogQuestion,
+                callback: function($$v) {
+                  _vm.dialogQuestion = $$v
+                },
+                expression: "dialogQuestion"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "headline" }, [
+                    _vm._v("Información")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-card-text", [
+                    _vm._v(_vm._s(_vm.messageQuestion) + ".")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialogQuestion = false
+                            }
+                          }
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: { click: _vm.guardaFinalizar }
+                        },
+                        [_vm._v("Continuar")]
+                      )
                     ],
                     1
                   )

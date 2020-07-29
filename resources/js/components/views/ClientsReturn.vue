@@ -139,6 +139,18 @@
       </v-col>
     </v-row>
 
+    <v-dialog v-model="dialogQuestion" persistent max-width="290">
+        <v-card>
+          <v-card-title class="headline">Información</v-card-title>
+          <v-card-text>{{messageQuestion}}.</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="dialogQuestion = false">Cancelar</v-btn>
+            <v-btn color="green darken-1" text @click="guardaFinalizar">Continuar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
     <!-- Dialog -->
 
     
@@ -266,6 +278,9 @@ export default {
                     value => !!value || 'Requerido.',
                     value => value > 0 || 'El número debe ser mayor o igual a cero',
                 ],
+
+      dialogQuestion:false,
+      messageQuestion:'',
       
     };
   },
@@ -311,14 +326,16 @@ export default {
               return;
           }
 
-          this.editadoSale.clre_pk = this.saleHeader.clre_pk;
+          this.messageQuestion = '¿Desea finalizar la devolución?';          
+
+         this.dialogQuestion = true
+      },
+      guardaFinalizar(){
+
+        this.editadoSale.clre_pk = this.saleHeader.clre_pk;
           this.editadoSale.remo_fk = this.selectReturn.remo_pk;
           this.editadoSale.clre_observation = this.clre_observation;
-  
-         var r = confirm("¿Está seguro de finalizar la venta?");
-            if (r == true) {
-              
-          axios.post('/client/returns/update', this.editadoSale)
+        axios.post('/client/returns/update', this.editadoSale)
                 .then(response => {
                   console.log(response)
                   if(response.data.status.code == 200){
@@ -336,9 +353,6 @@ export default {
                 .catch(e => {
                     this.errors.push(e)
                     })
-            }
-
-            
       },
       finalizarVenta(){
         console.log((this.total + '-' + (this.efectivo + this.tarjeta)));
