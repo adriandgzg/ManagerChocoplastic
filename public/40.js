@@ -127,7 +127,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    this.getUsers(); //this.getSales();
+    //this.getUsers();
+    this.getSales();
   },
   methods: {
     getUsers: function getUsers() {
@@ -147,14 +148,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.get("/clientsales").then(function (response) {
-        //this.sales = response.data.data;   
-        var products = response.data.data;
-        _this2.sales = products.filter(function (sale) {
-          return sale.stor_pk == _this2.idUserStore;
-        }); //this.sales =  this.salesO.find(item => item.stor_pk == this.idUserStore)     
-
-        console.log('this.sales' + _this2.idUserStore);
-        console.log(_this2.sales);
+        _this2.sales = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });

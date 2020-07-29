@@ -123,8 +123,8 @@ export default {
     };
   },
   created() {
-      this.getUsers();
-       //this.getSales();
+      //this.getUsers();
+       this.getSales();
    },
 
   methods: {
@@ -149,14 +149,7 @@ export default {
         .get("/clientsales")
         .then(response => {
             
-          //this.sales = response.data.data;   
-        const products = response.data.data;   
-  
-           this.sales = products.filter(sale => sale.stor_pk ==(this.idUserStore))  
-
-           //this.sales =  this.salesO.find(item => item.stor_pk == this.idUserStore)     
-           console.log('this.sales' + this.idUserStore)  
-           console.log(this.sales)  
+          this.sales = response.data.data;      
         })
         .catch(e => {
           console.log(e);
