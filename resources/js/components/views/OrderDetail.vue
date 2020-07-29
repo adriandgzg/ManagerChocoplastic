@@ -459,6 +459,12 @@ this.subtotal = 0;
     },
       
       finalizar(){
+
+        if(this.total<=0)
+        {
+          this.normal('Notificación', "La orden de compra no puede ser menor o igual a cero","error");
+          return;
+        }
           
           if(this.selectProv =='' || this.selectProv == null){
               
@@ -478,7 +484,7 @@ this.subtotal = 0;
               return;
           }
 
-          var r = confirm("¿Está seguro de finalizar la venta?");
+          var r = confirm("¿Está seguro de finalizar la orden compra?");
             if (r == true) {
             this.orderHeader.prpu_pk =  this.prpu_pk
             this.orderHeader.prpo_pk = this.prpo_pk

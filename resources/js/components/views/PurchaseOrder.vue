@@ -443,6 +443,12 @@ this.subtotal = 0;
     },
       
       finalizar(){
+
+        if(this.total<=0)
+        {
+          this.normal('Notificación', "La orden de compra no puede ser menor o igual a cero","error");
+          return;
+        }
           
           if(this.selectProv =='' || this.selectProv == null){              
               this.normal('Notificación', "Debe seleccionar un proveedor","error");
