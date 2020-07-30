@@ -366,7 +366,7 @@ var render = function() {
                                       },
                                       [
                                         _c("v-icon", { attrs: { dark: "" } }, [
-                                          _vm._v("mdi-cash-register")
+                                          _vm._v("mdi-swap-horizontal")
                                         ])
                                       ],
                                       1
