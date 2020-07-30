@@ -27,7 +27,7 @@
                             <v-text-field v-model="editadoProveedor.prov_identifier" label="Identificar" maxlength="300"
                                         :rules="nameRules" required></v-text-field>
                             <v-text-field v-model="editadoProveedor.prov_rfc" label="RFC" maxlength="15"
-                                        :rules="nameRules" required></v-text-field>
+                                        :rules="RFCRules" required></v-text-field>
                             <v-text-field v-model="editadoProveedor.prov_phone" label="Teléfono" maxlength="10"
                                         :rules="phoneRules" required></v-text-field>
                             <v-text-field v-model="editadoProveedor.prov_email" label="Correo Electrónico" maxlength="50"
@@ -116,7 +116,7 @@ export default {
                         width: '10%'
                     },                    
                     {
-                        text: 'Id Proveedor',
+                        text: 'Clave Personalizada',
                         value: 'prov_identifier'
                     }, 
                     {
@@ -212,6 +212,10 @@ export default {
             value => !!value || 'Requerido.',
             value => (value && value.length == 10 ) || 'Requiere 10 caracteres',
                  ],
+    RFCRules: [
+                    value => !!value || 'Requerido.',
+                    value => (value && value.length >= 12 && value.length <= 13) || 'El RFC ',
+                ],
     };
   },
    created() {

@@ -13,6 +13,17 @@
                         Cerrar
                     </v-btn>
                 </v-snackbar>
+                <v-dialog v-model="dialogQuestion" persistent max-width="290">
+        <v-card>
+          <v-card-title class="headline">Información</v-card-title>
+          <v-card-text>{{messageQuestion}}.</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="dialogQuestion = false">Cancelar</v-btn>
+            <v-btn color="green darken-1" text @click="guardaFinalizar">Continuar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
      <!--  Modal del diálogo para Alta y Edicion    -->
             <v-dialog v-model="dialog" max-width="800px" >
                 <v-card>
@@ -258,6 +269,8 @@ export default {
       dialogcredito: false,
       dialogcontado: false,
       dialog:false,
+      dialogQuestion:false,
+      messageQuestion:'',
 
       minNumberRules: [
                     value => !!value || 'Requerido.',
@@ -484,9 +497,17 @@ this.subtotal = 0;
               return;
           }
 
+          this.messageQuestion = '¿Desea finalizar la devolución?';          
+
+         this.dialogQuestion = true
+/*
           var r = confirm("¿Está seguro de finalizar la venta?");
-            if (r == true) {
-              this.orderHeader.prpo_pk = this.prpo_pk
+            if (r == true) {*/
+              
+           // }            
+      },
+       guardaFinalizar(){
+          this.orderHeader.prpo_pk = this.prpo_pk
             this.orderHeader.prov_fk =this.selectProv.prov_pk
             this.orderHeader.stor_fk = this.selectStore.stor_pk
 
@@ -510,12 +531,7 @@ this.subtotal = 0;
                 .catch(e => {
                     this.errors.push(e)
                     })
-            }
-
-          
-
-            
-      },
+       },
       finalizarVenta(){
         console.log((this.total + '-' + (this.efectivo + this.tarjeta)));
           if(this.editadoSale.pame_fk == 1)          

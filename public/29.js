@@ -180,6 +180,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -263,6 +274,8 @@ __webpack_require__.r(__webpack_exports__);
       dialogcredito: false,
       dialogcontado: false,
       dialog: false,
+      dialogQuestion: false,
+      messageQuestion: '',
       minNumberRules: [function (value) {
         return !!value || 'Requerido.';
       }, function (value) {
@@ -446,8 +459,6 @@ __webpack_require__.r(__webpack_exports__);
       this.total = this.subtotal + this.iva;
     },
     finalizar: function finalizar() {
-      var _this9 = this;
-
       if (this.total <= 0) {
         this.normal('Notificación', "La orden de compra no puede ser menor o igual a cero", "error");
         return;
@@ -468,29 +479,35 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      var r = confirm("¿Está seguro de finalizar la venta?");
+      this.messageQuestion = '¿Desea finalizar la devolución?';
+      this.dialogQuestion = true;
+      /*
+                var r = confirm("¿Está seguro de finalizar la venta?");
+                  if (r == true) {*/
+      // }            
+    },
+    guardaFinalizar: function guardaFinalizar() {
+      var _this9 = this;
 
-      if (r == true) {
-        this.orderHeader.prpo_pk = this.prpo_pk;
-        this.orderHeader.prov_fk = this.selectProv.prov_pk;
-        this.orderHeader.stor_fk = this.selectStore.stor_pk;
-        console.log(this.orderHeader);
-        axios.post('/provider/purchase/orders', this.orderHeader).then(function (response) {
-          console.log(response);
+      this.orderHeader.prpo_pk = this.prpo_pk;
+      this.orderHeader.prov_fk = this.selectProv.prov_pk;
+      this.orderHeader.stor_fk = this.selectStore.stor_pk;
+      console.log(this.orderHeader);
+      axios.post('/provider/purchase/orders', this.orderHeader).then(function (response) {
+        console.log(response);
 
-          if (response.data.status.code == 200) {
-            _this9.textMsg = "¡Actualizado correctamente!";
+        if (response.data.status.code == 200) {
+          _this9.textMsg = "¡Actualizado correctamente!";
 
-            _this9.normal('Notificación', '¡Actualizado correctamente!', "success");
+          _this9.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-            _this9.$router.push('/PurchaseOrdersList');
-          } else {
-            _this9.normal('Notificación', response.data.message, "error");
-          }
-        })["catch"](function (e) {
-          _this9.errors.push(e);
-        });
-      }
+          _this9.$router.push('/PurchaseOrdersList');
+        } else {
+          _this9.normal('Notificación', response.data.message, "error");
+        }
+      })["catch"](function (e) {
+        _this9.errors.push(e);
+      });
     },
     finalizarVenta: function finalizarVenta() {
       var _this10 = this;
@@ -598,6 +615,66 @@ var render = function() {
                   }
                 },
                 [_vm._v("\n                    Cerrar\n                ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "290" },
+              model: {
+                value: _vm.dialogQuestion,
+                callback: function($$v) {
+                  _vm.dialogQuestion = $$v
+                },
+                expression: "dialogQuestion"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "headline" }, [
+                    _vm._v("Información")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-card-text", [
+                    _vm._v(_vm._s(_vm.messageQuestion) + ".")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialogQuestion = false
+                            }
+                          }
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: { click: _vm.guardaFinalizar }
+                        },
+                        [_vm._v("Continuar")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
               )
             ],
             1

@@ -124,7 +124,7 @@ __webpack_require__.r(__webpack_exports__);
         value: 'prov_pk',
         width: '10%'
       }, {
-        text: 'Id Proveedor',
+        text: 'Clave Personalizada',
         value: 'prov_identifier'
       }, {
         text: 'Nombre',
@@ -210,6 +210,11 @@ __webpack_require__.r(__webpack_exports__);
         return !!value || 'Requerido.';
       }, function (value) {
         return value && value.length == 10 || 'Requiere 10 caracteres';
+      }],
+      RFCRules: [function (value) {
+        return !!value || 'Requerido.';
+      }, function (value) {
+        return value && value.length >= 12 && value.length <= 13 || 'El RFC ';
       }]
     };
   },
@@ -447,7 +452,7 @@ var render = function() {
                             attrs: {
                               label: "RFC",
                               maxlength: "15",
-                              rules: _vm.nameRules,
+                              rules: _vm.RFCRules,
                               required: ""
                             },
                             model: {
