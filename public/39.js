@@ -1,154 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[39],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ReturnList.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/ReturnList.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      headers: [{
-        text: 'ID',
-        value: 'prpu_identifier',
-        width: '10%'
-      }, {
-        text: 'Proveedor',
-        value: 'prov_name'
-      }, {
-        text: 'Sucursal',
-        value: 'stor_name'
-      }, {
-        text: 'Observación',
-        value: 'prre_observation'
-      }, {
-        text: 'Motivo de Devolución',
-        value: 'remo_description'
-      }, {
-        text: 'Fecha',
-        value: 'created_at'
-      }, {
-        text: 'Estatus',
-        value: 'status'
-      }, {
-        text: '',
-        value: 'action',
-        width: '20%'
-      }],
-      select: 0,
-      principal: false,
-      estado: true,
-      editedIndex: -1,
-      sales: [],
-      search: "",
-      dialog: false,
-      snackbar: false,
-      timeout: 2000,
-      textMsg: "",
-      folioRules: [function (value) {
-        return !!value || "Requerido.";
-      }, function (value) {
-        return value && value.length >= 10 || "Min 10 caracter";
-      }],
-      nameRules: [function (value) {
-        return !!value || 'Requerido.';
-      }, function (value) {
-        return value && value.length >= 3 || 'Min 3 caracteres';
-      }],
-      phoneRules: [function (value) {
-        return !!value || 'Requerido.';
-      }, function (value) {
-        return value && value.length == 10 || 'Requiere 10 caracteres';
-      }]
-    };
-  },
-  created: function created() {
-    this.getSales();
-  },
-  methods: {
-    getSales: function getSales() {
-      var _this = this;
-
-      axios.get("/provider/returns").then(function (response) {
-        console.log(response.data);
-        _this.sales = response.data.data;
-      })["catch"](function (e) {
-        console.log(e);
-      });
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ReturnList.vue?vue&type=template&id=030a4b1a&":
-/*!*******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/ReturnList.vue?vue&type=template&id=030a4b1a& ***!
-  \*******************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Upgrade.vue?vue&type=template&id=a2be1cc0&":
+/*!****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Upgrade.vue?vue&type=template&id=a2be1cc0& ***!
+  \****************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -161,202 +16,205 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-app",
+    "v-container",
     [
       _c(
-        "v-container",
+        "v-layout",
+        { attrs: { "justify-center": "" } },
         [
           _c(
-            "v-snackbar",
-            {
-              attrs: { color: "#000000", timeout: _vm.timeout },
-              model: {
-                value: _vm.snackbar,
-                callback: function($$v) {
-                  _vm.snackbar = $$v
-                },
-                expression: "snackbar"
-              }
-            },
+            "v-flex",
+            { attrs: { xs12: "", sm10: "", md8: "" } },
             [
-              _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
-              ),
               _c(
-                "v-btn",
+                "material-card",
                 {
-                  attrs: { color: "blue", text: "" },
-                  on: {
-                    click: function($event) {
-                      _vm.snackbar = false
-                    }
+                  attrs: {
+                    color: "primary",
+                    title: "Vue Material Dashboard PRO",
+                    text:
+                      "Are you looking for more components? Please check our Premium Version of Vue Material Dashboard."
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-row",
-            [
-              _c(
-                "v-col",
                 [
-                  _c(
-                    "v-card",
-                    [
-                      _c("v-data-table", {
-                        staticClass: "elevation-3",
-                        attrs: {
-                          headers: _vm.headers,
-                          items: _vm.sales,
-                          search: _vm.search,
-                          "sort-by": "id"
-                        },
-                        scopedSlots: _vm._u([
+                  _c("table", { staticClass: "v-table" }, [
+                    _c("thead", [
+                      _c("tr", [
+                        _c("th"),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          { staticClass: "subheading font-weight-light" },
+                          [_vm._v("Free")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          { staticClass: "subheading font-weight-light" },
+                          [_vm._v("PRO")]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("tbody", { staticClass: "text-xs-center" }, [
+                      _c("tr", [
+                        _c(
+                          "th",
                           {
-                            key: "top",
-                            fn: function() {
-                              return [
-                                _c("v-system-bar", {
-                                  attrs: { color: "indigo darken-2", dark: "" }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "v-toolbar",
-                                  { attrs: { flat: "", color: "indigo" } },
-                                  [
-                                    _c("v-divider", {
-                                      staticClass: "mx-4",
-                                      attrs: { inset: "", vertical: "" }
-                                    }),
-                                    _vm._v(" "),
-                                    _c("v-spacer")
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-col",
-                                  { attrs: { cols: "12", sm: "12" } },
-                                  [
-                                    _c("v-text-field", {
-                                      attrs: {
-                                        "append-icon": "search",
-                                        label: "Buscar",
-                                        "single-line": "",
-                                        "hide-details": ""
-                                      },
-                                      model: {
-                                        value: _vm.search,
-                                        callback: function($$v) {
-                                          _vm.search = $$v
-                                        },
-                                        expression: "search"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
-                              ]
-                            },
-                            proxy: true
+                            staticClass:
+                              "text-xs-left font-weight-light subheading"
                           },
+                          [_vm._v("Components")]
+                        ),
+                        _vm._v(" "),
+                        _c("td", [_vm._v("60")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v("200")])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c(
+                          "th",
                           {
-                            key: "item.status",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                item.prre_status == "Pendiente"
-                                  ? _c(
-                                      "v-chip",
-                                      { attrs: { color: "gray", dark: "" } },
-                                      [
-                                        _vm._v(
-                                          "  " +
-                                            _vm._s(
-                                              item.prre_status_description
-                                            ) +
-                                            "  "
-                                        )
-                                      ]
-                                    )
-                                  : _c(
-                                      "v-chip",
-                                      { attrs: { color: "green", dark: "" } },
-                                      [
-                                        _vm._v(
-                                          _vm._s(item.prre_status_description)
-                                        )
-                                      ]
-                                    )
-                              ]
-                            }
+                            staticClass:
+                              "text-xs-left font-weight-light subheading"
                           },
+                          [_vm._v("Plugins")]
+                        ),
+                        _vm._v(" "),
+                        _c("td", [_vm._v("2")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v("15")])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c(
+                          "th",
                           {
-                            key: "item.action",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                item.prre_status == "Pendiente"
-                                  ? _c(
-                                      "v-btn",
-                                      {
-                                        staticClass: "mr-2",
-                                        attrs: {
-                                          fab: "",
-                                          dark: "",
-                                          small: "",
-                                          color: "pink",
-                                          href:
-                                            "/providersreturn/" + item.prpu_pk,
-                                          title: "Devolución"
-                                        }
-                                      },
-                                      [
-                                        _c("v-icon", { attrs: { dark: "" } }, [
-                                          _vm._v("mdi-arrow-left-bold-circle")
-                                        ])
-                                      ],
-                                      1
-                                    )
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "purple",
-                                      title: "Detalle de devolución",
-                                      href:
-                                        "/providersreturndetail/" + item.prre_pk
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-eye")
-                                    ])
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ])
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
+                            staticClass:
+                              "text-xs-left font-weight-light subheading"
+                          },
+                          [_vm._v("Example Pages")]
+                        ),
+                        _vm._v(" "),
+                        _c("td", [_vm._v("3")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v("27")])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c(
+                          "th",
+                          {
+                            staticClass:
+                              "text-xs-left font-weight-light subheading"
+                          },
+                          [_vm._v("Login, Register, Pricing, Lock Pages")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "td",
+                          [
+                            _c("v-icon", { attrs: { color: "error" } }, [
+                              _vm._v("mdi-close")
+                            ])
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "td",
+                          [
+                            _c("v-icon", { attrs: { color: "success" } }, [
+                              _vm._v("mdi-check")
+                            ])
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c(
+                          "th",
+                          {
+                            staticClass:
+                              "text-xs-left font-weight-light subheading"
+                          },
+                          [_vm._v("Premium Support")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "td",
+                          [
+                            _c("v-icon", { attrs: { color: "error" } }, [
+                              _vm._v("mdi-close")
+                            ])
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "td",
+                          [
+                            _c("v-icon", { attrs: { color: "success" } }, [
+                              _vm._v("mdi-check")
+                            ])
+                          ],
+                          1
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("th"),
+                        _vm._v(" "),
+                        _c("td", [_vm._v("Free")]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v("Just $59")])
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("th"),
+                        _vm._v(" "),
+                        _c(
+                          "td",
+                          [
+                            _c(
+                              "v-btn",
+                              {
+                                staticClass:
+                                  "subheading white--text font-weight-light",
+                                attrs: {
+                                  rounded: "",
+                                  large: "",
+                                  color: "grey",
+                                  disabled: ""
+                                }
+                              },
+                              [_vm._v("Current Version")]
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "td",
+                          [
+                            _c(
+                              "v-btn",
+                              {
+                                staticClass:
+                                  "subheading white--text font-weight-light",
+                                attrs: { rounded: "", large: "", color: "cyan" }
+                              },
+                              [_vm._v("Upgrade to Pro")]
+                            )
+                          ],
+                          1
+                        )
+                      ])
+                    ])
+                  ])
+                ]
               )
             ],
             1
@@ -375,29 +233,27 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/views/ReturnList.vue":
-/*!******************************************************!*\
-  !*** ./resources/js/components/views/ReturnList.vue ***!
-  \******************************************************/
+/***/ "./resources/js/components/views/Upgrade.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/components/views/Upgrade.vue ***!
+  \***************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ReturnList_vue_vue_type_template_id_030a4b1a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ReturnList.vue?vue&type=template&id=030a4b1a& */ "./resources/js/components/views/ReturnList.vue?vue&type=template&id=030a4b1a&");
-/* harmony import */ var _ReturnList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ReturnList.vue?vue&type=script&lang=js& */ "./resources/js/components/views/ReturnList.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _Upgrade_vue_vue_type_template_id_a2be1cc0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Upgrade.vue?vue&type=template&id=a2be1cc0& */ "./resources/js/components/views/Upgrade.vue?vue&type=template&id=a2be1cc0&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-
-
+var script = {}
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ReturnList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ReturnList_vue_vue_type_template_id_030a4b1a___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ReturnList_vue_vue_type_template_id_030a4b1a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _Upgrade_vue_vue_type_template_id_a2be1cc0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Upgrade_vue_vue_type_template_id_a2be1cc0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -407,38 +263,24 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/views/ReturnList.vue"
+component.options.__file = "resources/js/components/views/Upgrade.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/views/ReturnList.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/components/views/ReturnList.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReturnList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ReturnList.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ReturnList.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReturnList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/views/ReturnList.vue?vue&type=template&id=030a4b1a&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/components/views/ReturnList.vue?vue&type=template&id=030a4b1a& ***!
-  \*************************************************************************************/
+/***/ "./resources/js/components/views/Upgrade.vue?vue&type=template&id=a2be1cc0&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/views/Upgrade.vue?vue&type=template&id=a2be1cc0& ***!
+  \**********************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReturnList_vue_vue_type_template_id_030a4b1a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ReturnList.vue?vue&type=template&id=030a4b1a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ReturnList.vue?vue&type=template&id=030a4b1a&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReturnList_vue_vue_type_template_id_030a4b1a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Upgrade_vue_vue_type_template_id_a2be1cc0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Upgrade.vue?vue&type=template&id=a2be1cc0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Upgrade.vue?vue&type=template&id=a2be1cc0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Upgrade_vue_vue_type_template_id_a2be1cc0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReturnList_vue_vue_type_template_id_030a4b1a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Upgrade_vue_vue_type_template_id_a2be1cc0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

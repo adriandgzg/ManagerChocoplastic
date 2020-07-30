@@ -190,4 +190,19 @@ export default [{
         name: 'Detalle Devolución Proveedor', 
         view: 'ProvidersReturnDetail'
     },
+    {
+        path: '/transferlist',
+        name: 'Transferencias', 
+        view: 'TransferList'
+    },
+    {
+        path: '/transferdetail/:id',
+        name: 'Detalle Transferencia', 
+        view: 'TransferDetail'
+    },
+    {
+        path: '/transferdetailview/:id',
+        name: 'Detalle Transferencia.', 
+        view: 'TransferDetailView'
+    },
 ]

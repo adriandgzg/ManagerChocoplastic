@@ -38,7 +38,8 @@
                                         :rules="nameRules" required></v-text-field>
                             <v-text-field v-model="editadoProveedor.prov_city" label="Ciudad" maxlength="300"
                                         :rules="nameRules" required></v-text-field>
-                            
+                                        
+                            <span>Activo/Inactivo</span>
                             <v-switch v-model="editadoProveedor.prov_status"/>
                         
                             <v-select :items="entities" v-model="select" label="Selecione un estado" single-line
