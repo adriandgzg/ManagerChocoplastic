@@ -21,7 +21,8 @@
                         <span class="headline">{{ formTitle }}</span>
                     </v-card-title>
                     <v-form v-model="validProvider" >
-                        <v-card-text>
+                        <v-card-text>                       
+                         
                             <v-text-field v-model="editadoProveedor.prov_name" label="Nombre" maxlength="300"
                                         :rules="nameRules" required></v-text-field>
                             <v-text-field v-model="editadoProveedor.prov_identifier" label="Identificar" maxlength="300"
@@ -29,9 +30,9 @@
                             <v-text-field v-model="editadoProveedor.prov_rfc" label="RFC" maxlength="15"
                                         :rules="RFCRules" required></v-text-field>
                             <v-text-field v-model="editadoProveedor.prov_phone" label="Teléfono" maxlength="10"
-                                        :rules="phoneRules" required></v-text-field>
+                                        v-on:keydown="isNumber" :rules="phoneRules" required></v-text-field>
                             <v-text-field v-model="editadoProveedor.prov_email" label="Correo Electrónico" maxlength="50"
-                                        :rules="nameRules" required></v-text-field>
+                                          type="email" :rules="emailRules" required></v-text-field>
                             <v-text-field v-model="editadoProveedor.prov_addres" label="Dirección" maxlength="1000"
                                         :rules="nameRules" required></v-text-field>
                             <v-text-field v-model="editadoProveedor.prov_cp" label="C.P." maxlength="5"
@@ -106,6 +107,8 @@
     </v-app>
 </template>
 <script>
+
+
 export default {
   data() {
     return {
@@ -163,6 +166,7 @@ export default {
 
          ],
          select:0,
+         phoneNumber:'',
          editadoProveedor:{
             prov_pk:0,
             feen_fk:0,
@@ -214,8 +218,16 @@ export default {
                  ],
     RFCRules: [
                     value => !!value || 'Requerido.',
-                    value => (value && value.length >= 12 && value.length <= 13) || 'El RFC ',
+                    value => (value && value.length >= 12 && value.length <= 13) || 'Ingrese un RFC valido',
                 ],
+    CPRules: [
+                    value => !!value || 'Código postal requerido.',
+                    value => (value && value.length == 5) || 'Ingrese un Código Postal valido ',
+                ],
+    emailRules: [
+                    (v) => !!v || 'Correo electrónico requerido',
+                    (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Ingrese un correo válido'
+                ]
     };
   },
    created() {
@@ -224,6 +236,22 @@ export default {
    },
 
   methods: {
+      
+      isNumber: function(evt) {
+           console.log('key ' + evt.key + ' (' + evt.keyCode + ')');
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        
+        //if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+        if ((charCode > 47 && charCode < 58) || (charCode > 95 && charCode < 106) || charCode == 8) {
+            console.log(charCode + '--> true' );
+            return true;
+        } else {
+            console.log(charCode + '-->' );
+            evt.preventDefault();
+            
+        }
+      },
 
       getProviders() {
       axios

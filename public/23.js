@@ -116,6 +116,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -159,6 +160,7 @@ __webpack_require__.r(__webpack_exports__);
         width: '20%'
       }],
       select: 0,
+      phoneNumber: '',
       editadoProveedor: {
         prov_pk: 0,
         feen_fk: 0,
@@ -214,7 +216,17 @@ __webpack_require__.r(__webpack_exports__);
       RFCRules: [function (value) {
         return !!value || 'Requerido.';
       }, function (value) {
-        return value && value.length >= 12 && value.length <= 13 || 'El RFC ';
+        return value && value.length >= 12 && value.length <= 13 || 'Ingrese un RFC valido';
+      }],
+      CPRules: [function (value) {
+        return !!value || 'Código postal requerido.';
+      }, function (value) {
+        return value && value.length == 5 || 'Ingrese un Código Postal valido ';
+      }],
+      emailRules: [function (v) {
+        return !!v || 'Correo electrónico requerido';
+      }, function (v) {
+        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Ingrese un correo válido';
       }]
     };
   },
@@ -223,6 +235,19 @@ __webpack_require__.r(__webpack_exports__);
     this.getEntities();
   },
   methods: {
+    isNumber: function isNumber(evt) {
+      console.log('key ' + evt.key + ' (' + evt.keyCode + ')');
+      evt = evt ? evt : window.event;
+      var charCode = evt.which ? evt.which : evt.keyCode; //if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+
+      if (charCode > 47 && charCode < 58 || charCode > 95 && charCode < 106 || charCode == 8) {
+        console.log(charCode + '--> true');
+        return true;
+      } else {
+        console.log(charCode + '-->');
+        evt.preventDefault();
+      }
+    },
     getProviders: function getProviders() {
       var _this = this;
 
@@ -471,6 +496,7 @@ var render = function() {
                               rules: _vm.phoneRules,
                               required: ""
                             },
+                            on: { keydown: _vm.isNumber },
                             model: {
                               value: _vm.editadoProveedor.prov_phone,
                               callback: function($$v) {
@@ -488,7 +514,8 @@ var render = function() {
                             attrs: {
                               label: "Correo Electrónico",
                               maxlength: "50",
-                              rules: _vm.nameRules,
+                              type: "email",
+                              rules: _vm.emailRules,
                               required: ""
                             },
                             model: {
