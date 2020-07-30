@@ -40,7 +40,7 @@
                                         :rules="nameRules" required></v-text-field>
                                         
                             <span>Activo/Inactivo</span>
-                            <v-switch v-model="editadoProveedor.prov_status"/>
+                            <v-switch v-model="estado"/>
                         
                             <v-select :items="entities" v-model="select" label="Selecione un estado" single-line
                                     item-text="feen_name" item-value="feen_pk"  persistent-hint 
@@ -199,6 +199,7 @@ export default {
       textMsg: "",
       valid: false,
       validProvider:false,
+      estado:true,
       folioRules: [
         value => !!value || "Requerido.",
         value => (value && value.length >= 10) || "Min 10 caracter"
@@ -253,10 +254,17 @@ export default {
       this.editedIndex = this.proveedores.indexOf(item)
       this.editadoProveedor = Object.assign({}, item)
       this.select = this.editadoProveedor.feen_fk
+      this.estado = this.editadoProveedor.prov_status
       this.dialog = true
     },
     guardar() {
         this.editadoProveedor.feen_fk = this.select
+
+        if(this.estado == true)
+            this.editadoProveedor.prov_status =  1;
+        else
+            this.editadoProveedor.prov_status =  0;
+
         if (this.editedIndex > -1) {
             this.editar()
         } else {            

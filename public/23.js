@@ -195,6 +195,7 @@ __webpack_require__.r(__webpack_exports__);
       textMsg: "",
       valid: false,
       validProvider: false,
+      estado: true,
       folioRules: [function (value) {
         return !!value || "Requerido.";
       }, function (value) {
@@ -246,10 +247,12 @@ __webpack_require__.r(__webpack_exports__);
       this.editedIndex = this.proveedores.indexOf(item);
       this.editadoProveedor = Object.assign({}, item);
       this.select = this.editadoProveedor.feen_fk;
+      this.estado = this.editadoProveedor.prov_status;
       this.dialog = true;
     },
     guardar: function guardar() {
       this.editadoProveedor.feen_fk = this.select;
+      if (this.estado == true) this.editadoProveedor.prov_status = 1;else this.editadoProveedor.prov_status = 0;
 
       if (this.editedIndex > -1) {
         this.editar();
@@ -552,15 +555,11 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-switch", {
                             model: {
-                              value: _vm.editadoProveedor.prov_status,
+                              value: _vm.estado,
                               callback: function($$v) {
-                                _vm.$set(
-                                  _vm.editadoProveedor,
-                                  "prov_status",
-                                  $$v
-                                )
+                                _vm.estado = $$v
                               },
-                              expression: "editadoProveedor.prov_status"
+                              expression: "estado"
                             }
                           }),
                           _vm._v(" "),
