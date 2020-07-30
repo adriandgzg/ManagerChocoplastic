@@ -174,9 +174,17 @@ Route::post('provider/return/details/destroy', 'ProviderReturnDetailController@d
 Route::get('product/inventories', 'ProductInventoryController@index');  //Inventario 
 
 
-//Traspaso de Productos
-Route::get('product/transfers', 'ProductTransferController@index');  //Consulta General
-Route::post('product/transfers', 'ProductTransferController@store'); //Guardar
+//CRUD Traspaso
+Route::get('product/transfers', 'ProductTransferController@index');   
+Route::get('product/transfers/{prtr_pk}', 'ProductTransferController@show');  
+Route::post('product/transfers', 'ProductTransferController@store'); 
+Route::post('product/transfers/update', 'ProductTransferController@update'); 
+Route::post('product/transfers/destroy', 'ProductTransferController@destroy'); 
+
+Route::post('product/transfer/details', 'ProductTransferDetailController@store');  
+Route::post('product/transfer/details/update', 'ProductTransferDetailController@update'); 
+Route::post('product/transfer/details/destroy', 'ProductTransferDetailController@destroy'); 
+
 
 
 /****** *************/

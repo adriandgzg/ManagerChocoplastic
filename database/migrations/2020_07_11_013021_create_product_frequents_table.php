@@ -13,6 +13,7 @@ class CreateProductFrequentsTable extends Migration
      */
     public function up()
     {
+        //Productos Frecuentes
         Schema::create('product_frequents', function (Blueprint $table) {
             $table->bigIncrements('prfr_pk'); //Llave Primaria
 

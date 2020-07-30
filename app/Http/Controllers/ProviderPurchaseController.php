@@ -592,10 +592,6 @@ class ProviderPurchaseController extends ApiResponseController
                         $vPI->save();
                     }
                 }
-
-
-
-
                 return $this->dbResponse($vprpu_pk, 200, null, 'Compra Guardada Correctamente');
             }
             else

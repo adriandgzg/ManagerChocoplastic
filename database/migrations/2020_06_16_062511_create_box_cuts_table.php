@@ -13,6 +13,7 @@ class CreateBoxCutsTable extends Migration
      */
     public function up()
     {
+        //Corte de caja
         Schema::create('box_cuts', function (Blueprint $table) {
             $table->bigIncrements('bocu_pk');
             $table->dateTimeTz('bocu_startdate', 0); //Fecha Inicio

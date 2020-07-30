@@ -13,6 +13,7 @@ class CreateProductInventoriesTable extends Migration
      */
     public function up()
     {
+        //Inventario
         Schema::create('product_inventories', function (Blueprint $table) {
             $table->bigIncrements('prin_pk'); //Llave Primaria
 

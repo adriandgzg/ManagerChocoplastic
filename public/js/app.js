@@ -89663,7 +89663,7 @@ var map = {
 	],
 	"./Inventory.vue": [
 		"./resources/js/components/views/Inventory.vue",
-		49
+		20
 	],
 	"./Maps.vue": [
 		"./resources/js/components/views/Maps.vue",
@@ -89671,38 +89671,38 @@ var map = {
 	],
 	"./Measurements.vue": [
 		"./resources/js/components/views/Measurements.vue",
-		20
+		21
 	],
 	"./Missions.vue": [
 		"./resources/js/components/views/Missions.vue",
 		1,
-		21
+		22
 	],
 	"./Notifications.vue": [
 		"./resources/js/components/views/Notifications.vue",
-		22
+		23
 	],
 	"./OrderDetail.vue": [
 		"./resources/js/components/views/OrderDetail.vue",
 		0,
-		23
+		24
 	],
 	"./PaymentMethods.vue": [
 		"./resources/js/components/views/PaymentMethods.vue",
-		24
+		25
 	],
 	"./PaymentShapes.vue": [
 		"./resources/js/components/views/PaymentShapes.vue",
-		25
+		26
 	],
 	"./PointOfSale.vue": [
 		"./resources/js/components/views/PointOfSale.vue",
-		26
+		27
 	],
 	"./Product.vue": [
 		"./resources/js/components/views/Product.vue",
 		0,
-		27
+		28
 	],
 	"./ProductInventory.vue": [
 		"./resources/js/components/views/ProductInventory.vue",
@@ -89710,95 +89710,95 @@ var map = {
 	],
 	"./Proveedores.vue": [
 		"./resources/js/components/views/Proveedores.vue",
-		28
+		29
 	],
 	"./ProviderDebts.vue": [
 		"./resources/js/components/views/ProviderDebts.vue",
 		0,
-		29
+		30
 	],
 	"./ProvidersReturn.vue": [
 		"./resources/js/components/views/ProvidersReturn.vue",
 		0,
-		30
+		31
 	],
 	"./ProvidersReturnDetail.vue": [
 		"./resources/js/components/views/ProvidersReturnDetail.vue",
 		0,
-		31
+		32
 	],
 	"./ProvidersReturnList.vue": [
 		"./resources/js/components/views/ProvidersReturnList.vue",
-		32
+		33
 	],
 	"./PurchaseList.vue": [
 		"./resources/js/components/views/PurchaseList.vue",
 		0,
-		33
+		34
 	],
 	"./PurchaseOrder.vue": [
 		"./resources/js/components/views/PurchaseOrder.vue",
 		0,
-		34
+		35
 	],
 	"./PurchaseOrdersList.vue": [
 		"./resources/js/components/views/PurchaseOrdersList.vue",
 		0,
-		35
+		36
 	],
 	"./Purchases.vue": [
 		"./resources/js/components/views/Purchases.vue",
 		0,
-		36
+		37
 	],
 	"./PurchasesDetail.vue": [
 		"./resources/js/components/views/PurchasesDetail.vue",
 		0,
-		37
+		38
 	],
 	"./ReturnList.vue": [
 		"./resources/js/components/views/ReturnList.vue",
-		38
+		39
 	],
 	"./ReturnMotives.vue": [
 		"./resources/js/components/views/ReturnMotives.vue",
-		39
+		40
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
-		40
+		41
 	],
 	"./SalesBusiness.vue": [
 		"./resources/js/components/views/SalesBusiness.vue",
 		0,
-		48,
-		41
+		49,
+		42
 	],
 	"./SalesDetail.vue": [
 		"./resources/js/components/views/SalesDetail.vue",
 		0,
-		42
+		43
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		43
+		44
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		44
+		45
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		47
+		48
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
 		0,
-		45
+		46
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		46
+		47
 	]
 };
 function webpackAsyncContext(req) {
