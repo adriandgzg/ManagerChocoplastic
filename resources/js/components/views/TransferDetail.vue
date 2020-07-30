@@ -445,7 +445,7 @@ export default {
                 this.editedIndex = -1
             },
         buscar(){
-            axios.get('/product/search')
+            axios.get('/product/inventories')
                 .then(response => {      
                     
                     this.products = response.data.data;

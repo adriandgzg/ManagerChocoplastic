@@ -426,7 +426,7 @@ __webpack_require__.r(__webpack_exports__);
     buscar: function buscar() {
       var _this8 = this;
 
-      axios.get('/product/search').then(function (response) {
+      axios.get('/product/inventories').then(function (response) {
         _this8.products = response.data.data;
         _this8.dialog = true;
         console.log(response.data);
