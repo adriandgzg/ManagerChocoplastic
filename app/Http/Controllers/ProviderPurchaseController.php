@@ -587,7 +587,7 @@ class ProviderPurchaseController extends ApiResponseController
                         //Insertar Producto Inventario
                         $vPI = new ProductInventory();        
                         $vPI->prod_fk = $vProduct;
-                        $vPI->stor_fk = $vPP->stor_fk;
+                        $vPI->stor_fk = 1;
                         $vPI->prin_stock = $vprpd_quantity;
                         $vPI->save();
                     }
