@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use DB;
 use Throwable;
 use Validator;
-use App\ProductTransferDetail;
-use Illuminate\Http\Request;
-use App\Http\Controllers\api\ApiResponseController;
 use App\ProductTransfer;
+use Illuminate\Http\Request;
+use App\ProductTransferDetail;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\api\ApiResponseController;
 
 class ProductTransferDetailController extends ApiResponseController
 {
@@ -57,12 +58,15 @@ class ProductTransferDetailController extends ApiResponseController
             //Asignacion de variables
             $vprtr_fk = $vInput['prtr_fk'];
             $vprod_fk = $vInput['prod_fk'];
-            $vprtd_quantity = $vInput['prtd_quantity'];
+            $vprtd_quantity = $vInput['prtd_quantity']; 
+
+            //PK Sucursal Salida
+            $vstor_fk_output = Auth::user()->store_id;
 
             if ($vprtr_fk == 0) {
                 //Insersión de la tabla principal (Traspaso)
                 $vPTI = new ProductTransfer();
-                $vPTI->stor_fk_output = null;
+                $vPTI->stor_fk_output = $vstor_fk_output;
                 $vPTI->stor_fk_input = null;
                 $vPTI->prtr_identifier = null;
                 $vPTI->prtr_observation = null;
