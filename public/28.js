@@ -157,10 +157,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -264,6 +260,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       textMsg: "",
       valid: false,
       validProvider: false,
+      dialogSuccess: false,
       folioRules: [function (value) {
         return !!value || "Requerido.";
       }, function (value) {
@@ -380,8 +377,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(response.data);
 
         if (response.data.status.code == 200) {
-          _this4.snackbar = true;
+          _this4.dialogSuccess = false;
           _this4.textMsg = response.data.status.message;
+
+          _this4.normal('Notificación', _this4.textMsg, "success");
 
           _this4.getProducts();
         } else {
@@ -398,8 +397,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(response);
 
         if (response.data.code == 200) {
-          _this5.snackbar = true;
+          _this5.dialogSuccess = false;
           _this5.textMsg = '¡Actualización Exitosa!';
+
+          _this5.normal('Notificación', _this5.textMsg, "success");
 
           _this5.getProducts();
         } else {
@@ -458,6 +459,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   },
+  watch: {
+    dialogSuccess: function dialogSuccess(val) {
+      var _this8 = this;
+
+      if (!val) return;
+      setTimeout(function () {
+        return _this8.dialogSuccess = false;
+      }, 4000);
+    }
+  },
   computed: {
     formTitle: function formTitle() {
       return this.editedIndex === -1 ? 'Nuevo Registro' : 'Editar Registro';
@@ -489,34 +500,43 @@ var render = function() {
         "v-container",
         [
           _c(
-            "v-snackbar",
+            "v-dialog",
             {
-              attrs: { color: "#000000", timeout: _vm.timeout },
+              attrs: { width: "640", "overlay-color": "white", persistent: "" },
               model: {
-                value: _vm.snackbar,
+                value: _vm.dialogSuccess,
                 callback: function($$v) {
-                  _vm.snackbar = $$v
+                  _vm.dialogSuccess = $$v
                 },
-                expression: "snackbar"
+                expression: "dialogSuccess"
               }
             },
             [
-              _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
-              ),
               _c(
-                "v-btn",
-                {
-                  attrs: { color: "blue", text: "" },
-                  on: {
-                    click: function($event) {
-                      _vm.snackbar = false
-                    }
-                  }
-                },
-                [_vm._v("\n                    Cerrar\n                ")]
+                "v-card",
+                { attrs: { color: "primary" } },
+                [
+                  _c(
+                    "v-alert",
+                    {
+                      attrs: {
+                        color: "success",
+                        border: "left",
+                        "colored-border": "",
+                        icon: "mdi-checkbox-marked-circle",
+                        prominent: ""
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.textMsg) +
+                          "\n                "
+                      )
+                    ]
+                  )
+                ],
+                1
               )
             ],
             1

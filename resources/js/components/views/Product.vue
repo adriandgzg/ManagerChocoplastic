@@ -1,18 +1,14 @@
 <template>
     <v-app>
         <v-container>
-                <v-snackbar color="#000000"
-                    v-model="snackbar"
-                    :timeout="timeout">
-                    {{ textMsg }}
-                    <v-btn
-                            color="blue"
-                            text
-                            @click="snackbar = false"
-                    >
-                        Cerrar
-                    </v-btn>
-                </v-snackbar>
+            <v-dialog v-model="dialogSuccess" width="640" overlay-color="white" persistent>
+                <v-card color="primary" >          
+                    <v-alert color="success" border="left" colored-border
+                            icon="mdi-checkbox-marked-circle" prominent>
+                    {{textMsg}}
+                    </v-alert>
+                </v-card>
+            </v-dialog>
             
              <!--  Modal del diálogo para Alta y Edicion    -->
             <v-dialog v-model="dialog" max-width="500px" persistent>
@@ -275,6 +271,7 @@ export default {
       textMsg: "",
       valid: false,
       validProvider:false,
+      dialogSuccess: false,
       folioRules: [
         value => !!value || "Requerido.",
         value => (value && value.length >= 10) || "Min 10 caracter"
@@ -398,9 +395,9 @@ export default {
         axios.post('/product/add', this.editado).then(response => {
             console.log(response.data)
             if(response.data.status.code == 200){
-            this.snackbar = true
+            this.dialogSuccess = false
             this.textMsg = response.data.status.message
-            
+            this.normal('Notificación', this.textMsg,"success");
             this.getProducts();
             }
             else{
@@ -415,8 +412,9 @@ export default {
         axios.put('/product/update', this.editado).then(response => {
             console.log(response)
             if(response.data.code == 200){
-            this.snackbar = true
+            this.dialogSuccess = false
             this.textMsg = '¡Actualización Exitosa!'
+            this.normal('Notificación', this.textMsg,"success");
             this.getProducts();
             }
             else{
@@ -476,6 +474,13 @@ export default {
           },  
 
 },
+watch: {
+    dialogSuccess (val) {
+      if (!val) return
+
+      setTimeout(() => (this.dialogSuccess = false), 4000)
+    },
+  },
 computed: {
 formTitle () {      
 return this.editedIndex === -1 ? 'Nuevo Registro' : 'Editar Registro'

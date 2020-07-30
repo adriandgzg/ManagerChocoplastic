@@ -96,9 +96,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -145,6 +142,7 @@ __webpack_require__.r(__webpack_exports__);
       textMsg: "",
       valid: false,
       validProvider: false,
+      dialogSuccess: false,
       folioRules: [function (value) {
         return !!value || "Requerido.";
       }, function (value) {
@@ -202,7 +200,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.post('/measurements/add', this.editado).then(function (response) {
-        _this2.snackbar = true;
+        _this2.dialogSuccess = true;
         _this2.textMsg = '¡Alta exitosa!';
 
         _this2.getMeasurements();
@@ -212,7 +210,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       axios.put('/measurements/update', this.editado).then(function (response) {
-        _this3.snackbar = true;
+        _this3.dialogSuccess = true;
         _this3.textMsg = '¡Actualización Exitosa!';
 
         _this3.getMeasurements();
@@ -237,6 +235,16 @@ __webpack_require__.r(__webpack_exports__);
 
         _this4.getMeasurements();
       });
+    }
+  },
+  watch: {
+    dialogSuccess: function dialogSuccess(val) {
+      var _this5 = this;
+
+      if (!val) return;
+      setTimeout(function () {
+        return _this5.dialogSuccess = false;
+      }, 4000);
     }
   },
   computed: {
@@ -270,34 +278,41 @@ var render = function() {
         "v-container",
         [
           _c(
-            "v-snackbar",
+            "v-dialog",
             {
-              attrs: { color: "#000000", timeout: _vm.timeout },
+              attrs: { width: "640", "overlay-color": "white", persistent: "" },
               model: {
-                value: _vm.snackbar,
+                value: _vm.dialogSuccess,
                 callback: function($$v) {
-                  _vm.snackbar = $$v
+                  _vm.dialogSuccess = $$v
                 },
-                expression: "snackbar"
+                expression: "dialogSuccess"
               }
             },
             [
-              _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
-              ),
               _c(
-                "v-btn",
-                {
-                  attrs: { color: "blue", text: "" },
-                  on: {
-                    click: function($event) {
-                      _vm.snackbar = false
-                    }
-                  }
-                },
-                [_vm._v("\n                    Cerrar\n                ")]
+                "v-card",
+                { attrs: { color: "primary" } },
+                [
+                  _c(
+                    "v-alert",
+                    {
+                      attrs: {
+                        color: "success",
+                        border: "left",
+                        "colored-border": "",
+                        icon: "mdi-checkbox-marked-circle",
+                        prominent: ""
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n          " + _vm._s(_vm.textMsg) + "\n        "
+                      )
+                    ]
+                  )
+                ],
+                1
               )
             ],
             1
