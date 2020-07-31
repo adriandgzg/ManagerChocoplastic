@@ -20,7 +20,7 @@
           <v-list-item-action>
             <v-icon>mdi-cart</v-icon>
           </v-list-item-action>
-          <v-list-item-title>Ordenes de Compra</v-list-item-title>
+          <v-list-item-title>Órdenes de Compra</v-list-item-title>
         </v-list-item>  
         <v-list-item href="/purchaselist">
           <v-list-item-action>
@@ -98,7 +98,7 @@
         
         <v-list-group prepend-icon="account_circle" no-action>        
           <template v-slot:activator>          
-            <v-list-item-title>Catalogos</v-list-item-title>
+            <v-list-item-title>Catálogos</v-list-item-title>
           </template>
 
           <v-list-item href="/products">
@@ -154,7 +154,7 @@
           <v-list-item-action>
             <v-icon>mdi-cart</v-icon>
           </v-list-item-action>
-          <v-list-item-title>Categorias</v-list-item-title>
+          <v-list-item-title>Categorías</v-list-item-title>
         </v-list-item>
           <v-list-item href="/measurementsView">
             <v-list-item-action>
@@ -172,7 +172,7 @@
             <v-list-item-action>
               <v-icon>mdi-cart</v-icon>
             </v-list-item-action>
-            <v-list-item-title>Metodos de Pago</v-list-item-title>
+            <v-list-item-title>Métodos de Pago</v-list-item-title>
           </v-list-item>
           <v-list-item href="/paymentshapes ">
             <v-list-item-action>

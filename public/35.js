@@ -84,7 +84,7 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Sucursal',
         value: 'stor_name'
       }, {
-        text: 'Metodo Pago',
+        text: 'Método Pago',
         value: 'pame_name'
       }, {
         text: 'Fecha',

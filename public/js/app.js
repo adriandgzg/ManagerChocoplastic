@@ -30002,7 +30002,7 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Ordenes de Compra")])
+                      _c("v-list-item-title", [_vm._v("Órdenes de Compra")])
                     ],
                     1
                   ),
@@ -30151,7 +30151,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-list-item",
-                { attrs: { href: "/purchaselist" } },
+                { attrs: { href: "/transferlist" } },
                 [
                   _c(
                     "v-list-item-action",
@@ -30159,7 +30159,7 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("v-list-item-title", [_vm._v("Tranferencias")])
+                  _c("v-list-item-title", [_vm._v("Traspaso")])
                 ],
                 1
               ),
@@ -30172,7 +30172,7 @@ var render = function() {
                     {
                       key: "activator",
                       fn: function() {
-                        return [_c("v-list-item-title", [_vm._v("Catalogos")])]
+                        return [_c("v-list-item-title", [_vm._v("Catálogos")])]
                       },
                       proxy: true
                     }
@@ -30295,7 +30295,7 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Categorias")])
+                      _c("v-list-item-title", [_vm._v("Categorías")])
                     ],
                     1
                   ),
@@ -30340,7 +30340,7 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Metodos de Pago")])
+                      _c("v-list-item-title", [_vm._v("Métodos de Pago")])
                     ],
                     1
                   ),

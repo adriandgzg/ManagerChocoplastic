@@ -78,7 +78,7 @@ export default {
                         value: 'stor_name'
                     },
                     {
-                        text: 'Metodo Pago',
+                        text: 'Método Pago',
                         value: 'pame_name'
                     },
                     {

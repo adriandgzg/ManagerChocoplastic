@@ -718,8 +718,8 @@ var render = function() {
                               "item-value": "name",
                               filled: "",
                               chips: "",
-                              label: "Genero",
-                              placeholder: "Selecciona su genero"
+                              label: "Género",
+                              placeholder: "Selecciona su Género"
                             },
                             model: {
                               value: _vm.gender,
@@ -905,8 +905,8 @@ var render = function() {
                               "item-value": "name",
                               filled: "",
                               chips: "",
-                              label: "Genero",
-                              placeholder: "Selecciona su genero"
+                              label: "Género",
+                              placeholder: "Selecciona su Género"
                             },
                             model: {
                               value: _vm.gender,

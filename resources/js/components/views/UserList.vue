@@ -69,8 +69,8 @@
                                         item-value="name"
                                         filled
                                         chips
-                                        label="Genero"
-                                        placeholder="Selecciona su genero"
+                                        label="Género"
+                                        placeholder="Selecciona su Género"
                                 ></v-select>
                     <v-select
                                         
@@ -125,8 +125,8 @@
                                         item-value="name"
                                         filled
                                         chips
-                                        label="Genero"
-                                        placeholder="Selecciona su genero"
+                                        label="Género"
+                                        placeholder="Selecciona su Género"
                                 ></v-select>
                     <v-select
                                         

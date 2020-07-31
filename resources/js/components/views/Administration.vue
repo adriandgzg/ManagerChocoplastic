@@ -21,7 +21,7 @@
                             bottom
                             left
                             absolute
-                            @click="dialog = !dialog"
+                            @click="abrirdialog()"
                     >
                         <v-icon>mdi-plus</v-icon>
                     </v-btn>
@@ -135,7 +135,7 @@
       </v-col>
     </v-row>
     <!--  Modal del diálogo para Alta y Edicion    -->
-    <v-dialog v-model="dialog" max-width="640px">
+    <v-dialog v-model="dialog" max-width="640px" persistent>
         <template v-slot:activator="{ on }"></template>
         <v-card>
             <!-- para el EDICION-->
@@ -285,6 +285,12 @@ export default {
     this.getstores();
   },
   methods:{
+    abrirdialog(){
+      this.editado = this.editadoTemp;
+      this.dialog = true;
+      this.editado.email='';
+      console.log(this.editado)
+    },
     getstores(){
       axios.get('/storeget')
                     .then(response => {

@@ -298,6 +298,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.getstores();
   },
   methods: {
+    abrirdialog: function abrirdialog() {
+      this.editado = this.editadoTemp;
+      this.dialog = true;
+      this.editado.email = '';
+      console.log(this.editado);
+    },
     getstores: function getstores() {
       var _this = this;
 
@@ -598,7 +604,7 @@ var render = function() {
                                         },
                                         on: {
                                           click: function($event) {
-                                            _vm.dialog = !_vm.dialog
+                                            return _vm.abrirdialog()
                                           }
                                         }
                                       },
@@ -1006,7 +1012,7 @@ var render = function() {
       _c(
         "v-dialog",
         {
-          attrs: { "max-width": "640px" },
+          attrs: { "max-width": "640px", persistent: "" },
           scopedSlots: _vm._u([
             {
               key: "activator",
