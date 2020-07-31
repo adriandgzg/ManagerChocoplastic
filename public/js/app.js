@@ -89786,6 +89786,11 @@ var map = {
 		"./resources/js/components/views/Sales.vue",
 		35
 	],
+	"./SalesDetail.vue": [
+		"./resources/js/components/views/SalesDetail.vue",
+		43,
+		0
+	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
 		36

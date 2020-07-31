@@ -11,6 +11,20 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! crip-vue-notice */ "./node_modules/crip-vue-notice/lib/crip-vue-notice.js");
 /* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(crip_vue_notice__WEBPACK_IMPORTED_MODULE_0__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -162,7 +176,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
+    var _ref;
+
+    return _ref = {
       headers: [{
         text: 'Ident',
         value: 'prod_identifier'
@@ -285,8 +301,9 @@ __webpack_require__.r(__webpack_exports__);
         return !!value || 'Requerido.';
       }, function (value) {
         return value > 0 || 'El número debe ser mayor o igual a cero';
-      }]
-    };
+      }],
+      loading: false
+    }, _defineProperty(_ref, "dialogQuestion", false), _defineProperty(_ref, "dialogQuestionDelete", false), _defineProperty(_ref, "messageQuestion", ''), _ref;
   },
   created: function created() {
     this.getStores();
@@ -416,13 +433,24 @@ __webpack_require__.r(__webpack_exports__);
     createCompra: function createCompra() {
       var _this7 = this;
 
+      this.loading = true;
       axios.get('/product/transfers/' + this.prtr_pk + '').then(function (response) {
-        console.log(response);
-        _this7.desserts = response.data.data.ProductTransferDetails;
-        _this7.prtr_pk = response.data.data.ProductTransfers.prtr_pk;
-        _this7.editadoHeader = response.data.data.ProductTransfers;
+        setTimeout(function () {
+          return _this7.loading = false;
+        }, 2000);
+
+        if (response.data.data != null) {
+          console.log(response);
+          _this7.desserts = response.data.data.ProductTransferDetails;
+          _this7.prtr_pk = response.data.data.ProductTransfers.prtr_pk;
+          _this7.editadoHeader = response.data.data.ProductTransfers;
+        } else {
+          _this7.normal('Notificación', response.data.status.message, "error");
+        }
       })["catch"](function (e) {
         console.log(e);
+
+        _this7.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     cancelar: function cancelar() {
@@ -579,6 +607,41 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", width: "300" },
+              model: {
+                value: _vm.loading,
+                callback: function($$v) {
+                  _vm.loading = $$v
+                },
+                expression: "loading"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                { attrs: { color: "white" } },
+                [
+                  _c(
+                    "v-card-text",
+                    [
+                      _vm._v("\n          Cargando\n          "),
+                      _c("v-progress-linear", {
+                        staticClass: "mb-0",
+                        attrs: { indeterminate: "", color: "green" }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-snackbar",
             {

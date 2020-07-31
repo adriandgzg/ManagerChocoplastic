@@ -1,6 +1,40 @@
 <template>
     <v-app>
         <v-container>
+        <v-dialog v-model="loading" persistent width="300">
+          <v-card color="white">
+            <v-card-text>
+              Cargando
+              <v-progress-linear
+                indeterminate 
+                color="green"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogQuestion" persistent max-width="290">
+            <v-card>
+            <v-card-title class="headline">Información</v-card-title>
+            <v-card-text>{{messageQuestion}}.</v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="dialogQuestion = false">Cancelar</v-btn>
+                <v-btn color="green darken-1" text @click="guardaFinalizar">Continuar</v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogQuestionDelete" persistent max-width="290">
+            <v-card>
+            <v-card-title class="headline">Alerta</v-card-title>
+            <v-card-text>¿Está seguro de borrar el registro?</v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="dialogQuestionDelete = false">Cancelar</v-btn>
+                <v-btn color="green darken-1" text @click="guardaBorrar">Continuar</v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-dialog>
         <v-snackbar color="#000000"
                     v-model="snackbar"
                     :timeout="timeout">
@@ -139,17 +173,7 @@
       </v-col>
     </v-row>
 
-    <v-dialog v-model="dialogQuestion" persistent max-width="290">
-        <v-card>
-          <v-card-title class="headline">Información</v-card-title>
-          <v-card-text>{{messageQuestion}}.</v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="dialogQuestion = false">Cancelar</v-btn>
-            <v-btn color="green darken-1" text @click="guardaFinalizar">Continuar</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+   
 
     <!-- Dialog -->
 
@@ -279,7 +303,9 @@ export default {
                     value => value > 0 || 'El número debe ser mayor o igual a cero',
                 ],
 
-      dialogQuestion:false,
+      loading:false,
+    dialogQuestion:false,
+      dialogQuestionDelete:false,
       messageQuestion:'',
       
     };
@@ -418,19 +444,26 @@ export default {
 
         },
       createsale() {
-        console.log('/client/returns?clsa_pk=' + this.clsa_pk + '')
+        this.loading = true
             axios.post('/client/returns?clsa_pk=' + this.clsa_pk + '')
                 .then(response => {
-                  console.log(response.data)
-                    this.sales = response.data.data;
-                    this.saleHeader = response.data.data.ClientReturns;
-                    this.desserts =  this.sales.ClientReturnDetails;
+                  setTimeout(() => (this.loading = false), 2000)
+                    if(response.data.data != null){
+                            this.sales = response.data.data;
+                            this.saleHeader = response.data.data.ClientReturns;
+                            this.desserts =  this.sales.ClientReturnDetails;
 
-                    this.getTotal();
+                            this.getTotal();
+                            } 
+                    else
+                    {
+                        this.normal('Notificación',response.data.status.message ,"error");
+                    }  
                 })
                 .catch(e => {
                     //this.errors.push(e)
                     console.log(e)
+                    this.normal('Notificación', "Error al cargar los datos" ,"error");
                     })
                 },
     getTotal(){
@@ -446,12 +479,13 @@ export default {
     borrar(item) {
         
             this.editado = Object.assign({}, item)
-            var r = confirm("¿Está seguro de borrar el registro?");
-            if (r == true) {
-                this.editado.clrd_pk = item.clrd_pk;
-                this.delete()
-            }
+            this.dialogQuestionDelete = true
         },
+
+        guardaBorrar(){
+            this.delete()
+            this.dialogQuestionDelete = false
+            },
 
         delete: function () {
             

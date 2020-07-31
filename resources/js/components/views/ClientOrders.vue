@@ -189,7 +189,8 @@ export default {
           this.loading = true
       axios
         .get("/clientorders")
-        .then(response => {setTimeout(() => (this.loading = false), 2000)
+        .then(response => {
+            setTimeout(() => (this.loading = false), 2000)
             if(response.data.data != null)
             {
             console.log(response.data)

@@ -1,6 +1,18 @@
 <template>
     <v-app>
         <v-container>
+        <v-dialog v-model="loading" persistent width="300">
+          <v-card color="white">
+            <v-card-text>
+              Cargando
+              <v-progress-linear
+                indeterminate 
+                color="green"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
                 <v-snackbar color="#000000"
                     v-model="snackbar"
                     :timeout="timeout">
@@ -104,6 +116,10 @@ export default {
             value => !!value || 'Requerido.',
             value => (value && value.length == 10 ) || 'Requiere 10 caracteres',
                  ],
+      loading:false,
+    dialogQuestion:false,
+      dialogQuestionDelete:false,
+      messageQuestion:'',
     };
   },
   created() {
@@ -128,15 +144,23 @@ export default {
 
       getSales() {
 
-          
+          this.loading = true
       axios
         .get("/product/inventories")
-        .then(response => {            
+        .then(response => {           
+          setTimeout(() => (this.loading = false), 2000)
+            if(response.data.data != null){ 
           this.sales = response.data.data;      
           
+        } 
+            else
+            {
+                this.normal('Notificación',response.data.status.message ,"error");
+            }    
         })
         .catch(e => {
           console.log(e);
+          this.normal('Notificación', "Error al cargar los datos" ,"error");
         });
     },
   }

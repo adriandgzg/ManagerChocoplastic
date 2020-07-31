@@ -68,6 +68,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -120,7 +132,11 @@ __webpack_require__.r(__webpack_exports__);
         return !!value || 'Requerido.';
       }, function (value) {
         return value && value.length == 10 || 'Requiere 10 caracteres';
-      }]
+      }],
+      loading: false,
+      dialogQuestion: false,
+      dialogQuestionDelete: false,
+      messageQuestion: ''
     };
   },
   created: function created() {
@@ -130,11 +146,22 @@ __webpack_require__.r(__webpack_exports__);
     getSales: function getSales() {
       var _this = this;
 
+      this.loading = true;
       axios.get("/client/returns").then(function (response) {
-        console.log(response.data);
-        _this.sales = response.data.data;
+        setTimeout(function () {
+          return _this.loading = false;
+        }, 2000);
+
+        if (response.data.data != null) {
+          console.log(response.data);
+          _this.sales = response.data.data;
+        } else {
+          _this.normal('Notificación', response.data.status.message, "error");
+        }
       })["catch"](function (e) {
         console.log(e);
+
+        _this.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     normal: function normal(Title, Description, Type) {
@@ -173,6 +200,41 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", width: "300" },
+              model: {
+                value: _vm.loading,
+                callback: function($$v) {
+                  _vm.loading = $$v
+                },
+                expression: "loading"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                { attrs: { color: "white" } },
+                [
+                  _c(
+                    "v-card-text",
+                    [
+                      _vm._v("\n          Cargando\n          "),
+                      _c("v-progress-linear", {
+                        staticClass: "mb-0",
+                        attrs: { indeterminate: "", color: "green" }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-snackbar",
             {

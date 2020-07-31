@@ -1,6 +1,18 @@
 <template>
     <v-app>
         <v-container>
+        <v-dialog v-model="loading" persistent width="300">
+          <v-card color="white">
+            <v-card-text>
+              Cargando
+              <v-progress-linear
+                indeterminate 
+                color="green"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
         <v-snackbar color="#000000"
                     v-model="snackbar"
                     :timeout="timeout">
@@ -231,6 +243,10 @@ export default {
         
       dialogcredito: false,
       dialogcontado: false,
+      loading:false,
+    dialogQuestion:false,
+      dialogQuestionDelete:false,
+      messageQuestion:'',
 
       minNumberRules: [
                     value => !!value || 'Requerido.',
@@ -361,19 +377,28 @@ export default {
             }
       },
       createsale() {
-        
+        this.loading = true
             axios.get('/client/orders/' + this.clor_pk + '')
                 .then(response => {
+                  setTimeout(() => (this.loading = false), 2000)
+            if(response.data.data != null)
+            {
                   console.log(response.data)
                     this.sales = response.data.data;
                     this.saleHeader = response.data.data.order;
                     this.desserts =  this.sales.order_details;
 
                     this.getTotal();
+                    } 
+            else
+            {
+                this.normal('Notificación',response.data.status.message ,"error");
+            }
                 })
                 .catch(e => {
                     //this.errors.push(e)
                     console.log(e)
+                    this.normal('Notificación', "Error al cargar los datos" ,"error");
                     })
                 },
     getTotal(){
