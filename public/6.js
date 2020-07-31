@@ -155,71 +155,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -258,6 +193,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       dialogcredito: false,
       dialogcontado: false,
+      loadingDialog: false,
       minNumberRules: [function (value) {
         return !!value || 'Requerido.';
       }, function (value) {
@@ -267,7 +203,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.createsale();
-    this.getMotivos();
   },
   methods: {
     formatMoney: function formatMoney(amount) {
@@ -286,117 +221,29 @@ __webpack_require__.r(__webpack_exports__);
         console.log(e);
       }
     },
-    getMotivos: function getMotivos() {
+    createsale: function createsale() {
       var _this = this;
 
-      axios.get("/return/motives").then(function (response) {
-        _this.returns = response.data.data;
-        _this.selectReturn = _this.returns[0];
-      })["catch"](function (e) {
-        console.log(e);
-      });
-    },
-    finalizar: function finalizar() {
-      var _this2 = this;
-
-      if (this.selectReturn == '' || this.selectReturn == null) {
-        this.normal('Notificación', "Debe seleccionar un motivo de devolución", "success");
-        return;
-      }
-
-      this.editadoSale.clre_pk = this.saleHeader.clre_pk;
-      this.editadoSale.remo_fk = this.selectReturn.remo_pk;
-      this.editadoSale.clre_observation = this.clre_observation;
-      var r = confirm("¿Está seguro de finalizar la venta?");
-
-      if (r == true) {
-        axios.post('/client/returns/update', this.editadoSale).then(function (response) {
-          console.log(response);
-
-          if (response.data.status.code == 200) {
-            _this2.textMsg = "¡Actualizado correctamente!";
-
-            _this2.normal('Notificación', _this2.textMsg, "success");
-
-            _this2.$router.push('/clientsreturnlist');
-          } else {
-            _this2.normal('Notificación', response.data.message, "success");
-          }
-        })["catch"](function (e) {
-          _this2.errors.push(e);
-        });
-      }
-    },
-    finalizarVenta: function finalizarVenta() {
-      var _this3 = this;
-
-      console.log(this.total + '-' + (this.efectivo + this.tarjeta));
-      if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
-        this.normal('Notificación', "Los montos de pago deben ser igual al total", "error");
-        return;
-      }
-      var r = confirm("¿Está seguro de finalizar la venta?");
-
-      if (r == true) {
-        this.editadoSale.clde_amount = this.total;
-        this.editadoSale.clpa_amount_cash = this.efectivo;
-        this.editadoSale.clpa_amount_transfer = this.tarjeta;
-        axios.post('/clientsales/update', this.editadoSale).then(function (response) {
-          console.log(response);
-
-          if (response.data.code == 200) {
-            _this3.textMsg = "¡Actualizado correctamente!";
-
-            _this3.normal('Notificación', _this3.textMsg, "success");
-
-            _this3.$router.push('/sales');
-          } else {
-            _this3.normal('Notificación', response.data.message, "error");
-          }
-        })["catch"](function (e) {
-          _this3.errors.push(e);
-        });
-      }
-    },
-    onQuantityChange: function onQuantityChange(item) {
-      var _this4 = this;
-
-      this.editado = Object.assign({}, item);
-      console.log(this.editado);
-      console.log('this.editado');
-
-      if (this.editado.clrd_quantity > this.editado.clrd_quantity_sale) {
-        this.textMsg = "¡El cantidad devuelta no puede ser mayor a la cantidad comprada!";
-        this.normal('Notificación', this.textMsg, "error");
-        /*this.alertError = true;
-        setTimeout(()=>{
-           this.alertError=false
-         },3000)*/
-
-        this.createsale();
-        return;
-      }
-
-      axios.post('/client/return/details/update', this.editado).then(function (response) {
-        _this4.getTotal();
-      })["catch"](function (e) {
-        _this4.errors.push(e);
-      });
-    },
-    createsale: function createsale() {
-      var _this5 = this;
-
+      this.loadingDialog = true;
       console.log('/client/returns/' + this.clre_pk + ' --> get');
       axios.get('/client/returns/' + this.clre_pk + '').then(function (response) {
-        console.log(response.data);
-        _this5.sales = response.data.data;
-        _this5.saleHeader = response.data.data.ClientReturns;
-        _this5.desserts = _this5.sales.ClientReturnDetails;
+        setTimeout(function () {
+          return _this.loadingDialog = false;
+        }, 1000);
 
-        _this5.getTotal();
+        if (response.data.data != null) {
+          _this.sales = response.data.data;
+          _this.saleHeader = response.data.data.ClientReturns;
+          _this.desserts = _this.sales.ClientReturnDetails;
+
+          _this.getTotal();
+        } else {
+          _this.normal('Notificación', response.data.status.message, "error");
+        }
       })["catch"](function (e) {
-        //this.errors.push(e)
         console.log(e);
+
+        _this.normal('Notificación', "Error al cargar el detalle de la devolución", "error");
       });
     },
     getTotal: function getTotal() {
@@ -406,38 +253,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
       this.total = this.subtotal + this.iva;
-    },
-    borrar: function borrar(item) {
-      this.editado = Object.assign({}, item);
-      var r = confirm("¿Está seguro de borrar el registro?");
-
-      if (r == true) {
-        this.editado.clrd_pk = item.clrd_pk;
-        this["delete"]();
-      }
-    },
-    "delete": function _delete() {
-      var _this6 = this;
-
-      axios.post('/client/return/details/destroy', this.editado).then(function (response) {
-        _this6.textMsg = "¡Eliminado correctamente!";
-
-        _this6.normal('Notificación', _this6.textMsg, "success");
-
-        _this6.createsale();
-      });
-    },
-    actualizar: function actualizar(item) {
-      var _this7 = this;
-
-      this.editado = Object.assign({}, item);
-      axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this7.textMsg = "¡Actualizado correctamente!";
-
-        _this7.normal('Notificación', _this7.textMsg, "success");
-      })["catch"](function (e) {
-        _this7.errors.push(e);
-      });
     },
     normal: function normal(Title, Description, Type) {
       this.notice = new crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default.a({
@@ -475,6 +290,41 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", width: "300" },
+              model: {
+                value: _vm.loadingDialog,
+                callback: function($$v) {
+                  _vm.loadingDialog = $$v
+                },
+                expression: "loadingDialog"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                { attrs: { color: "white" } },
+                [
+                  _c(
+                    "v-card-text",
+                    [
+                      _vm._v("\n          Cargando\n          "),
+                      _c("v-progress-linear", {
+                        staticClass: "mb-0",
+                        attrs: { indeterminate: "", color: "green" }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-snackbar",
             {
@@ -897,259 +747,6 @@ var render = function() {
                           }
                         ])
                       })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-dialog",
-            {
-              attrs: { "max-width": "500" },
-              model: {
-                value: _vm.dialogcredito,
-                callback: function($$v) {
-                  _vm.dialogcredito = $$v
-                },
-                expression: "dialogcredito"
-              }
-            },
-            [
-              _c(
-                "v-card",
-                [
-                  _c("v-card-title", [_vm._v("Crédito:")]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-text",
-                    [
-                      _c(
-                        "span",
-                        { staticClass: "subheading font-weight-bold" },
-                        [_vm._v("Forma de Pago:")]
-                      ),
-                      _vm._v(" "),
-                      _c("v-text-field", {
-                        attrs: {
-                          label: "Efectivo: ",
-                          prefix: "$",
-                          type: "number"
-                        },
-                        model: {
-                          value: _vm.efectivo,
-                          callback: function($$v) {
-                            _vm.efectivo = $$v
-                          },
-                          expression: "efectivo"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("v-text-field", {
-                        attrs: {
-                          label: "Transferencia: ",
-                          prefix: "$",
-                          type: "number"
-                        },
-                        model: {
-                          value: _vm.tarjeta,
-                          callback: function($$v) {
-                            _vm.tarjeta = $$v
-                          },
-                          expression: "tarjeta"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("br"),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("td", [_vm._v("Subtotal")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.subtotal)))
-                        ]),
-                        _vm._v(" "),
-                        _c("td")
-                      ]),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("td", [_vm._v("Total I.V.A.")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.iva)))
-                        ]),
-                        _vm._v(" "),
-                        _c("td")
-                      ]),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("td", [_vm._v("Total")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.total)))
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("td", [_vm._v("Total Crédito")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(
-                            " $" +
-                              _vm._s(
-                                _vm.formatMoney(
-                                  _vm.total - _vm.efectivo - _vm.tarjeta
-                                )
-                              )
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          on: {
-                            click: function($event) {
-                              _vm.dialogcredito = !_vm.dialogcredito
-                            }
-                          }
-                        },
-                        [_vm._v("Cancelar")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "warning" },
-                          on: { click: _vm.finalizarVenta }
-                        },
-                        [_vm._v("Confirmar")]
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-dialog",
-            {
-              attrs: { "max-width": "500" },
-              model: {
-                value: _vm.dialogcontado,
-                callback: function($$v) {
-                  _vm.dialogcontado = $$v
-                },
-                expression: "dialogcontado"
-              }
-            },
-            [
-              _c(
-                "v-card",
-                [
-                  _c("v-card-title", [_vm._v("Contado")]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-text",
-                    [
-                      _c(
-                        "span",
-                        { staticClass: "subheading font-weight-bold" },
-                        [_vm._v("Forma de Pago:")]
-                      ),
-                      _vm._v(" "),
-                      _c("v-text-field", {
-                        attrs: {
-                          label: "Efectivo: ",
-                          required: "",
-                          rules: _vm.minNumberRules,
-                          prefix: "$",
-                          type: "number"
-                        },
-                        model: {
-                          value: _vm.efectivo,
-                          callback: function($$v) {
-                            _vm.efectivo = $$v
-                          },
-                          expression: "efectivo"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("v-text-field", {
-                        attrs: {
-                          label: "Transferencia: ",
-                          required: "",
-                          rules: _vm.minNumberRules,
-                          prefix: "$",
-                          type: "number"
-                        },
-                        model: {
-                          value: _vm.tarjeta,
-                          callback: function($$v) {
-                            _vm.tarjeta = $$v
-                          },
-                          expression: "tarjeta"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("br"),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("td", [_vm._v("Subtotal")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.subtotal)))
-                        ]),
-                        _vm._v(" "),
-                        _c("td")
-                      ]),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("td", [_vm._v("Total I.V.A.")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.iva)))
-                        ]),
-                        _vm._v(" "),
-                        _c("td")
-                      ]),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("td", [_vm._v("Total")]),
-                        _vm._v(" "),
-                        _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.total)))
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          on: {
-                            click: function($event) {
-                              _vm.dialogcontado = !_vm.dialogcontado
-                            }
-                          }
-                        },
-                        [_vm._v("Cancelar")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "success" },
-                          on: { click: _vm.finalizarVenta }
-                        },
-                        [_vm._v("Confirmar")]
-                      )
                     ],
                     1
                   )

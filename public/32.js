@@ -150,6 +150,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -253,6 +265,7 @@ __webpack_require__.r(__webpack_exports__);
       dialogcredito: false,
       dialogcontado: false,
       dialog: false,
+      loading: false,
       minNumberRules: [function (value) {
         return !!value || 'Requerido.';
       }, function (value) {
@@ -371,30 +384,23 @@ __webpack_require__.r(__webpack_exports__);
     createCompra: function createCompra() {
       var _this6 = this;
 
+      this.loading = true;
       axios.get('/provider/purchases/' + this.prpo_pk + '').then(function (response) {
-        _this6.desserts = response.data.data.ProviderPurchaseDetail;
+        setTimeout(function () {
+          return _this6.loading = false;
+        }, 2000);
 
-        _this6.getTotal();
+        if (response.data.data != null) {
+          _this6.desserts = response.data.data.ProviderPurchaseDetail;
 
-        _this6.prpu_pk = response.data.data.ProviderPurchase.prpu_pk;
-        _this6.editadoHeader = response.data.data.ProviderPurchase;
-        console.log(response.data); //response.data.data.ProviderPurchaseDetail//
+          _this6.getTotal();
 
-        /*var i = 0;
-        for(i=0;i<this.providers.length; i++){
-            
-            if(response.data.data.ProviderPurchase.prov_fk == this.providers[i].prov_pk){
-                this.selectProv = this.providers[i];
-            }
+          _this6.prpu_pk = response.data.data.ProviderPurchase.prpu_pk;
+          _this6.editadoHeader = response.data.data.ProviderPurchase;
+          console.log(response.data);
+        } else {
+          _this6.normal('Notificación', response.data.status.message, "error");
         }
-        
-        for(i=0;i<this.stores.length; i++){
-            
-            if(response.data.data.ProviderPurchase.stor_fk == this.stores[i].stor_pk){
-                console.log(i)
-                this.selectStore = this.stores[i];
-            }
-        }*/
       })["catch"](function (e) {
         //this.errors.push(e)
         console.log(e);
@@ -570,6 +576,41 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", width: "300" },
+              model: {
+                value: _vm.loading,
+                callback: function($$v) {
+                  _vm.loading = $$v
+                },
+                expression: "loading"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                { attrs: { color: "white" } },
+                [
+                  _c(
+                    "v-card-text",
+                    [
+                      _vm._v("\n          Cargando\n          "),
+                      _c("v-progress-linear", {
+                        staticClass: "mb-0",
+                        attrs: { indeterminate: "", color: "green" }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-snackbar",
             {

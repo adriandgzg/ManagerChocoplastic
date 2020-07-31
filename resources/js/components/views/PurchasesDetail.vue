@@ -1,6 +1,18 @@
 <template>
     <v-app>
         <v-container>
+        <v-dialog v-model="loading" persistent width="300">
+          <v-card color="white">
+            <v-card-text>
+              Cargando
+              <v-progress-linear
+                indeterminate 
+                color="green"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
         <v-snackbar color="#000000"
                     v-model="snackbar"
                     :timeout="timeout">
@@ -248,7 +260,7 @@ export default {
       dialogcredito: false,
       dialogcontado: false,
       dialog:false,
-
+      loading:false,
       minNumberRules: [
                     value => !!value || 'Requerido.',
                     value => value > 0 || 'El número debe ser mayor o igual a cero',
@@ -380,30 +392,22 @@ export default {
         },   
 
         createCompra() {
-
+          this.loading = true
             axios.get('/provider/purchases/' + this.prpo_pk + '')
                 .then(response => {
+                  setTimeout(() => (this.loading = false), 2000)
+                    if(response.data.data != null){
                     this.desserts = response.data.data.ProviderPurchaseDetail;
                     this.getTotal();
                     this.prpu_pk = response.data.data.ProviderPurchase.prpu_pk;
                     this.editadoHeader= response.data.data.ProviderPurchase;
                     console.log(response.data)
-                    //response.data.data.ProviderPurchaseDetail//
-                    /*var i = 0;
-                    for(i=0;i<this.providers.length; i++){
-                        
-                        if(response.data.data.ProviderPurchase.prov_fk == this.providers[i].prov_pk){
-                            this.selectProv = this.providers[i];
-                        }
-                    }
+                    } 
+                    else
+                    {
+                        this.normal('Notificación',response.data.status.message ,"error");
+                    } 
                     
-                    for(i=0;i<this.stores.length; i++){
-                        
-                        if(response.data.data.ProviderPurchase.stor_fk == this.stores[i].stor_pk){
-                            console.log(i)
-                            this.selectStore = this.stores[i];
-                        }
-                    }*/
                     
                 })
                 .catch(e => {

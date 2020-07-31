@@ -1,6 +1,29 @@
 <template>
     <v-app>
         <v-container>
+        <v-dialog v-model="loading" persistent width="300">
+          <v-card color="white">
+            <v-card-text>
+              Cargando
+              <v-progress-linear
+                indeterminate 
+                color="green"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogQuestionDelete" persistent max-width="290">
+            <v-card>
+            <v-card-title class="headline">Alerta</v-card-title>
+            <v-card-text>¿Está seguro de borrar el registro?</v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="dialogQuestionDelete = false">Cancelar</v-btn>
+                <v-btn color="green darken-1" text @click="guardaBorrar">Continuar</v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-dialog>
         <v-alert v-model="alert" dismissible transition="fade-transition" type="info">
       {{ textMsg }}
     </v-alert>
@@ -272,10 +295,11 @@ export default {
             remo_fk:0,
             prre_observation:'',
         },
-        
+        loading:false,
       dialogcredito: false,
       dialogcontado: false,
       dialogQuestion:false,
+      dialogQuestionDelete:false,
       messageQuestion:'',
 
       minNumberRules: [
@@ -418,19 +442,27 @@ export default {
 
         },
       createsale() {
+         this.loading = true
         console.log('/provider/returns?prpu_pk=' + this.prpu_pk + '')
             axios.post('/provider/returns?prpu_pk=' + this.prpu_pk + '')
                 .then(response => {
+                  setTimeout(() => (this.loading = false), 2000)
+                  if(response.data.data != null){
                   console.log(response.data)
                     this.sales = response.data.data;
                     this.saleHeader = response.data.data.ProviderReturns;
                     this.desserts =  this.sales.ProviderReturnDetails;
-
-                    this.getTotal();
+                    this.getTotal();     
+                  } 
+                  else
+                  {
+                      this.normal('Notificación',response.data.status.message ,"error");
+                  }    
                 })
                 .catch(e => {
                     //this.errors.push(e)
                     console.log(e)
+                    this.normal('Notificación', "Error al cargar los datos" ,"error");
                     })
                 },
     getTotal(){
@@ -446,12 +478,13 @@ export default {
     borrar(item) {
         
             this.editado = Object.assign({}, item)
-            var r = confirm("¿Está seguro de borrar el registro?");
-            if (r == true) {
-                this.editado.prrd_pk = item.prrd_pk;
-                this.delete()
-            }
+            this.dialogQuestionDelete = true
         },
+
+        guardaBorrar(){
+            this.delete()
+            this.dialogQuestionDelete = false
+            },
 
         delete: function () {
             

@@ -224,6 +224,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -266,7 +278,11 @@ __webpack_require__.r(__webpack_exports__);
         return !!value || 'Requerido.';
       }, function (value) {
         return value > 0 || 'El número debe ser mayor o igual a cero';
-      }]
+      }],
+      loading: false,
+      dialogQuestion: false,
+      dialogQuestionDelete: false,
+      messageQuestion: ''
     };
   },
   created: function created() {
@@ -389,16 +405,27 @@ __webpack_require__.r(__webpack_exports__);
     createsale: function createsale() {
       var _this5 = this;
 
+      this.loading = true;
       axios.get('/provider/returns/' + this.prpu_pk + '').then(function (response) {
-        console.log(response.data);
-        _this5.sales = response.data.data;
-        _this5.saleHeader = response.data.data.ProviderReturns;
-        _this5.desserts = _this5.sales.ProviderReturnDetails;
+        setTimeout(function () {
+          return _this5.loading = false;
+        }, 2000);
 
-        _this5.getTotal();
+        if (response.data.data != null) {
+          console.log(response.data);
+          _this5.sales = response.data.data;
+          _this5.saleHeader = response.data.data.ProviderReturns;
+          _this5.desserts = _this5.sales.ProviderReturnDetails;
+
+          _this5.getTotal();
+        } else {
+          _this5.normal('Notificación', response.data.status.message, "error");
+        }
       })["catch"](function (e) {
         //this.errors.push(e)
         console.log(e);
+
+        _this5.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     getTotal: function getTotal() {
@@ -475,6 +502,41 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", width: "300" },
+              model: {
+                value: _vm.loading,
+                callback: function($$v) {
+                  _vm.loading = $$v
+                },
+                expression: "loading"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                { attrs: { color: "white" } },
+                [
+                  _c(
+                    "v-card-text",
+                    [
+                      _vm._v("\n          Cargando\n          "),
+                      _c("v-progress-linear", {
+                        staticClass: "mb-0",
+                        attrs: { indeterminate: "", color: "green" }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-alert",
             {

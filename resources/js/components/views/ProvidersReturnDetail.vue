@@ -1,6 +1,18 @@
 <template>
     <v-app>
         <v-container>
+        <v-dialog v-model="loading" persistent width="300">
+          <v-card color="white">
+            <v-card-text>
+              Cargando
+              <v-progress-linear
+                indeterminate 
+                color="green"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
         <v-alert v-model="alert" dismissible transition="fade-transition" type="info">
       {{ textMsg }}
     </v-alert>
@@ -256,7 +268,10 @@ export default {
                     value => !!value || 'Requerido.',
                     value => value > 0 || 'El número debe ser mayor o igual a cero',
                 ],
-      
+      loading:false,
+      dialogQuestion:false,
+      dialogQuestionDelete:false,
+      messageQuestion:'',
     };
   },
    created() {
@@ -389,18 +404,26 @@ export default {
 
         },
       createsale() {
+        this.loading = true
             axios.get('/provider/returns/' + this.prpu_pk + '')
                 .then(response => {
+                   setTimeout(() => (this.loading = false), 2000)
+                  if(response.data.data != null){
                   console.log(response.data)
                     this.sales = response.data.data;
                     this.saleHeader = response.data.data.ProviderReturns;
                     this.desserts =  this.sales.ProviderReturnDetails;
-
                     this.getTotal();
+                    } 
+                    else
+                    {
+                        this.normal('Notificación',response.data.status.message ,"error");
+                    }  
                 })
                 .catch(e => {
                     //this.errors.push(e)
                     console.log(e)
+                    this.normal('Notificación', "Error al cargar los datos" ,"error");
                     })
                 },
     getTotal(){

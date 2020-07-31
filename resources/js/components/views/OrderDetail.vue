@@ -1,6 +1,31 @@
 4<template>
     <v-app>
         <v-container>
+        <v-dialog v-model="loading" persistent width="300">
+                    <v-card color="white">
+                        <v-card-text>
+                        Cargando
+                        <v-progress-linear
+                            indeterminate 
+                            color="green"
+                            class="mb-0"
+                        ></v-progress-linear>
+                        </v-card-text>
+                    </v-card>
+                    </v-dialog>
+
+                
+                <v-dialog v-model="dialogQuestionDelete" persistent max-width="290">
+                  <v-card>
+                    <v-card-title class="headline">Alerta</v-card-title>
+                    <v-card-text>¿Está seguro de borrar el registro?</v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="green darken-1" text @click="dialogQuestionDelete = false">Cancelar</v-btn>
+                      <v-btn color="green darken-1" text @click="guardaBorrar">Continuar</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
         <v-snackbar color="#000000"
                     v-model="snackbar"
                     :timeout="timeout">
@@ -20,7 +45,8 @@
                         <span class="headline">Buscar producto</span>
                     </v-card-title>
                     
-                     <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3">
+                     <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3"
+                     :loading="loading" loading-text="Cargando... Espere un momento.">
                     <template v-slot:top>                      
                         <v-col cols="12" sm="12">
                             <v-text-field v-model="search" append-icon="search" label="Buscar" single-line
@@ -257,6 +283,10 @@ export default {
                     value => value > 0 || 'El número debe ser mayor o igual a cero',
                 ],
       
+     loading:false,
+    dialogQuestion:false,
+      dialogQuestionDelete:false,
+      messageQuestion:'',
     };
   },
    created() {
@@ -361,11 +391,13 @@ export default {
             
             console.log(item)
             this.editado = Object.assign({}, item)
-            var r = confirm("¿Está seguro de borrar el registro?");
-            if (r == true) {
-                this.delete()
-            }
+           this.dialogQuestionDelete = true
         },
+
+        guardaBorrar(){
+            this.delete()
+            this.dialogQuestionDelete = false
+            },
 
         delete: function () {
             axios.post('/provider/purchase/details/destroy', this.editado).then(response => {
@@ -384,21 +416,27 @@ export default {
         },   
 
         createCompra() {
-            console.log('/provider/purchase/orders/' + this.prpo_pk + '')
+           this.loading = true
             axios.get('/provider/purchase/orders/' + this.prpo_pk + '')
                 .then(response => {
-                    console.log(response.data)
-                    this.desserts = response.data.data.provider_purchase_order_details;
-                    
-                    this.prpu_pk = response.data.data.provider_purchase_orders.prpu_pk;
-                    this.editadoHeader= response.data.data.provider_purchase_orders[0];
-console.log(this.editadoHeader)
-                    this.getTotal();
-                    
+                  setTimeout(() => (this.loading = false), 2000)
+                  if(response.data.data != null){
+                      console.log(response.data)
+                      this.desserts = response.data.data.provider_purchase_order_details;
+                      
+                      this.prpu_pk = response.data.data.provider_purchase_orders.prpu_pk;
+                      this.editadoHeader= response.data.data.provider_purchase_orders[0];
+                      this.getTotal();
+                    } 
+                    else
+                    {
+                        this.normal('Notificación',response.data.status.message ,"error");
+                    }
                     
                 })
                 .catch(e => {
                     console.log(e)
+                    this.normal('Notificación', "Error al cargar los datos" ,"error");
                     })
                 },
         cancelar() {
@@ -538,8 +576,7 @@ this.subtotal = 0;
           axios.post('/clientsales/update', this.editadoSale)
                 .then(response => {
                   console.log(response)
-                  if(response.data.code == 200){
-                    
+                  if(response.data.code == 200){                    
                     this.textMsg = "¡Actualizado correctamente!";
                     this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.$router.push('/sales') ; 

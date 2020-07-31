@@ -56,7 +56,6 @@ Vue.component('core-footer', require('./components/core/Footer.vue').default);
 Vue.component('core-toolbar', require('./components/core/Toolbar.vue').default);
 Vue.component('core-view', require('./components/core/View.vue').default);
 //Vue.component('app', require('./components/App.vue').default);
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

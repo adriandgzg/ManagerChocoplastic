@@ -13,17 +13,41 @@
                         Cerrar
                     </v-btn>
                 </v-snackbar>
+                <v-dialog v-model="loading" persistent width="300">
+                    <v-card color="white">
+                        <v-card-text>
+                        Cargando
+                        <v-progress-linear
+                            indeterminate 
+                            color="green"
+                            class="mb-0"
+                        ></v-progress-linear>
+                        </v-card-text>
+                    </v-card>
+                    </v-dialog>
+
                 <v-dialog v-model="dialogQuestion" persistent max-width="290">
-        <v-card>
-          <v-card-title class="headline">Información</v-card-title>
-          <v-card-text>{{messageQuestion}}.</v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="dialogQuestion = false">Cancelar</v-btn>
-            <v-btn color="green darken-1" text @click="guardaFinalizar">Continuar</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+                  <v-card>
+                    <v-card-title class="headline">Información</v-card-title>
+                    <v-card-text>{{messageQuestion}}.</v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="green darken-1" text @click="dialogQuestion = false">Cancelar</v-btn>
+                      <v-btn color="green darken-1" text @click="guardaFinalizar">Continuar</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-dialog v-model="dialogQuestionDelete" persistent max-width="290">
+                  <v-card>
+                    <v-card-title class="headline">Alerta</v-card-title>
+                    <v-card-text>¿Está seguro de borrar el registro?</v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="green darken-1" text @click="dialogQuestionDelete = false">Cancelar</v-btn>
+                      <v-btn color="green darken-1" text @click="guardaBorrar">Continuar</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
      <!--  Modal del diálogo para Alta y Edicion    -->
             <v-dialog v-model="dialog" max-width="800px" >
                 <v-card>
@@ -269,7 +293,9 @@ export default {
       dialogcredito: false,
       dialogcontado: false,
       dialog:false,
-      dialogQuestion:false,
+      loading:false,
+    dialogQuestion:false,
+      dialogQuestionDelete:false,
       messageQuestion:'',
 
       minNumberRules: [
@@ -384,11 +410,12 @@ export default {
             
             console.log(item)
             this.editado = Object.assign({}, item)
-            var r = confirm("¿Está seguro de borrar el registro?");
-            if (r == true) {
-                this.delete()
-            }
-        },
+            this.dialogQuestionDelete = true
+          },
+          guardaBorrar(){
+                  this.delete()
+                  this.dialogQuestionDelete = false
+                  },
 
         delete: function () {
             axios.post('/provider/purchase/order/details/destroy', this.editado).then(response => {
@@ -407,14 +434,23 @@ export default {
         },   
 
         createCompra() {
+          this.loading = true
             axios.get('/provider/purchase/orders/' + this.prpo_pk + '')
                 .then(response => {
+                  setTimeout(() => (this.loading = false), 2000)
+                  if(response.data.data != null){
                     console.log(response)
                     this.desserts = response.data.data.provider_purchase_order_details
                     this.getTotal();
+                    } 
+                else
+                {
+                    this.normal('Notificación',response.data.status.message ,"error");
+                } 
                 })
                 .catch(e => {
-                    this.errors.push(e)
+                    console.log(e);
+                    this.normal('Notificación', "Error al cargar los datos" ,"error");
                     })
                 },
         cancelar() {

@@ -248,6 +248,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -284,9 +307,11 @@ __webpack_require__.r(__webpack_exports__);
         remo_fk: 0,
         prre_observation: ''
       },
+      loading: false,
       dialogcredito: false,
       dialogcontado: false,
       dialogQuestion: false,
+      dialogQuestionDelete: false,
       messageQuestion: '',
       minNumberRules: [function (value) {
         return !!value || 'Requerido.';
@@ -416,17 +441,28 @@ __webpack_require__.r(__webpack_exports__);
     createsale: function createsale() {
       var _this5 = this;
 
+      this.loading = true;
       console.log('/provider/returns?prpu_pk=' + this.prpu_pk + '');
       axios.post('/provider/returns?prpu_pk=' + this.prpu_pk + '').then(function (response) {
-        console.log(response.data);
-        _this5.sales = response.data.data;
-        _this5.saleHeader = response.data.data.ProviderReturns;
-        _this5.desserts = _this5.sales.ProviderReturnDetails;
+        setTimeout(function () {
+          return _this5.loading = false;
+        }, 2000);
 
-        _this5.getTotal();
+        if (response.data.data != null) {
+          console.log(response.data);
+          _this5.sales = response.data.data;
+          _this5.saleHeader = response.data.data.ProviderReturns;
+          _this5.desserts = _this5.sales.ProviderReturnDetails;
+
+          _this5.getTotal();
+        } else {
+          _this5.normal('Notificación', response.data.status.message, "error");
+        }
       })["catch"](function (e) {
         //this.errors.push(e)
         console.log(e);
+
+        _this5.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     getTotal: function getTotal() {
@@ -439,12 +475,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     borrar: function borrar(item) {
       this.editado = Object.assign({}, item);
-      var r = confirm("¿Está seguro de borrar el registro?");
-
-      if (r == true) {
-        this.editado.prrd_pk = item.prrd_pk;
-        this["delete"]();
-      }
+      this.dialogQuestionDelete = true;
+    },
+    guardaBorrar: function guardaBorrar() {
+      this["delete"]();
+      this.dialogQuestionDelete = false;
     },
     "delete": function _delete() {
       var _this6 = this;
@@ -503,6 +538,101 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", width: "300" },
+              model: {
+                value: _vm.loading,
+                callback: function($$v) {
+                  _vm.loading = $$v
+                },
+                expression: "loading"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                { attrs: { color: "white" } },
+                [
+                  _c(
+                    "v-card-text",
+                    [
+                      _vm._v("\n          Cargando\n          "),
+                      _c("v-progress-linear", {
+                        staticClass: "mb-0",
+                        attrs: { indeterminate: "", color: "green" }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "290" },
+              model: {
+                value: _vm.dialogQuestionDelete,
+                callback: function($$v) {
+                  _vm.dialogQuestionDelete = $$v
+                },
+                expression: "dialogQuestionDelete"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "headline" }, [
+                    _vm._v("Alerta")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-card-text", [
+                    _vm._v("¿Está seguro de borrar el registro?")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialogQuestionDelete = false
+                            }
+                          }
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: { click: _vm.guardaBorrar }
+                        },
+                        [_vm._v("Continuar")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-alert",
             {

@@ -1,6 +1,18 @@
 <template>
     <v-app>
         <v-container>
+        <v-dialog v-model="loadingDialog" persistent width="300">
+          <v-card color="white">
+            <v-card-text>
+              Cargando
+              <v-progress-linear
+                indeterminate 
+                color="green"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
         <v-snackbar color="#000000"
                     v-model="snackbar"
                     :timeout="timeout">
@@ -127,88 +139,12 @@
 
     <!-- Dialog -->
 
-    
-    <v-dialog v-model="dialogcredito" max-width="500">
-      <v-card>
-        <v-card-title>Crédito:</v-card-title>
-        <v-card-text>
-          <span class="subheading font-weight-bold">Forma de Pago:</span>
-          <v-text-field
-            label="Efectivo: "
-            prefix="$"
-            type="number"
-            v-model="efectivo"
-          ></v-text-field>
-          <v-text-field label="Transferencia: " v-model="tarjeta"  prefix="$" type="number"></v-text-field>
-
-          <br />
-          <tr>
-            <td>Subtotal</td>
-            <td> ${{formatMoney(subtotal)}}</td>
-            <td />
-          </tr>          
-          <tr>
-            <td>Total I.V.A.</td>
-            <td> ${{formatMoney(iva)}}</td>
-            <td />
-          </tr>
-          <tr>
-            <td>Total</td>
-            <td> ${{formatMoney(total)}}</td>
-          </tr>
-          <tr>
-            <td>Total Crédito</td>
-            <td> ${{formatMoney(total - efectivo - tarjeta) }}</td>
-          </tr>
-
-          <v-btn @click="dialogcredito = !dialogcredito">Cancelar</v-btn>
-          <v-btn @click="finalizarVenta" color="warning">Confirmar</v-btn>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="dialogcontado" max-width="500">
-      <v-card>
-        <v-card-title>Contado</v-card-title>
-
-        <v-card-text>
-          <span class="subheading font-weight-bold">Forma de Pago:</span>
-
-          <v-text-field
-            label="Efectivo: "
-            v-model="efectivo"
-            required
-            :rules="minNumberRules"
-            prefix="$"
-            type="number"
-          ></v-text-field>
-          <v-text-field label="Transferencia: " v-model="tarjeta" required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
-
-          <br />
-          <tr>
-            <td>Subtotal</td>
-            <td> ${{formatMoney(subtotal)}}</td>
-            <td />
-          </tr>          
-          <tr>
-            <td>Total I.V.A.</td>
-            <td> ${{formatMoney(iva)}}</td>
-            <td />
-          </tr>
-          <tr>
-            <td>Total</td>
-            <td> ${{formatMoney(total)}}</td>
-          </tr>
-          <v-btn @click="dialogcontado = !dialogcontado">Cancelar</v-btn>
-          <v-btn @click="finalizarVenta" color="success">Confirmar</v-btn>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
         </v-container>
     </v-app>
 </template>
 <script>
 import CripNotice from "crip-vue-notice";
+
 export default {
   data() {
     return {
@@ -247,7 +183,7 @@ export default {
         
       dialogcredito: false,
       dialogcontado: false,
-
+      loadingDialog:false,
       minNumberRules: [
                     value => !!value || 'Requerido.',
                     value => value > 0 || 'El número debe ser mayor o igual a cero',
@@ -257,9 +193,7 @@ export default {
   },
    created() {
        this.createsale();
-       this.getMotivos();
    },
-
   methods: {
     
       formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
@@ -277,129 +211,27 @@ export default {
             console.log(e)
           }
         },
-      getMotivos(){
-            axios.get("/return/motives")
-            .then(response => {
-            this.returns = response.data.data;
-            this.selectReturn = this.returns[0];
-
-            })
-            .catch(e => {
-            console.log(e);
-            });
-
-        },
-      finalizar(){
-          
-          if(this.selectReturn =='' || this.selectReturn == null){              
-              this.normal('Notificación', "Debe seleccionar un motivo de devolución","success");
-              return;
-          }
-
-          this.editadoSale.clre_pk = this.saleHeader.clre_pk;
-          this.editadoSale.remo_fk = this.selectReturn.remo_pk;
-          this.editadoSale.clre_observation = this.clre_observation;
-  
-         var r = confirm("¿Está seguro de finalizar la venta?");
-            if (r == true) {
-              
-          axios.post('/client/returns/update', this.editadoSale)
-                .then(response => {
-                  console.log(response)
-                  if(response.data.status.code == 200){
-                    
-                    this.textMsg = "¡Actualizado correctamente!";
-                    this.normal('Notificación', this.textMsg,"success");
-                    this.$router.push('/clientsreturnlist') ; 
-                  }
-                  else{
-                    this.normal('Notificación', response.data.message,"success");
-                    
-                  }
-                
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                    })
-            }
-
-            
-      },
-      finalizarVenta(){
-        console.log((this.total + '-' + (this.efectivo + this.tarjeta)));
-          if(this.editadoSale.pame_fk == 1)          
-          if((this.total - this.efectivo - this.tarjeta)==0)
-          {
-
-          }
-          else{            
-            this.normal('Notificación', "Los montos de pago deben ser igual al total","error");
-              return;
-          }
-          var r = confirm("¿Está seguro de finalizar la venta?");
-            if (r == true) {
-              this.editadoSale.clde_amount = this.total
-            this.editadoSale.clpa_amount_cash=this.efectivo
-            this.editadoSale.clpa_amount_transfer= this.tarjeta
-          axios.post('/clientsales/update', this.editadoSale)
-                .then(response => {
-                  console.log(response)
-                  if(response.data.code == 200){
-                    
-                    this.textMsg = "¡Actualizado correctamente!";
-                    this.normal('Notificación', this.textMsg,"success");
-                    this.$router.push('/sales') ; 
-                  }
-                  else{
-                    this.normal('Notificación', response.data.message,"error");                    
-                  }
-                
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                    })
-            }
-      },
-      onQuantityChange(item){
-            this.editado = Object.assign({}, item)
-            console.log(this.editado)
-            console.log('this.editado')
-           if(this.editado.clrd_quantity > this.editado.clrd_quantity_sale )
-           {
-             this.textMsg = "¡El cantidad devuelta no puede ser mayor a la cantidad comprada!";
-             this.normal('Notificación', this.textMsg,"error");
-             /*this.alertError = true;
-             setTimeout(()=>{
-                this.alertError=false
-              },3000)*/
-
-              this.createsale();
-             return;
-           }
-
-            axios.post('/client/return/details/update', this.editado)
-                .then(response => {
-                this.getTotal();
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                    })
-
-        },
+      
       createsale() {
+        this.loadingDialog = true
         console.log('/client/returns/' + this.clre_pk + ' --> get')
             axios.get('/client/returns/' + this.clre_pk + '')
                 .then(response => {
-                  console.log(response.data)
+                  setTimeout(() => (this.loadingDialog = false), 1000)
+                  if(response.data.data != null){
                     this.sales = response.data.data;
                     this.saleHeader = response.data.data.ClientReturns;
                     this.desserts =  this.sales.ClientReturnDetails;
 
                     this.getTotal();
+                  }
+                  else{
+                    this.normal('Notificación',response.data.status.message ,"error");
+                  }
                 })
                 .catch(e => {
-                    //this.errors.push(e)
                     console.log(e)
+                    this.normal('Notificación', "Error al cargar el detalle de la devolución" ,"error");
                     })
                 },
     getTotal(){
@@ -412,39 +244,7 @@ export default {
             this.total = this.subtotal + this.iva;
     },
     
-    borrar(item) {
-        
-            this.editado = Object.assign({}, item)
-            var r = confirm("¿Está seguro de borrar el registro?");
-            if (r == true) {
-                this.editado.clrd_pk = item.clrd_pk;
-                this.delete()
-            }
-        },
-
-        delete: function () {
-            
-            axios.post('/client/return/details/destroy', this.editado).then(response => {             
-               
-                this.textMsg = "¡Eliminado correctamente!";
-                this.normal('Notificación', this.textMsg,"success");
-               this.createsale();
-            });
-        },
-
-        actualizar(item) {
-        
-            this.editado = Object.assign({}, item)
-            axios.post('/client_sale_details/update', this.editado)
-                .then(response => {
-                    
-                this.textMsg = "¡Actualizado correctamente!";
-                this.normal('Notificación', this.textMsg,"success");
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                    })
-        },
+    
         normal(Title, Description, Type) {
             this.notice = new CripNotice({
                 title: Title,
