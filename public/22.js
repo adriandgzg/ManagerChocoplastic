@@ -453,6 +453,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     borrar: function borrar(item) {
       var index = this.products.indexOf(item);
+      this.editado = Object.assign({}, item);
       this.dialogQuestionDelete = true;
     },
     guardaBorrar: function guardaBorrar() {
@@ -463,6 +464,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this6 = this;
 
       axios.put('/product/delete', this.editado).then(function (response) {
+        console.log(response);
         _this6.textMsg = "¡Eliminado correctamente!";
 
         _this6.normal('Notificación', _this6.textMsg, "success");

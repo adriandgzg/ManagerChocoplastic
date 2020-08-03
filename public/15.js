@@ -105,6 +105,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -189,7 +212,11 @@ __webpack_require__.r(__webpack_exports__);
         return !!value || 'Archivo requerido';
       }, function (value) {
         return !value || value.size < 2000000 || 'La imagen tiene que ser menor a 2 MB!';
-      }]
+      }],
+      loading: false,
+      dialogQuestion: false,
+      dialogQuestionDelete: false,
+      messageQuestion: ''
     };
   },
   created: function created() {
@@ -236,9 +263,17 @@ __webpack_require__.r(__webpack_exports__);
     getProducts: function getProducts() {
       var _this3 = this;
 
+      this.loading = true;
       axios.get("/productList").then(function (response) {
-        console.log(response.data);
-        _this3.products = response.data.data;
+        setTimeout(function () {
+          return _this3.loading = false;
+        }, 2000);
+
+        if (response.data.data != null) {
+          _this3.products = response.data.data;
+        } else {
+          _this3.normal('Notificación', 'Ocurrio un error al cargar los datos.', "error");
+        }
       })["catch"](function (e) {
         console.log(e);
       });
@@ -253,7 +288,9 @@ __webpack_require__.r(__webpack_exports__);
     guardar: function guardar() {
       var _this4 = this;
 
-      this.editado.prod_fk = this.product;
+      console.log(this.product);
+      console.log(this.store);
+      this.editado.prod_fk = this.product.prod_pk;
       this.editado.stor_fk = this.store;
       axios.post('/product/frequents', this.editado).then(function (response) {
         console.log(response.data);
@@ -266,20 +303,21 @@ __webpack_require__.r(__webpack_exports__);
 
           _this4.getFrequents();
         } else {
-          _this4.normal('Notificación', response.data.status.technicaldetail.errorInfo[2], "error");
+          _this4.normal('Notificación', 'Ocurrio un error al guardar. Contacte a su administrador.', "error");
         }
       })["catch"](function (e) {
-        _this4.errors.push(e);
+        //this.errors.push(e)
+        console.log(e);
       });
     },
     borrar: function borrar(item) {
       var index = this.products.indexOf(item);
       this.editado = Object.assign({}, item);
-      var r = confirm("¿Está seguro de borrar el registro?");
-
-      if (r == true) {
-        this["delete"]();
-      }
+      this.dialogQuestionDelete = true;
+    },
+    guardaBorrar: function guardaBorrar() {
+      this["delete"]();
+      this.dialogQuestionDelete = false;
     },
     "delete": function _delete() {
       var _this5 = this;
@@ -333,6 +371,101 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", width: "300" },
+              model: {
+                value: _vm.loading,
+                callback: function($$v) {
+                  _vm.loading = $$v
+                },
+                expression: "loading"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                { attrs: { color: "white" } },
+                [
+                  _c(
+                    "v-card-text",
+                    [
+                      _vm._v("\n          Cargando\n          "),
+                      _c("v-progress-linear", {
+                        staticClass: "mb-0",
+                        attrs: { indeterminate: "", color: "green" }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "290" },
+              model: {
+                value: _vm.dialogQuestionDelete,
+                callback: function($$v) {
+                  _vm.dialogQuestionDelete = $$v
+                },
+                expression: "dialogQuestionDelete"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "headline" }, [
+                    _vm._v("Alerta")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-card-text", [
+                    _vm._v("¿Está seguro de borrar el registro?")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialogQuestionDelete = false
+                            }
+                          }
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: { click: _vm.guardaBorrar }
+                        },
+                        [_vm._v("Continuar")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-snackbar",
             {

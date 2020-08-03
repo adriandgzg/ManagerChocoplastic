@@ -468,6 +468,7 @@ export default {
 
     borrar(item) {
         const index = this.products.indexOf(item)
+        this.editado = Object.assign({}, item)
         this.dialogQuestionDelete = true
         },
 
@@ -478,7 +479,7 @@ export default {
 
     delete: function () {
         axios.put('/product/delete', this.editado).then(response => {
-            
+            console.log(response)
             this.textMsg = "¡Eliminado correctamente!";
             this.normal('Notificación', this.textMsg,"success");
             this.getProducts();

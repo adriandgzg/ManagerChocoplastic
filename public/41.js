@@ -204,6 +204,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -305,7 +328,11 @@ __webpack_require__.r(__webpack_exports__);
           var pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || 'E-mail inválido.';
         }
-      }
+      },
+      loading: false,
+      dialogQuestion: false,
+      dialogQuestionDelete: false,
+      messageQuestion: ''
     };
   },
   created: function created() {
@@ -317,10 +344,16 @@ __webpack_require__.r(__webpack_exports__);
     getUser: function getUser() {
       var _this = this;
 
+      this.loading = true;
       axios.get('/listUsers').then(function (response) {
+        setTimeout(function () {
+          return _this.loading = false;
+        }, 2000);
         _this.usuarios = response.data.data;
       })["catch"](function (e) {
         console.log(e);
+
+        _this.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     getGenders: function getGenders() {
@@ -456,6 +489,101 @@ var render = function() {
   return _c(
     "v-container",
     [
+      _c(
+        "v-dialog",
+        {
+          attrs: { persistent: "", width: "300" },
+          model: {
+            value: _vm.loading,
+            callback: function($$v) {
+              _vm.loading = $$v
+            },
+            expression: "loading"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            { attrs: { color: "white" } },
+            [
+              _c(
+                "v-card-text",
+                [
+                  _vm._v("\n          Cargando\n          "),
+                  _c("v-progress-linear", {
+                    staticClass: "mb-0",
+                    attrs: { indeterminate: "", color: "green" }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { persistent: "", "max-width": "290" },
+          model: {
+            value: _vm.dialogQuestionDelete,
+            callback: function($$v) {
+              _vm.dialogQuestionDelete = $$v
+            },
+            expression: "dialogQuestionDelete"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", { staticClass: "headline" }, [
+                _vm._v("Alerta")
+              ]),
+              _vm._v(" "),
+              _c("v-card-text", [
+                _vm._v("¿Está seguro de borrar el registro?")
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "green darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.dialogQuestionDelete = false
+                        }
+                      }
+                    },
+                    [_vm._v("Cancelar")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "green darken-1", text: "" },
+                      on: { click: _vm.guardaBorrar }
+                    },
+                    [_vm._v("Continuar")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
       _c(
         "v-row",
         [

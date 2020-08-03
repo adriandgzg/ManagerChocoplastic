@@ -1,5 +1,28 @@
 <template>
     <v-container>
+    <v-dialog v-model="loading" persistent width="300">
+          <v-card color="white">
+            <v-card-text>
+              Cargando
+              <v-progress-linear
+                indeterminate 
+                color="green"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogQuestionDelete" persistent max-width="290">
+            <v-card>
+            <v-card-title class="headline">Alerta</v-card-title>
+            <v-card-text>¿Está seguro de borrar el registro?</v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="dialogQuestionDelete = false">Cancelar</v-btn>
+                <v-btn color="green darken-1" text @click="guardaBorrar">Continuar</v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-dialog>
         <v-row>
             <v-col>
                 <v-data-table :headers="headers" :items="usuarios" sort-by="id" class="elevation-3">
@@ -286,6 +309,11 @@ import CripNotice from "crip-vue-notice";
                                 return pattern.test(value) || 'E-mail inválido.'
                                 },
                     },
+                
+                loading:false,
+                dialogQuestion:false,
+                dialogQuestionDelete:false,
+                messageQuestion:'',
 
             }
         },
@@ -296,12 +324,15 @@ import CripNotice from "crip-vue-notice";
         },
         methods: {
             getUser() {
+                 this.loading = true
                 axios.get('/listUsers')
-                    .then(response => {                        
+                    .then(response => {
+                         setTimeout(() => (this.loading = false), 2000)                   
                         this.usuarios = response.data.data
                     })
                     .catch(e => {
                         console.log(e);
+                        this.normal('Notificación', "Error al cargar los datos" ,"error");
                     })
             },
             getGenders() {
