@@ -89791,6 +89791,10 @@ var map = {
 		0,
 		36
 	],
+	"./Stores.vue": [
+		"./resources/js/components/views/Stores.vue",
+		44
+	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
 		37

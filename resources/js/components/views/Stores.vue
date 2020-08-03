@@ -1,3 +1,4 @@
+
 <template>
     <v-app>
         <v-container>
@@ -24,15 +25,18 @@
             </v-card-actions>
             </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogSuccess" width="640" overlay-color="white" persistent>
-        <v-card color="primary" >          
-            <v-alert color="success" border="left" colored-border
-                     icon="mdi-checkbox-marked-circle" prominent>
-              {{textMsg}}
-            </v-alert>
-        </v-card>
-      </v-dialog>
-                
+                <v-snackbar color="#000000"
+                    v-model="snackbar"
+                    :timeout="timeout">
+                    {{ textMsg }}
+                    <v-btn
+                            color="blue"
+                            text
+                            @click="snackbar = false"
+                    >
+                        Cerrar
+                    </v-btn>
+                </v-snackbar>
             
              <!--  Modal del diálogo para Alta y Edicion    -->
             <v-dialog v-model="dialog" max-width="500px" persistent>
@@ -42,10 +46,14 @@
                     </v-card-title>
                     <v-form v-model="validProvider" >
                         <v-card-text>
-                            <v-text-field v-model="editado.meas_name" label="Nombre" maxlength="300"
-                                        :rules="nameRules" required></v-text-field>                 
-                            <v-text-field v-model="editado.meas_abbreviation" label="Abreviación" maxlength="300"
-                                        :rules="nameRules" required></v-text-field>                                       
+                            <v-text-field v-model="editado.stor_name" label="Nombre" maxlength="300"
+                                        :rules="nameRules" required></v-text-field>                            
+                            <v-text-field v-model="editado.stor_phone" label="Teléfono" maxlength="10"
+                                        :rules="phoneRules" required></v-text-field>
+                            <v-text-field v-model="editado.stor_addres" label="Dirección" maxlength="1000"
+                                        :rules="nameRules" required></v-text-field>
+                            <span>Matriz</span>
+                            <v-switch v-model="principal"></v-switch>                            
                             <span>Activo/Inactivo</span>
                             <v-switch v-model="estado"/>
                         </v-card-text>
@@ -62,7 +70,7 @@
             <v-row>
             <v-col>
                 <v-card>
-                    <v-data-table :headers="headers" :items="measurements" :search="search" sort-by="id" class="elevation-3">
+                    <v-data-table :headers="headers" :items="stores" :search="search" sort-by="id" class="elevation-3">
                     <template v-slot:top>
                     <v-system-bar color="indigo darken-2" dark></v-system-bar>
                         <v-toolbar flat color="indigo">
@@ -89,7 +97,7 @@
                         </v-col>
                     </template>
                     <template v-slot:item.status="{ item }">                            
-                            <v-chip v-if="item.meas_status == 1" color="green" dark>  Activo  </v-chip>
+                            <v-chip v-if="item.stor_status == 1" color="green" dark>  Activo  </v-chip>
                             <v-chip v-else color="red" dark>Inactivo</v-chip>                        
                     </template>
                     <template v-slot:item.action="{ item }">                   
@@ -115,18 +123,26 @@ export default {
          headers: [
                     {
                         text: 'ID',
-                        value: 'meas_pk',
+                        value: 'stor_pk',
                         width: '10%'
                     }, 
                     {
                         text: 'Nombre',
-                        value: 'meas_name'
+                        value: 'stor_name'
                     }, 
                     {
-                        text: 'Abrev',
-                        value: 'meas_abbreviation'
-                    },               
-                     {
+                        text: 'Teléfono',
+                        value: 'stor_phone'
+                    }, 
+                    {
+                        text: 'Dirección',
+                        value: 'stor_addres'
+                    }, 
+                    {
+                        text: 'Principal',
+                        value: 'stor_main'
+                    }, 
+                    {
                         text: 'Estatus',
                         value: 'status'
                     },
@@ -139,21 +155,25 @@ export default {
          ],
          select:0,
          principal:false,
-         estado:true,
+         estado:false,
          editado:{
-            meas_pk:0,
-            meas_name:'',            
-            meas_abbreviation:'',
-            meas_status:0,
+            stor_pk:0,
+            stor_name:'',
+            stor_phone:'',
+            stor_addres:'',
+            stor_main:0,
+            stor_status:0,
          },
          defaultItem:{
-            meas_pk:0,
-            meas_name:'',
-            meas_abbreviation:'',
-            meas_status:0,
+            stor_pk:0,
+            stor_name:'',
+            stor_phone:'',
+            stor_addres:'',
+            stor_main:0,
+            stor_status:0,
          },
          editedIndex: -1,
-          measurements: [],
+          stores: [],
           entities: [],
           search:"",
           dialog: false,
@@ -162,7 +182,6 @@ export default {
       textMsg: "",
       valid: false,
       validProvider:false,
-      dialogSuccess: false,
       folioRules: [
         value => !!value || "Requerido.",
         value => (value && value.length >= 10) || "Min 10 caracter"
@@ -182,22 +201,35 @@ export default {
     };
   },
    created() {
-       this.getMeasurements();
+       this.getStores();
+       this.getEntities();
    },
 
   methods: {
 
-      getMeasurements() {
-           this.loading = true
+      getStores() {
+            this.loading = true
       axios
-        .get("/measurementsList")
-        .then(response => {            
-          this.measurements = response.data.data;          
-          setTimeout(() => (this.loading = false), 2000)
+        .get("/storelist")
+        .then(response => {
+            setTimeout(() => (this.loading = false), 2000)
+            console.log(response.data)
+          this.stores = response.data.data;          
         })
         .catch(e => {
           console.log(e);
            this.normal('Notificación', "Error al cargar los datos" ,"error");
+        });
+    },
+    getEntities() {
+      axios
+        .get("/entitieslist")
+        .then(response => {
+            console.log(response.data)
+          this.entities = response.data.data;          
+        })
+        .catch(e => {
+          console.log(e);
         });
     },
 
@@ -207,17 +239,22 @@ export default {
                 this.editedIndex = -1
             },
     edita (item) {         
-      this.editedIndex = this.measurements.indexOf(item)
+      this.editedIndex = this.stores.indexOf(item)
       this.editado = Object.assign({}, item)
-      this.estado = this.editado.meas_status
+      this.principal = this.editado.stor_main
+      this.estado = this.editado.stor_status
       this.dialog = true
     },
     guardar() {
+        if(this.principal == true)
+            this.editado.stor_main =  1;
+        else
+            this.editado.stor_main =  0;
         
         if(this.estado == true)
-            this.editado.meas_status =  1;
+            this.editado.stor_status =  1;
         else
-            this.editado.meas_status =  0;
+            this.editado.stor_status =  0;
         
         if (this.editedIndex > -1) {
             this.editar()
@@ -227,22 +264,22 @@ export default {
         this.cancelar()
     },
     alta: function () {
-        axios.post('/measurements/add', this.editado).then(response => {
-            this.dialogSuccess = true
+        axios.post('/store/add', this.editado).then(response => {
+            this.snackbar = true
             this.textMsg = '¡Alta exitosa!'
-            this.getMeasurements();
+            this.getStores();
         });
     },
     editar: function () {
-        axios.put('/measurements/update', this.editado).then(response => {
-            this.dialogSuccess = true
+        axios.put('/store/update', this.editado).then(response => {
+            this.snackbar = true
             this.textMsg = '¡Actualización Exitosa!'
-            this.getMeasurements();
+            this.getStores();
         });
     },
 
     borrar(item) {
-        const index = this.measurements.indexOf(item)
+        const index = this.stores.indexOf(item)
         this.editado = Object.assign({}, item)
         this.dialogQuestionDelete = true
         },
@@ -253,22 +290,15 @@ export default {
             },
 
     delete: function () {
-        axios.put('/measurements/delete', this.editado).then(response => {
+        axios.put('/store/delete', this.editado).then(response => {
             
             this.textMsg = "¡Eliminado correctamente!";
-            this.normal('Notificación', this.textMsg,"success");
-            this.getMeasurements();
+            this.normal('Notificación', this.textMsg,"error");
+            this.getStores();
         });
     },
 
 },
-watch: {
-    dialogSuccess (val) {
-      if (!val) return
-
-      setTimeout(() => (this.dialogSuccess = false), 4000)
-    },
-  },
 computed: {
 formTitle () {      
 return this.editedIndex === -1 ? 'Nuevo Registro' : 'Editar Registro'
