@@ -1,6 +1,33 @@
 <template>
     <v-app>
         <v-container>
+
+            <v-dialog v-model="loading" persistent width="300">
+          <v-card color="white">
+            <v-card-text>
+              Cargando
+              <v-progress-linear
+                indeterminate 
+                color="green"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogQuestionDelete" persistent max-width="290">
+            <v-card>
+            <v-card-title class="headline">Alerta</v-card-title>
+            <v-card-text>¿Está seguro de borrar el registro?</v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="dialogQuestionDelete = false">Cancelar</v-btn>
+                <v-btn color="green darken-1" text @click="guardaBorrar">Continuar</v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+
+
             <v-dialog v-model="dialogSuccess" width="640" overlay-color="white" persistent>
                 <v-card color="primary" >          
                     <v-alert color="success" border="left" colored-border
@@ -292,6 +319,10 @@ export default {
         value => !!value || 'Archivo requerido',
         value => !value || value.size < 2000000 || 'La imagen tiene que ser menor a 2 MB!',
     ],
+    loading:false,
+    dialogQuestion:false,
+      dialogQuestionDelete:false,
+      messageQuestion:'',
     };
   },
    created() {
@@ -319,14 +350,22 @@ export default {
         },
 
       getProducts() {
+          this.loading = true
       axios
         .get("/productList")
         .then(response => {
-            console.log(response.data)
-          this.products = response.data.data;          
+           setTimeout(() => (this.loading = false), 2000)
+            if(response.data.data != null){
+          this.products = response.data.data;    
+          } 
+            else
+            {
+                this.normal('Notificación',response.data.status.message ,"error");
+            }         
         })
         .catch(e => {
           console.log(e);
+          this.normal('Notificación', "Error al cargar los datos" ,"error");
         });
     },
 
@@ -429,12 +468,13 @@ export default {
 
     borrar(item) {
         const index = this.products.indexOf(item)
-        this.editado = Object.assign({}, item)
-        var r = confirm("¿Está seguro de borrar el registro?");
-        if (r == true) {
+        this.dialogQuestionDelete = true
+        },
+
+        guardaBorrar(){
             this.delete()
-        }
-    },
+            this.dialogQuestionDelete = false
+            },
 
     delete: function () {
         axios.put('/product/delete', this.editado).then(response => {

@@ -191,6 +191,7 @@
             prefix="$"
             type="number"
             v-model="efectivo"
+            
           ></v-text-field>
           <v-text-field label="Transferencia: " v-model="tarjeta"  prefix="$" type="number"></v-text-field>
 
@@ -229,15 +230,25 @@
 
           <v-text-field
             label="Efectivo: "
-            v-model="efectivo"
-            required
+            v-model="efectivo"            
             :rules="minNumberRules"
             prefix="$"
             type="number"
+            @change="getcambio()"
           ></v-text-field>
-          <v-text-field label="Transferencia: " v-model="tarjeta" required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
+          <v-text-field 
+          label="Transferencia: " 
+          v-model="tarjeta" 
+          :rules="minNumberRules" 
+          prefix="$" 
+          type="number"></v-text-field>
 
           <br />
+          <tr>
+            <td>Cambio</td>
+            <td> <span>${{formatMoney(cambio)}} </span></td>
+            <td />
+          </tr> 
           <tr>
             <td>Subtotal</td>
             <td> ${{formatMoney(subtotal)}}</td>
@@ -282,6 +293,7 @@ export default {
         timeout: 2000,
         subtotal:0,
         total:0,
+        cambio: 0,
         iva:0,
         efectivo:0,
         tarjeta:0,
@@ -408,8 +420,10 @@ export default {
           this.editadoSale.pame_fk = this.selectpame.pame_pk;
           this.editadoSale.stor_fk = this.selectStore.stor_pk;
 
-          if(this.editadoSale.pame_fk == 1)
+          if(this.editadoSale.pame_fk == 1){
           this.dialogcontado = true;
+          this.getcambio();
+          }
           else
           this.dialogcredito = true;
 
@@ -463,6 +477,7 @@ export default {
             axios.post('/clientsales?clor_pk=' + this.clor_pk + '')
                 .then(response => {
                   setTimeout(() => (this.loading = false), 2000)
+                  console.log(response.data)
                   if(response.data.data != null){
                   console.log(response.data)
                     this.sales = response.data.data;
@@ -472,7 +487,7 @@ export default {
                     } 
                     else
                     {
-                        this.normal('Notificación',response.data.status.message ,"error");
+                        this.normal('Notificación',response.data.message ,"error");
                     }
                 })
                 .catch(e => {
@@ -481,12 +496,16 @@ export default {
                     this.normal('Notificación', "Error al cargar los datos" ,"error");
                     })
                 },
+                getcambio(){
+                  this.cambio = this.total - this.efectivo;
+                },
     getTotal(){
 
             for (var i = 0; i < this.desserts.length; i++) {
                 this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity );
             }
             //this.iva =  this.subtotal * 0.16;
+            
 
             this.total = this.subtotal + this.iva;
     },

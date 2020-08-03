@@ -273,6 +273,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -294,6 +305,7 @@ __webpack_require__.r(__webpack_exports__);
       timeout: 2000,
       subtotal: 0,
       total: 0,
+      cambio: 0,
       iva: 0,
       efectivo: 0,
       tarjeta: 0,
@@ -416,7 +428,11 @@ __webpack_require__.r(__webpack_exports__);
       this.editadoSale.clie_fk = this.selectClient.clie_pk;
       this.editadoSale.pame_fk = this.selectpame.pame_pk;
       this.editadoSale.stor_fk = this.selectStore.stor_pk;
-      if (this.editadoSale.pame_fk == 1) this.dialogcontado = true;else this.dialogcredito = true;
+
+      if (this.editadoSale.pame_fk == 1) {
+        this.dialogcontado = true;
+        this.getcambio();
+      } else this.dialogcredito = true;
     },
     finalizarVenta: function finalizarVenta() {
       console.log(this.total + '-' + (this.efectivo + this.tarjeta));
@@ -457,6 +473,7 @@ __webpack_require__.r(__webpack_exports__);
         setTimeout(function () {
           return _this4.loading = false;
         }, 2000);
+        console.log(response.data);
 
         if (response.data.data != null) {
           console.log(response.data);
@@ -466,7 +483,7 @@ __webpack_require__.r(__webpack_exports__);
 
           _this4.getTotal();
         } else {
-          _this4.normal('Notificación', response.data.status.message, "error");
+          _this4.normal('Notificación', response.data.message, "error");
         }
       })["catch"](function (e) {
         //this.errors.push(e)
@@ -474,6 +491,9 @@ __webpack_require__.r(__webpack_exports__);
 
         _this4.normal('Notificación', "Error al cargar los datos", "error");
       });
+    },
+    getcambio: function getcambio() {
+      this.cambio = this.total - this.efectivo;
     },
     getTotal: function getTotal() {
       for (var i = 0; i < this.desserts.length; i++) {
@@ -1405,10 +1425,14 @@ var render = function() {
                       _c("v-text-field", {
                         attrs: {
                           label: "Efectivo: ",
-                          required: "",
                           rules: _vm.minNumberRules,
                           prefix: "$",
                           type: "number"
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.getcambio()
+                          }
                         },
                         model: {
                           value: _vm.efectivo,
@@ -1422,7 +1446,6 @@ var render = function() {
                       _c("v-text-field", {
                         attrs: {
                           label: "Transferencia: ",
-                          required: "",
                           rules: _vm.minNumberRules,
                           prefix: "$",
                           type: "number"
@@ -1437,6 +1460,20 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("br"),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("td", [_vm._v("Cambio")]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("span", [
+                            _vm._v(
+                              "$" + _vm._s(_vm.formatMoney(_vm.cambio)) + " "
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td")
+                      ]),
                       _vm._v(" "),
                       _c("tr", [
                         _c("td", [_vm._v("Subtotal")]),

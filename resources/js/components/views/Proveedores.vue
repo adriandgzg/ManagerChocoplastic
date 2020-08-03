@@ -1,6 +1,29 @@
 <template>
     <v-app>
         <v-container>
+        <v-dialog v-model="loading" persistent width="300">
+          <v-card color="white">
+            <v-card-text>
+              Cargando
+              <v-progress-linear
+                indeterminate 
+                color="green"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogQuestionDelete" persistent max-width="290">
+            <v-card>
+            <v-card-title class="headline">Alerta</v-card-title>
+            <v-card-text>¿Está seguro de borrar el registro?</v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="dialogQuestionDelete = false">Cancelar</v-btn>
+                <v-btn color="green darken-1" text @click="guardaBorrar">Continuar</v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-dialog>
                 <v-snackbar color="#000000"
                     v-model="snackbar"
                     :timeout="timeout">
@@ -227,7 +250,11 @@ export default {
     emailRules: [
                     (v) => !!v || 'Correo electrónico requerido',
                     (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Ingrese un correo válido'
-                ]
+                ],
+    loading:false,
+    dialogQuestion:false,
+      dialogQuestionDelete:false,
+      messageQuestion:'',
     };
   },
    created() {
@@ -254,14 +281,23 @@ export default {
       },
 
       getProviders() {
+           this.loading = true
       axios
         .get("/providerlist")
         .then(response => {
-            console.log(response.data)
-          this.proveedores = response.data.data;          
+            setTimeout(() => (this.loading = false), 2000)
+            if(response.data.data != null){
+          this.proveedores = response.data.data;  
+          } 
+            else
+            {
+                this.normal('Notificación',response.data.status.message ,"error");
+            }          
         })
         .catch(e => {
           console.log(e);
+          this.normal('Notificación', "Error al cargar los datos" ,"error");
+
         });
     },
     getEntities() {
@@ -322,13 +358,13 @@ export default {
     borrar(item) {
         const index = this.proveedores.indexOf(item)
         this.editadoProveedor = Object.assign({}, item)
-        console.log('capturo el id de la fila seleccionada')
-        console.log(item) //capturo el id de la fila seleccionada
-        var r = confirm("¿Está seguro de borrar el registro?");
-        if (r == true) {
+        this.dialogQuestionDelete = true
+        },
+
+        guardaBorrar(){
             this.delete()
-        }
-    },
+            this.dialogQuestionDelete = false
+            },
 
     delete: function () {
         axios.put('/providers/delete', this.editadoProveedor).then(response => {
