@@ -242,6 +242,84 @@ class ProductController extends ApiResponseController
 
 
 
+    public function updatederived(Request $r)
+    {
+        $vInput = $r->all();
+
+        $vVal = Validator::make($vInput, [
+            'prod_pk' => 'required|int', //PK Producto
+            'meas_fk_output' => 'required|int', //PK Unidad Medida Salida
+            'prod_saleprice' => 'required', //Precio Venta
+            'prod_listprice' => 'required', //Precio Lista
+        ]);
+
+        if ($vVal->fails()) {
+            return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+        }
+
+        try {
+            //Asignacion de variables
+           $vprod_pk = $vInput['prod_pk'];
+           $vmeas_fk_output = $vInput['meas_fk_output'];
+           $vprod_saleprice = $vInput['prod_saleprice'];
+           $vprod_listprice = $vInput['prod_listprice'];
+
+            $vProduct = Product::where('prod_pk', '=', $vprod_pk)->first();
+
+            if($vProduct)
+            { 
+                //Modificar Producto Derivado
+                DB::table('products')
+                ->where('prod_pk', '=', $vprod_pk)
+                ->update(['meas_fk_output' => $vmeas_fk_output, 'prod_saleprice' => $vprod_saleprice, 'prod_listprice' => $vprod_listprice]);
+
+                return $this->dbResponse(null, 200, null, 'Producto Derivado Modificado Correctamente');
+                         
+            }
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
+        }
+    }
+
+
+    public function destroyderived(Request $r)
+    {
+        $vInput = $r->all();
+
+        $vVal = Validator::make($vInput, [
+            'prod_pk' => 'required|int', //PK Producto
+        ]);
+
+        if ($vVal->fails()) {
+            return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+        }
+
+        try {
+            //Asignacion de variables
+           $vprod_pk = $vInput['prod_pk'];
+
+            $vProduct = Product::where('prod_pk', '=', $vprod_pk)->first();
+
+            if($vProduct)
+            { 
+                //Modificar Producto Derivado
+                DB::table('products')
+                ->where('prod_pk', '=', $vprod_pk)
+                ->update(['prod_status' => 0]);
+
+                return $this->dbResponse(null, 200, null, 'Producto Derivado Eliminado Correctamente');
+            }
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
+        }
+    }
+
+
+
 
     public function derived(int $prod_main_pk)
     {

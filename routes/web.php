@@ -82,6 +82,8 @@ Route::put('/product/delete', 'ProductController@delete');
 
 Route::get('/products/derived/{prod_main_pk}', 'ProductController@derived'); //Productos Derivado
 Route::post('/products/derived', 'ProductController@storederived'); //Guardar Productos Derivado
+Route::post('/products/derived/update', 'ProductController@updatederived'); //Modificar Productos Derivado
+Route::post('/products/derived/destroy', 'ProductController@destroyderived'); //Eliminar Productos Derivado
 
 
 
