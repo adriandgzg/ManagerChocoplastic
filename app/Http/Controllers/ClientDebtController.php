@@ -26,13 +26,19 @@ class ClientDebtController extends Controller
                     DB::raw('(SELECT IFNULL(SUM(clpa_amount), 0) AS clde_amount_paid FROM client_payments WHERE clde_fk = CD.clde_pk) AS clde_amount_paid'), //Monto Pagado
                     DB::raw('(SELECT CD.clde_amount - IFNULL(SUM(clpa_amount), 0) AS clde_amount_outstanding FROM client_payments WHERE clde_fk = CD.clde_pk) AS clde_amount_outstanding'), //Monto Pendiente por pagar
                     'CD.created_at',
+                    'CD.clde_status',
+                    DB::raw('(CASE 
+                        WHEN CD.clde_status = 1 THEN "Activo" 
+                        WHEN CD.clde_status = 2 THEN "Pagado" 
+                        ELSE "" END) AS clde_status_description'), 
                     'C.clie_pk',
                     'C.clie_identifier',
                     'C.clie_name',
                     'C.clie_rfc',
-                    'CS.clsa_identifier'       
+                    'CS.clsa_identifier',
+                    
                 )
-                ->where('CD.clde_status', '=', 1)
+                ->where('CD.clde_status', '<>', 0)
                 ->get();
 
             return response()->json([
