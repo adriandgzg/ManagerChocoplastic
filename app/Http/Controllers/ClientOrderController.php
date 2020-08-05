@@ -366,7 +366,7 @@ class ClientOrderController extends ApiResponseController
             if($vClientOrder)
             { 
                 //Cancelar Pedido
-                DB::table('clor_pk')
+                DB::table('client_orders')
                 ->where('clor_pk', '=', $vclor_pk)
                 ->update(['clor_status' =>  0]);
     
