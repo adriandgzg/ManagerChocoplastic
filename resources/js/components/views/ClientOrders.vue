@@ -78,12 +78,13 @@
                         </v-col>
                     </template>
                     <template v-slot:item.status="{ item }">                            
-                            <v-chip v-if="item.clor_status == 1" color="green" dark>  Activo  </v-chip>
-                            <v-chip v-else color="red" dark>Inactivo</v-chip>                        
+                            <v-chip v-if="item.clor_status == 1" color="green" dark>  Pendiente  </v-chip>
+                            <v-chip v-if="item.clor_status == 2" color="blue" dark>  Procesado  </v-chip>
+                            <v-chip v-if="item.clor_status == 0" color="red" dark>  Cancelado  </v-chip>
                     </template>
                      <template v-slot:item.action="{ item }">   
                                     
-                        <v-btn class="mr-2" fab dark small color="cyan"  title="Convertir Orden en Venta"
+                        <v-btn class="mr-2" fab dark small color="cyan" v-if="item.clor_status == 1"  title="Convertir Orden en Venta"
                                :href="'/detaiorder/'+item.clor_pk">
                             <v-icon dark>mdi-cash-register</v-icon>
                         </v-btn>
@@ -91,7 +92,7 @@
                                :href="'/detaiorderread/'+item.clor_pk">
                             <v-icon dark>mdi-eye</v-icon>
                         </v-btn>  
-                        <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)" title="Eliminar orden">
+                        <v-btn class="mr-2" fab dark small color="error" v-if="item.clor_status == 1"  @click="borrar(item)" title="Eliminar orden">
                             <v-icon dark>mdi-delete</v-icon>
                         </v-btn>
                     </template>

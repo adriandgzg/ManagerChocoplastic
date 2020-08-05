@@ -532,7 +532,7 @@ this.subtotal = 0;
 
          
 
-          this.messageQuestion = '¿Está seguro de finalizar la transferencia?';          
+          this.messageQuestion = '¿Está seguro de finalizar el traspaso?';          
 
          this.dialogQuestion = true
 

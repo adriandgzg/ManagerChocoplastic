@@ -116,6 +116,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -597,13 +598,25 @@ var render = function() {
                                   ? _c(
                                       "v-chip",
                                       { attrs: { color: "green", dark: "" } },
-                                      [_vm._v("  Activo  ")]
+                                      [_vm._v("  Pendiente  ")]
                                     )
-                                  : _c(
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.clor_status == 2
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "blue", dark: "" } },
+                                      [_vm._v("  Procesado  ")]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.clor_status == 0
+                                  ? _c(
                                       "v-chip",
                                       { attrs: { color: "red", dark: "" } },
-                                      [_vm._v("Inactivo")]
+                                      [_vm._v("  Cancelado  ")]
                                     )
+                                  : _vm._e()
                               ]
                             }
                           },
@@ -612,26 +625,28 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "cyan",
-                                      title: "Convertir Orden en Venta",
-                                      href: "/detaiorder/" + item.clor_pk
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-cash-register")
-                                    ])
-                                  ],
-                                  1
-                                ),
+                                item.clor_status == 1
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        staticClass: "mr-2",
+                                        attrs: {
+                                          fab: "",
+                                          dark: "",
+                                          small: "",
+                                          color: "cyan",
+                                          title: "Convertir Orden en Venta",
+                                          href: "/detaiorder/" + item.clor_pk
+                                        }
+                                      },
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-cash-register")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e(),
                                 _vm._v(" "),
                                 _c(
                                   "v-btn",
@@ -654,30 +669,32 @@ var render = function() {
                                   1
                                 ),
                                 _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "error",
-                                      title: "Eliminar orden"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.borrar(item)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-delete")
-                                    ])
-                                  ],
-                                  1
-                                )
+                                item.clor_status == 1
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        staticClass: "mr-2",
+                                        attrs: {
+                                          fab: "",
+                                          dark: "",
+                                          small: "",
+                                          color: "error",
+                                          title: "Eliminar orden"
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.borrar(item)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-delete")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e()
                               ]
                             }
                           }
