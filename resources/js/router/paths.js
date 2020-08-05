@@ -192,17 +192,17 @@ export default [{
     },
     {
         path: '/transferlist',
-        name: 'Transferencias', 
+        name: 'Traspaso', 
         view: 'TransferList'
     },
     {
         path: '/transferdetail/:id',
-        name: 'Detalle Transferencia', 
+        name: 'Detalle Traspaso', 
         view: 'TransferDetail'
     },
     {
         path: '/transferdetailview/:id',
-        name: 'Detalle Transferencia.', 
+        name: 'Detalle Traspaso.', 
         view: 'TransferDetailView'
     },
 ]

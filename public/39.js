@@ -497,7 +497,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      this.messageQuestion = '¿Está seguro de finalizar la transferencia?';
+      this.messageQuestion = '¿Está seguro de finalizar el traspaso?';
       this.dialogQuestion = true;
     },
     guardaFinalizar: function guardaFinalizar() {

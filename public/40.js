@@ -955,7 +955,7 @@ var render = function() {
                                 },
                                 [
                                   _c("v-label", [
-                                    _c("h4", [_vm._v("ID Transferencia")]),
+                                    _c("h4", [_vm._v("ID traspaso")]),
                                     _vm._v(
                                       " \n          " +
                                         _vm._s(

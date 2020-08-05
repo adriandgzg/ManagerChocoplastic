@@ -90183,15 +90183,15 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   view: 'ProvidersReturnDetail'
 }, {
   path: '/transferlist',
-  name: 'Transferencias',
+  name: 'Traspaso',
   view: 'TransferList'
 }, {
   path: '/transferdetail/:id',
-  name: 'Detalle Transferencia',
+  name: 'Detalle Traspaso',
   view: 'TransferDetail'
 }, {
   path: '/transferdetailview/:id',
-  name: 'Detalle Transferencia.',
+  name: 'Detalle Traspaso.',
   view: 'TransferDetailView'
 }]);
 

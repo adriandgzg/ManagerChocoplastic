@@ -103,7 +103,7 @@ export default {
                     },
                     {
                         text: 'Sucursal Entrada',
-                        value: 'stor_name'
+                        value: 'stor_name_input'
                     },
                     {
                         text: 'Observación',

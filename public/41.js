@@ -109,7 +109,7 @@ __webpack_require__.r(__webpack_exports__);
         value: 'stor_name_output'
       }, {
         text: 'Sucursal Entrada',
-        value: 'stor_name'
+        value: 'stor_name_input'
       }, {
         text: 'Observación',
         value: 'prtr_observation'

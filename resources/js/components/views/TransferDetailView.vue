@@ -87,7 +87,7 @@
         <v-row> 
             <v-col cols="3">
               <v-card-text class="category d-inline-flex font-weight-light">  
-              <v-label><h4>ID Transferencia</h4> 
+              <v-label><h4>ID traspaso</h4> 
               {{editadoHeader.prtr_identifier}}</v-label>             
               </v-card-text>
             </v-col> 
