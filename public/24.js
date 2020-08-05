@@ -161,6 +161,9 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Fecha',
         value: 'created_at'
       }, {
+        text: 'Estatus',
+        value: 'prde_status_description'
+      }, {
         text: '',
         value: 'action',
         width: '20%'
@@ -286,7 +289,7 @@ __webpack_require__.r(__webpack_exports__);
       this.editado.pash_fk = this.selectpame.pash_pk;
 
       if (this.selectpame == '' || this.selectpame == null) {
-        this.normal('Notificación', "Debe seleccionar un método de pago", "error");
+        this.normal('Notificación', "Debe seleccionar una Forma de Pago", "error");
         return;
       }
 
@@ -302,7 +305,7 @@ __webpack_require__.r(__webpack_exports__);
 
           _this3.cancelar();
         } else {
-          _this3.normal('Notificación', "Error al guardar el pago", "error");
+          _this3.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         _this3.errors.push(e);
@@ -367,7 +370,7 @@ var render = function() {
           _c(
             "v-dialog",
             {
-              attrs: { "max-width": "500px", persistent: "" },
+              attrs: { "max-width": "700px", persistent: "" },
               model: {
                 value: _vm.dialogdetail,
                 callback: function($$v) {

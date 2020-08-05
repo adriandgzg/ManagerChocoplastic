@@ -1,8 +1,8 @@
-<template>
+<template> 
     <v-app>
         <v-container>
          <!--  Modal del diálogo para Alta y Edicion    -->
-            <v-dialog v-model="dialogdetail" max-width="500px" persistent>
+            <v-dialog v-model="dialogdetail" max-width="700px" persistent>
                 <v-card>
                     <v-card-title class="cyan white--text">
                         <span class="headline">Detalle de pagos</span>
@@ -163,6 +163,11 @@ export default {
                         value: 'created_at'
                     }, 
                     {
+                        text: 'Estatus',
+                        value: 'prde_status_description'
+                    }, 
+                    
+                    {
                         text: '',
                         value: 'action',
                         width: '20%'
@@ -281,7 +286,7 @@ this.dialog = true
         this.editado.pash_fk = this.selectpame.pash_pk;
        
         if(this.selectpame =='' || this.selectpame == null){              
-              this.normal('Notificación', "Debe seleccionar un método de pago","error");
+              this.normal('Notificación', "Debe seleccionar una Forma de Pago","error");
               return;
           }
           
@@ -297,7 +302,7 @@ this.dialog = true
                     this.cancelar()
                   }
                   else{                      
-                    this.normal('Notificación', "Error al guardar el pago","error");
+                    this.normal('Notificación', response.data.status.message,"error");
                   }
                 
                 })

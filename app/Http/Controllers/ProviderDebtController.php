@@ -28,13 +28,18 @@ class ProviderDebtController extends ApiResponseController
                     DB::raw('(SELECT IFNULL(SUM(prpa_amount), 0) AS prde_amount_paid FROM provider_payments WHERE prde_fk = PD.prde_pk) AS prde_amount_paid'),//Monto Pagado
                     DB::raw('(SELECT PD.prde_amount - IFNULL(SUM(prpa_amount), 0) AS prde_amount_outstanding FROM provider_payments WHERE prde_fk = PD.prde_pk) AS prde_amount_outstanding'), //Monto Pendiente por pagar
                     'PD.created_at',
+                    'PD.prde_status',
+                    DB::raw('(CASE 
+                        WHEN PD.prde_status = 1 THEN "Activo" 
+                        WHEN PD.prde_status = 2 THEN "Pagado" 
+                        ELSE "" END) AS prde_status_description'),
                     'P.prov_pk',
                     'P.prov_identifier',
                     'P.prov_name',
                     'P.prov_rfc',
                     'PP.prpu_identifier'       
                 )
-                ->where('PD.prde_status', '=', 1)
+                ->where('PD.prde_status', '<>', 0)
                 ->orderByDesc('PD.prde_pk')
                 ->get();
 

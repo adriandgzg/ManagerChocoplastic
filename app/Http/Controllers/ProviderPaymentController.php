@@ -61,20 +61,53 @@ class ProviderPaymentController extends ApiResponseController
            $vpash_fk = $vInput['pash_fk'];
            $vprpa_amount = $vInput['prpa_amount'];
 
-            $vProvDebt = ProviderDebt::where('prde_pk', '=', $vprde_fk)->first();
+            $vProvDebt = ProviderDebt::where('prde_pk', '=', $vprde_fk)->where('prde_status', '=', 1)->first();
 
             if($vProvDebt)
             { 
-                //Insertar Pago del Proveedor
-                $vPP = new ProviderPayment();        
-                $vPP->prov_fk = $vprov_fk;
-                $vPP->prde_fk = $vprde_fk;
-                $vPP->prde_fk = $vprde_fk;
-                $vPP->pash_fk = $vpash_fk;
-                $vPP->prpa_amount = $vprpa_amount;
-                $vPP->save();
+                //Busqueda de montos
+                $vprde_amount = $vProvDebt->prde_amount; //Montos total de deuda
+                $vpayment_total = ProviderPayment::where('prde_fk', '=', $vprde_fk)->where('prpa_status', '=', 1)->sum('prpa_amount'); //Monto total de pagos
+
+                $vdebt_total =  $vprde_amount - $vpayment_total;
+
+                //Validar que el monto pendiente de la deuda sea mayor o igual que el pago
+                if($vprpa_amount <= $vdebt_total)
+                {
+                    //Insertar Pago del Proveedor
+                    $vPP = new ProviderPayment();        
+                    $vPP->prov_fk = $vprov_fk;
+                    $vPP->prde_fk = $vprde_fk;
+                    $vPP->prde_fk = $vprde_fk;
+                    $vPP->pash_fk = $vpash_fk;
+                    $vPP->prpa_amount = $vprpa_amount;
+                    $vPP->save();
+
+                    //Validar montos para cambio de estatus
+                    $vpayment_total_finaly = $vpayment_total + $vprpa_amount; //Monto total de pagos
+
+                    if($vpayment_total_finaly == $vprde_amount)
+                    {
+                        //Modificar Estatus Deuda
+                        DB::table('provider_debts')
+                        ->where('prde_pk', '=', $vprde_fk)
+                        ->update(['prde_status' =>  2]);
+
+                        //Modificar Estatus Compra
+                        DB::table('provider_purchases')
+                        ->where('prpu_pk', '=', $vProvDebt->prpu_fk)
+                        ->update(['prpu_status' =>  3]);
+                    }
+
+
+                    return $this->dbResponse(null, 200, null, 'Pago Guardado Correctamente');
+
+                }
+                else
+                {
+                    return $this->dbResponse(null, 500, null, 'Monto de Pago es mayor que la deuda');
+                }
                
-                return $this->dbResponse(null, 200, null, 'Pago Guardado Correctamente');
             }
             else
             {
