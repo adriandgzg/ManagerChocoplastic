@@ -451,6 +451,7 @@ export default {
                   } 
                   else
                   {
+                    if(this.prtr_pk > 0)
                       this.normal('Notificación',response.data.status.message ,"error");
                   }    
               })
