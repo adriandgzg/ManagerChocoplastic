@@ -26,7 +26,7 @@ class CreateProductsTable extends Migration
             $table->bigInteger('meas_fk_output')->unsigned(); //Llave Foranea Catálogo Unidad de Medida Salida
             $table->foreign('meas_fk_output')->references('meas_pk')->on('measurements')->onUpdate('cascade');
 
-            $table->string('prod_identifier', 20)->unique(); //Identificador Personalizado
+            $table->string('prod_identifier', 20);//->unique(); //Identificador Personalizado
             $table->string('prod_name', 300); //Nombre
             $table->text('prod_description'); //Descripcion
             $table->text('prod_image'); //URL Imagen
@@ -36,7 +36,8 @@ class CreateProductsTable extends Migration
             $table->decimal('prod_saleprice', 12, 2); //Precio Venta
             $table->decimal('prod_listprice', 12, 2); //Precio Lista
             $table->decimal('prod_packingquantity', 12, 2); //Cantidad Empaque
-            $table->boolean('prod_bulk'); //Aplica Granel 1) Si 0 No
+            $table->bigInteger('prod_main_pk')->nullable(); //PK Articulo Padre
+            $table->boolean('prod_bulk'); //Aplica Granel 1) Si y 0) No
             $table->smallInteger('prod_status')->default(1); //Estatus
             $table->timestamps();
         });

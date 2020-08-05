@@ -80,6 +80,11 @@ Route::post('/product/add', 'ProductController@add');
 Route::put('/product/update', 'ProductController@update');
 Route::put('/product/delete', 'ProductController@delete');
 
+Route::get('/products/derived/{prod_main_pk}', 'ProductController@derived'); //Productos Derivado
+Route::post('/products/derived', 'ProductController@storederived'); //Guardar Productos Derivado
+
+
+
 
 Route::get('/clientorders', 'ClientOrderController@index'); //Lista de Pedidos (Cliente)
 Route::get('/client/orders/{clor_pk}', 'ClientOrderController@showmanager'); //Detalle de Pedidos (Cliente) 
