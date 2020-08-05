@@ -55,20 +55,20 @@
                 <v-icon>mdi-cart</v-icon>
               </v-list-item-action>
               <v-list-item-title>Pedidos</v-list-item-title>
-            </v-list-item>
-
-            <v-list-item href="/clientdebts">
-            <v-list-item-action>
-              <v-icon>mdi-cart</v-icon>
-            </v-list-item-action>
-            <v-list-item-title>Cuentas por Cobrar</v-list-item-title>
-          </v-list-item>
+            </v-list-item>           
           
           <v-list-item href="/sales">
             <v-list-item-action>
               <v-icon>mdi-cart</v-icon>
             </v-list-item-action>
             <v-list-item-title>Venta</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item href="/clientdebts">
+            <v-list-item-action>
+              <v-icon>mdi-cart</v-icon>
+            </v-list-item-action>
+            <v-list-item-title>Cuentas por Cobrar</v-list-item-title>
           </v-list-item>
 
           <v-list-item href="/clientsreturnlist">
