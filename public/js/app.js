@@ -30088,21 +30088,6 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-list-item",
-                    { attrs: { href: "/clientdebts" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Cuentas por Cobrar")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
                     { attrs: { href: "/sales" } },
                     [
                       _c(
@@ -30112,6 +30097,21 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("v-list-item-title", [_vm._v("Venta")])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { href: "/clientdebts" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-cart")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-list-item-title", [_vm._v("Cuentas por Cobrar")])
                     ],
                     1
                   ),
@@ -89793,38 +89793,38 @@ var map = {
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		44
+		37
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		37
+		38
 	],
 	"./TransferDetail.vue": [
 		"./resources/js/components/views/TransferDetail.vue",
 		0,
-		38
+		39
 	],
 	"./TransferDetailView.vue": [
 		"./resources/js/components/views/TransferDetailView.vue",
 		0,
-		39
+		40
 	],
 	"./TransferList.vue": [
 		"./resources/js/components/views/TransferList.vue",
-		40
+		41
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		43
+		44
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
 		0,
-		41
+		42
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		42
+		43
 	]
 };
 function webpackAsyncContext(req) {
