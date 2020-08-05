@@ -438,7 +438,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this7.prtr_pk = response.data.data.ProductTransfers.prtr_pk;
           _this7.editadoHeader = response.data.data.ProductTransfers;
         } else {
-          _this7.normal('Notificación', response.data.status.message, "error");
+          if (_this7.prtr_pk > 0) _this7.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
