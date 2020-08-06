@@ -707,7 +707,7 @@ export default {
         console.log(this.editadoVar)
          axios.post('/products/derived/update', this.editadoVar).then(response => {
             console.log(response)
-            if(response.data.code == 200){
+            if(response.data.status.code == 200){
             this.dialogSuccess = false
             this.textMsg = '¡Actualización Exitosa!'
             this.normal('Notificación', this.textMsg,"success");

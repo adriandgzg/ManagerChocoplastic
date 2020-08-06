@@ -684,7 +684,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios.post('/products/derived/update', this.editadoVar).then(function (response) {
         console.log(response);
 
-        if (response.data.code == 200) {
+        if (response.data.status.code == 200) {
           _this10.dialogSuccess = false;
           _this10.textMsg = '¡Actualización Exitosa!';
 
