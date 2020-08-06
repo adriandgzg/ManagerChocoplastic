@@ -63,24 +63,59 @@ class ClientPaymentController extends Controller
            $vpash_fk = $vInput['pash_fk'];
            $vclpa_amount = $vInput['clpa_amount'];
 
-            $vClientDebt = ClientDebt::where('clde_pk', '=', $vclde_fk)->first();
+            $vClientDebt = ClientDebt::where('clde_pk', '=', $vclde_fk)->where('clde_status', '=', 1)->first();
 
             if($vClientDebt)
             { 
-                //Insertar Pago del cliente
-                $vCPC = new ClientPayment();        
-                $vCPC->clie_fk = $vclie_fk;
-                $vCPC->clde_fk = $vclde_fk;
-                $vCPC->pash_fk = $vpash_fk;
-                $vCPC->clpa_amount = $vclpa_amount;
-                $vCPC->save();
+                //Busqueda de montos
+                $vclde_amount = $vClientDebt->clde_amount; //Montos total de deuda
+                $vpayment_total = ClientPayment::where('clde_fk', '=', $vclde_fk)->where('clpa_status', '=', 1)->sum('clpa_amount'); //Monto total de pagos
 
-                return response()->json([
-                    'code' => 200,
-                    'success' => true,
-                    'message' => 'Pago Guardado Correctamente'
-         
-                ], 200);
+                $vdebt_total =  $vclde_amount - $vpayment_total;
+
+                //Validar que el monto pendiente de la deuda sea mayor o igual que el pago
+                if($vclpa_amount <= $vdebt_total)
+                {
+                    //Insertar Pago del cliente
+                    $vCPC = new ClientPayment();        
+                    $vCPC->clie_fk = $vclie_fk;
+                    $vCPC->clde_fk = $vclde_fk;
+                    $vCPC->pash_fk = $vpash_fk;
+                    $vCPC->clpa_amount = $vclpa_amount;
+                    $vCPC->save();
+
+                    //Validar montos para cambio de estatus
+                    $vpayment_total_finaly = $vpayment_total + $vclpa_amount; //Monto total de pagos
+
+                    if($vpayment_total_finaly == $vclde_amount)
+                    {
+                        //Modificar Estatus Deuda
+                        DB::table('client_debts')
+                        ->where('clde_pk', '=', $vclde_fk)
+                        ->update(['clde_status' =>  2]);
+
+                        //Modificar Estatus Venta
+                        DB::table('client_sales')
+                        ->where('clsa_pk', '=', $vClientDebt->clsa_fk)
+                        ->update(['clsa_status' =>  3]);
+                    }
+
+                    return response()->json([
+                        'code' => 200,
+                        'success' => true,
+                        'message' => 'Pago Guardado Correctamente'
+                    ], 200);
+
+                }
+                else
+                {
+                    return response()->json([
+                        'code' => 500,
+                        'success' => false,
+                        'message' => 'Monto de Pago es mayor que la deuda'
+                    ], 200);
+
+                }
             }
             else
             {

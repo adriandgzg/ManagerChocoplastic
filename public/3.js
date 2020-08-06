@@ -174,6 +174,9 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Fecha',
         value: 'created_at'
       }, {
+        text: 'Estatus',
+        value: 'clde_status_description'
+      }, {
         text: '',
         value: 'action',
         width: '20%'
@@ -314,7 +317,7 @@ __webpack_require__.r(__webpack_exports__);
       this.editado.pash_fk = this.selectpame.pash_pk;
 
       if (this.selectpame == '' || this.selectpame == null) {
-        this.normal('Notificación', "Debe seleccionar un método de pago", "success");
+        this.normal('Notificación', "Debe seleccionar un Forma de Pago", "success");
         return;
       }
 
@@ -429,7 +432,7 @@ var render = function() {
           _c(
             "v-dialog",
             {
-              attrs: { "max-width": "500px", persistent: "" },
+              attrs: { "max-width": "800px", persistent: "" },
               model: {
                 value: _vm.dialogdetail,
                 callback: function($$v) {

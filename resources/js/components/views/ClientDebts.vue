@@ -15,7 +15,7 @@
         </v-dialog>
         
          <!--  Modal del diálogo para Alta y Edicion    -->
-            <v-dialog v-model="dialogdetail" max-width="500px" persistent>
+            <v-dialog v-model="dialogdetail" max-width="800px" persistent>
                 <v-card>
                     <v-card-title class="cyan white--text">
                         <span class="headline">Detalle de pagos</span>
@@ -176,6 +176,10 @@ export default {
                         value: 'created_at'
                     },
                     {
+                        text: 'Estatus',
+                        value: 'clde_status_description'
+                    },
+                    {
                         text: '',
                         value: 'action',
                         width: '20%'
@@ -308,7 +312,7 @@ this.editado.clsa_identifier = item.clsa_identifier
        
         if(this.selectpame =='' || this.selectpame == null){
               
-              this.normal('Notificación', "Debe seleccionar un método de pago","success");
+              this.normal('Notificación', "Debe seleccionar un Forma de Pago","success");
               return;
           }
           
