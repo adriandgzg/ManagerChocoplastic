@@ -551,6 +551,7 @@ export default {
                         } 
                       else
                       {
+                        if(this.prpo_pk > 0)
                           this.normal('Notificación',response.data.status.message ,"error");
                       } 
                         

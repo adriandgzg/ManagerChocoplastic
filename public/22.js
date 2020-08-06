@@ -184,12 +184,108 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _defaultItem;
 
     return {
+      headersVar: [{
+        text: 'Unidad de medida',
+        value: 'meas_fk_output_name'
+      }, {
+        text: 'Precio de Lista',
+        value: 'prod_listprice'
+      }, {
+        text: 'Precio de venta',
+        value: 'prod_saleprice'
+      }, {
+        text: '',
+        value: 'action'
+      }],
       headers: [{
         text: 'Ident',
         value: 'prod_identifier'
@@ -231,17 +327,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         value: 'status'
       }, {
         text: '',
-        value: 'action',
-        width: '20%'
+        value: 'action'
       }],
       select: 0,
       selectCat: 0,
       selectMeasIn: 0,
+      selectMeas: 0,
       selectMeasOut: 0,
       principal: false,
       estado: true,
       estadoGranel: true,
       imageUrl: '',
+      editadoVar: {
+        prod_pk: 0,
+        meas_fk_output: 0,
+        prod_saleprice: 0,
+        prod_listprice: 0
+      },
+      defaultItemVar: {
+        prod_pk: 0,
+        meas_fk_output: 0,
+        prod_saleprice: 0,
+        prod_listprice: 0
+      },
       editado: {
         prod_pk: 0,
         prca_fk: 0,
@@ -264,6 +372,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         is_mod: false,
         imageUrl: this.imageUrl
       },
+      prod_pk: 0,
       defaultItem: (_defaultItem = {
         prod_pk: 0,
         prca_fk: 0,
@@ -282,12 +391,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       measurements: [],
       search: "",
       dialog: false,
+      dialogAddVar: false,
       snackbar: false,
       timeout: 2000,
       textMsg: "",
       valid: false,
+      validVar: false,
       validProvider: false,
       dialogSuccess: false,
+      dialogVar: false,
+      variations: [],
       folioRules: [function (value) {
         return !!value || "Requerido.";
       }, function (value) {
@@ -379,6 +492,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(e);
       });
     },
+    variacion: function variacion(item) {
+      var _this4 = this;
+
+      this.editedIndex = this.products.indexOf(item);
+      this.editado = Object.assign({}, item);
+      this.editadoVar.prod_pk = this.editado.prod_pk;
+      this.dialogVar = true;
+      this.loading = true;
+      axios.get("/products/derived/" + item.prod_pk).then(function (response) {
+        setTimeout(function () {
+          return _this4.loading = false;
+        }, 500);
+
+        if (response.data.data != null) {
+          _this4.variations = response.data.data;
+        } else {
+          _this4.normal('Notificación', response.data.status.message, "error");
+        }
+      })["catch"](function (e) {
+        console.log(e);
+
+        _this4.normal('Notificación', "Error al cargar los datos", "error");
+      });
+    },
     cancelar: function cancelar() {
       this.dialog = false;
       this.editado = Object.assign({}, this.defaultItem);
@@ -412,43 +549,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.cancelar();
     },
     alta: function alta() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.post('/product/add', this.editado).then(function (response) {
         console.log(response.data);
 
         if (response.data.status.code == 200) {
-          _this4.dialogSuccess = false;
-          _this4.textMsg = response.data.status.message;
-
-          _this4.normal('Notificación', _this4.textMsg, "success");
-
-          _this4.getProducts();
-        } else {
-          _this4.normal('Notificación', response.data.status.technicaldetail.errorInfo[2], "error");
-        }
-      })["catch"](function (e) {
-        _this4.errors.push(e);
-      });
-    },
-    editar: function editar() {
-      var _this5 = this;
-
-      axios.put('/product/update', this.editado).then(function (response) {
-        console.log(response);
-
-        if (response.data.code == 200) {
           _this5.dialogSuccess = false;
-          _this5.textMsg = '¡Actualización Exitosa!';
+          _this5.textMsg = response.data.status.message;
 
           _this5.normal('Notificación', _this5.textMsg, "success");
 
           _this5.getProducts();
         } else {
-          _this5.normal('Notificación', response.data.message, "error");
+          _this5.normal('Notificación', response.data.status.technicaldetail.errorInfo[2], "error");
         }
       })["catch"](function (e) {
         _this5.errors.push(e);
+      });
+    },
+    editar: function editar() {
+      var _this6 = this;
+
+      axios.put('/product/update', this.editado).then(function (response) {
+        console.log(response);
+
+        if (response.data.code == 200) {
+          _this6.dialogSuccess = false;
+          _this6.textMsg = '¡Actualización Exitosa!';
+
+          _this6.normal('Notificación', _this6.textMsg, "success");
+
+          _this6.getProducts();
+        } else {
+          _this6.normal('Notificación', response.data.message, "error");
+        }
+      })["catch"](function (e) {
+        _this6.errors.push(e);
       });
     },
     borrar: function borrar(item) {
@@ -461,34 +598,130 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.dialogQuestionDelete = false;
     },
     "delete": function _delete() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.put('/product/delete', this.editado).then(function (response) {
         console.log(response);
-        _this6.textMsg = "¡Eliminado correctamente!";
+        _this7.textMsg = "¡Eliminado correctamente!";
 
-        _this6.normal('Notificación', _this6.textMsg, "success");
+        _this7.normal('Notificación', _this7.textMsg, "success");
 
-        _this6.getProducts();
+        _this7.getProducts();
       });
     },
     onPickFileProduct: function onPickFileProduct() {
       this.$refs.fileInput.click();
     },
     onFilePickedProduct: function onFilePickedProduct(event) {
-      var _this7 = this;
+      var _this8 = this;
 
       var files = event.target.files;
       var filename = files[0].name;
       var fileReader = new FileReader();
       fileReader.addEventListener('load', function () {
-        _this7.imageUrl = fileReader.result;
-        _this7.editado.imageUrl = fileReader.result;
-        _this7.editado.is_mod = true;
-        console.log(_this7.editado);
+        _this8.imageUrl = fileReader.result;
+        _this8.editado.imageUrl = fileReader.result;
+        _this8.editado.is_mod = true;
+        console.log(_this8.editado);
       });
       fileReader.readAsDataURL(files[0]);
       this.image = files[0];
+    },
+    OpenDialogAddVar: function OpenDialogAddVar() {
+      //console.log(this.editadoVar)
+      this.dialogAddVar = true;
+      this.selectMeas = -1;
+    },
+    guardaAddVar: function guardaAddVar() {
+      this.editadoVar.meas_fk_output = this.selectMeas;
+
+      if (this.editedIndexVar > -1) {
+        this.editarAddVar();
+      } else {
+        this.guardarAddVar();
+      }
+
+      this.cancelarAddVar();
+    },
+    guardarAddVar: function guardarAddVar() {
+      var _this9 = this;
+
+      //this.editadoVar.meas_fk_output = this.selectMeas
+      console.log(this.editadoVar);
+      axios.post('products/derived', this.editadoVar).then(function (response) {
+        console.log(response.data);
+
+        if (response.data.status.code == 200) {
+          _this9.dialogSuccess = false;
+          _this9.textMsg = response.data.status.message;
+
+          _this9.normal('Notificación', _this9.textMsg, "success");
+
+          _this9.getvariacion(_this9.editado.prod_pk);
+        } else {
+          _this9.normal('Notificación', response.data.status.technicaldetail.errorInfo[2], "error");
+        }
+      })["catch"](function (e) {
+        //this.errors.push(e)
+        console.log(e);
+      });
+    },
+    editaVar: function editaVar(item) {
+      this.editedIndexVar = this.variations.indexOf(item); //this.editadoVar = Object.assign({}, item)
+
+      this.editadoVar.prod_pk = item.prod_pk;
+      this.editadoVar.meas_fk_output = item.meas_fk_output;
+      this.editadoVar.prod_saleprice = item.prod_saleprice;
+      this.editadoVar.prod_listprice = item.prod_listprice;
+      this.selectMeas = item.meas_fk_output;
+      this.dialogAddVar = true;
+    },
+    editarAddVar: function editarAddVar() {
+      var _this10 = this;
+
+      console.log("editar");
+      console.log(this.editadoVar);
+      axios.post('/products/derived/update', this.editadoVar).then(function (response) {
+        console.log(response);
+
+        if (response.data.code == 200) {
+          _this10.dialogSuccess = false;
+          _this10.textMsg = '¡Actualización Exitosa!';
+
+          _this10.normal('Notificación', _this10.textMsg, "success");
+
+          _this10.getvariacion(_this10.editado.prod_pk);
+        } else {
+          _this10.normal('Notificación', response.data.message, "error");
+        }
+      })["catch"](function (e) {
+        _this10.errors.push(e);
+      });
+    },
+    cancelarAddVar: function cancelarAddVar() {
+      this.dialogAddVar = false;
+      this.editadoVar = Object.assign({}, this.defaultItemVar);
+      this.editedIndexVar = -1;
+    },
+    getvariacion: function getvariacion(id) {
+      var _this11 = this;
+
+      this.loading = true;
+      axios.get("/products/derived/" + id).then(function (response) {
+        setTimeout(function () {
+          return _this11.loading = false;
+        }, 500);
+
+        if (response.data.data != null) {
+          _this11.variations = response.data.data;
+        } else {
+          _this11.normal('Notificación', response.data.status.message, "error");
+        }
+      })["catch"](function (e) {
+        console.log(e);
+
+        _this11.normal('Notificación', "Error al cargar los datos", "error");
+      });
     },
     normal: function normal(Title, Description, Type) {
       this.notice = new crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default.a({
@@ -503,11 +736,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     dialogSuccess: function dialogSuccess(val) {
-      var _this8 = this;
+      var _this12 = this;
 
       if (!val) return;
       setTimeout(function () {
-        return _this8.dialogSuccess = false;
+        return _this12.dialogSuccess = false;
       }, 4000);
     }
   },
@@ -1028,6 +1261,286 @@ var render = function() {
           ),
           _vm._v(" "),
           _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "500px", persistent: "" },
+              model: {
+                value: _vm.dialogAddVar,
+                callback: function($$v) {
+                  _vm.dialogAddVar = $$v
+                },
+                expression: "dialogAddVar"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-toolbar",
+                    { attrs: { dark: "", color: "primary" } },
+                    [_c("v-toolbar-title", [_vm._v("Variaciones")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-form",
+                    {
+                      model: {
+                        value: _vm.validVar,
+                        callback: function($$v) {
+                          _vm.validVar = $$v
+                        },
+                        expression: "validVar"
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c("span", [_vm._v("Unidad de medida")]),
+                          _vm._v(" "),
+                          _c("v-select", {
+                            attrs: {
+                              items: _vm.measurements,
+                              label: "Selecione una Unidad Entrada",
+                              "single-line": "",
+                              "item-text": "meas_name",
+                              "item-value": "meas_pk",
+                              "persistent-hint": ""
+                            },
+                            model: {
+                              value: _vm.selectMeas,
+                              callback: function($$v) {
+                                _vm.selectMeas = $$v
+                              },
+                              expression: "selectMeas"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Precio Lista",
+                              prefix: "$",
+                              type: "number",
+                              rules: _vm.numberRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editadoVar.prod_listprice,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editadoVar, "prod_listprice", $$v)
+                              },
+                              expression: "editadoVar.prod_listprice"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Precio Venta",
+                              prefix: "$",
+                              type: "number",
+                              rules: _vm.numberRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editadoVar.prod_saleprice,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editadoVar, "prod_saleprice", $$v)
+                              },
+                              expression: "editadoVar.prod_saleprice"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: { color: "blue-grey" },
+                              on: { click: _vm.cancelarAddVar }
+                            },
+                            [_vm._v("Cancelar")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: {
+                                disabled: !_vm.validVar,
+                                color: "teal accent-4"
+                              },
+                              on: { click: _vm.guardaAddVar }
+                            },
+                            [_vm._v("Guardar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "800px", persistent: "" },
+              model: {
+                value: _vm.dialogVar,
+                callback: function($$v) {
+                  _vm.dialogVar = $$v
+                },
+                expression: "dialogVar"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-toolbar",
+                    { attrs: { dark: "", color: "primary" } },
+                    [
+                      _c(
+                        "v-toolbar-items",
+                        [
+                          _c("v-btn", { attrs: { dark: "", text: "" } }, [
+                            _vm._v("Variaciones")
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { icon: "", dark: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialogVar = false
+                            }
+                          }
+                        },
+                        [_c("v-icon", [_vm._v("mdi-close")])],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "ma-2",
+                          attrs: { dark: "", color: "green" },
+                          on: { click: _vm.OpenDialogAddVar }
+                        },
+                        [_vm._v("Nuevo")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-data-table", {
+                        staticClass: "elevation-3",
+                        attrs: {
+                          headers: _vm.headersVar,
+                          items: _vm.variations
+                        },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "item.prod_listprice",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c("v-label", [
+                                  _vm._v(
+                                    "$" +
+                                      _vm._s(
+                                        _vm.formatMoney(item.prod_listprice)
+                                      )
+                                  )
+                                ])
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.prod_saleprice",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c("v-label", [
+                                  _vm._v(
+                                    "$" +
+                                      _vm._s(
+                                        _vm.formatMoney(item.prod_saleprice)
+                                      )
+                                  )
+                                ])
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.action",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c(
+                                  "v-btn",
+                                  {
+                                    staticClass: "mx-2",
+                                    attrs: {
+                                      fab: "",
+                                      dark: "",
+                                      small: "",
+                                      color: "cyan",
+                                      title: "Editar"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.editaVar(item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-pencil")
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
             "v-row",
             [
               _c(
@@ -1257,49 +1770,142 @@ var render = function() {
                               var item = ref.item
                               return [
                                 _c(
-                                  "v-btn",
+                                  "v-menu",
                                   {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "cyan"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.edita(item)
-                                      }
-                                    }
+                                    attrs: { bottom: "", left: "" },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "activator",
+                                          fn: function(ref) {
+                                            var on = ref.on
+                                            var attrs = ref.attrs
+                                            return [
+                                              _c(
+                                                "v-btn",
+                                                _vm._g(
+                                                  _vm._b(
+                                                    {
+                                                      attrs: {
+                                                        color: "grey",
+                                                        dark: "",
+                                                        icon: ""
+                                                      }
+                                                    },
+                                                    "v-btn",
+                                                    attrs,
+                                                    false
+                                                  ),
+                                                  on
+                                                ),
+                                                [
+                                                  _c("v-icon", [
+                                                    _vm._v("mdi-dots-vertical")
+                                                  ])
+                                                ],
+                                                1
+                                              )
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      true
+                                    )
                                   },
                                   [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-pencil")
-                                    ])
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "error"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.borrar(item)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-delete")
-                                    ])
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-list",
+                                      [
+                                        _c(
+                                          "v-list-item",
+                                          [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticClass: "mx-2",
+                                                attrs: {
+                                                  fab: "",
+                                                  dark: "",
+                                                  small: "",
+                                                  color: "cyan",
+                                                  title: "Editar producto"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.edita(item)
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-icon",
+                                                  { attrs: { dark: "" } },
+                                                  [_vm._v("mdi-pencil")]
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticClass: "mx-2",
+                                                attrs: {
+                                                  fab: "",
+                                                  dark: "",
+                                                  small: "",
+                                                  color: "orange",
+                                                  title: "Variaciones"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.variacion(item)
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-icon",
+                                                  { attrs: { dark: "" } },
+                                                  [_vm._v("mdi-scale")]
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                staticClass: "mr-2",
+                                                attrs: {
+                                                  fab: "",
+                                                  dark: "",
+                                                  small: "",
+                                                  color: "error"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.borrar(item)
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c(
+                                                  "v-icon",
+                                                  { attrs: { dark: "" } },
+                                                  [_vm._v("mdi-delete")]
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
                                   ],
                                   1
                                 )

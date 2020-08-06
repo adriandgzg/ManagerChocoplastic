@@ -98,6 +98,74 @@
 
             </v-dialog>
 
+            <v-dialog v-model="dialogAddVar" max-width="500px" persistent>
+                <v-card>   
+                    <v-toolbar dark color="primary">                    
+                        <v-toolbar-title>Variaciones</v-toolbar-title>
+                    </v-toolbar> 
+                     <v-form v-model="validVar" >
+                        <v-card-text>
+                        <span>Unidad de medida</span>
+                            <v-select :items="measurements" v-model="selectMeas" label="Selecione una Unidad Entrada" single-line
+                                    item-text="meas_name" item-value="meas_pk"  persistent-hint 
+                                    ></v-select>
+                                    
+                            <v-text-field v-model="editadoVar.prod_listprice" label="Precio Lista" prefix="$" type="number"
+                                            :rules="numberRules" required></v-text-field>
+                            <v-text-field v-model="editadoVar.prod_saleprice" label="Precio Venta" prefix="$" type="number"
+                                            :rules="numberRules" required></v-text-field>
+
+                        </v-card-text>
+                        <v-card-actions>
+                        <v-spacer></v-spacer>
+                            <v-btn color="blue-grey" class="ma-2 white--text" @click="cancelarAddVar">Cancelar</v-btn>
+                            <v-btn :disabled="!validVar" color="teal accent-4" class="ma-2 white--text" @click="guardaAddVar">Guardar</v-btn>
+                        </v-card-actions>
+                     </v-form> 
+                </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="dialogVar" max-width="800px" persistent>
+                <v-card>   
+                <v-toolbar dark color="primary">                    
+                    <v-toolbar-items>
+                        <v-btn dark text >Variaciones</v-btn>
+                    </v-toolbar-items>
+                    <v-spacer></v-spacer>
+                    <v-btn icon dark @click="dialogVar = false">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-toolbar>    
+                    <v-card-text>   
+                            <v-btn class="ma-2" dark color="green"
+                                @click="OpenDialogAddVar">Nuevo</v-btn>        
+                        <v-data-table :headers="headersVar" :items="variations" class="elevation-3">
+                            
+                            <template v-slot:item.prod_listprice="{ item }">          
+                                <v-label>${{formatMoney(item.prod_listprice)}}</v-label>                              
+                            </template>
+                            <template v-slot:item.prod_saleprice="{ item }">          
+                                <v-label>${{formatMoney(item.prod_saleprice)}}</v-label>                              
+                            </template>
+                           <template v-slot:item.action="{ item }">                         
+                                <v-btn class="mx-2" fab dark small color="cyan" @click="editaVar(item)" title="Editar">
+                                    <v-icon dark>mdi-pencil</v-icon>
+                                </v-btn>
+                              <!--   <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)">
+                                    <v-icon dark>mdi-delete</v-icon>
+                                </v-btn>
+                                
+                                
+                                <v-btn class="mx-2" fab dark small color="orange" @click="variacion(item)" title="Variaciones">
+                                    <v-icon dark>mdi-scale</v-icon>
+                                </v-btn>-->
+                        </template>
+                        </v-data-table>
+                    </v-card-text>
+                </v-card>
+
+            </v-dialog>
+
             <v-row>
             <v-col>
                 <v-card>
@@ -151,15 +219,30 @@
                         <v-chip v-if="item.prod_bulk == 1" color="green" outlined> 
                         Granel</v-chip>
                         <v-chip v-else color="red" outlined>NA Granel</v-chip>
+                        
                     </template>
-                    <template v-slot:item.action="{ item }">   
-                                     
-                        <v-btn class="mr-2" fab dark small color="cyan" @click="edita(item)">
-                            <v-icon dark>mdi-pencil</v-icon>
-                        </v-btn>
-                        <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)">
-                            <v-icon dark>mdi-delete</v-icon>
-                        </v-btn>
+                    <template v-slot:item.action="{ item }">  
+                        <v-menu bottom left>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn color="grey" dark icon v-bind="attrs" v-on="on">
+                                <v-icon>mdi-dots-vertical</v-icon>
+                                </v-btn>
+                            </template>
+                
+                            <v-list>
+                                <v-list-item>
+                                    <v-btn class="mx-2" fab dark small color="cyan" @click="edita(item)" title="Editar producto">
+                                        <v-icon dark>mdi-pencil</v-icon>
+                                    </v-btn>
+                                    <v-btn class="mx-2" fab dark small color="orange" @click="variacion(item)" title="Variaciones">
+                                        <v-icon dark>mdi-scale</v-icon>
+                                    </v-btn>
+                                    <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)">
+                                        <v-icon dark>mdi-delete</v-icon>
+                                    </v-btn>
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
                     </template>
                 </v-data-table>
                 </v-card>
@@ -174,6 +257,24 @@ import CripNotice from "crip-vue-notice";
 export default {
   data() {
     return {
+         headersVar: [
+                     {
+                        text: 'Unidad de medida',
+                        value: 'meas_fk_output_name'
+                    },                       
+                    {
+                        text: 'Precio de Lista',
+                        value: 'prod_listprice'
+                    },                 
+                    {
+                        text: 'Precio de venta',
+                        value: 'prod_saleprice'
+                    },   
+                    {
+                        text: '',
+                        value: 'action'
+                    },                  
+         ],    
          headers: [
                      {
                         text: 'Ident',
@@ -230,18 +331,30 @@ export default {
                     },
                     {
                         text: '',
-                        value: 'action',
-                        width: '20%'
+                        value: 'action'
                     },
          ],
          select:0,
          selectCat:0,
          selectMeasIn:0,
+         selectMeas:0,
          selectMeasOut:0,
          principal:false,
          estado:true,
          estadoGranel:true,
          imageUrl:'',
+         editadoVar:{
+             prod_pk:0,
+             meas_fk_output:0,
+             prod_saleprice:0,
+             prod_listprice:0
+         },
+         defaultItemVar:{
+             prod_pk:0,
+             meas_fk_output:0,
+             prod_saleprice:0,
+             prod_listprice:0
+         },
          editado:{
             prod_pk:0,
             prca_fk:0,
@@ -264,6 +377,7 @@ export default {
             is_mod: false,
             imageUrl: this.imageUrl,
          },
+         prod_pk:0,
          defaultItem:{
             prod_pk:0,
             prca_fk:0,
@@ -293,12 +407,16 @@ export default {
           measurements:[],
           search:"",
           dialog: false,
+          dialogAddVar:false,
         snackbar: false,
         timeout: 2000,
       textMsg: "",
       valid: false,
+      validVar:false,
       validProvider:false,
       dialogSuccess: false,
+      dialogVar:false,
+      variations:[],
       folioRules: [
         value => !!value || "Requerido.",
         value => (value && value.length >= 10) || "Min 10 caracter"
@@ -391,6 +509,33 @@ export default {
         });
     },
 
+    variacion(item){
+        this.editedIndex = this.products.indexOf(item)
+        this.editado = Object.assign({}, item)
+        this.editadoVar.prod_pk =  this.editado.prod_pk
+
+        
+        this.dialogVar = true
+
+        this.loading = true
+      axios
+        .get("/products/derived/" + item.prod_pk)
+        .then(response => {
+           setTimeout(() => (this.loading = false), 500)
+            if(response.data.data != null){
+          this.variations = response.data.data;    
+          } 
+            else
+            {
+                this.normal('Notificación',response.data.status.message ,"error");
+            }         
+        })
+        .catch(e => {
+          console.log(e);
+          this.normal('Notificación', "Error al cargar los datos" ,"error");
+        });
+
+    },
     cancelar() {
                 this.dialog = false
                 this.editado = Object.assign({}, this.defaultItem)
@@ -447,6 +592,7 @@ export default {
                     this.errors.push(e)
                     })
     },
+
     editar: function () {
         axios.put('/product/update', this.editado).then(response => {
             console.log(response)
@@ -502,6 +648,105 @@ export default {
         })
         fileReader.readAsDataURL(files[0])
         this.image = files[0]
+    },
+    OpenDialogAddVar(){
+        //console.log(this.editadoVar)
+        this.dialogAddVar = true
+        this.selectMeas = -1
+    },
+    guardaAddVar(){
+        
+        this.editadoVar.meas_fk_output = this.selectMeas;
+
+        if (this.editedIndexVar > -1) {
+            
+            this.editarAddVar()
+        } else {            
+            this.guardarAddVar()
+        }
+        
+        this.cancelarAddVar()
+
+    },
+    guardarAddVar: function () {
+        //this.editadoVar.meas_fk_output = this.selectMeas
+        console.log(this.editadoVar)
+        axios.post('products/derived', this.editadoVar).then(response => {
+            console.log(response.data)
+            if(response.data.status.code == 200){
+            this.dialogSuccess = false
+            this.textMsg = response.data.status.message
+            this.normal('Notificación', this.textMsg,"success");
+            this.getvariacion(this.editado.prod_pk)
+            }
+            else{
+                this.normal('Notificación', response.data.status.technicaldetail.errorInfo[2],"error");
+            }
+        })
+        .catch(e => {
+                    //this.errors.push(e)
+                    console.log(e)
+                    })
+    },
+
+    editaVar(item){
+        this.editedIndexVar = this.variations.indexOf(item)
+      //this.editadoVar = Object.assign({}, item)
+      this.editadoVar.prod_pk = item.prod_pk
+      this.editadoVar.meas_fk_output = item.meas_fk_output
+      this.editadoVar.prod_saleprice = item.prod_saleprice
+      this.editadoVar.prod_listprice = item.prod_listprice
+
+      this.selectMeas = item.meas_fk_output
+
+             
+      this.dialogAddVar = true
+    },
+    editarAddVar(){
+        console.log("editar")
+        console.log(this.editadoVar)
+         axios.post('/products/derived/update', this.editadoVar).then(response => {
+            console.log(response)
+            if(response.data.code == 200){
+            this.dialogSuccess = false
+            this.textMsg = '¡Actualización Exitosa!'
+            this.normal('Notificación', this.textMsg,"success");
+            this.getvariacion(this.editado.prod_pk)
+            }
+            else{
+                
+                this.normal('Notificación', response.data.message,"error");
+            }
+        })
+        .catch(e => {
+                    this.errors.push(e)
+                    })
+    },
+    cancelarAddVar() {
+                this.dialogAddVar = false
+                this.editadoVar = Object.assign({}, this.defaultItemVar)
+                this.editedIndexVar = -1
+            },
+    getvariacion(id){
+        
+        this.loading = true
+      axios
+        .get("/products/derived/" + id)
+        .then(response => {
+           setTimeout(() => (this.loading = false), 500)
+            if(response.data.data != null){
+          this.variations = response.data.data;    
+          } 
+            else
+            {
+                this.normal('Notificación',response.data.status.message ,"error");
+            }         
+        })
+        .catch(e => {
+          console.log(e);
+          this.normal('Notificación', "Error al cargar los datos" ,"error");
+        });
+
     },
     normal(Title, Description, Type) {
             this.notice = new CripNotice({

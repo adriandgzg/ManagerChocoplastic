@@ -540,7 +540,7 @@ __webpack_require__.r(__webpack_exports__);
               }
             }
           } else {
-            _this7.normal('Notificación', response.data.status.message, "error");
+            if (_this7.prpo_pk > 0) _this7.normal('Notificación', response.data.status.message, "error");
           }
         })["catch"](function (e) {
           //this.errors.push(e)
