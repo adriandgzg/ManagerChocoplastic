@@ -31,7 +31,8 @@ class ProductController extends ApiResponseController
             $vProducts = DB::table('products AS P')
                 ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
                 ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
-                ->select(
+                ->select
+                (
                     'P.prod_pk AS PK_Product',
                     'P.prod_identifier AS ProductIdentifier',
                     'P.prod_name AS ProductName',
@@ -47,15 +48,60 @@ class ProductController extends ApiResponseController
                 )
                 ->where('prod_status', '=', 1)
                 ->where('prca_fk', '=', $prca_fk)
+                ->whereNull('P.prod_main_pk')
                 ->orderBy('P.prod_pk')
                 ->get();
+                
+
+                $vProdJson = array();
+
+                foreach($vProducts AS $vP)
+                {
+
+                    $vProdVariats = DB::table('products AS P')
+                    ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                    ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                    ->select(
+                        'P.prod_pk AS PK_Product',
+                        'P.prod_saleprice AS SalePrice',
+                        'P.prod_listprice AS ListPrice',
+                        'P.prod_bulk AS Bulk',
+                        DB::raw("2 AS Stock"),
+                        'MO.meas_name AS Measurement'
+                    )
+                    ->where('prod_status', '=', 1)
+                    ->where('P.prod_main_pk', '=', $vP->PK_Product)
+                    ->orderBy('P.prod_pk')
+                    ->get();
+
+                    $vPP = 
+                        array(
+                            "PK_Product" => $vP->PK_Product,
+                            "ProductIdentifier" => $vP->ProductIdentifier,
+                            "ProductName" => $vP->ProductName,
+                            "ProductDescription" => $vP->ProductDescription,
+                            "ProductImage" => $vP->ProductImage,
+                            "SalePrice" => $vP->SalePrice,
+                            "ListPrice" => $vP->ListPrice,
+                            "Stock" => $vP->Stock,
+                            "Category" => $vP->Category,
+                            "Measurement" => $vP->Measurement,
+                            "Store" => $vP->Store,
+                            "VariatsInfo" => $vProdVariats
+                        );
+                        array_push($vProdJson, $vPP);
+                } 
+                
             
-            return $this->dbResponse($vProducts, 200, null, 'Lista de Productos, filtrada por Sucursal y Categoría');
+            return $this->dbResponse($vProdJson, 200, null, 'Lista de Productos, filtrada por Sucursal y Categoría');
           
         } catch (Exception $e) {
             return $this->dbResponse(null, 500, $e, null);
         }
     }
+
+
+
 
     public function ProductList(){ 
 
@@ -165,6 +211,7 @@ class ProductController extends ApiResponseController
             'meas_fk_output' => 'required|int', //PK Unidad Medida Salida
             'prod_saleprice' => 'required', //Precio Venta
             'prod_listprice' => 'required', //Precio Lista
+            'prod_fact_convert' => 'required' //Factor Conversión Unidad Medida
         ]);
 
         if ($vVal->fails()) {
@@ -177,6 +224,7 @@ class ProductController extends ApiResponseController
            $vmeas_fk_output = $vInput['meas_fk_output'];
            $vprod_saleprice = $vInput['prod_saleprice'];
            $vprod_listprice = $vInput['prod_listprice'];
+           $vprod_fact_convert = $vInput['prod_fact_convert'];
 
             $vProduct = Product::where('prod_pk', '=', $vprod_pk)->first();
 
@@ -201,6 +249,7 @@ class ProductController extends ApiResponseController
                             'prod_packingquantity', 
                             'prod_bulk', 
                             DB::raw("$vprod_pk AS prod_main_pk"),
+                            DB::raw("$vprod_fact_convert AS prod_fact_convert"),
                             DB::raw("NOW() AS created_at"),
                             DB::raw("NOW() AS updated_at")
                         )
@@ -224,6 +273,7 @@ class ProductController extends ApiResponseController
                             'prod_packingquantity', 
                             'prod_bulk', 
                             'prod_main_pk', 
+                            'prod_fact_convert', 
                             'created_at', 
                             'updated_at'
                         ]
@@ -251,6 +301,8 @@ class ProductController extends ApiResponseController
             'meas_fk_output' => 'required|int', //PK Unidad Medida Salida
             'prod_saleprice' => 'required', //Precio Venta
             'prod_listprice' => 'required', //Precio Lista
+            'prod_fact_convert' => 'required' //Factor Conversión Unidad Medida
+
         ]);
 
         if ($vVal->fails()) {
@@ -263,6 +315,7 @@ class ProductController extends ApiResponseController
            $vmeas_fk_output = $vInput['meas_fk_output'];
            $vprod_saleprice = $vInput['prod_saleprice'];
            $vprod_listprice = $vInput['prod_listprice'];
+           $vprod_fact_convert = $vInput['prod_fact_convert'];
 
             $vProduct = Product::where('prod_pk', '=', $vprod_pk)->first();
 
@@ -271,7 +324,12 @@ class ProductController extends ApiResponseController
                 //Modificar Producto Derivado
                 DB::table('products')
                 ->where('prod_pk', '=', $vprod_pk)
-                ->update(['meas_fk_output' => $vmeas_fk_output, 'prod_saleprice' => $vprod_saleprice, 'prod_listprice' => $vprod_listprice]);
+                ->update([
+                    'meas_fk_output' => $vmeas_fk_output, 
+                    'prod_saleprice' => $vprod_saleprice, 
+                    'prod_listprice' => $vprod_listprice,
+                    'prod_fact_convert' => $vprod_fact_convert
+                    ]);
 
                 return $this->dbResponse(null, 200, null, 'Producto Derivado Modificado Correctamente');
                          
@@ -343,6 +401,7 @@ class ProductController extends ApiResponseController
                     //'P.prod_preferentialprice', 
                     'P.prod_saleprice', 
                     'P.prod_listprice', 
+                    'P.prod_fact_convert', 
                     //'P.prod_packingquantity', 
                     //'P.prod_status', 
                     'P.prod_bulk',
