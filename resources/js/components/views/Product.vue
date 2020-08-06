@@ -26,6 +26,18 @@
             </v-card>
         </v-dialog>
 
+        <v-dialog v-model="dialogQuestionDeleteVar" persistent max-width="290">
+            <v-card>
+            <v-card-title class="headline">Alerta</v-card-title>
+            <v-card-text>¿Está seguro de borrar el registro?</v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="dialogQuestionDeleteVar = false">Cancelar</v-btn>
+                <v-btn color="green darken-1" text @click="guardaBorrarVar">Continuar</v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-dialog>
+
 
 
             <v-dialog v-model="dialogSuccess" width="640" overlay-color="white" persistent>
@@ -151,10 +163,10 @@
                                 <v-btn class="mx-2" fab dark small color="cyan" @click="editaVar(item)" title="Editar">
                                     <v-icon dark>mdi-pencil</v-icon>
                                 </v-btn>
-                              <!--   <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)">
+                                 <v-btn class="mr-2" fab dark small color="error" @click="borrarVar(item)">
                                     <v-icon dark>mdi-delete</v-icon>
                                 </v-btn>
-                                
+                                <!--
                                 
                                 <v-btn class="mx-2" fab dark small color="orange" @click="variacion(item)" title="Variaciones">
                                     <v-icon dark>mdi-scale</v-icon>
@@ -440,6 +452,7 @@ export default {
     loading:false,
     dialogQuestion:false,
       dialogQuestionDelete:false,
+      dialogQuestionDeleteVar:false,
       messageQuestion:'',
     };
   },
@@ -751,6 +764,26 @@ export default {
           this.normal('Notificación', "Error al cargar los datos" ,"error");
         });
 
+    },
+
+    borrarVar(item) {
+        const index = this.variations.indexOf(item)
+        this.editadoVar = Object.assign({}, item)
+        this.dialogQuestionDeleteVar = true
+        },
+
+        guardaBorrarVar(){
+            this.deleteVar()
+            this.dialogQuestionDeleteVar = false
+            },
+
+    deleteVar: function () {
+        axios.post('/products/derived/destroy', this.editadoVar).then(response => {
+            console.log(response)
+            this.textMsg = "¡Eliminado correctamente!";
+            this.normal('Notificación', this.textMsg,"success");
+            this.getvariacion(this.editado.prod_pk)
+        });
     },
     normal(Title, Description, Type) {
             this.notice = new CripNotice({

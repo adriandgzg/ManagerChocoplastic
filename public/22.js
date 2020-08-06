@@ -267,6 +267,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -429,6 +441,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       loading: false,
       dialogQuestion: false,
       dialogQuestionDelete: false,
+      dialogQuestionDeleteVar: false,
       messageQuestion: ''
     };
   },
@@ -726,6 +739,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this11.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
+    borrarVar: function borrarVar(item) {
+      var index = this.variations.indexOf(item);
+      this.editadoVar = Object.assign({}, item);
+      this.dialogQuestionDeleteVar = true;
+    },
+    guardaBorrarVar: function guardaBorrarVar() {
+      this.deleteVar();
+      this.dialogQuestionDeleteVar = false;
+    },
+    deleteVar: function deleteVar() {
+      var _this12 = this;
+
+      axios.post('/products/derived/destroy', this.editadoVar).then(function (response) {
+        console.log(response);
+        _this12.textMsg = "¡Eliminado correctamente!";
+
+        _this12.normal('Notificación', _this12.textMsg, "success");
+
+        _this12.getvariacion(_this12.editado.prod_pk);
+      });
+    },
     normal: function normal(Title, Description, Type) {
       this.notice = new crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default.a({
         title: Title,
@@ -739,11 +773,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     dialogSuccess: function dialogSuccess(val) {
-      var _this12 = this;
+      var _this13 = this;
 
       if (!val) return;
       setTimeout(function () {
-        return _this12.dialogSuccess = false;
+        return _this13.dialogSuccess = false;
       }, 4000);
     }
   },
@@ -859,6 +893,66 @@ var render = function() {
                         {
                           attrs: { color: "green darken-1", text: "" },
                           on: { click: _vm.guardaBorrar }
+                        },
+                        [_vm._v("Continuar")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "290" },
+              model: {
+                value: _vm.dialogQuestionDeleteVar,
+                callback: function($$v) {
+                  _vm.dialogQuestionDeleteVar = $$v
+                },
+                expression: "dialogQuestionDeleteVar"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "headline" }, [
+                    _vm._v("Alerta")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-card-text", [
+                    _vm._v("¿Está seguro de borrar el registro?")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialogQuestionDeleteVar = false
+                            }
+                          }
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: { click: _vm.guardaBorrarVar }
                         },
                         [_vm._v("Continuar")]
                       )
@@ -1524,6 +1618,30 @@ var render = function() {
                                   [
                                     _c("v-icon", { attrs: { dark: "" } }, [
                                       _vm._v("mdi-pencil")
+                                    ])
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    staticClass: "mr-2",
+                                    attrs: {
+                                      fab: "",
+                                      dark: "",
+                                      small: "",
+                                      color: "error"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.borrarVar(item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-delete")
                                     ])
                                   ],
                                   1
