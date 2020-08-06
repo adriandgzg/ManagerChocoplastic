@@ -126,6 +126,8 @@
                                             :rules="numberRules" required></v-text-field>
                             <v-text-field v-model="editadoVar.prod_saleprice" label="Precio Venta" prefix="$" type="number"
                                             :rules="numberRules" required></v-text-field>
+                            <v-text-field v-model="editadoVar.prod_fact_convert" label="Factor de conversión" prefix="" type="number"
+                                            :rules="numberRules" required></v-text-field>
 
                         </v-card-text>
                         <v-card-actions>
@@ -137,7 +139,7 @@
                 </v-card>
             </v-dialog>
 
-            <v-dialog v-model="dialogVar" max-width="800px" persistent>
+            <v-dialog v-model="dialogVar" max-width="1024px" persistent>
                 <v-card>   
                 <v-toolbar dark color="primary">                    
                     <v-toolbar-items>
@@ -281,7 +283,11 @@ export default {
                     {
                         text: 'Precio de venta',
                         value: 'prod_saleprice'
-                    },   
+                    },  
+                    {
+                        text: 'Factor de conversión',
+                        value: 'prod_fact_convert'
+                    },  
                     {
                         text: '',
                         value: 'action'
@@ -359,13 +365,15 @@ export default {
              prod_pk:0,
              meas_fk_output:0,
              prod_saleprice:0,
-             prod_listprice:0
+             prod_listprice:0,
+             prod_fact_convert:0
          },
          defaultItemVar:{
              prod_pk:0,
              meas_fk_output:0,
              prod_saleprice:0,
-             prod_listprice:0
+             prod_listprice:0,
+             prod_fact_convert:0
          },
          editado:{
             prod_pk:0,
@@ -711,6 +719,7 @@ export default {
       this.editadoVar.meas_fk_output = item.meas_fk_output
       this.editadoVar.prod_saleprice = item.prod_saleprice
       this.editadoVar.prod_listprice = item.prod_listprice
+      this.editadoVar.prod_fact_convert = item.prod_fact_convert
 
       this.selectMeas = item.meas_fk_output
 

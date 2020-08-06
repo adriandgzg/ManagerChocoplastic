@@ -279,6 +279,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -294,6 +296,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         text: 'Precio de venta',
         value: 'prod_saleprice'
+      }, {
+        text: 'Factor de conversión',
+        value: 'prod_fact_convert'
       }, {
         text: '',
         value: 'action'
@@ -354,13 +359,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         prod_pk: 0,
         meas_fk_output: 0,
         prod_saleprice: 0,
-        prod_listprice: 0
+        prod_listprice: 0,
+        prod_fact_convert: 0
       },
       defaultItemVar: {
         prod_pk: 0,
         meas_fk_output: 0,
         prod_saleprice: 0,
-        prod_listprice: 0
+        prod_listprice: 0,
+        prod_fact_convert: 0
       },
       editado: {
         prod_pk: 0,
@@ -689,6 +696,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.editadoVar.meas_fk_output = item.meas_fk_output;
       this.editadoVar.prod_saleprice = item.prod_saleprice;
       this.editadoVar.prod_listprice = item.prod_listprice;
+      this.editadoVar.prod_fact_convert = item.prod_fact_convert;
       this.selectMeas = item.meas_fk_output;
       this.dialogAddVar = true;
     },
@@ -1447,6 +1455,27 @@ var render = function() {
                               },
                               expression: "editadoVar.prod_saleprice"
                             }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Factor de conversión",
+                              prefix: "",
+                              type: "number",
+                              rules: _vm.numberRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editadoVar.prod_fact_convert,
+                              callback: function($$v) {
+                                _vm.$set(
+                                  _vm.editadoVar,
+                                  "prod_fact_convert",
+                                  $$v
+                                )
+                              },
+                              expression: "editadoVar.prod_fact_convert"
+                            }
                           })
                         ],
                         1
@@ -1495,7 +1524,7 @@ var render = function() {
           _c(
             "v-dialog",
             {
-              attrs: { "max-width": "800px", persistent: "" },
+              attrs: { "max-width": "1024px", persistent: "" },
               model: {
                 value: _vm.dialogVar,
                 callback: function($$v) {
