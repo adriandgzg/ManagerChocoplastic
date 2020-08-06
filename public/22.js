@@ -1408,7 +1408,7 @@ var render = function() {
                           _c("v-select", {
                             attrs: {
                               items: _vm.measurements,
-                              label: "Selecione una Unidad Entrada",
+                              label: "Selecione una Unidad de Salida",
                               "single-line": "",
                               "item-text": "meas_name",
                               "item-value": "meas_pk",

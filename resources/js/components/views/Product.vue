@@ -118,7 +118,7 @@
                      <v-form v-model="validVar" >
                         <v-card-text>
                         <span>Unidad de medida</span>
-                            <v-select :items="measurements" v-model="selectMeas" label="Selecione una Unidad Entrada" single-line
+                            <v-select :items="measurements" v-model="selectMeas" label="Selecione una Unidad de Salida" single-line
                                     item-text="meas_name" item-value="meas_pk"  persistent-hint 
                                     ></v-select>
                                     
