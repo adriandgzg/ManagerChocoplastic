@@ -647,6 +647,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this9 = this;
 
       //this.editadoVar.meas_fk_output = this.selectMeas
+      this.editadoVar.prod_pk = this.editado.prod_pk;
       console.log(this.editadoVar);
       axios.post('products/derived', this.editadoVar).then(function (response) {
         console.log(response.data);

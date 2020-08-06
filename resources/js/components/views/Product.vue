@@ -670,6 +670,7 @@ export default {
     },
     guardarAddVar: function () {
         //this.editadoVar.meas_fk_output = this.selectMeas
+        this.editadoVar.prod_pk = this.editado.prod_pk
         console.log(this.editadoVar)
         axios.post('products/derived', this.editadoVar).then(response => {
             console.log(response.data)
