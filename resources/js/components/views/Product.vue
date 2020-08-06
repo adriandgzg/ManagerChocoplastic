@@ -677,6 +677,7 @@ export default {
             this.dialogSuccess = false
             this.textMsg = response.data.status.message
             this.normal('Notificación', this.textMsg,"success");
+            console.log(this.editado)
             this.getvariacion(this.editado.prod_pk)
             }
             else{
@@ -733,7 +734,9 @@ export default {
       axios
         .get("/products/derived/" + id)
         .then(response => {
-           setTimeout(() => (this.loading = false), 500)
+           this.loading = false
+           console.log('response')
+           console.log(response)
             if(response.data.data != null){
           this.variations = response.data.data;    
           } 

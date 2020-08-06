@@ -657,6 +657,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           _this9.normal('Notificación', _this9.textMsg, "success");
 
+          console.log(_this9.editado);
+
           _this9.getvariacion(_this9.editado.prod_pk);
         } else {
           _this9.normal('Notificación', response.data.status.technicaldetail.errorInfo[2], "error");
@@ -708,9 +710,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.loading = true;
       axios.get("/products/derived/" + id).then(function (response) {
-        setTimeout(function () {
-          return _this11.loading = false;
-        }, 500);
+        _this11.loading = false;
+        console.log('response');
+        console.log(response);
 
         if (response.data.data != null) {
           _this11.variations = response.data.data;
