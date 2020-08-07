@@ -1,13 +1,9 @@
 <?php
 
 namespace App\Exceptions;
-use App\Traits\ApiResponse;
 
 use Exception;
-use Throwable;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -48,15 +44,11 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
      */
-    //public function render($request, Exception $exception)
-    public function render($request, Throwable $exception)
+    public function render($request, Exception $exception)
     {
-        
         if($exception instanceof \Illuminate\Routing\Exceptions\UrlGenerationException && $request->wantsJson()){
             return response()->json(['false' => false, 'message' => 'Route not allowed', 'data' =>$exception->getMessage() ], 401);
         }else if($exception instanceof \Illuminate\Auth\AuthenticationException && $exception->guards()[0]=="api"  ){
-            //return response()->json(['false' => false, 'message' => 'Unauthenticated', 'data' =>null ], 401);
-
             return response()->json(
                 array(
                     "status" => array(
@@ -69,17 +61,9 @@ class Handler extends ExceptionHandler
                 )
                 , 200
             );
-
         }else if($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException ){
             return response()->json(['false' => false, 'message' => $exception->getMessage(), 'data' =>null ], 405);
         }
-        if ($exception instanceof NotFoundHttpException) {
-            return $this->dbResponse(null, 404, null, "");
-        }
-        if ($exception instanceof ModelNotFoundException) {
-            return $this->dbResponse(null, 404, null, "");
-        }
-
         return parent::render($request, $exception);
     }
 }
