@@ -49,11 +49,10 @@ class LoginProxyController extends ApiResponseController
             'grant_type' => $grantType
         ]);
 
-        $tokenRequest = Request::create('/oauth/token', 'POST', $data);
+        $tokenRequest = Request::create('/oauth/token', 'POST', $data); 
         $response = app()->handle($tokenRequest);
 
         $vSystem = System::select('syst_prod_desc_availability')->first();
-
 
         $vResult = json_decode($response->getContent());
 
@@ -89,5 +88,7 @@ class LoginProxyController extends ApiResponseController
 
         $accessToken->revoke();
     }
+
+
 
 }

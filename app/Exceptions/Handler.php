@@ -51,20 +51,33 @@ class Handler extends ExceptionHandler
     //public function render($request, Exception $exception)
     public function render($request, Throwable $exception)
     {
-        /*
+        
         if($exception instanceof \Illuminate\Routing\Exceptions\UrlGenerationException && $request->wantsJson()){
             return response()->json(['false' => false, 'message' => 'Route not allowed', 'data' =>$exception->getMessage() ], 401);
         }else if($exception instanceof \Illuminate\Auth\AuthenticationException && $exception->guards()[0]=="api"  ){
-            return response()->json(['false' => false, 'message' => 'Unauthenticated', 'data' =>null ], 401);
+            //return response()->json(['false' => false, 'message' => 'Unauthenticated', 'data' =>null ], 401);
+
+            return response()->json(
+                array(
+                    "status" => array(
+                        "status" => false, 
+                        "code" => 401, 
+                        "description" => "No Autentificado. Por favor Iniciar Sesión", 
+                        "message" => "No Autentificado. Por favor Iniciar Sesión", 
+                        "technicaldetail" => null), 
+                    "data" => null
+                )
+                , 200
+            );
+
         }else if($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException ){
             return response()->json(['false' => false, 'message' => $exception->getMessage(), 'data' =>null ], 405);
-        }*/
-        if ($exception instanceof NotFoundHttpException) {
-            return $this->successResponse(null, false, 404, null);
         }
-
+        if ($exception instanceof NotFoundHttpException) {
+            return $this->dbResponse(null, 404, null, "");
+        }
         if ($exception instanceof ModelNotFoundException) {
-            return $this->successResponse(null, false, 404, null);
+            return $this->dbResponse(null, 404, null, "");
         }
 
         return parent::render($request, $exception);

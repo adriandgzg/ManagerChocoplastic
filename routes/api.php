@@ -14,23 +14,6 @@ use Illuminate\Http\Request;
 */
  
 
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
 Route::post('/start', 'Auth\Api\LoginController@start');
 Route::post('/verify', 'Auth\Api\LoginController@verify');
 Route::post('/completeRegister', 'Auth\Api\LoginController@complete');
@@ -59,6 +42,8 @@ Route::middleware('auth:api')->group( function(){
     Route::get('/client/order/show', 'ClientOrderController@show'); // Detalle de un pedido
 
 });
+
+
 
 
 Route::fallback(function(){
