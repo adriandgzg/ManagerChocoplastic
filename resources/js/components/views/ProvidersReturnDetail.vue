@@ -319,7 +319,7 @@ export default {
           this.editadoSale.remo_fk = this.selectReturn.remo_pk;
           this.editadoSale.prre_observation = this.prre_observation;
   
-         var r = confirm("¿Está seguro de finalizar la venta?");
+         var r = confirm("¿Está seguro de finalizar?");
             if (r == true) {
               
           axios.post('/provider/returns/update', this.editadoSale)
@@ -355,7 +355,7 @@ export default {
             this.normal('Alerta', "Los montos de pago deben ser igual al total","error");
               return;
           }
-          var r = confirm("¿Está seguro de finalizar la venta?");
+          var r = confirm("¿Está seguro de finalizar?");
             if (r == true) {
               this.editadoSale.clde_amount = this.total
             this.editadoSale.clpa_amount_cash=this.efectivo

@@ -540,13 +540,13 @@ __webpack_require__.r(__webpack_exports__);
               }
             }
           } else {
-            if (_this7.prpo_pk > 0) _this7.normal('Notificación', response.data.status.message, "error0");
+            if (_this7.prpo_pk > 0) _this7.normal('Notificación', response.data.status.message, "error");
           }
         })["catch"](function (e) {
           //this.errors.push(e)
           console.log(e);
 
-          _this7.normal('Notificación', "Error al cargar los datos", "error");
+          _this7.normal('Notificación', "Error al cargar los datos11", "error");
         });
       } else {
         axios.get('/provider/purchases/' + this.prpo_pk + '').then(function (response) {
@@ -570,7 +570,7 @@ __webpack_require__.r(__webpack_exports__);
           //this.errors.push(e)
           console.log(e);
 
-          _this7.normal('Notificación', "Error al cargar los datos", "error");
+          _this7.normal('Notificación', "Error al cargar los datos22", "error");
         });
       }
     },

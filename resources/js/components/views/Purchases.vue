@@ -552,14 +552,14 @@ export default {
                       else
                       {
                         if(this.prpo_pk > 0)
-                          this.normal('Notificación',response.data.status.message ,"error0");
+                          this.normal('Notificación',response.data.status.message ,"error");
                       } 
                         
                     })
                     .catch(e => {
                         //this.errors.push(e)
                         console.log(e)
-                        this.normal('Notificación', "Error al cargar los datos" ,"error");
+                        this.normal('Notificación', "Error al cargar los datos11" ,"error");
                         })
             }
             else{
@@ -584,7 +584,7 @@ export default {
                 .catch(e => {
                     //this.errors.push(e)
                     console.log(e)
-                    this.normal('Notificación', "Error al cargar los datos" ,"error");
+                    this.normal('Notificación', "Error al cargar los datos22" ,"error");
                     })
             }
         },

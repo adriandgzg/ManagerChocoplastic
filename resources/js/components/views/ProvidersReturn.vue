@@ -350,7 +350,7 @@ export default {
               return;
           }
 
-           this.messageQuestion = '¿Está seguro de finalizar la compra?';          
+           this.messageQuestion = '¿Está seguro de finalizar la devolución?';          
 
          this.dialogQuestion = true
 
@@ -374,7 +374,7 @@ export default {
                     this.$router.push('/purchaselist') ; 
                   }
                   else{
-                    this.normal('Notificación', response.data.message,"error");
+                    this.normal('Notificación', response.data.status.message,"error");
                   }
                 
                 })
@@ -393,7 +393,7 @@ export default {
             this.normal('Notificación', "Los montos de pago deben ser igual al total","error");
               return;
           }
-          var r = confirm("¿Está seguro de finalizar la venta?");
+          var r = confirm("¿Está seguro de finalizar la devolución?");
             if (r == true) {
               this.editadoSale.clde_amount = this.total
             this.editadoSale.clpa_amount_cash=this.efectivo
@@ -408,7 +408,7 @@ export default {
                     this.$router.push('/sales') ; 
                   }
                   else{
-                    this.normal('Notificación', response.data.message,"error");
+                    this.normal('Notificación', response.data.status.message,"error");
                   }
                 
                 })
