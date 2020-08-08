@@ -540,7 +540,7 @@ __webpack_require__.r(__webpack_exports__);
               }
             }
           } else {
-            if (_this7.prpo_pk > 0) _this7.normal('Notificación', response.data.status.message, "error");
+            if (_this7.prpo_pk > 0) _this7.normal('Notificación', response.data.status.message, "error0");
           }
         })["catch"](function (e) {
           //this.errors.push(e)
@@ -564,7 +564,7 @@ __webpack_require__.r(__webpack_exports__);
 
             _this7.editadoHeader = response.data.data.ProviderPurchase;
           } else {
-            _this7.normal('Notificación', response.data.status.message, "error");
+            if (_this7.prpo_pk > 0) _this7.normal('Notificación', response.data.status.message, "error");
           }
         })["catch"](function (e) {
           //this.errors.push(e)

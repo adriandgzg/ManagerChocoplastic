@@ -45,12 +45,12 @@
                         </v-col>
                     </template>
                    
-                     <template v-slot:item.action="{ item }">   
+                    <!--<template v-slot:item.action="{ item }">   
                         <v-btn class="mr-2" fab dark small color="indigo" v-if="item.clsa_status != 'Pendiente'" 
                                :href="'/clientsreturn/'+item.clor_pk" title="Devolución">
                             <v-icon dark>mdi-archive-arrow-up</v-icon>
                         </v-btn>  
-                    </template>
+                    </template>-->
                 </v-data-table>
                 </v-card>
             </v-col>
@@ -84,11 +84,6 @@ export default {
                     {
                         text: 'Stock',
                         value: 'prin_stock'
-                    },
-                    {
-                        text: '',
-                        value: 'action',
-                        width: '20%'
                     },
 
          ],

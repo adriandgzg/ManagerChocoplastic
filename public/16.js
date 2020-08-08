@@ -89,10 +89,6 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'Stock',
         value: 'prin_stock'
-      }, {
-        text: '',
-        value: 'action',
-        width: '20%'
       }],
       select: 0,
       principal: false,
@@ -325,37 +321,6 @@ var render = function() {
                               ]
                             },
                             proxy: true
-                          },
-                          {
-                            key: "item.action",
-                            fn: function(ref) {
-                              var item = ref.item
-                              return [
-                                item.clsa_status != "Pendiente"
-                                  ? _c(
-                                      "v-btn",
-                                      {
-                                        staticClass: "mr-2",
-                                        attrs: {
-                                          fab: "",
-                                          dark: "",
-                                          small: "",
-                                          color: "indigo",
-                                          href:
-                                            "/clientsreturn/" + item.clor_pk,
-                                          title: "Devolución"
-                                        }
-                                      },
-                                      [
-                                        _c("v-icon", { attrs: { dark: "" } }, [
-                                          _vm._v("mdi-archive-arrow-up")
-                                        ])
-                                      ],
-                                      1
-                                    )
-                                  : _vm._e()
-                              ]
-                            }
                           }
                         ])
                       })
