@@ -2913,12 +2913,159 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3017,13 +3164,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       notifications: [],
       title: null,
       responsive: false,
-      responsiveInput: false
+      responsiveInput: false,
+      dialogCaja: false,
+      dialogCerrarCaja: false,
+      validCerrarCaja: false,
+      validCaja: false,
+      dateFormatted: '',
+      caja: [],
+      user: '',
+      montoApertura: 0,
+      numberRules: [function (value) {
+        return !!value || 'Requerido.';
+      }, function (value) {
+        return value > 0 || 'El número debe ser mayor a cero';
+      }]
     };
   },
   watch: {
     '$route': function $route(val) {
       this.title = val.name;
     }
+  },
+  created: function created() {
+    this.getUser();
+    this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' + this.formatHour(new Date().toISOString().substr(11, 15));
   },
   mounted: function mounted() {
     this.onResponsiveInverted();
@@ -3032,7 +3196,68 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   beforeDestroy: function beforeDestroy() {
     window.removeEventListener('resize', this.onResponsiveInverted);
   },
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])('app', ['setDrawer', 'toggleDrawer']), {
+  methods: _objectSpread({
+    isNumberValid: function isNumberValid(evt) {
+      console.log('key ' + evt.key + ' (' + evt.keyCode + ')');
+      evt = evt ? evt : window.event;
+      var charCode = evt.which ? evt.which : evt.keyCode; //if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+
+      if (charCode > 47 && charCode < 58 || charCode > 95 && charCode < 106 || charCode == 8) {
+        console.log(charCode + '--> true');
+        return true;
+      } else {
+        console.log(charCode + '-->');
+        evt.preventDefault();
+      }
+    },
+    formatDate: function formatDate(date) {
+      if (!date) return null;
+
+      var _date$split = date.split('-'),
+          _date$split2 = _slicedToArray(_date$split, 3),
+          year = _date$split2[0],
+          month = _date$split2[1],
+          day = _date$split2[2];
+
+      return "".concat(day.substr(0, 2), "/").concat(month, "/").concat(year);
+    },
+    formatHour: function formatHour(date) {
+      if (!date) return null;
+
+      var _date$split3 = date.split(':'),
+          _date$split4 = _slicedToArray(_date$split3, 3),
+          year = _date$split4[0],
+          month = _date$split4[1],
+          day = _date$split4[2];
+
+      return "".concat(year, ":").concat(month);
+    },
+    getUser: function getUser() {
+      var _this = this;
+
+      axios.get("/listUser").then(function (response) {
+        _this.user = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    abrirCaja: function abrirCaja() {
+      this.dialogCaja = true;
+      this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' + this.formatHour(new Date().toISOString().substr(11, 15));
+    },
+    cerrarCaja: function cerrarCaja() {
+      this.dialogCerrarCaja = true;
+      this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' + this.formatHour(new Date().toISOString().substr(11, 15));
+    },
+    cancelar: function cancelar() {
+      this.dialogCaja = false;
+    },
+    cancelarCerrar: function cancelarCerrar() {
+      this.dialogCerrarCaja = false;
+    },
+    guardar: function guardar() {},
+    guardarCierre: function guardarCierre() {}
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapMutations"])('app', ['setDrawer', 'toggleDrawer']), {
     onClickBtn: function onClickBtn() {
       this.setDrawer(!this.$store.state.app.drawer);
     },
@@ -30498,6 +30723,867 @@ var render = function() {
         },
         [
           _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "500px" },
+              model: {
+                value: _vm.dialogCaja,
+                callback: function($$v) {
+                  _vm.dialogCaja = $$v
+                },
+                expression: "dialogCaja"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "cyan white--text" }, [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v("Apertura de Caja")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-form",
+                    {
+                      model: {
+                        value: _vm.validCaja,
+                        callback: function($$v) {
+                          _vm.validCaja = $$v
+                        },
+                        expression: "validCaja"
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Usuario",
+                              "prepend-icon": "mdi-account",
+                              disabled: ""
+                            },
+                            model: {
+                              value: _vm.user.name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.user, "name", $$v)
+                              },
+                              expression: "user.name"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Inicio de Caja",
+                              "prepend-icon": "event",
+                              disabled: ""
+                            },
+                            model: {
+                              value: _vm.dateFormatted,
+                              callback: function($$v) {
+                                _vm.dateFormatted = $$v
+                              },
+                              expression: "dateFormatted"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Monto de Apertura",
+                              "prepend-icon": "mdi-square-inc-cash",
+                              prefix: "",
+                              type: "number",
+                              rules: _vm.numberRules,
+                              required: ""
+                            },
+                            on: { keydown: _vm.isNumberValid },
+                            model: {
+                              value: _vm.montoApertura,
+                              callback: function($$v) {
+                                _vm.montoApertura = $$v
+                              },
+                              expression: "montoApertura"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: { color: "blue-grey" },
+                              on: { click: _vm.cancelar }
+                            },
+                            [_vm._v("Cancelar")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: {
+                                disabled: !_vm.validCaja,
+                                color: "teal accent-4"
+                              },
+                              on: { click: _vm.guardar }
+                            },
+                            [_vm._v("Guardar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "500px" },
+              model: {
+                value: _vm.dialogCerrarCaja,
+                callback: function($$v) {
+                  _vm.dialogCerrarCaja = $$v
+                },
+                expression: "dialogCerrarCaja"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "cyan white--text" }, [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v("Cierre de Caja")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-form",
+                    {
+                      model: {
+                        value: _vm.validCaja,
+                        callback: function($$v) {
+                          _vm.validCaja = $$v
+                        },
+                        expression: "validCaja"
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                {
+                                  staticStyle: { padding: "0px 12px 0px 12px" },
+                                  attrs: { cols: "12", md: "12" }
+                                },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Usuario",
+                                      "prepend-icon": "mdi-account",
+                                      disabled: ""
+                                    },
+                                    model: {
+                                      value: _vm.user.name,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.user, "name", $$v)
+                                      },
+                                      expression: "user.name"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                {
+                                  staticStyle: { padding: "0px 12px 0px 12px" },
+                                  attrs: { cols: "12", md: "6" }
+                                },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Inicio de Caja",
+                                      "prepend-icon": "event",
+                                      disabled: ""
+                                    },
+                                    model: {
+                                      value: _vm.dateFormatted,
+                                      callback: function($$v) {
+                                        _vm.dateFormatted = $$v
+                                      },
+                                      expression: "dateFormatted"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                {
+                                  staticStyle: { padding: "0px 12px 0px 12px" },
+                                  attrs: { cols: "12", md: "6" }
+                                },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Cierre de Caja",
+                                      "prepend-icon": "event",
+                                      disabled: ""
+                                    },
+                                    model: {
+                                      value: _vm.dateFormatted,
+                                      callback: function($$v) {
+                                        _vm.dateFormatted = $$v
+                                      },
+                                      expression: "dateFormatted"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                {
+                                  staticStyle: { padding: "0px 12px 0px 12px" },
+                                  attrs: { cols: "12", md: "6" }
+                                },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Monto de Apertura",
+                                      "prepend-icon": "mdi-square-inc-cash",
+                                      disabled: "",
+                                      prefix: "",
+                                      type: "number",
+                                      rules: _vm.numberRules,
+                                      required: ""
+                                    },
+                                    on: { keydown: _vm.isNumberValid },
+                                    model: {
+                                      value: _vm.montoApertura,
+                                      callback: function($$v) {
+                                        _vm.montoApertura = $$v
+                                      },
+                                      expression: "montoApertura"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                {
+                                  staticStyle: { padding: "0px 12px 0px 12px" },
+                                  attrs: { cols: "12", md: "6" }
+                                },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Monto de Cierre",
+                                      "prepend-icon": "mdi-square-inc-cash",
+                                      prefix: "",
+                                      type: "number",
+                                      rules: _vm.numberRules,
+                                      required: ""
+                                    },
+                                    on: { keydown: _vm.isNumberValid },
+                                    model: {
+                                      value: _vm.montoApertura,
+                                      callback: function($$v) {
+                                        _vm.montoApertura = $$v
+                                      },
+                                      expression: "montoApertura"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                [
+                                  _c(
+                                    "v-card",
+                                    [
+                                      _c(
+                                        "v-card-title",
+                                        { staticClass: "green white--text" },
+                                        [
+                                          _c(
+                                            "v-icon",
+                                            {
+                                              staticClass: "mr-4",
+                                              attrs: { dark: "", size: "36" }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                          mdi-cash-multiple\n                        "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "span",
+                                            { staticClass: "headline" },
+                                            [_vm._v("Resumen de Caja")]
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-container",
+                                        [
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-h5 font-weight-bold  green--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                          Total de Venta\n                        "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-right text-lg-h5  green--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                            $150,000.00\n                          "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-h6 grey--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                          Efectivo\n                        "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-right text-lg-h6  grey--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                            $30,000.00\n                          "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-h6 grey--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                          Tarjeta\n                        "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-right text-lg-h6  grey--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                            $70,000.00\n                          "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-h6 grey--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                          Crédito\n                        "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-right text-lg-h6  grey--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                            $50,000.00\n                          "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c("v-divider", {
+                                            staticStyle: {
+                                              margin: "10px 10px 10px"
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-h5 font-weight-bold  blue--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                          Total en Caja\n                        "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-right text-lg-h5  blue--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                            $10,000.00\n                          "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-h6 grey--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                          Cobrado\n                        "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-right text-lg-h6  green--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                            $30,000.00\n                          "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-row",
+                                            [
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-h6 grey--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                          Retiros\n                        "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-col",
+                                                {
+                                                  staticStyle: {
+                                                    padding: "0px 12px 0px 12px"
+                                                  },
+                                                  attrs: { cols: "12", md: "6" }
+                                                },
+                                                [
+                                                  _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-lg-right text-lg-h6  red--text",
+                                                      staticStyle: {
+                                                        "padding-bottom": "0px",
+                                                        margin: "0px"
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                            $20,000.00\n                          "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-textarea", {
+                            attrs: {
+                              "auto-grow": "",
+                              filled: "",
+                              color: "deep-purple",
+                              label: "Observaciones",
+                              rows: "3"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: { color: "blue-grey" },
+                              on: { click: _vm.cancelarCerrar }
+                            },
+                            [_vm._v("Cancelar")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: {
+                                disabled: !_vm.validCerrarCaja,
+                                color: "teal accent-4"
+                              },
+                              on: { click: _vm.guardar }
+                            },
+                            [_vm._v("Guardar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
             "div",
             { staticClass: "v-toolbar-title" },
             [
@@ -30519,7 +31605,7 @@ var render = function() {
                     [_c("v-icon", [_vm._v("mdi-view-list")])],
                     1
                   ),
-                  _vm._v("\n      " + _vm._s(_vm.title) + "\n    ")
+                  _vm._v("\n        " + _vm._s(_vm.title) + "\n      ")
                 ],
                 1
               )
@@ -30537,90 +31623,33 @@ var render = function() {
                 { attrs: { "align-center": "", layout: "", "py-2": "" } },
                 [
                   _c(
-                    "router-link",
+                    "v-btn",
                     {
-                      directives: [{ name: "ripple", rawName: "v-ripple" }],
-                      staticClass: "toolbar-items",
-                      attrs: { to: "/dashboard" }
+                      staticClass: "ma-2 white--text",
+                      attrs: { color: "#4F33FF" },
+                      on: { click: _vm.abrirCaja }
                     },
                     [
-                      _c("v-icon", { attrs: { color: "white" } }, [
-                        _vm._v("mdi-view-dashboard")
+                      _vm._v("\n        Abrir Caja\n        "),
+                      _c("v-icon", { attrs: { right: "", dark: "" } }, [
+                        _vm._v("mdi-inbox-arrow-down")
                       ])
                     ],
                     1
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-menu",
+                    "v-btn",
                     {
-                      attrs: {
-                        "open-on-hover": "",
-                        bottom: "",
-                        left: "",
-                        "offset-y": "",
-                        transition: "slide-y-transition"
-                      },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "activator",
-                          fn: function(ref) {
-                            var on = ref.on
-                            return [
-                              _c(
-                                "v-btn",
-                                _vm._g(
-                                  { attrs: { color: "tertiary", icon: "" } },
-                                  on
-                                ),
-                                [
-                                  _c(
-                                    "v-badge",
-                                    { attrs: { color: "error" } },
-                                    [
-                                      _c("template", { slot: "badge" }, [
-                                        _vm._v(
-                                          "\n                      " +
-                                            _vm._s(_vm.notifications.length) +
-                                            "\n\n                  "
-                                        )
-                                      ]),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-icon",
-                                        { attrs: { color: "white" } },
-                                        [_vm._v("mdi-bell")]
-                                      )
-                                    ],
-                                    2
-                                  )
-                                ],
-                                1
-                              )
-                            ]
-                          }
-                        }
-                      ])
+                      staticClass: "ma-2 white--text",
+                      attrs: { color: "#FF5733" },
+                      on: { click: _vm.cerrarCaja }
                     },
                     [
-                      _vm._v(" "),
-                      _c(
-                        "v-list",
-                        { attrs: { dense: "" } },
-                        _vm._l(_vm.notifications, function(notification) {
-                          return _c(
-                            "v-list-item",
-                            { key: notification, on: { click: _vm.onClick } },
-                            [
-                              _c("v-list-item-title", {
-                                domProps: { textContent: _vm._s(notification) }
-                              })
-                            ],
-                            1
-                          )
-                        }),
-                        1
-                      )
+                      _vm._v("\n        Cerrar Caja\n        "),
+                      _c("v-icon", { attrs: { right: "", dark: "" } }, [
+                        _vm._v("mdi-inbox-arrow-up")
+                      ])
                     ],
                     1
                   )
