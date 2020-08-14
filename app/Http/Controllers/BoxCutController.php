@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BoxCut;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BoxCutController extends Controller
 {
@@ -14,7 +15,17 @@ class BoxCutController extends Controller
      */
     public function index()
     {
-        //
+        $vUser = Auth::user()->id;
+        $vBoxCut = BoxCut::where('admi_fk', '=', $vUser)->where('bocu_status', '=', 1)->first();;
+        
+            return response()->json([
+                'code' => 200,
+                'success' => true,
+                'message' => 'Caja cargada',
+                'data' => $vBoxCut
+                
+            ], 200);
+        
     }
 
     /**
@@ -35,7 +46,34 @@ class BoxCutController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+
+            $vUser = Auth::user()->id;
+
+            $box = new BoxCut();  
+            $box->admi_fk = $vUser;
+            $box->bocu_startdate = $request->bocu_startdate;
+            $box->bocu_initialamount = $request->bocu_initialamount;
+
+            $box->save();
+
+            $vUser = Auth::user()->id;
+            $vBoxCut = BoxCut::where('admi_fk', '=', $vUser)->where('bocu_status', '=', 1)->first();;
+        
+            return response()->json([
+                'code' => 200,
+                'success' => true,
+                'message' => 'Caja cargada',
+                'data' => $vBoxCut
+                
+            ], 200);
+
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        }
+
     }
 
     /**

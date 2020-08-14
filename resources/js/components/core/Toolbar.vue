@@ -211,12 +211,12 @@
         py-2
       >
 
-      <v-btn color="#4F33FF" class="ma-2 white--text" @click="abrirCaja">
+      <v-btn v-if="boxEnabled" color="#4F33FF" class="ma-2 white--text" @click="abrirCaja" >
         Abrir Caja
         <v-icon right dark>mdi-inbox-arrow-down</v-icon>
       </v-btn>
 
-      <v-btn color="#FF5733" class="ma-2 white--text" @click="cerrarCaja">
+      <v-btn v-else color="#FF5733" class="ma-2 white--text" @click="cerrarCaja">
         Cerrar Caja
         <v-icon right dark>mdi-inbox-arrow-up</v-icon>
       </v-btn>
@@ -231,7 +231,7 @@
 <script>
 
     import {mapMutations} from 'vuex'
-
+import CripNotice from "crip-vue-notice";
     export default {
         data: () => ({
             notifications: [],
@@ -242,7 +242,12 @@
             dialogCerrarCaja:false,
             validCerrarCaja:false,
             validCaja:false,         
-            dateFormatted:'',   
+            dateFormatted:'',
+            boxEnabled:false,   
+            editadoBox:{
+              bocu_startdate:'',
+              bocu_initialamount:0
+            },
             caja:[],   
             user:'',
             montoApertura:0,
@@ -260,6 +265,8 @@
 
   created() {
     this.getUser();
+    this.obtenerCaja();
+    console.log(new Date().toISOString());
     this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' + this.formatHour(new Date().toISOString().substr(11, 15));
     
   },   
@@ -292,7 +299,7 @@
       if (!date) return null
 
       const [year, month, day] = date.split('-')
-      return `${day.substr(0,2)}/${month}/${year}`
+      return `${year}-${month}-${day.substr(0,2)}`
     },
     formatHour (date) {
       if (!date) return null
@@ -305,6 +312,22 @@
         .get("/listUser")
         .then(response => {
           this.user = response.data.data;
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    obtenerCaja(){
+      axios
+        .get("/boxcut")
+        .then(response => {
+          console.log(response.data)
+          if(response.data.data == null)
+            this.boxEnabled = true
+          else
+            this.boxEnabled = false
+
+          //this.caja = response.data.data;
         })
         .catch(e => {
           console.log(e);
@@ -326,8 +349,39 @@
     cancelarCerrar() {
                 this.dialogCerrarCaja = false
             },
-    guardar(){},
+    guardar(){
+      this.editadoBox.bocu_startdate = this.dateFormatted;
+      this.editadoBox.bocu_initialamount = this.montoApertura;
+      axios.post('/box/insert', this.editadoBox)
+                .then(response => {
+                  console.log(response)
+                  if(response.data.code == 200){
+                    this.dialogCaja = false
+                    this.textMsg = "¡Actualizado correctamente!";
+                    this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+                   this.obtenerCaja();
+                  }
+                  else{
+                    this.normal('Notificación',response.data.message ,"error");                    
+                  }
+                
+                })
+                .catch(e => {
+                    //this.errors.push(e)
+                    console.log(e)
+                    })
+    },
     guardarCierre(){},
+    normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          }, 
     ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
     onClickBtn () {
       this.setDrawer(!this.$store.state.app.drawer)

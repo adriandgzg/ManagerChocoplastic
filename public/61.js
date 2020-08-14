@@ -1,8 +1,8 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[46],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[61],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ClientOrders.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PurchaseList.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/ClientOrders.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/PurchaseList.vue?vue&type=script&lang=js& ***!
   \*****************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -115,28 +115,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      headers: [+{
-        text: 'ID',
-        value: 'clor_pk',
-        width: '10%'
+      headers: [{
+        text: 'ID Compra',
+        value: 'prpu_identifier'
       }, {
-        text: 'No. Orden',
-        value: 'clor_identifier'
+        text: 'Proveedor',
+        value: 'prov_name'
       }, {
         text: 'Sucursal',
         value: 'stor_name'
       }, {
-        text: 'Fecha',
-        value: 'created_at'
+        text: 'Tipo',
+        value: 'prpu_type_description'
+      }, {
+        text: 'ID Orden de Compra',
+        value: 'prpo_identifier'
+      }, {
+        text: 'Método de pago',
+        value: 'pame_name'
       }, {
         text: 'Estatus',
         value: 'status'
+      }, {
+        text: 'Fecha',
+        value: 'created_at'
       }, {
         text: '',
         value: 'action',
@@ -157,7 +163,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       editedIndex: -1,
       sales: [],
-      categories: [],
+      ordenescompra: [],
       entities: [],
       search: "",
       dialog: false,
@@ -195,14 +201,13 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.loading = true;
-      axios.get("/clientorders").then(function (response) {
+      axios.get("/provider/purchases").then(function (response) {
         setTimeout(function () {
           return _this.loading = false;
         }, 2000);
 
         if (response.data.data != null) {
-          console.log(response.data);
-          _this.categories = response.data.data;
+          _this.ordenescompra = response.data.data;
         } else {
           _this.normal('Notificación', response.data.status.message, "error");
         }
@@ -233,7 +238,6 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     borrar: function borrar(item) {
-      var index = this.categories.indexOf(item);
       this.editado = Object.assign({}, item);
       this.dialogQuestionDelete = true;
     },
@@ -244,17 +248,17 @@ __webpack_require__.r(__webpack_exports__);
     "delete": function _delete() {
       var _this3 = this;
 
-      axios.post('/client/orders/destroy', this.editado).then(function (response) {
+      axios.post('/provider/purchases/destroy', this.editado).then(function (response) {
         console.log(response);
 
-        if (response.data.code == 200) {
+        if (response.data.status.code == 200) {
           _this3.textMsg = "¡Eliminado correctamente!";
 
-          _this3.normal('Notificación', _this3.textMsg, "error");
+          _this3.normal('Notificación', _this3.textMsg, "success");
 
           _this3.getCategories();
         } else {
-          _this3.normal('Notificación', response.data.message, "error");
+          _this3.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
         }
       });
     },
@@ -278,9 +282,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ClientOrders.vue?vue&type=template&id=7f6c6c88&":
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PurchaseList.vue?vue&type=template&id=21259ceb&":
 /*!*********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/ClientOrders.vue?vue&type=template&id=7f6c6c88& ***!
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/PurchaseList.vue?vue&type=template&id=21259ceb& ***!
   \*********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -299,6 +303,40 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-snackbar",
+            {
+              attrs: { color: "#000000", timeout: _vm.timeout },
+              model: {
+                value: _vm.snackbar,
+                callback: function($$v) {
+                  _vm.snackbar = $$v
+                },
+                expression: "snackbar"
+              }
+            },
+            [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.textMsg) +
+                  "\n                "
+              ),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "blue", text: "" },
+                  on: {
+                    click: function($event) {
+                      _vm.snackbar = false
+                    }
+                  }
+                },
+                [_vm._v("\n                    Cerrar\n                ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
           _c(
             "v-dialog",
             {
@@ -395,135 +433,6 @@ var render = function() {
           ),
           _vm._v(" "),
           _c(
-            "v-snackbar",
-            {
-              attrs: { color: "#000000", timeout: _vm.timeout },
-              model: {
-                value: _vm.snackbar,
-                callback: function($$v) {
-                  _vm.snackbar = $$v
-                },
-                expression: "snackbar"
-              }
-            },
-            [
-              _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
-              ),
-              _c(
-                "v-btn",
-                {
-                  attrs: { color: "blue", text: "" },
-                  on: {
-                    click: function($event) {
-                      _vm.snackbar = false
-                    }
-                  }
-                },
-                [_vm._v("\n                    Cerrar\n                ")]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-dialog",
-            {
-              attrs: { "max-width": "500px", persistent: "" },
-              model: {
-                value: _vm.dialog,
-                callback: function($$v) {
-                  _vm.dialog = $$v
-                },
-                expression: "dialog"
-              }
-            },
-            [
-              _c(
-                "v-card",
-                [
-                  _c("v-card-title", { staticClass: "cyan white--text" }, [
-                    _c("span", { staticClass: "headline" }, [
-                      _vm._v(_vm._s(_vm.formTitle))
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-form",
-                    {
-                      model: {
-                        value: _vm.validProvider,
-                        callback: function($$v) {
-                          _vm.validProvider = $$v
-                        },
-                        expression: "validProvider"
-                      }
-                    },
-                    [
-                      _c(
-                        "v-card-text",
-                        [
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Nombre",
-                              maxlength: "300",
-                              rules: _vm.nameRules,
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.editado.clor_name,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editado, "clor_name", $$v)
-                              },
-                              expression: "editado.clor_name"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("span", [_vm._v("Activo/Inactivo")]),
-                          _vm._v(" "),
-                          _c("v-switch", {
-                            model: {
-                              value: _vm.estado,
-                              callback: function($$v) {
-                                _vm.estado = $$v
-                              },
-                              expression: "estado"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-card-actions",
-                        [
-                          _c("v-spacer"),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              staticClass: "ma-2 white--text",
-                              attrs: { color: "blue-grey" },
-                              on: { click: _vm.cancelar }
-                            },
-                            [_vm._v("Cancelar")]
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
             "v-row",
             [
               _c(
@@ -536,7 +445,7 @@ var render = function() {
                         staticClass: "elevation-3",
                         attrs: {
                           headers: _vm.headers,
-                          items: _vm.categories,
+                          items: _vm.ordenescompra,
                           search: _vm.search,
                           "sort-by": "id"
                         },
@@ -551,8 +460,40 @@ var render = function() {
                                 _vm._v(" "),
                                 _c(
                                   "v-toolbar",
-                                  { attrs: { flat: "", color: "indigo" } },
+                                  {
+                                    attrs: { flat: "", color: "indigo" },
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "extension",
+                                        fn: function() {
+                                          return [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                attrs: {
+                                                  fab: "",
+                                                  color: "cyan accent-2",
+                                                  bottom: "",
+                                                  left: "",
+                                                  absolute: "",
+                                                  href: "/purchases/0/2"
+                                                }
+                                              },
+                                              [
+                                                _c("v-icon", [
+                                                  _vm._v("mdi-plus")
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ]
+                                        },
+                                        proxy: true
+                                      }
+                                    ])
+                                  },
                                   [
+                                    _vm._v(" "),
                                     _c("v-divider", {
                                       staticClass: "mx-4",
                                       attrs: { inset: "", vertical: "" }
@@ -594,27 +535,67 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                item.clor_status == 1
-                                  ? _c(
-                                      "v-chip",
-                                      { attrs: { color: "green", dark: "" } },
-                                      [_vm._v("  Pendiente  ")]
-                                    )
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                item.clor_status == 2
-                                  ? _c(
-                                      "v-chip",
-                                      { attrs: { color: "blue", dark: "" } },
-                                      [_vm._v("  Procesado  ")]
-                                    )
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                item.clor_status == 0
+                                item.prpu_status == 0
                                   ? _c(
                                       "v-chip",
                                       { attrs: { color: "red", dark: "" } },
-                                      [_vm._v("  Cancelado  ")]
+                                      [
+                                        _vm._v(
+                                          "  " +
+                                            _vm._s(
+                                              item.prpu_status_description
+                                            ) +
+                                            "  "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.prpu_status == 1
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "orange", dark: "" } },
+                                      [
+                                        _vm._v(
+                                          "  " +
+                                            _vm._s(
+                                              item.prpu_status_description
+                                            ) +
+                                            "  "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.prpu_status == 2
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "green", dark: "" } },
+                                      [
+                                        _vm._v(
+                                          "  " +
+                                            _vm._s(
+                                              item.prpu_status_description
+                                            ) +
+                                            "  "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.prpu_status == 3
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "blue", dark: "" } },
+                                      [
+                                        _vm._v(
+                                          "  " +
+                                            _vm._s(
+                                              item.prpu_status_description
+                                            ) +
+                                            "  "
+                                        )
+                                      ]
                                     )
                                   : _vm._e()
                               ]
@@ -625,7 +606,7 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                item.clor_status == 1
+                                item.prpu_status == 1 && item.prpu_type == 1
                                   ? _c(
                                       "v-btn",
                                       {
@@ -634,14 +615,43 @@ var render = function() {
                                           fab: "",
                                           dark: "",
                                           small: "",
-                                          color: "cyan",
-                                          title: "Convertir Orden en Venta",
-                                          href: "/detaiorder/" + item.clor_pk
+                                          color: "orange",
+                                          href:
+                                            "/purchases/" +
+                                            item.prpo_pk +
+                                            "/" +
+                                            item.prpu_type,
+                                          title: "Continuar compra"
                                         }
                                       },
                                       [
                                         _c("v-icon", { attrs: { dark: "" } }, [
-                                          _vm._v("mdi-cash-register")
+                                          _vm._v("mdi-cloud-check")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.prpu_status_description != "Pendiente" ||
+                                item.prpu_status_description == "Cancelada"
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        staticClass: "mr-2",
+                                        attrs: {
+                                          fab: "",
+                                          dark: "",
+                                          small: "",
+                                          color: "pink",
+                                          href:
+                                            "/providersreturn/" + item.prpu_pk,
+                                          title: "Devolución"
+                                        }
+                                      },
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-arrow-left-bold-circle")
                                         ])
                                       ],
                                       1
@@ -657,8 +667,8 @@ var render = function() {
                                       dark: "",
                                       small: "",
                                       color: "purple",
-                                      title: "Detalle de orden",
-                                      href: "/detaiorderread/" + item.clor_pk
+                                      href: "/purchasesdetail/" + item.prpu_pk,
+                                      title: "Detalle de compra"
                                     }
                                   },
                                   [
@@ -669,7 +679,7 @@ var render = function() {
                                   1
                                 ),
                                 _vm._v(" "),
-                                item.clor_status == 1
+                                item.prpu_status == 1
                                   ? _c(
                                       "v-btn",
                                       {
@@ -679,7 +689,7 @@ var render = function() {
                                           dark: "",
                                           small: "",
                                           color: "error",
-                                          title: "Eliminar orden"
+                                          title: "Eliminar"
                                         },
                                         on: {
                                           click: function($event) {
@@ -723,17 +733,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/views/ClientOrders.vue":
+/***/ "./resources/js/components/views/PurchaseList.vue":
 /*!********************************************************!*\
-  !*** ./resources/js/components/views/ClientOrders.vue ***!
+  !*** ./resources/js/components/views/PurchaseList.vue ***!
   \********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ClientOrders_vue_vue_type_template_id_7f6c6c88___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ClientOrders.vue?vue&type=template&id=7f6c6c88& */ "./resources/js/components/views/ClientOrders.vue?vue&type=template&id=7f6c6c88&");
-/* harmony import */ var _ClientOrders_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ClientOrders.vue?vue&type=script&lang=js& */ "./resources/js/components/views/ClientOrders.vue?vue&type=script&lang=js&");
+/* harmony import */ var _PurchaseList_vue_vue_type_template_id_21259ceb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PurchaseList.vue?vue&type=template&id=21259ceb& */ "./resources/js/components/views/PurchaseList.vue?vue&type=template&id=21259ceb&");
+/* harmony import */ var _PurchaseList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PurchaseList.vue?vue&type=script&lang=js& */ "./resources/js/components/views/PurchaseList.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -743,9 +753,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ClientOrders_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ClientOrders_vue_vue_type_template_id_7f6c6c88___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ClientOrders_vue_vue_type_template_id_7f6c6c88___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _PurchaseList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PurchaseList_vue_vue_type_template_id_21259ceb___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PurchaseList_vue_vue_type_template_id_21259ceb___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -755,38 +765,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/views/ClientOrders.vue"
+component.options.__file = "resources/js/components/views/PurchaseList.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/views/ClientOrders.vue?vue&type=script&lang=js&":
+/***/ "./resources/js/components/views/PurchaseList.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************!*\
-  !*** ./resources/js/components/views/ClientOrders.vue?vue&type=script&lang=js& ***!
+  !*** ./resources/js/components/views/PurchaseList.vue?vue&type=script&lang=js& ***!
   \*********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ClientOrders_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ClientOrders.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ClientOrders.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ClientOrders_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PurchaseList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PurchaseList.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PurchaseList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PurchaseList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/views/ClientOrders.vue?vue&type=template&id=7f6c6c88&":
+/***/ "./resources/js/components/views/PurchaseList.vue?vue&type=template&id=21259ceb&":
 /*!***************************************************************************************!*\
-  !*** ./resources/js/components/views/ClientOrders.vue?vue&type=template&id=7f6c6c88& ***!
+  !*** ./resources/js/components/views/PurchaseList.vue?vue&type=template&id=21259ceb& ***!
   \***************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClientOrders_vue_vue_type_template_id_7f6c6c88___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ClientOrders.vue?vue&type=template&id=7f6c6c88& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ClientOrders.vue?vue&type=template&id=7f6c6c88&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClientOrders_vue_vue_type_template_id_7f6c6c88___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PurchaseList_vue_vue_type_template_id_21259ceb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PurchaseList.vue?vue&type=template&id=21259ceb& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PurchaseList.vue?vue&type=template&id=21259ceb&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PurchaseList_vue_vue_type_template_id_21259ceb___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClientOrders_vue_vue_type_template_id_7f6c6c88___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PurchaseList_vue_vue_type_template_id_21259ceb___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

@@ -168,7 +168,9 @@ Route::post('provider/returns/update', 'ProviderReturnController@update');  //Fi
 Route::post('provider/return/details/update', 'ProviderReturnDetailController@update'); 
 Route::post('provider/return/details/destroy', 'ProviderReturnDetailController@destroy'); 
 
-
+//Corte de caja
+Route::get('/boxcut', 'BoxCutController@index');
+Route::post('/box/insert', 'BoxCutController@store'); //Guardar Corte de caja
 
 
 
@@ -220,6 +222,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/roles', 'RoleController@index');
     Route::get('/permissions', 'PermissionController@index');
     Route::put('/user/updateStatus', 'AdminController@updateStatus');
+
+
 
 
 

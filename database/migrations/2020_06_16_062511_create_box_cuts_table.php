@@ -16,10 +16,12 @@ class CreateBoxCutsTable extends Migration
         //Corte de caja
         Schema::create('box_cuts', function (Blueprint $table) {
             $table->bigIncrements('bocu_pk');
+            $table->bigInteger('admi_fk');
             $table->dateTimeTz('bocu_startdate', 0); //Fecha Inicio
-            $table->dateTimeTz('bocu_enddate', 0); //Fecha Fin
-            $table->decimal('bocu_amountcash', 12, 2); //Total Contado
-            $table->decimal('bocu_amountsum', 12, 2); //Total Suma
+            $table->decimal('bocu_initialamount', 12, 2)->default(0); //Monto inicial
+            $table->dateTimeTz('bocu_enddate', 0)->nullable(); //Fecha Fin
+            $table->decimal('bocu_amountcash', 12, 2)->default(0); //Total Contado
+            $table->decimal('bocu_amountsum', 12, 2)->default(0); //Total Suma
             $table->smallInteger('bocu_status')->default(1); //Estatus
             $table->timestamps();
         });

@@ -27,9 +27,11 @@ class AdminController extends Controller
         $status =Auth::user();
 
         $users=Admin::with(['permissions','role'])->get();
+
+
         return response()->json([
             'success' => true,
-            'message' => 'Users loaded',
+            'message' => 'Users loaded main',
             'data' => $status,
         ], 200);
     }

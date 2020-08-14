@@ -1,9 +1,9 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[45],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[58],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ClientDebts.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/ClientDebts.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -120,62 +120,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       headersdetail: [{
         text: 'ID',
-        value: 'clpa_pk',
+        value: 'prpa_pk',
         width: '10%'
       }, {
         text: 'Forma de Pago',
         value: 'pash_name'
       }, {
         text: 'Monto pagado',
-        value: 'clpa_amount'
+        value: 'prpa_amount'
       }, {
         text: 'Fecha pago',
         value: 'created_at'
       }],
       headers: [{
         text: 'ID',
-        value: 'clde_pk',
+        value: 'prde_pk',
         width: '10%'
       }, {
-        text: 'No. Venta',
-        value: 'clsa_identifier'
+        text: 'No. Compra',
+        value: 'prpu_identifier'
       }, {
-        text: 'Cliente',
-        value: 'clie_name'
+        text: 'Proveedor',
+        value: 'prov_name'
       }, {
-        text: 'Monto Deuda',
-        value: 'clde_amount'
+        text: 'Monto',
+        value: 'prde_amount'
       }, {
         text: 'Monto Pagado',
-        value: 'clde_amount_paid'
+        value: 'prde_amount_paid'
       }, {
         text: 'Monto Pendiente',
-        value: 'clde_amount_outstanding'
+        value: 'prde_amount_outstanding'
       }, {
         text: 'Fecha',
         value: 'created_at'
       }, {
         text: 'Estatus',
-        value: 'clde_status_description'
+        value: 'prde_status_description'
       }, {
         text: '',
         value: 'action',
@@ -185,25 +172,25 @@ __webpack_require__.r(__webpack_exports__);
       principal: false,
       estado: true,
       editado: {
-        clde_fk: 0,
+        prde_fk: 0,
         //PK Cliente Deuda
-        clsa_identifier: '',
-        clie_fk: 0,
+        prpu_identifier: '',
+        prov_fk: 0,
         //PK Cliente
         pash_fk: 0,
         //PK Forma de Pago
-        clpa_amount: 0 //Monto
+        prpa_amount: 0 //Monto
 
       },
       defaultItem: {
-        clde_fk: 0,
+        prde_fk: 0,
         //PK Cliente Deuda
-        clsa_identifier: '',
-        clie_fk: 0,
+        prpu_identifier: '',
+        prov_fk: 0,
         //PK Cliente
         pash_fk: 0,
         //PK Forma de Pago
-        clpa_amount: 0 //Monto
+        prpa_amount: 0 //Monto
 
       },
       editedIndex: -1,
@@ -240,11 +227,7 @@ __webpack_require__.r(__webpack_exports__);
         return !!value || 'Requerido.';
       }, function (value) {
         return value > 0 || 'El número debe ser mayor o igual a cero';
-      }],
-      loading: false,
-      dialogQuestion: false,
-      dialogQuestionDelete: false,
-      messageQuestion: ''
+      }]
     };
   },
   created: function created() {
@@ -271,22 +254,11 @@ __webpack_require__.r(__webpack_exports__);
     getClientesPago: function getClientesPago() {
       var _this = this;
 
-      this.loading = true;
-      axios.get("/client/debts").then(function (response) {
-        setTimeout(function () {
-          return _this.loading = false;
-        }, 2000);
-
-        if (response.data.data != null) {
-          console.log(response.data);
-          _this.clientsdebts = response.data.data;
-        } else {
-          _this.normal('Notificación', response.data.status.message, "error");
-        }
+      axios.get("/provider/debts").then(function (response) {
+        console.log(response.data);
+        _this.clientsdebts = response.data.data;
       })["catch"](function (e) {
         console.log(e);
-
-        _this.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     cancelar: function cancelar() {
@@ -296,11 +268,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     abonar: function abonar(item) {
       this.dialog = true;
-      this.editado.clde_fk = item.clde_pk;
-      this.editado.clsa_identifier = item.clsa_identifier;
-      this.editado.clie_fk = item.clie_pk;
+      this.editado.prde_fk = item.prde_pk;
+      this.editado.prov_fk = item.prov_pk;
       this.editado.pash_fk = 0;
-      this.editado.clpa_amount = 0;
+      this.editado.prpa_amount = 0;
+      this.editado.prpu_identifier = item.prpu_identifier;
     },
     getPayment: function getPayment() {
       var _this2 = this;
@@ -317,23 +289,23 @@ __webpack_require__.r(__webpack_exports__);
       this.editado.pash_fk = this.selectpame.pash_pk;
 
       if (this.selectpame == '' || this.selectpame == null) {
-        this.normal('Notificación', "Debe seleccionar un Forma de Pago", "success");
+        this.normal('Notificación', "Debe seleccionar una Forma de Pago", "error");
         return;
       }
 
-      axios.post('/client/payments', this.editado).then(function (response) {
+      axios.post('/provider/payments', this.editado).then(function (response) {
         console.log(response);
 
-        if (response.data.code == 200) {
+        if (response.data.status.code == 200) {
           _this3.textMsg = "¡Actualizado correctamente!";
 
-          _this3.normal('Notificación', '¡Actualizado correctamente!', "success");
+          _this3.normal('Notificación', response.data.status.message, "success");
 
           _this3.getClientesPago();
 
           _this3.cancelar();
         } else {
-          _this3.normal('Notificación', response.data.message, "success");
+          _this3.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         _this3.errors.push(e);
@@ -343,7 +315,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       console.log(item);
-      axios.get("/client/payments/" + item.clde_pk).then(function (response) {
+      axios.get("/provider/payments/" + item.prde_pk).then(function (response) {
+        console.log(response);
         _this4.detallepagos = response.data.data;
         _this4.dialogdetail = true;
       })["catch"](function (e) {
@@ -373,10 +346,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ClientDebts.vue?vue&type=template&id=31982639&":
-/*!********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/ClientDebts.vue?vue&type=template&id=31982639& ***!
-  \********************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a& ***!
+  \**********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -397,42 +370,7 @@ var render = function() {
           _c(
             "v-dialog",
             {
-              attrs: { persistent: "", width: "300" },
-              model: {
-                value: _vm.loading,
-                callback: function($$v) {
-                  _vm.loading = $$v
-                },
-                expression: "loading"
-              }
-            },
-            [
-              _c(
-                "v-card",
-                { attrs: { color: "white" } },
-                [
-                  _c(
-                    "v-card-text",
-                    [
-                      _vm._v("\n          Cargando\n          "),
-                      _c("v-progress-linear", {
-                        staticClass: "mb-0",
-                        attrs: { indeterminate: "", color: "green" }
-                      })
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-dialog",
-            {
-              attrs: { "max-width": "800px", persistent: "" },
+              attrs: { "max-width": "700px", persistent: "" },
               model: {
                 value: _vm.dialogdetail,
                 callback: function($$v) {
@@ -463,14 +401,14 @@ var render = function() {
                         },
                         scopedSlots: _vm._u([
                           {
-                            key: "item.clpa_amount",
+                            key: "item.prpa_amount",
                             fn: function(ref) {
                               var item = ref.item
                               return [
                                 _c("v-label", [
                                   _vm._v(
                                     "$" +
-                                      _vm._s(_vm.formatMoney(item.clpa_amount))
+                                      _vm._s(_vm.formatMoney(item.prpa_amount))
                                   )
                                 ])
                               ]
@@ -548,8 +486,7 @@ var render = function() {
                             { staticClass: "subheading font-weight-bold" },
                             [
                               _vm._v(
-                                "No. Venta: " +
-                                  _vm._s(_vm.editado.clsa_identifier)
+                                "Compra: " + _vm._s(_vm.editado.prpu_identifier)
                               )
                             ]
                           ),
@@ -568,11 +505,11 @@ var render = function() {
                                   required: ""
                                 },
                                 model: {
-                                  value: _vm.editado.clpa_amount,
+                                  value: _vm.editado.prpa_amount,
                                   callback: function($$v) {
-                                    _vm.$set(_vm.editado, "clpa_amount", $$v)
+                                    _vm.$set(_vm.editado, "prpa_amount", $$v)
                                   },
-                                  expression: "editado.clpa_amount"
+                                  expression: "editado.prpa_amount"
                                 }
                               }),
                               _vm._v(" "),
@@ -719,21 +656,21 @@ var render = function() {
                             proxy: true
                           },
                           {
-                            key: "item.clde_amount",
+                            key: "item.prde_amount",
                             fn: function(ref) {
                               var item = ref.item
                               return [
                                 _c("v-label", [
                                   _vm._v(
                                     "$" +
-                                      _vm._s(_vm.formatMoney(item.clde_amount))
+                                      _vm._s(_vm.formatMoney(item.prde_amount))
                                   )
                                 ])
                               ]
                             }
                           },
                           {
-                            key: "item.clde_amount_paid",
+                            key: "item.prde_amount_paid",
                             fn: function(ref) {
                               var item = ref.item
                               return [
@@ -741,7 +678,7 @@ var render = function() {
                                   _vm._v(
                                     "$" +
                                       _vm._s(
-                                        _vm.formatMoney(item.clde_amount_paid)
+                                        _vm.formatMoney(item.prde_amount_paid)
                                       )
                                   )
                                 ])
@@ -749,7 +686,7 @@ var render = function() {
                             }
                           },
                           {
-                            key: "item.clde_amount_outstanding",
+                            key: "item.prde_amount_outstanding",
                             fn: function(ref) {
                               var item = ref.item
                               return [
@@ -758,7 +695,7 @@ var render = function() {
                                     "$" +
                                       _vm._s(
                                         _vm.formatMoney(
-                                          item.clde_amount_outstanding
+                                          item.prde_amount_outstanding
                                         )
                                       )
                                   )
@@ -805,7 +742,7 @@ var render = function() {
                                       dark: "",
                                       small: "",
                                       color: "cyan",
-                                      title: "Detalle de pagos"
+                                      title: "Detalle"
                                     },
                                     on: {
                                       click: function($event) {
@@ -848,17 +785,17 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./resources/js/components/views/ClientDebts.vue":
-/*!*******************************************************!*\
-  !*** ./resources/js/components/views/ClientDebts.vue ***!
-  \*******************************************************/
+/***/ "./resources/js/components/views/ProviderDebts.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/views/ProviderDebts.vue ***!
+  \*********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ClientDebts_vue_vue_type_template_id_31982639___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ClientDebts.vue?vue&type=template&id=31982639& */ "./resources/js/components/views/ClientDebts.vue?vue&type=template&id=31982639&");
-/* harmony import */ var _ClientDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ClientDebts.vue?vue&type=script&lang=js& */ "./resources/js/components/views/ClientDebts.vue?vue&type=script&lang=js&");
+/* harmony import */ var _ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ProviderDebts.vue?vue&type=template&id=c772d85a& */ "./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a&");
+/* harmony import */ var _ProviderDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProviderDebts.vue?vue&type=script&lang=js& */ "./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -868,9 +805,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ClientDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ClientDebts_vue_vue_type_template_id_31982639___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ClientDebts_vue_vue_type_template_id_31982639___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _ProviderDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -880,38 +817,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/views/ClientDebts.vue"
+component.options.__file = "resources/js/components/views/ProviderDebts.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/views/ClientDebts.vue?vue&type=script&lang=js&":
-/*!********************************************************************************!*\
-  !*** ./resources/js/components/views/ClientDebts.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************/
+/***/ "./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ClientDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ClientDebts.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ClientDebts.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ClientDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProviderDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ProviderDebts.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProviderDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/views/ClientDebts.vue?vue&type=template&id=31982639&":
-/*!**************************************************************************************!*\
-  !*** ./resources/js/components/views/ClientDebts.vue?vue&type=template&id=31982639& ***!
-  \**************************************************************************************/
+/***/ "./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a& ***!
+  \****************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClientDebts_vue_vue_type_template_id_31982639___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ClientDebts.vue?vue&type=template&id=31982639& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ClientDebts.vue?vue&type=template&id=31982639&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClientDebts_vue_vue_type_template_id_31982639___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ProviderDebts.vue?vue&type=template&id=c772d85a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ClientDebts_vue_vue_type_template_id_31982639___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
