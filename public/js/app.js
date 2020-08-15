@@ -3175,8 +3175,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       dateFormatted: '',
       boxEnabled: false,
       editadoBox: {
+        admi_fk: 0,
+        bocu_amountcash: 0,
+        bocu_amountsum: 0,
+        bocu_enddate: '',
+        bocu_initialamount: 0,
+        bocu_endamount: 0,
         bocu_startdate: '',
-        bocu_initialamount: 0
+        box_observation: '',
+        bocu_status: 1
+      },
+      editadoBoxDefault: {
+        admi_fk: 0,
+        bocu_amountcash: 0,
+        bocu_amountsum: 0,
+        bocu_enddate: '',
+        bocu_initialamount: 0,
+        bocu_endamount: 0,
+        bocu_startdate: '',
+        box_observation: '',
+        bocu_status: 1
       },
       caja: [],
       user: '',
@@ -3255,8 +3273,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       axios.get("/boxcut").then(function (response) {
-        console.log(response.data);
-        if (response.data.data == null) _this2.boxEnabled = true;else _this2.boxEnabled = false; //this.caja = response.data.data;
+        if (response.data.data == null) {
+          _this2.boxEnabled = true;
+        } else {
+          _this2.boxEnabled = false;
+          _this2.editadoBox = response.data.data;
+        }
       })["catch"](function (e) {
         console.log(e);
       });
@@ -3289,6 +3311,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           _this3.normal('Notificación', '¡Actualizado correctamente!', "success");
 
+          _this3.editadoBox = _this3.editadoBoxDefault;
+
           _this3.obtenerCaja();
         } else {
           _this3.normal('Notificación', response.data.message, "error");
@@ -3298,7 +3322,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(e);
       });
     },
-    guardarCierre: function guardarCierre() {},
+    guardarCierre: function guardarCierre() {
+      var _this4 = this;
+
+      this.editadoBox.bocu_enddate = this.dateFormatted;
+      axios.post('/box/update', this.editadoBox).then(function (response) {
+        console.log(response);
+
+        if (response.data.code == 200) {
+          _this4.dialogCerrarCaja = false;
+          _this4.textMsg = "¡Actualizado correctamente!";
+
+          _this4.normal('Notificación', '¡Actualizado correctamente!', "success");
+
+          _this4.editadoBox = _this4.editadoBoxDefault;
+
+          _this4.obtenerCaja();
+        } else {
+          _this4.normal('Notificación', response.data.message, "error");
+        }
+      })["catch"](function (e) {
+        //this.errors.push(e)
+        console.log(e);
+      });
+    },
     normal: function normal(Title, Description, Type) {
       this.notice = new crip_vue_notice__WEBPACK_IMPORTED_MODULE_1___default.a({
         title: Title,
@@ -30946,11 +30993,11 @@ var render = function() {
                     "v-form",
                     {
                       model: {
-                        value: _vm.validCaja,
+                        value: _vm.validCerrarCaja,
                         callback: function($$v) {
-                          _vm.validCaja = $$v
+                          _vm.validCerrarCaja = $$v
                         },
-                        expression: "validCaja"
+                        expression: "validCerrarCaja"
                       }
                     },
                     [
@@ -31005,11 +31052,15 @@ var render = function() {
                                       disabled: ""
                                     },
                                     model: {
-                                      value: _vm.dateFormatted,
+                                      value: _vm.editadoBox.bocu_startdate,
                                       callback: function($$v) {
-                                        _vm.dateFormatted = $$v
+                                        _vm.$set(
+                                          _vm.editadoBox,
+                                          "bocu_startdate",
+                                          $$v
+                                        )
                                       },
-                                      expression: "dateFormatted"
+                                      expression: "editadoBox.bocu_startdate"
                                     }
                                   })
                                 ],
@@ -31066,11 +31117,16 @@ var render = function() {
                                     },
                                     on: { keydown: _vm.isNumberValid },
                                     model: {
-                                      value: _vm.montoApertura,
+                                      value: _vm.editadoBox.bocu_initialamount,
                                       callback: function($$v) {
-                                        _vm.montoApertura = $$v
+                                        _vm.$set(
+                                          _vm.editadoBox,
+                                          "bocu_initialamount",
+                                          $$v
+                                        )
                                       },
-                                      expression: "montoApertura"
+                                      expression:
+                                        "editadoBox.bocu_initialamount"
                                     }
                                   })
                                 ],
@@ -31095,11 +31151,15 @@ var render = function() {
                                     },
                                     on: { keydown: _vm.isNumberValid },
                                     model: {
-                                      value: _vm.montoApertura,
+                                      value: _vm.editadoBox.bocu_endamount,
                                       callback: function($$v) {
-                                        _vm.montoApertura = $$v
+                                        _vm.$set(
+                                          _vm.editadoBox,
+                                          "bocu_endamount",
+                                          $$v
+                                        )
                                       },
-                                      expression: "montoApertura"
+                                      expression: "editadoBox.bocu_endamount"
                                     }
                                   })
                                 ],
@@ -31606,6 +31666,13 @@ var render = function() {
                               color: "deep-purple",
                               label: "Observaciones",
                               rows: "3"
+                            },
+                            model: {
+                              value: _vm.editadoBox.box_observation,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editadoBox, "box_observation", $$v)
+                              },
+                              expression: "editadoBox.box_observation"
                             }
                           })
                         ],
@@ -31635,7 +31702,7 @@ var render = function() {
                                 disabled: !_vm.validCerrarCaja,
                                 color: "teal accent-4"
                               },
-                              on: { click: _vm.guardar }
+                              on: { click: _vm.guardarCierre }
                             },
                             [_vm._v("Guardar")]
                           )
@@ -90728,175 +90795,175 @@ var map = {
 	],
 	"./Categorie.vue": [
 		"./resources/js/components/views/Categorie.vue",
-		2
+		1
 	],
 	"./ClientDebts.vue": [
 		"./resources/js/components/views/ClientDebts.vue",
-		45
+		2
 	],
 	"./ClientOrders.vue": [
 		"./resources/js/components/views/ClientOrders.vue",
-		46
+		3
 	],
 	"./Clients.vue": [
 		"./resources/js/components/views/Clients.vue",
-		47
+		4
 	],
 	"./ClientsRDetail.vue": [
 		"./resources/js/components/views/ClientsRDetail.vue",
-		48
+		5
 	],
 	"./ClientsReturn.vue": [
 		"./resources/js/components/views/ClientsReturn.vue",
-		49
+		6
 	],
 	"./ClientsReturnDetails.vue": [
 		"./resources/js/components/views/ClientsReturnDetails.vue",
-		50
+		7
 	],
 	"./ClientsReturnList.vue": [
 		"./resources/js/components/views/ClientsReturnList.vue",
-		51
+		8
 	],
 	"./Dashboard.vue": [
 		"./resources/js/components/views/Dashboard.vue",
-		10
+		9
 	],
 	"./DetailOrder.vue": [
 		"./resources/js/components/views/DetailOrder.vue",
-		52
+		10
 	],
 	"./DetailOrderRead.vue": [
 		"./resources/js/components/views/DetailOrderRead.vue",
-		53
+		11
 	],
 	"./DetailSale.vue": [
 		"./resources/js/components/views/DetailSale.vue",
-		54
+		12
 	],
 	"./Entities.vue": [
 		"./resources/js/components/views/Entities.vue",
-		14
+		13
 	],
 	"./Frequents.vue": [
 		"./resources/js/components/views/Frequents.vue",
-		55
+		14
 	],
 	"./Inventory.vue": [
 		"./resources/js/components/views/Inventory.vue",
-		16
+		15
 	],
 	"./Measurements.vue": [
 		"./resources/js/components/views/Measurements.vue",
-		17
+		16
 	],
 	"./OrderDetail.vue": [
 		"./resources/js/components/views/OrderDetail.vue",
-		56
+		17
 	],
 	"./PaymentMethods.vue": [
 		"./resources/js/components/views/PaymentMethods.vue",
-		19
+		18
 	],
 	"./PaymentShapes.vue": [
 		"./resources/js/components/views/PaymentShapes.vue",
-		20
+		19
 	],
 	"./PointOfSale.vue": [
 		"./resources/js/components/views/PointOfSale.vue",
-		21
+		20
 	],
 	"./Product.vue": [
 		"./resources/js/components/views/Product.vue",
-		57
+		21
 	],
 	"./Proveedores.vue": [
 		"./resources/js/components/views/Proveedores.vue",
-		23
+		22
 	],
 	"./ProviderDebts.vue": [
 		"./resources/js/components/views/ProviderDebts.vue",
-		58
+		23
 	],
 	"./ProvidersReturn.vue": [
 		"./resources/js/components/views/ProvidersReturn.vue",
-		59
+		24
 	],
 	"./ProvidersReturnDetail.vue": [
 		"./resources/js/components/views/ProvidersReturnDetail.vue",
-		60
+		25
 	],
 	"./ProvidersReturnList.vue": [
 		"./resources/js/components/views/ProvidersReturnList.vue",
-		27
+		26
 	],
 	"./PurchaseList.vue": [
 		"./resources/js/components/views/PurchaseList.vue",
-		61
+		27
 	],
 	"./PurchaseOrder.vue": [
 		"./resources/js/components/views/PurchaseOrder.vue",
-		62
+		28
 	],
 	"./PurchaseOrdersList.vue": [
 		"./resources/js/components/views/PurchaseOrdersList.vue",
-		63
+		29
 	],
 	"./Purchases.vue": [
 		"./resources/js/components/views/Purchases.vue",
-		64
+		30
 	],
 	"./PurchasesDetail.vue": [
 		"./resources/js/components/views/PurchasesDetail.vue",
-		65
+		31
 	],
 	"./ReturnList.vue": [
 		"./resources/js/components/views/ReturnList.vue",
-		33
+		32
 	],
 	"./ReturnMotives.vue": [
 		"./resources/js/components/views/ReturnMotives.vue",
-		34
+		33
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
-		35
+		34
 	],
 	"./SalesDetail.vue": [
 		"./resources/js/components/views/SalesDetail.vue",
-		66
+		35
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		37
+		36
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		38
+		37
 	],
 	"./TransferDetail.vue": [
 		"./resources/js/components/views/TransferDetail.vue",
-		67
+		38
 	],
 	"./TransferDetailView.vue": [
 		"./resources/js/components/views/TransferDetailView.vue",
-		68
+		39
 	],
 	"./TransferList.vue": [
 		"./resources/js/components/views/TransferList.vue",
-		41
+		40
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		44
+		43
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		69
+		41
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		43
+		42
 	]
 };
 function webpackAsyncContext(req) {

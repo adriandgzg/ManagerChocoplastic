@@ -105,9 +105,33 @@ class BoxCutController extends Controller
      * @param  \App\BoxCut  $boxCut
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, BoxCut $boxCut)
+    public function update(Request $request)
     {
-        //
+        try{
+
+            \DB::update("update box_cuts set"
+        . "   bocu_enddate = '" . $request->bocu_enddate 
+        . "', bocu_status = 2 " 
+        . ",  bocu_endamount  = '" .  $request->bocu_endamount
+        . "', box_observation = '" .  $request->box_observation
+        . "' where bocu_pk = ". $request->bocu_pk);
+
+            
+          
+            return response()->json([
+                'code' => 200,
+                'success' => true,
+                'message' => 'Caja cargada',
+                'data' => null
+                
+            ], 200);
+
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        }
+
     }
 
     /**

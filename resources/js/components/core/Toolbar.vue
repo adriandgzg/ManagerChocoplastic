@@ -43,7 +43,7 @@
         <v-card-title class="cyan white--text">
             <span class="headline">Cierre de Caja</span>
         </v-card-title>
-        <v-form v-model="validCaja" >
+        <v-form v-model="validCerrarCaja" >
           <v-card-text>
             <v-row>
               <v-col cols="12" md="12" style="padding: 0px 12px 0px 12px;">  
@@ -53,7 +53,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">  
-                <v-text-field v-model="dateFormatted" label="Inicio de Caja" prepend-icon="event"
+                <v-text-field v-model="editadoBox.bocu_startdate" label="Inicio de Caja" prepend-icon="event"
                            disabled></v-text-field>
               </v-col>
               <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">  
@@ -63,13 +63,13 @@
             </v-row>
             <v-row>
               <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">  
-                <v-text-field v-model="montoApertura" label="Monto de Apertura" 
+                <v-text-field v-model="editadoBox.bocu_initialamount" label="Monto de Apertura" 
                           prepend-icon="mdi-square-inc-cash" disabled
                           prefix="" type="number" v-on:keydown="isNumberValid" 
                           :rules="numberRules" required></v-text-field>
               </v-col>
               <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">   
-                <v-text-field v-model="montoApertura" label="Monto de Cierre" 
+                <v-text-field v-model="editadoBox.bocu_endamount" label="Monto de Cierre" 
                           prepend-icon="mdi-square-inc-cash"
                           prefix="" type="number" v-on:keydown="isNumberValid" 
                           :rules="numberRules" required></v-text-field>
@@ -175,13 +175,13 @@
               </v-col>
             </v-row>
            
-               <v-textarea auto-grow
+               <v-textarea auto-grow v-model="editadoBox.box_observation"
                     filled color="deep-purple" label="Observaciones" rows="3"></v-textarea>
               </v-card-text>
           <v-spacer></v-spacer>
           <v-card-actions>
               <v-btn color="blue-grey" class="ma-2 white--text" @click="cancelarCerrar">Cancelar</v-btn>
-              <v-btn :disabled="!validCerrarCaja" color="teal accent-4" class="ma-2 white--text" @click="guardar">Guardar</v-btn>
+              <v-btn :disabled="!validCerrarCaja" color="teal accent-4" class="ma-2 white--text" @click="guardarCierre">Guardar</v-btn>
           </v-card-actions>
         </v-form>
           
@@ -244,9 +244,27 @@ import CripNotice from "crip-vue-notice";
             validCaja:false,         
             dateFormatted:'',
             boxEnabled:false,   
-            editadoBox:{
+            editadoBox:{                            
+              admi_fk: 0,
+              bocu_amountcash: 0,
+              bocu_amountsum: 0,
+              bocu_enddate: '',
+              bocu_initialamount:0,
+              bocu_endamount:0,
               bocu_startdate:'',
-              bocu_initialamount:0
+              box_observation:'',
+              bocu_status:1
+            },
+            editadoBoxDefault:{                            
+              admi_fk: 0,
+              bocu_amountcash: 0,
+              bocu_amountsum: 0,
+              bocu_enddate: '',
+              bocu_initialamount:0,
+              bocu_endamount:0,
+              bocu_startdate:'',
+              box_observation:'',
+              bocu_status:1
             },
             caja:[],   
             user:'',
@@ -321,13 +339,13 @@ import CripNotice from "crip-vue-notice";
       axios
         .get("/boxcut")
         .then(response => {
-          console.log(response.data)
-          if(response.data.data == null)
+          if(response.data.data == null){
             this.boxEnabled = true
-          else
+            }
+          else{
             this.boxEnabled = false
-
-          //this.caja = response.data.data;
+            this.editadoBox = response.data.data;
+          }
         })
         .catch(e => {
           console.log(e);
@@ -359,6 +377,7 @@ import CripNotice from "crip-vue-notice";
                     this.dialogCaja = false
                     this.textMsg = "¡Actualizado correctamente!";
                     this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+                    this.editadoBox = this.editadoBoxDefault;
                    this.obtenerCaja();
                   }
                   else{
@@ -371,7 +390,32 @@ import CripNotice from "crip-vue-notice";
                     console.log(e)
                     })
     },
-    guardarCierre(){},
+
+    
+    guardarCierre(){
+      this.editadoBox.bocu_enddate = this.dateFormatted;
+      
+      axios.post('/box/update', this.editadoBox)
+                .then(response => {
+                  console.log(response)
+                  if(response.data.code == 200){
+                    this.dialogCerrarCaja = false
+                    this.textMsg = "¡Actualizado correctamente!";
+                    this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+                    this.editadoBox = this.editadoBoxDefault;
+                   this.obtenerCaja();                   
+                  }
+                  else{
+                    this.normal('Notificación',response.data.message ,"error");                    
+                  }
+                
+                })
+                .catch(e => {
+                    //this.errors.push(e)
+                    console.log(e)
+                    })
+
+    },
     normal(Title, Description, Type) {
             this.notice = new CripNotice({
                 title: Title,

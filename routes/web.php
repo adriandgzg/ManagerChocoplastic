@@ -171,6 +171,7 @@ Route::post('provider/return/details/destroy', 'ProviderReturnDetailController@d
 //Corte de caja
 Route::get('/boxcut', 'BoxCutController@index');
 Route::post('/box/insert', 'BoxCutController@store'); //Guardar Corte de caja
+Route::post('/box/update', 'BoxCutController@update'); //Guardar Corte de caja
 
 
 
