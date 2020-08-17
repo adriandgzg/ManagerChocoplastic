@@ -24,12 +24,23 @@ class CreateAdminsTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+
         DB::table('admins')->insert(
             array(
                 'name' => 'SuperAdmin',
                 'email' => 'admin@admin.com',
                 'password' => Hash::make('admin'),
                 'store_id' => 1
+            )
+        );
+
+        DB::table('admins')->insert(
+            array(
+                'name' => 'Francisco Gabriel Alvarez Alcaraz',
+                'email' => 'fgaa@chocoplastic.com',
+                'password' => Hash::make('choco'),
+                'store_id' => 2
             )
         );
 

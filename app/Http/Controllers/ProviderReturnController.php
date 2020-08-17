@@ -23,8 +23,8 @@ class ProviderReturnController extends ApiResponseController
      */
     public function index()
     {
-        try {
-
+        try 
+        {
             $vProviderReturns = DB::table('provider_returns AS PR')
                 ->join('provider_purchases AS PP', 'PP.prpu_pk', '=', 'PR.prpu_fk')
                 ->join('providers AS P', 'P.prov_pk', '=', 'PR.prov_fk')
@@ -97,17 +97,22 @@ class ProviderReturnController extends ApiResponseController
             return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
         }
 
-        try {
+        try 
+        {
             //Asignacion de variables
-           $vprpu_pk = $vInput['prpu_pk'];
+           $vprpu_pk = $vInput['prpu_pk']; //PK Compra
 
+           //Consulta de Compra Proveedor
             $vProviderPurchase = ProviderPurchase::where('prpu_pk', '=', $vprpu_pk)
-                        ->whereIn('prpu_status', [2, 3])
-                        ->first();
+                ->whereIn('prpu_status', [2, 3])
+                ->first();
 
+            //Validar si la compra existe 
             if($vProviderPurchase)
             { 
+                //Consultar Devolución
                 $vProviderReturn = ProviderReturn::where('prpu_fk', '=', $vprpu_pk)->first();
+                //Validar si existe una devolución de esa compra
 
                 if($vProviderReturn)
                 {
@@ -115,17 +120,32 @@ class ProviderReturnController extends ApiResponseController
                 }
                 else
                 {
-                    //Insertar Encabezado de Devolución Proveedor
-                    $vSelPP = ProviderPurchase::where('prpu_pk', '=', $vprpu_pk)
-                    ->select(
+                    //Consulta de Compra Proveedor
+                    //$vPPS = ProviderPurchase::where('prpu_pk', '=', $vprpu_pk)->first();
+                    /*->select(
                         'prov_fk', 
                         'prpu_pk AS prpu_fk',
                         'stor_fk', 
                         DB::raw("1 AS prre_status"),
                         DB::raw("NOW() AS created_at"),
                         DB::raw("NOW() AS updated_at")
-                    );
-                    DB::table('provider_returns')
+                    );*/
+
+                    //Inserción Encabezado de Devolución Proveedor
+                    $vPRI = new ProviderReturn();
+                    $vPRI->prpu_fk = $vProviderPurchase->prpu_pk;
+                    $vPRI->prov_fk = $vProviderPurchase->prov_fk;
+                    $vPRI->stor_fk = $vProviderPurchase->stor_fk;
+                    $vPRI->prre_status = 1;
+                    $vPRI->save();
+
+                    //Asignación de PK de Devolución Proveedor
+                    $vprre_pk = $vPRI->prre_pk; 
+
+                    //////////////////  Inserción de Log  //////////////////
+                    $this->getstorelog('provider_returns', $vprre_pk, 1);
+
+                    /*DB::table('provider_returns')
                         ->insertUsing(
                             [
                                 'prov_fk', 
@@ -135,9 +155,42 @@ class ProviderReturnController extends ApiResponseController
                                 'created_at', 
                                 'updated_at'
                             ]
-                        , $vSelPP);
+                        , $vSelPP);*/
+
+
+                    //Insertar Detallado de Devolución
+                    $vSelPPD = ProviderPurchaseDetail::where('prpu_fk', '=', $vprpu_pk)->where('prpd_status', '=', 1)
+                    ->select(
+                        array(
+                            DB::raw("$vprre_pk AS prre_fk"),
+                            'prod_fk AS prod_fk',
+                            'meas_fk AS meas_fk',
+                            'prpd_quantity AS prrd_quantity',
+                            'prpd_quantity AS prrd_quantity_purchase',
+                            'prpd_price AS prrd_price',
+                            DB::raw("1 AS prrd_status"),
+                            DB::raw("NOW() AS created_at"),
+                            DB::raw("NOW() AS updated_at")
+                        )
+                    );
+
+                    DB::table('provider_return_details')
+                        ->insertUsing(
+                            [
+                                'prre_fk',
+                                'prod_fk', 
+                                'meas_fk',
+                                'prrd_quantity', 
+                                'prrd_quantity_purchase', 
+                                'prrd_price', 
+                                'prrd_status', 
+                                'created_at', 
+                                'updated_at'
+                            ]
+                        , $vSelPPD);
                 }
 
+                //Consulta Devolución Proveedor
                 $vProviderReturns = DB::table('provider_returns AS PR')
                     ->join('provider_purchases AS PP', 'PP.prpu_pk', '=', 'PR.prpu_fk')
                     ->join('providers AS P', 'P.prov_pk', '=', 'PR.prov_fk')
@@ -172,45 +225,9 @@ class ProviderReturnController extends ApiResponseController
                     )
                     ->where('PR.prpu_fk', '=', $vprpu_pk)
                     ->first();
+              
 
-                if($vProviderReturn)
-                {
-
-                }
-                else
-                {
-                    //Insertar Detallado de Devolución
-                    $vSelPPD = ProviderPurchaseDetail::where('prpu_fk', '=', $vprpu_pk)->where('prpd_status', '=', 1)
-                    ->select(
-                        array(
-                            DB::raw("$vProviderReturns->prre_pk AS clre_fk"),
-                            'prod_fk AS prod_fk',
-                            'meas_fk AS meas_fk',
-                            'prpd_quantity AS prrd_quantity',
-                            'prpd_quantity AS prrd_quantity_purchase',
-                            'prpd_price AS prrd_price',
-                            DB::raw("1 AS prrd_status"),
-                            DB::raw("NOW() AS created_at"),
-                            DB::raw("NOW() AS updated_at")
-                        )
-                    );
-
-                    DB::table('provider_return_details')
-                        ->insertUsing(
-                            [
-                                'prre_fk',
-                                'prod_fk', 
-                                'meas_fk',
-                                'prrd_quantity', 
-                                'prrd_quantity_purchase', 
-                                'prrd_price', 
-                                'prrd_status', 
-                                'created_at', 
-                                'updated_at'
-                            ]
-                        , $vSelPPD);
-                }
-
+                //Consultar Devolución Detallado 
                 $vProviderReturnDetails = DB::table('provider_return_details AS PRD')
                     ->join('products AS P', 'P.prod_pk', '=', 'PRD.prod_fk')
                     ->join('measurements AS M', 'M.meas_pk', '=', 'PRD.meas_fk')
@@ -251,7 +268,7 @@ class ProviderReturnController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -264,7 +281,8 @@ class ProviderReturnController extends ApiResponseController
     public function show($prre_pk)
     {
 
-        try {
+        try 
+        {
             //Asignacion de variables
             $vprre_pk = $prre_pk;
 
@@ -351,7 +369,7 @@ class ProviderReturnController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -386,7 +404,8 @@ class ProviderReturnController extends ApiResponseController
             return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
         }
 
-        try {
+        try 
+        {
             //Asignacion de variables
             $vprre_pk = $vInput['prre_pk'];
             $vremo_fk = $vInput['remo_fk'];
@@ -397,12 +416,12 @@ class ProviderReturnController extends ApiResponseController
 
             if($vProviderReturn)
             { 
-
-                //Validar Detallado de la Devolución
+                //Consulta Devolución Detallado
                 $vPRD = ProviderReturnDetail::where('prre_fk', '=', $vprre_pk)
                         ->where('prrd_status', '=', 1)
                         ->get();
 
+                //Validar Devolución Detallado
                 foreach($vPRD as $vP)
                 {
                     //Datos del Producto a devolver
@@ -418,7 +437,6 @@ class ProviderReturnController extends ApiResponseController
                     if ($vPI) 
                     {
                         //Datos del producto en el Inventario
-                        $vprin_pk = $vPI->prin_pk; //Llave primaria del Inventario
                         $vprin_stock = $vPI->prin_stock; //Stock actual
 
                         //Validar la cantidad del producto
@@ -431,18 +449,18 @@ class ProviderReturnController extends ApiResponseController
                         {
                             //Producto Insuficiente para Devolución
                             $vVal_Dev = false;
-
+                            break;
                         }
-                        
                     } 
                     else 
                     {
                         //Producto NO Encontrado, NO se puede devolver
                         $vVal_Dev = false;
+                        break;
                     }
                 }
 
-                //Validar si es factible hacer toda la devolucion
+                //Validar si es posible hacer toda la devolucion
                 if ($vVal_Dev) {
                     //Modificar Devolución (Finalizar)
                     DB::table('provider_returns')
@@ -452,9 +470,40 @@ class ProviderReturnController extends ApiResponseController
                         'remo_fk' =>  $vremo_fk, 
                         'prre_observation' =>  $vprre_observation
                     ]);
+
+                    //////////////////  Inserción de Log  //////////////////
+                    $this->getstorelog('provider_returns', $vprre_pk, 2);
+
+                    //Aplicar modificación de Inventario
+                    foreach($vPRD as $vP)
+                    {
+                        //Datos del Producto a devolver
+                        $vprod_fk = $vP->prod_fk;
+                        $vprrd_quantity = $vP->prrd_quantity;
+
+                        //Buscar el Producto en el Inventario de la Sucursal 
+                        $vPI = ProductInventory::where('prod_fk', '=', $vprod_fk)
+                            ->where('prin_status', '=', 1)
+                            ->where('stor_fk', '=', $vProviderReturn->stor_fk)
+                            ->first();
+
+                        $vprin_pk = $vPI->prin_pk; //PK Inventario
+                        $vprin_stock = $vPI->prin_stock; //Stock actual
+
+                        //Modificar Inventario
+                        $vPIU = ProductInventory::find($vprin_pk);
+                        $vPIU->prin_stock = $vprin_stock - $vprrd_quantity;
+                        $vPIU->save();
+
+                        //////////////////  Inserción de Log  //////////////////
+                        $this->getstorelog('product_inventories', $vprin_pk, 2);
+                    }
+
                     return $this->dbResponse($vprre_pk, 200, null, 'Devolución Finalizada Correctamente');
-                } else {
-                    return $this->dbResponse($vprre_pk, 501, null, 'Artículos insuficientes para devolución. Revisar Inventario Actual');
+                } 
+                else 
+                {
+                    return $this->dbResponse($vprre_pk, 501, null, 'Productos insuficientes para devolución. Revisar Inventario Actual');
                 }
             }
             else
@@ -462,8 +511,10 @@ class ProviderReturnController extends ApiResponseController
                 return $this->dbResponse($vprre_pk, 404, null, 'Devolución NO Encontrada');
             }
 
-        } catch (Throwable $vTh) {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.'); 
         }
     }
 

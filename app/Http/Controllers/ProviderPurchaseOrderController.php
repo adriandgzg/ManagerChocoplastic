@@ -49,7 +49,6 @@ class ProviderPurchaseOrderController extends ApiResponseController
                 ->get();
             
             return $this->dbResponse($vPPO, 200, null, 'Lista de Ordenes de Compra de Proveedor');
-          
         } 
         catch (Throwable $vTh) 
         {
@@ -103,13 +102,16 @@ class ProviderPurchaseOrderController extends ApiResponseController
             $vPPO = ProviderPurchaseOrder::where('prpo_pk', '=', $vprpo_pk)->first();
             if ($vPPO) 
             {
-                //Modificar Orden de Compra Detalle
+                //Modificar Orden de Compra 
                 $vPPOU = ProviderPurchaseOrder::find($vprpo_pk);
                 $vPPOU->prov_fk = $vprov_fk;
                 $vPPOU->stor_fk = $vstor_fk;
                 $vPPOU->prpo_identifier = $vprpo_identifier;
                 $vPPOU->prpo_status = 2;
                 $vPPOU->save();
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('provider_purchase_orders', $vprpo_pk, 2);
 
                 //Modificar Folio de la Orden de Compra del Proveedor
                 DB::table('systems')
@@ -248,6 +250,8 @@ class ProviderPurchaseOrderController extends ApiResponseController
                 $vPPOU->prpo_status = 0;
                 $vPPOU->save();
 
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('provider_purchase_orders', $vprpo_pk, 3);
                     
                 return $this->dbResponse($vprpo_pk, 200, null, 'Orden Compra Eliminado Correctamente');
             }

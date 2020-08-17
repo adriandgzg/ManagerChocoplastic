@@ -19,8 +19,8 @@ class CreateLogsTable extends Migration
             $table->string('table', 100);
             $table->bigInteger('pk_register');
             $table->smallInteger('operation');
-            $table->text('observation');
-            $table->text('query');
+            $table->text('observation')->nullable();
+            $table->text('query')->nullable();
             $table->timestamps();
         });
     }

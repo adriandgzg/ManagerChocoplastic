@@ -22,13 +22,16 @@ class ProductController extends ApiResponseController
      */
     public function index(int $prca_fk)
     {
-        try {
+        try 
+        {
             //Sucursal al que pertenece el Usuario App
             $vStore_PK = Auth::user()->stor_fk;
 
-            $vStore = Store::where('stor_pk', '=', $vStore_PK)->first();
-           
-            $vProducts = DB::table('products AS P')
+            //Consulta de productos principales
+            $vProducts = 
+                DB::table('product_inventories AS PI')
+                ->join('stores AS S', 'S.stor_pk', '=', 'PI.stor_fk')
+                ->join('products AS P', 'P.prod_pk', '=', 'PI.prod_fk')
                 ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
                 ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
                 ->select
@@ -38,64 +41,82 @@ class ProductController extends ApiResponseController
                     'P.prod_name AS ProductName',
                     'P.prod_description AS ProductDescription',
                     'P.prod_image AS ProductImage',
-                    'P.prod_saleprice AS SalePrice',
-                    'P.prod_listprice AS ListPrice',
+                    'P.prod_saleprice AS RetailPrice',
+                    'P.prod_listprice AS WholesalePrice',
+                    'P.prod_minimumpurchase AS MinimumPurchase',
                     'P.prod_bulk AS Bulk',
-                    DB::raw("10 AS Stock"),
+                    'PI.prin_stock AS Stock',
                     'PC.prca_name AS Category',
                     'MO.meas_name AS Measurement',
-                    DB::raw("'$vStore->stor_name' AS Store")
+                    'S.stor_name AS Store'
                 )
-                ->where('prod_status', '=', 1)
-                ->where('prca_fk', '=', $prca_fk)
+                ->where('PI.prin_status', '=', 1)
+                ->where('P.prod_status', '=', 1)
+                ->where('PI.stor_fk', '=', $vStore_PK)
+                ->where('P.prca_fk', '=', $prca_fk)
                 ->whereNull('P.prod_main_pk')
                 ->orderBy('P.prod_pk')
                 ->get();
-                
 
-                $vProdJson = array();
+            $vProdJson = array();
 
-                foreach($vProducts AS $vP)
-                {
+            //Recorrido de productos principales
+            foreach($vProducts AS $vP)
+            {
+                //Busqueda de productos variantes
+                $vProdVariats = 
+                    DB::table('products AS P')
+                        ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                        ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                        ->select(
+                            'P.prod_pk AS PK_Product',
+                            'P.prod_saleprice AS RetailPrice',
+                            'P.prod_bulk AS Bulk',
+                            DB::raw("$vP->Stock / P.prod_fact_convert  AS Stock"),
+                            'MO.meas_name AS Measurement'
+                        )
+                        ->where('prod_status', '=', 1)
+                        ->where('P.prod_main_pk', '=', $vP->PK_Product)
+                        ->orderBy('P.prod_pk')
+                        ->get();
 
-                    $vProdVariats = DB::table('products AS P')
-                    ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
-                    ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
-                    ->select(
-                        'P.prod_pk AS PK_Product',
-                        'P.prod_saleprice AS SalePrice',
-                        'P.prod_listprice AS ListPrice',
-                        'P.prod_bulk AS Bulk',
-                        DB::raw("2 AS Stock"),
-                        'MO.meas_name AS Measurement'
-                    )
-                    ->where('prod_status', '=', 1)
-                    ->where('P.prod_main_pk', '=', $vP->PK_Product)
-                    ->orderBy('P.prod_pk')
-                    ->get();
+                //Consultar Suma de Cantidad Preventa (Pedidos Pendientes)
+                $vSumclod_quantity  =  DB::table('client_orders AS CO')
+                    ->join('client_order_details AS COD', 'CO.clor_pk', '=', 'COD.clor_fk')
+                    ->join('products AS P', 'COD.prod_fk', '=', 'P.prod_pk')
+                    ->where('CO.stor_fk', '=', $vStore_PK)
+                    ->where('CO.clor_status', '=', 1)
+                    ->where('COD.clod_status', '=', 1)
+                    ->where('clod_status', '=', 1)
+                    ->where('COD.prod_fk', '=', $vP->PK_Product)
+                    ->whereNull('P.prod_main_pk')
+                    ->sum('COD.clod_quantity');
 
-                    $vPP = 
-                        array(
-                            "PK_Product" => $vP->PK_Product,
-                            "ProductIdentifier" => $vP->ProductIdentifier,
-                            "ProductName" => $vP->ProductName,
-                            "ProductDescription" => $vP->ProductDescription,
-                            "ProductImage" => $vP->ProductImage,
-                            "SalePrice" => $vP->SalePrice,
-                            "ListPrice" => $vP->ListPrice,
-                            "Stock" => $vP->Stock,
-                            "Category" => $vP->Category,
-                            "Measurement" => $vP->Measurement,
-                            "Store" => $vP->Store,
-                            "VariatsInfo" => $vProdVariats
-                        );
-                        array_push($vProdJson, $vPP);
-                } 
-                
+                    
+                //Lista final de productos con los variantes 
+                $vPP = array(
+                    "PK_Product" => $vP->PK_Product,
+                    "ProductIdentifier" => $vP->ProductIdentifier,
+                    "ProductName" => $vP->ProductName,
+                    "ProductDescription" => $vP->ProductDescription,
+                    "ProductImage" => $vP->ProductImage,
+                    "RetailPrice" => $vP->RetailPrice,
+                    "WholesalePrice" => $vP->WholesalePrice,
+                    "Stock" => $vP->Stock - $vSumclod_quantity,
+                    "Category" => $vP->Category,
+                    "Measurement" => $vP->Measurement,
+                    "Store" => $vP->Store,
+                    "VariatsInfo" => $vProdVariats
+                );
+                //Anexo de producto a la lista principal
+                array_push($vProdJson, $vPP);
+            } 
             
             return $this->dbResponse($vProdJson, 200, null, 'Lista de Productos, filtrada por Sucursal y Categoría');
           
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             return $this->dbResponse(null, 500, $e, null);
         }
     }
@@ -427,18 +448,16 @@ class ProductController extends ApiResponseController
 
 
 
-    public function search(int $isSKU, string $text)
+    public function search(int $isSKU, string $vText)
     {
-        try {
+        try 
+        {
             //Sucursal al que pertenece el Usuario App
             $vStore_PK = Auth::user()->stor_fk;
 
-            $vStore = Store::where('stor_pk', '=', $vStore_PK)->first();
-           
-
             if($isSKU == 1)
             {
-                $vProducts = DB::table('products AS P')
+                /*$vProducts = DB::table('products AS P')
                     ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
                     ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
                     ->select(
@@ -458,11 +477,93 @@ class ProductController extends ApiResponseController
                     ->where('P.prod_status', '=', 1)
                     ->where('P.prod_identifier', '=', $text)
                     ->orderBy('P.prod_pk')
+                    ->get();*/
+                
+                $vProducts = DB::table('product_inventories AS PI')
+                    ->join('stores AS S', 'S.stor_pk', '=', 'PI.stor_fk')
+                    ->join('products AS P', 'P.prod_pk', '=', 'PI.prod_fk')
+                    ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                    ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                    ->select
+                    (
+                        'P.prod_pk AS PK_Product',
+                        'P.prod_identifier AS ProductIdentifier',
+                        'P.prod_name AS ProductName',
+                        'P.prod_description AS ProductDescription',
+                        'P.prod_image AS ProductImage',
+                        'P.prod_saleprice AS RetailPrice',
+                        'P.prod_listprice AS WholesalePrice',
+                        'P.prod_minimumpurchase AS MinimumPurchase',
+                        'P.prod_bulk AS Bulk',
+                        'PI.prin_stock AS Stock',
+                        'PC.prca_name AS Category',
+                        'MO.meas_name AS Measurement',
+                        'S.stor_name AS Store'
+                    )
+                    ->where('PI.prin_status', '=', 1)
+                    ->where('PI.stor_fk', '=', $vStore_PK)
+                    ->where('P.prod_status', '=', 1)
+                    ->whereNull('P.prod_main_pk')
+                    ->where('P.prod_identifier', '=', $vText)
                     ->get();
+
+                    $vProdJson = array();
+
+                //Recorrido de productos principales
+                foreach($vProducts AS $vP)
+                {
+                    //Busqueda de productos variantes
+                    $vProdVariats = 
+                        DB::table('products AS P')
+                            ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                            ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                            ->select(
+                                'P.prod_pk AS PK_Product',
+                                'P.prod_saleprice AS RetailPrice',
+                                'P.prod_bulk AS Bulk',
+                                DB::raw("$vP->Stock / P.prod_fact_convert  AS Stock"),
+                                'MO.meas_name AS Measurement'
+                            )
+                        ->where('prod_status', '=', 1)
+                        ->where('P.prod_main_pk', '=', $vP->PK_Product)
+                        ->orderBy('P.prod_pk')
+                        ->get();
+
+                    //Consultar Suma de Cantidad Preventa (Pedidos Pendientes)
+                    $vSumclod_quantity  =  DB::table('client_orders AS CO')
+                    ->join('client_order_details AS COD', 'CO.clor_pk', '=', 'COD.clor_fk')
+                    ->join('products AS P', 'COD.prod_fk', '=', 'P.prod_pk')
+                    ->where('CO.stor_fk', '=', $vStore_PK)
+                    ->where('CO.clor_status', '=', 1)
+                    ->where('COD.clod_status', '=', 1)
+                    ->where('clod_status', '=', 1)
+                    ->where('COD.prod_fk', '=', $vP->PK_Product)
+                    ->whereNull('P.prod_main_pk')
+                    ->sum('COD.clod_quantity');
+                        
+                    //Lista final de productos con los variantes 
+                    $vPP = array(
+                        "PK_Product" => $vP->PK_Product,
+                        "ProductIdentifier" => $vP->ProductIdentifier,
+                        "ProductName" => $vP->ProductName,
+                        "ProductDescription" => $vP->ProductDescription,
+                        "ProductImage" => $vP->ProductImage,
+                        "RetailPrice" => $vP->RetailPrice,
+                        "WholesalePrice" => $vP->WholesalePrice,
+                        "Stock" => $vP->Stock - $vSumclod_quantity,
+                        "Category" => $vP->Category,
+                        "Measurement" => $vP->Measurement,
+                        "Store" => $vP->Store,
+                        "VariatsInfo" => $vProdVariats
+                    );
+                    //Anexo de producto a la lista principal
+                    array_push($vProdJson, $vPP);
+                }
+
             }
             else
             {
-                $vProducts = DB::table('products AS P')
+                /*$vProducts = DB::table('products AS P')
                     ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
                     ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
                     ->select(
@@ -484,13 +585,91 @@ class ProductController extends ApiResponseController
                     ->orWhere('P.prod_name', 'LIKE', '%' . $text . '%')
                     ->orWhere('P.prod_description', 'LIKE', '%' . $text . '%')
                     ->orderBy('P.prod_pk')
+                    ->get();*/
+
+
+                //Consulta de productos principales
+                $vProducts = DB::table('product_inventories AS PI')
+                    ->join('stores AS S', 'S.stor_pk', '=', 'PI.stor_fk')
+                    ->join('products AS P', 'P.prod_pk', '=', 'PI.prod_fk')
+                    ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                    ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                    ->select
+                    (
+                        'P.prod_pk AS PK_Product',
+                        'P.prod_identifier AS ProductIdentifier',
+                        'P.prod_name AS ProductName',
+                        'P.prod_description AS ProductDescription',
+                        'P.prod_image AS ProductImage',
+                        'P.prod_saleprice AS RetailPrice',
+                        'P.prod_listprice AS WholesalePrice',
+                        'P.prod_minimumpurchase AS MinimumPurchase',
+                        'P.prod_bulk AS Bulk',
+                        'PI.prin_stock AS Stock',
+                        'PC.prca_name AS Category',
+                        'MO.meas_name AS Measurement',
+                        'S.stor_name AS Store'
+                    )
+                    ->whereNull('P.prod_main_pk')
+                    ->where('PI.prin_status', '=', 1)
+                    ->where('P.prod_status', '=', 1)
+                    ->where(function($vSubQuery) use($vText) {
+                        return  $vSubQuery->Where('P.prod_identifier', 'LIKE', '%' . $vText . '%')
+                            ->orWhere('P.prod_name', 'LIKE', '%' . $vText . '%')
+                        ->orWhere('P.prod_description', 'LIKE', '%' . $vText . '%');
+                    })
+                    ->orderBy('P.prod_pk')
                     ->get();
+
+
+                $vProdJson = array();
+
+                //Recorrido de productos principales
+                foreach($vProducts AS $vP)
+                {
+                    //Busqueda de productos variantes
+                    $vProdVariats = 
+                        DB::table('products AS P')
+                            ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                            ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                            ->select(
+                                'P.prod_pk AS PK_Product',
+                                'P.prod_saleprice AS RetailPrice',
+                                'P.prod_bulk AS Bulk',
+                                DB::raw("$vP->Stock / P.prod_fact_convert  AS Stock"),
+                                'MO.meas_name AS Measurement'
+                            )
+                        ->where('prod_status', '=', 1)
+                        ->where('P.prod_main_pk', '=', $vP->PK_Product)
+                        ->orderBy('P.prod_pk')
+                        ->get();
+                        
+                    //Lista final de productos con los variantes 
+                    $vPP = array(
+                        "PK_Product" => $vP->PK_Product,
+                        "ProductIdentifier" => $vP->ProductIdentifier,
+                        "ProductName" => $vP->ProductName,
+                        "ProductDescription" => $vP->ProductDescription,
+                        "ProductImage" => $vP->ProductImage,
+                        "RetailPrice" => $vP->RetailPrice,
+                        "WholesalePrice" => $vP->WholesalePrice,
+                        "Stock" => $vP->Stock,
+                        "Category" => $vP->Category,
+                        "Measurement" => $vP->Measurement,
+                        "Store" => $vP->Store,
+                        "VariatsInfo" => $vProdVariats
+                    );
+                    //Anexo de producto a la lista principal
+                    array_push($vProdJson, $vPP);
+                }
 
             }
 
-            return $this->dbResponse($vProducts, 200, null, 'Resultado de Busqueda por texto');
+            return $this->dbResponse($vProdJson, 200, null, 'Resultado de Busqueda por texto');
           
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             return $this->dbResponse(null, 500, $e, null);
         }
     }

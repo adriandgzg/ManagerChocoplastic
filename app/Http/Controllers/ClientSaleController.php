@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Exception;
 use Throwable;
 use Validator;
-use DB;
-use App\ClientDebt;
 use App\System;
+use App\ClientDebt;
 use App\ClientSale;
 use App\ClientOrder;
-use App\ClientOrderDetail;
 use App\ClientPayment;
+use App\ClientSaleDetail;
+use App\ProductInventory;
+use App\ClientOrderDetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
 
@@ -91,7 +93,8 @@ class ClientSaleController extends ApiResponseController
         ]);
 
 
-        if ($validator->fails()) {
+        if ($validator->fails()) 
+        {
             return response()->json([
                 'code' => 500,
                 'success' => false,
@@ -100,7 +103,8 @@ class ClientSaleController extends ApiResponseController
 
         }
 
-        try {
+        try 
+        {
             //Asignacion de variables
            $vclor_pk = $vInput['clor_pk'];
 
@@ -108,8 +112,8 @@ class ClientSaleController extends ApiResponseController
 
             if($vClientOrder)
             { 
-                //Insertar Encabezado de Pedido
-                $SelectCO = ClientOrder::where('clor_pk', '=', $vclor_pk)
+                //Consultar Pedido Cliente
+                /*$SelectCO = ClientOrder::where('clor_pk', '=', $vclor_pk)
                     ->select(
                         array(
                             'clie_fk', 
@@ -129,16 +133,31 @@ class ClientSaleController extends ApiResponseController
                             'created_at', 
                             'updated_at'
                         ]
-                    , $SelectCO);
+                    , $SelectCO);*/
 
-                $vClientSale = ClientSale::orderBy('created_at', 'DESC')->first();
+                //Insertar Pago del cliente
+                $vCSI = new ClientSale();        
+                $vCSI->clie_fk = $vClientOrder->clie_fk;
+                $vCSI->clor_fk = $vClientOrder->clor_pk;
+                $vCSI->clsa_status = 0;
+                $vCSI->save();
 
-                //Insertar Detallado de pedido
+                //Asignación de PK Venta Cliente
+                $vclsa_pk = $vCSI->clsa_pk;
 
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('client_sales', $vclsa_pk, 1);
+
+                //Consultar Venta Clente
+                $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)->first();
+
+                //Consultar Pedido Detallado
                 $SelectCOD = ClientOrderDetail::where('clor_fk', '=', $vclor_pk)->where('clod_status', '=', 1)
-                    ->select(
-                          array(
-                            DB::raw("$vClientSale->clsa_pk AS clsa_fk"),
+                    ->select
+                    (
+                        array
+                        (
+                            DB::raw("$vclsa_pk AS clsa_fk"),
                             'prod_fk AS prod_fk',
                             'meas_fk AS meas_fk',
                             'clod_quantity AS clsd_quantity',
@@ -149,9 +168,9 @@ class ClientSaleController extends ApiResponseController
                             DB::raw("1 AS clsd_status"),
                             DB::raw("NOW() AS created_at"),
                             DB::raw("NOW() AS updated_at")
-                            )
-                    );
-
+                        )
+                );
+                //Insertar Venta Detallado Cliente
                 DB::table('client_sale_details')
                     ->insertUsing(
                         [
@@ -169,34 +188,39 @@ class ClientSaleController extends ApiResponseController
                         ]
                     , $SelectCOD);
 
+
+                //Consultar Venta Detalle
                 $vClientSaleDetail = DB::table('client_sale_details AS CSD')
-                                        ->join('products AS P', 'P.prod_pk', '=', 'CSD.prod_fk')
-                                        ->join('measurements AS M', 'M.meas_pk', '=', 'CSD.meas_fk')
-                                        ->select(
-                                            'CSD.clsd_pk',
-                                            'CSD.clsa_fk',
-                                            'P.prod_pk',
-                                            'P.prod_identifier',
-                                            'P.prod_name',
-                                            'M.meas_pk',
-                                            'M.meas_name',
-                                            'M.meas_abbreviation',
-                                            'CSD.clsd_quantity',
-                                            'CSD.clsd_price',
-                                            'CSD.clsd_discountrate',
-                                            'CSD.clsd_ieps',
-                                            'CSD.clsd_iva',
-                                            'CSD.clsd_status'
-                                        )
-                                        ->where('clsa_fk', '=', $vClientSale->clsa_pk)
-                                        ->where('clsd_status', '=', 1)
-                                        ->get();
+                    ->join('products AS P', 'P.prod_pk', '=', 'CSD.prod_fk')
+                    ->join('measurements AS M', 'M.meas_pk', '=', 'CSD.meas_fk')
+                    ->select(
+                        'CSD.clsd_pk',
+                        'CSD.clsa_fk',
+                        'P.prod_pk',
+                        'P.prod_identifier',
+                        'P.prod_name',
+                        'M.meas_pk',
+                        'M.meas_name',
+                        'M.meas_abbreviation',
+                        'CSD.clsd_quantity',
+                        'CSD.clsd_price',
+                        'CSD.clsd_discountrate',
+                        'CSD.clsd_ieps',
+                        'CSD.clsd_iva',
+                        'CSD.clsd_status'
+                    )
+                    ->where('clsa_fk', '=', $vclsa_pk)
+                    ->where('clsd_status', '=', 1)
+                    ->get();
 
                 
                 //Modificar Pedido a Procesado
                 DB::table('client_orders')
                 ->where('clor_pk', '=', $vclor_pk)
                 ->update(['clor_status' =>  2]);
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('client_orders', $vclor_pk, 2);
 
                 return response()->json([
                     'code' => 200,
@@ -394,95 +418,208 @@ class ClientSaleController extends ApiResponseController
         }
 
 
-
-        try {
+        try 
+        {
             //Asignacion de variables
-           $vclsa_pk = $vInput['clsa_pk'];
-           $vclie_fk = $vInput['clie_fk'];
-           $vpame_fk = $vInput['pame_fk'];
-           $vstor_fk = $vInput['stor_fk'];
-           $vclde_amount = $vInput['clde_amount'];
-           $vclpa_amount_cash = $vInput['clpa_amount_cash'];
-           $vclpa_amount_transfer = $vInput['clpa_amount_transfer'];
+            $vclsa_pk = $vInput['clsa_pk'];
+            $vclie_fk = $vInput['clie_fk'];
+            $vpame_fk = $vInput['pame_fk'];
+            $vstor_fk = $vInput['stor_fk'];
+            $vclde_amount = $vInput['clde_amount'];
+            $vclpa_amount_cash = $vInput['clpa_amount_cash'];
+            $vclpa_amount_transfer = $vInput['clpa_amount_transfer'];
 
+            //Consultar Venta Cliente
             $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)->where('clsa_status', '=', 0)->first();
 
+            //Validar si existe la Venta Cliente
             if($vClientSale)
             { 
-                if ($vpame_fk == 1) {
-                    $vclsa_status = 3;
-                } else {
+                //Validar Inventario
+
+                //Consultar Venta Detallado Cliente
+                $vCSDSel = ClientSaleDetail::where('clsa_fk', '=', $vclsa_pk)
+                    ->where('clsd_status', '=', 1)
+                    ->get();
+
+                //Recorrer Venta Detallado Cliente
+                foreach($vCSDSel as $vP)
+                {
+                    //Datos del Producto a Comprar
+                    $vprod_fk = $vP->prod_fk;
+                    $vclsd_quantity = $vP->clsd_quantity;
+
+                    //Buscar el Producto en el Inventario de la Sucursal 
+                    $vPISel = ProductInventory::where('prod_fk', '=', $vprod_fk)
+                        ->where('prin_status', '=', 1)
+                        ->where('stor_fk', '=', $vClientSale->stor_fk)
+                        ->first();
+
+                    if ($vPISel) 
+                    {
+                        //Datos del producto en el Inventario
+                        $vprin_stock = $vPISel->prin_stock; //Stock actual
+
+                        //Validar la cantidad del producto
+                        if($vprin_stock > $vclsd_quantity)
+                        {
+                            //Si aplicar Venta
+                            $vVal_Dev = true;
+                        }
+                        else
+                        {
+                            //Producto Insuficiente para Venta
+                            $vVal_Dev = false;
+                            break;
+                        }
+                    } 
+                    else 
+                    {
+                        //Producto NO Encontrado, NO se puede Vender
+                        $vVal_Dev = false;
+                        break;
+                    }
+                }
+
+                //Validar si es posible hacer toda la devolucion
+                if ($vVal_Dev) 
+                {
+                    //Revisar metodo de pago para asignar el estatus
+                    if ($vpame_fk == 1) 
+                    {
+                        $vclsa_status = 3;
+                    } 
+                    else 
+                    {    
+                        $vclsa_status = 2;
+                    }
+
+                    //Buscar el folio consecutivo
+                    $vSystem = System::select('syst_clie_sale')->first();
+                    $vsyst_clie_sale = $vSystem->syst_clie_sale;
+                    $vclsa_identifier =  "Ven_" . $vsyst_clie_sale;
+
+                    //Modificar Venta (Finalizar)
+                    DB::table('client_sales')
+                    ->where('clsa_pk', '=', $vclsa_pk)
+                    ->update([
+                        'clsa_status' =>  $vclsa_status, 
+                        'clie_fk' =>  $vclie_fk, 
+                        'pame_fk' =>  $vpame_fk, 
+                        'stor_fk' => $vstor_fk, 
+                        'clsa_identifier' => $vclsa_identifier
+                    ]);
+
+                    //////////////////  Inserción de Log  //////////////////
+                    $this->getstorelog('client_sales', $vclsa_pk, 2);
+
+
+                    if ($vpame_fk == 1) 
+                    {
+                        //De contado
+                    } 
+                    else 
+                    {
+                        //Credito
+
+                        //Inserción de Deuda Cliente
+                        $vCD = new ClientDebt();        
+                        $vCD->clie_fk = $vclie_fk;
+                        $vCD->clsa_fk = $vclsa_pk;
+                        $vCD->clde_amount = $vclde_amount;
+                        $vCD->save();
+
+                        //Asignación PK de Deuda Cliente
+                        $vclde_fk = $vCD->clde_pk;
+
+                        //////////////////  Inserción de Log  //////////////////
+                        $this->getstorelog('client_debts', $vclde_fk, 1);
+
+
+                        //Insertar Abonos de Cliente
+
+                        //Efectivo
+                        if($vclpa_amount_cash > 0)
+                        {
+                            $vCPC = new ClientPayment();        
+                            $vCPC->clie_fk = $vclie_fk;
+                            $vCPC->clde_fk = $vclde_fk;
+                            $vCPC->pash_fk = 1;
+                            $vCPC->clpa_amount = $vclpa_amount_cash;
+                            $vCPC->save();
+
+                            //Asignación PK de Deuda Cliente
+                            $vclpa_pk = $vCPC->clpa_pk;
+
+                            //////////////////  Inserción de Log  //////////////////
+                            $this->getstorelog('client_payments', $vclpa_pk, 1);
+                        }
+
+                        //Transferencia
+                        if($vclpa_amount_transfer > 0)
+                        {
+                            $vCPT = new ClientPayment();        
+                            $vCPT->clie_fk = $vclie_fk;
+                            $vCPT->clde_fk = $vclde_fk;
+                            $vCPT->pash_fk = 2;
+                            $vCPT->clpa_amount = $vclpa_amount_transfer;
+                            $vCPT->save(); 
+
+                            //Asignación PK de Deuda Cliente
+                            $vclpa_pk2 = $vCPT->clpa_pk;
+
+                            //////////////////  Inserción de Log  //////////////////
+                            $this->getstorelog('client_payments', $vclpa_pk2, 1);
+                        }
+                    }
+
+                    //Modificar Folio del Venta
+                    DB::table('systems')
+                    ->update(['syst_clie_sale' =>  $vsyst_clie_sale + 1]);
+
+
+                    //Aplicar modificación de Inventario
+                    foreach($vCSDSel as $vP)
+                    {
+                        //Datos del Producto a devolver
+                        $vprod_fk = $vP->prod_fk; //PK Producto
+                        $vclsd_quantity = $vP->clsd_quantity; //Cantidad Venta
+
+                        //Buscar el Producto en el Inventario de la Sucursal 
+                        $vPI = ProductInventory::where('prod_fk', '=', $vprod_fk)
+                            ->where('prin_status', '=', 1)
+                            ->where('stor_fk', '=', $vClientSale->stor_fk)
+                            ->first();
+
+                        $vprin_pk = $vPI->prin_pk; //PK Inventario
+                        $vprin_stock = $vPI->prin_stock; //Stock actual
+
+                        //Modificar Inventario
+                        $vPIU = ProductInventory::find($vprin_pk);
+                        $vPIU->prin_stock = $vprin_stock - $vclsd_quantity;
+                        $vPIU->save();
+
+                        //////////////////  Inserción de Log  //////////////////
+                        $this->getstorelog('product_inventories', $vprin_pk, 2);
+                    }
+
                     
-                    $vclsa_status = 2;
+                    return response()->json([
+                        'code' => 200,
+                        'success' => true,
+                        'message' => 'Venta Finaliza Correctamente',
+                        'data' => $vclsa_identifier 
+                    ], 200);
+
+                } 
+                else 
+                {
+                    return response()->json([
+                        'code' => 501,
+                        'success' => false,
+                        'message' => 'Productos insuficientes para Venta. Revisar Inventario Actual'
+                    ], 200);
                 }
-                
-                //Buscar el folio consecutivo
-                $vSystem = System::select('syst_clie_sale')->first();
-                $vsyst_clie_sale = $vSystem->syst_clie_sale;
-                
-                $vclsa_identifier =  "Ven_" . $vsyst_clie_sale;
-                //Modificar Venta (Finalizar)
-                DB::table('client_sales')
-                ->where('clsa_pk', '=', $vclsa_pk)
-                ->update([
-                    'clsa_status' =>  $vclsa_status, 
-                    'clie_fk' =>  $vclie_fk, 
-                    'pame_fk' =>  $vpame_fk, 
-                    'stor_fk' => $vstor_fk, 
-                    'clsa_identifier' => $vclsa_identifier
-                ]);
-
-
-
-                if ($vpame_fk == 1) {
-                    //De contado
-                } else {
-                    //Credito
-
-                    //Inserción de deuda
-                    $vCD = new ClientDebt();        
-                    $vCD->clie_fk = $vclie_fk;
-                    $vCD->clsa_fk = $vclsa_pk;
-                    $vCD->clde_amount = $vclde_amount;
-                    $vCD->save();
-
-                    $vclde_fk = $vCD->clde_pk;
-
-                    //Insersion de Abonos
-
-                    //Efectivo
-                    if($vclpa_amount_cash > 0)
-                    {
-                        $vCPC = new ClientPayment();        
-                        $vCPC->clie_fk = $vclie_fk;
-                        $vCPC->clde_fk = $vclde_fk;
-                        $vCPC->pash_fk = 1;
-                        $vCPC->clpa_amount = $vclpa_amount_cash;
-                        $vCPC->save();
-                    }
-
-                    //Transferencia
-                    if($vclpa_amount_transfer > 0)
-                    {
-                        $vCPT = new ClientPayment();        
-                        $vCPT->clie_fk = $vclie_fk;
-                        $vCPT->clde_fk = $vclde_fk;
-                        $vCPT->pash_fk = 2;
-                        $vCPT->clpa_amount = $vclpa_amount_transfer;
-                        $vCPT->save(); 
-                    }
-                }
-
-                //Modificar Folio del Venta
-                DB::table('systems')
-                ->update(['syst_clie_sale' =>  $vsyst_clie_sale + 1]);
-                
-                return response()->json([
-                    'code' => 200,
-                    'success' => true,
-                    'message' => 'Venta Finaliza Correctamente',
-                    'data' => $vclsa_identifier 
-                ], 200);
             }
             else
             {
@@ -490,7 +627,6 @@ class ClientSaleController extends ApiResponseController
                     'code' => 404,
                     'success' => false,
                     'message' => 'Venta No Encontrada'
-         
                 ], 200);
             }
 

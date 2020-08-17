@@ -516,15 +516,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       console.log(this.orderHeader);
       axios.post('/product/transfers/update', this.orderHeader).then(function (response) {
         console.log(response);
+        var vMessage = response.data.status.message;
 
         if (response.data.status.code == 200) {
-          _this10.textMsg = "¡Actualizado correctamente!";
-
-          _this10.normal('Notificación', '¡Actualizado correctamente!', "success");
+          //this.textMsg = "¡Actualizado correctamente!";
+          _this10.normal('Notificación', vMessage, "success");
 
           _this10.$router.push('/transferlist');
         } else {
-          _this10.normal('Notificación', "Ocurrio un error al finalizar la compra", "error");
+          _this10.normal('Notificación', vMessage, "error");
         }
       })["catch"](function (e) {
         _this10.errors.push(e);

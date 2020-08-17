@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\ClientSaleDetail;
-use Illuminate\Http\Request;
 use Exception;
 use Validator;
 use DB;
+use App\ClientSaleDetail;
+use Illuminate\Http\Request;
+use App\Http\Controllers\api\ApiResponseController;
 
-
-class ClientSaleDetailController extends Controller
+class ClientSaleDetailController extends ApiResponseController
 {
     /**
      * Display a listing of the resource.
@@ -92,18 +92,22 @@ class ClientSaleDetailController extends Controller
 
         try {
             //Asignacion de variables
-           $vclsd_pk = $vInput['clsd_pk'];
-           $vclsd_quantity = $vInput['clsd_quantity'];
+            $vclsd_pk = $vInput['clsd_pk'];
+            $vclsd_quantity = $vInput['clsd_quantity'];
 
+            //Consultar Venta Detalle Cliente
             $vClientSaleDetail = ClientSaleDetail::where('clsd_pk', '=', $vclsd_pk)->first();
 
             if($vClientSaleDetail)
             { 
        
-                //Modificar Venta (Finalizar)
+                //Modificar Venta Detalle
                 DB::table('client_sale_details')
                 ->where('clsd_pk', '=', $vclsd_pk)
                 ->update(['clsd_quantity' => $vclsd_quantity]);
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('client_sale_details', $vclsd_pk, 2);
 
                 return response()->json([
                     'code' => 200,
@@ -164,10 +168,13 @@ class ClientSaleDetailController extends Controller
             if($vClientSaleDetail)
             { 
        
-                //Modificar Venta (Finalizar)
+                //Eliminar Venta Detalle Cliente
                 DB::table('client_sale_details')
                 ->where('clsd_pk', '=', $vclsd_pk)
                 ->update(['clsd_status' =>  0]);
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('client_sale_details', $vclsd_pk, 3);
 
                 return response()->json([
                     'code' => 200,

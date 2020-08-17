@@ -89,6 +89,12 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'Stock',
         value: 'prin_stock'
+      }, {
+        text: 'Pedido',
+        value: 'stock_order'
+      }, {
+        text: 'Stock App',
+        value: 'stock_app'
       }],
       select: 0,
       principal: false,

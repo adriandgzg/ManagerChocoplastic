@@ -8,6 +8,7 @@ use Validator;
 use DB;
 use Carbon\Carbon;
 use App\ClientOrder;
+use App\ClientOrderDetail;
 use App\System;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
@@ -72,7 +73,9 @@ class ClientOrderController extends ApiResponseController
                 ->get();
             
             return $this->dbResponse($vClientOrders, 200, null, 'Lista de Pedidos');
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             return $this->dbResponse(null, 500, $e, null);
         }
     }
@@ -104,7 +107,7 @@ class ClientOrderController extends ApiResponseController
             $vSystem = System::select('syst_clie_order')->first();
             $vsyst_clie_order = $vSystem->syst_clie_order;
 
-            //Insersión de la tabla principal (Pedido del cliente)
+            //Inserción de la tabla principal (Pedido del cliente)
             $vOrder = new ClientOrder();
             $vOrder->clie_fk = 1;
             $vOrder->stor_fk = $vStore_PK;
@@ -113,6 +116,10 @@ class ClientOrderController extends ApiResponseController
 
             //Asignación de PK del Pedido
             $vclor_pk = $vOrder->clor_pk;
+
+            //////////////////  Inserción de Log  //////////////////
+            $this->getstorelog('client_orders', $vclor_pk, 1);
+
 
             //Modificar Folio del Pedido
             DB::table('systems')
@@ -128,7 +135,27 @@ class ClientOrderController extends ApiResponseController
                 $vprod_pk = $cod["PK_Product"];
                 $vProduct = Product::where('prod_pk','=',$vprod_pk)->first();
 
-                DB::table('client_order_details')->insert(array(
+                //Inserción de la tabla principal (Pedido del cliente)
+                $vCORDI = new ClientOrderDetail();
+                $vCORDI->clor_fk = $vclor_pk;
+                $vCORDI->prod_fk = $vprod_pk;
+                $vCORDI->meas_fk = $vProduct->meas_fk_output;
+                $vCORDI->clod_quantity = $cod["Quantity"];
+                $vCORDI->clod_price = $vProduct->prod_saleprice;
+                $vCORDI->clod_discountrate = 0;
+                $vCORDI->clod_ieps = 0;
+                $vCORDI->clod_iva = 0;
+                $vCORDI->clod_status = 1;
+                $vCORDI->save();
+                
+                //Asignación de PK Pedido Detalle Cliente
+                $vclod_pk = $vCORDI->clod_pk;
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('client_order_details', $vclod_pk, 1);
+
+
+                /*DB::table('client_order_details')->insert(array(
                     'clor_fk' => $vclor_pk,
                     'prod_fk' => $vprod_pk,
                     'meas_fk' => $vProduct->meas_fk_output,
@@ -141,12 +168,14 @@ class ClientOrderController extends ApiResponseController
                     'clod_status' => 1,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
-                ));
+                ));*/
             }
        
             return $this->dbResponse("Ped_" . $vsyst_clie_order, 200, null, 'Pedido Guardado Correctamente');
-        } catch (Exception $e) {
-            return $this->dbResponse(null, 500, $e, null);
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
 
     }
@@ -179,11 +208,11 @@ class ClientOrderController extends ApiResponseController
            $vclor_pk = $vInput['clor_pk'];
 
             $vClientOrder = ClientOrder::where('clor_pk', '=', $vclor_pk)
-                            ->select(
-                                'clor_pk AS PK_Order',
-                                'clor_identifier AS Identifier'
-                                )
-                            ->first();
+                ->select(
+                    'clor_pk AS PK_Order',
+                    'clor_identifier AS Identifier'
+                    )
+                ->first();
 
             if($vClientOrder)
             { 
@@ -229,8 +258,10 @@ class ClientOrderController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Pedido No Encontrado');
             }
             
-        } catch (Exception $e) {
-            return $this->dbResponse(null, 500, $e, null);
+        }
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -369,6 +400,10 @@ class ClientOrderController extends ApiResponseController
                 DB::table('client_orders')
                 ->where('clor_pk', '=', $vclor_pk)
                 ->update(['clor_status' =>  0]);
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('client_orders', $vclor_pk, 3);
+
     
                 return response()->json([
                     'code' => 200,

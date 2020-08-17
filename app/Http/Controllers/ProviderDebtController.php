@@ -45,8 +45,9 @@ class ProviderDebtController extends ApiResponseController
 
                 return $this->dbResponse($vProvDebts, 200, null, 'Lista de Deudas del Proveedor');
             
-        } catch (Throwable $vTh) {
-            return $this->dbResponse(null, 500, $vTh, "Detalle");
+        } 
+        catch (Throwable $vTh) {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     } 
 

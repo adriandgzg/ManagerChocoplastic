@@ -173,6 +173,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -180,36 +192,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     return _ref = {
       headers: [{
-        text: 'Ident',
-        value: 'prod_identifier'
+        text: "Ident",
+        value: "prod_identifier"
       }, {
-        text: 'Nombre',
-        value: 'prod_name'
+        text: "Nombre",
+        value: "prod_name"
       }, {
-        text: 'Unidad',
-        value: 'meas_fk_input_name'
+        text: "Unidad",
+        value: "meas_fk_input_name"
       }, {
-        text: 'Tipo',
-        value: 'bulk'
+        text: "Tipo",
+        value: "bulk"
       }, {
-        text: '',
-        value: 'action',
-        width: '20%'
+        text: "",
+        value: "action",
+        width: "20%"
       }],
       prtr_pk: this.$route.params.id,
       directa: this.$route.params.directa,
-      prtr_observation: '',
+      prtr_observation: "",
       prpu_pk: 0,
       valid: false,
       stores: [],
       providers: [],
       desserts: [],
       products: [],
-      selectProv: '',
-      selectStore: '',
+      selectProv: "",
+      selectStore: "",
       payments: [],
-      selectpame: '',
-      search: '',
+      selectpame: "",
+      search: "",
       snackbar: false,
       timeout: 2000,
       subtotal: 0,
@@ -219,17 +231,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       editadoHeader: {
         prpu_pk: 0,
         prov_fk: 0,
-        prov_name: '',
+        prov_name: "",
         prpo_fk: 0,
         stor_fk: 0,
-        store_name: '',
+        store_name: "",
         pame_fk: 0,
-        pame_name: '',
-        prpu_identifier: '',
+        pame_name: "",
+        prpu_identifier: "",
         prpu_type: 0,
         prpu_status: 0,
-        created_at: '',
-        updated_at: ''
+        created_at: "",
+        updated_at: ""
       },
       editado: {
         prtd_pk: 0,
@@ -238,9 +250,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         prtd_discountrate: 0,
         prod_pk: 0,
         prod_identifier: 0,
-        prod_name: '',
-        prod_description: '',
-        meas_name: ''
+        prod_name: "",
+        prod_description: "",
+        meas_name: ""
       },
       defaultItem: {
         prtd_pk: 0,
@@ -249,9 +261,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         prtd_discountrate: 0,
         prod_pk: 0,
         prod_identifier: 0,
-        prod_name: '',
-        prod_description: '',
-        meas_name: ''
+        prod_name: "",
+        prod_description: "",
+        meas_name: ""
       },
       detail: {
         prpu_pk: 0,
@@ -281,7 +293,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         stor_fk_input: 0,
         pame_fk: 0,
         prpu_amount: 0,
-        prtr_observation: ''
+        prtr_observation: ""
       },
       enabledStore: false,
       dialogcredito: false,
@@ -289,14 +301,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       dialog: false,
       dialogQuestion: false,
       dialogQuestionDelete: false,
-      messageQuestion: '',
+      messageQuestion: "",
       minNumberRules: [function (value) {
-        return !!value || 'Requerido.';
+        return !!value || "Requerido.";
       }, function (value) {
-        return value > 0 || 'El número debe ser mayor o igual a cero';
+        return value > 0 || "El número debe ser mayor o igual a cero";
       }],
       loading: false
-    }, _defineProperty(_ref, "dialogQuestion", false), _defineProperty(_ref, "dialogQuestionDelete", false), _defineProperty(_ref, "messageQuestion", ''), _ref;
+    }, _defineProperty(_ref, "dialogQuestion", false), _defineProperty(_ref, "dialogQuestionDelete", false), _defineProperty(_ref, "messageQuestion", ""), _ref;
   },
   created: function created() {
     this.getStores();
@@ -308,7 +320,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getUsers: function getUsers() {
       var _this = this;
 
-      axios.get('/users').then(function (response) {
+      axios.get("/users").then(function (response) {
         _this.users = response.data.data;
 
         if (_this.users[0].store_id > 0) {
@@ -332,7 +344,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var negativeSign = amount < 0 ? "-" : "";
         var i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
         var j = i.length > 3 ? i.length % 3 : 0;
-        return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+        return negativeSign + (j ? i.substr(0, j) + thousands : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
       } catch (e) {
         console.log(e);
       }
@@ -380,7 +392,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.detail.prov_fk = this.selectProv.prov_pk;
       this.detail.stor_fk = this.selectStore.stor_pk;
       this.detail.pame_fk = this.selectpame.pame_pk;
-      axios.post('/product/transfer/details', this.detail).then(function (response) {
+      axios.post("/product/transfer/details", this.detail).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
@@ -391,7 +403,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           _this5.dialog = false; //this.getTotal();
         } else {
-          _this5.normal('Notificación', response.data.message, "error");
+          _this5.normal("Notificación", response.data.message, "error");
         }
       })["catch"](function (e) {
         _this5.errors.push(e);
@@ -409,17 +421,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     "delete": function _delete() {
       var _this6 = this;
 
-      axios.post('/product/transfer/details/destroy', this.editado).then(function (response) {
+      axios.post("/product/transfer/details/destroy", this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
           _this6.textMsg = "¡Eliminado correctamente!";
 
-          _this6.normal('Notificación', _this6.textMsg, "success");
+          _this6.normal("Notificación", _this6.textMsg, "success");
 
           _this6.createCompra();
         } else {
-          _this6.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
+          _this6.normal("Notificación", "Ocurrio un error al eliminar el producto", "error");
         }
       });
     },
@@ -427,7 +439,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this7 = this;
 
       this.loading = true;
-      axios.get('/product/transfers/' + this.prtr_pk + '').then(function (response) {
+      axios.get("/product/transfers/" + this.prtr_pk + "").then(function (response) {
         setTimeout(function () {
           return _this7.loading = false;
         }, 2000);
@@ -438,12 +450,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this7.prtr_pk = response.data.data.ProductTransfers.prtr_pk;
           _this7.editadoHeader = response.data.data.ProductTransfers;
         } else {
-          if (_this7.prtr_pk > 0) _this7.normal('Notificación', response.data.status.message, "error");
+          if (_this7.prtr_pk > 0) _this7.normal("Notificación", response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
 
-        _this7.normal('Notificación', "Error al cargar los datos", "error");
+        _this7.normal("Notificación", "Error al cargar los datos", "error");
       });
     },
     cancelar: function cancelar() {
@@ -454,7 +466,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     buscar: function buscar() {
       var _this8 = this;
 
-      axios.get('/product/inventories').then(function (response) {
+      axios.get("/product/inventories").then(function (response) {
         _this8.products = response.data.data;
         _this8.dialog = true;
         console.log(response.data);
@@ -469,13 +481,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.detail.prtd_quantity = item.prtd_quantity;
       this.detail.prtd_price = item.prtd_price;
       this.detail.prtd_discountrate = item.prtd_discountrate;
-      axios.post('/product/transfer/details/update', this.detail).then(function (response) {
+      axios.post("/product/transfer/details/update", this.detail).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
           _this9.textMsg = "¡Actualizado correctamente!";
         } else {
-          _this9.normal('Notificación', response.data.status.message, "success");
+          _this9.normal("Notificación", response.data.status.message, "success");
         }
       })["catch"](function (e) {
         _this9.errors.push(e);
@@ -492,12 +504,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.total = this.subtotal + this.iva;
     },
     finalizar: function finalizar() {
-      if (this.selectStore == '' || this.selectStore == null) {
-        this.normal('Notificación', "Debe seleccionar una sucursal", "error");
+      if (this.selectStore == "" || this.selectStore == null) {
+        this.normal("Notificación", "Debe seleccionar una sucursal", "error");
         return;
       }
 
-      this.messageQuestion = '¿Está seguro de finalizar el traspaso?';
+      this.messageQuestion = "¿Está seguro de finalizar el traspaso?";
       this.dialogQuestion = true;
     },
     guardaFinalizar: function guardaFinalizar() {
@@ -507,17 +519,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.orderHeader.stor_fk_input = this.selectStore.stor_pk;
       this.orderHeader.prtr_observation = this.prtr_observation;
       console.log(this.orderHeader);
-      axios.post('/product/transfers/update', this.orderHeader).then(function (response) {
+      axios.post("/product/transfers/update", this.orderHeader).then(function (response) {
         console.log(response);
+        var vMessage = response.data.status.message;
 
         if (response.data.status.code == 200) {
-          _this10.textMsg = "¡Actualizado correctamente!";
+          //this.textMsg = "¡Actualizado correctamente!";
+          _this10.normal("Notificación", vMessage, "success");
 
-          _this10.normal('Notificación', '¡Actualizado correctamente!', "success");
-
-          _this10.$router.push('/transferlist');
+          _this10.$router.push("/transferlist");
         } else {
-          _this10.normal('Notificación', "Ocurrio un error al finalizar la compra", "error");
+          _this10.normal("Notificación", vMessage, "error");
         }
       })["catch"](function (e) {
         _this10.errors.push(e);
@@ -526,9 +538,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     finalizarVenta: function finalizarVenta() {
       var _this11 = this;
 
-      console.log(this.total + '-' + (this.efectivo + this.tarjeta));
+      console.log(this.total + "-" + (this.efectivo + this.tarjeta));
       if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
-        this.normal('Notificación', "Los montos de pago deben ser igual al total", "error");
+        this.normal("Notificación", "Los montos de pago deben ser igual al total", "error");
         return;
       }
       var r = confirm("¿Está seguro de finalizar la compra?");
@@ -537,17 +549,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.editadoSale.clde_amount = this.total;
         this.editadoSale.clpa_amount_cash = this.efectivo;
         this.editadoSale.clpa_amount_transfer = this.tarjeta;
-        axios.post('/clientsales/update', this.editadoSale).then(function (response) {
+        axios.post("/clientsales/update", this.editadoSale).then(function (response) {
           console.log(response);
 
           if (response.data.code == 200) {
             _this11.textMsg = "¡Actualizado correctamente!";
 
-            _this11.normal('Notificación', '¡Actualizado correctamente!', "success");
+            _this11.normal("Notificación", "¡Actualizado correctamente!", "success");
 
-            _this11.$router.push('/sales');
+            _this11.$router.push("/sales");
           } else {
-            _this11.normal('Notificación', response.data.message, "error");
+            _this11.normal("Notificación", response.data.message, "error");
           }
         })["catch"](function (e) {
           _this11.errors.push(e);
@@ -558,7 +570,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this12 = this;
 
       this.editado = Object.assign({}, item);
-      axios.post('/client_sale_details/update', this.editado).then(function (response) {
+      axios.post("/client_sale_details/update", this.editado).then(function (response) {
         _this12.textMsg = "¡Actualizado correctamente!";
       })["catch"](function (e) {
         _this12.errors.push(e);
@@ -613,11 +625,7 @@ var render = function() {
               }
             },
             [
-              _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
-              ),
+              _vm._v("\n      " + _vm._s(_vm.textMsg) + "\n      "),
               _c(
                 "v-btn",
                 {
@@ -628,7 +636,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("Cerrar")]
               )
             ],
             1
@@ -654,9 +662,7 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v(
-                        "\n                  Cargando\n                  "
-                      ),
+                      _vm._v("\n          Cargando\n          "),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -875,7 +881,7 @@ var render = function() {
                               ? _c(
                                   "v-chip",
                                   { attrs: { color: "green", outlined: "" } },
-                                  [_vm._v(" \n                    Granel")]
+                                  [_vm._v("Granel")]
                                 )
                               : _c(
                                   "v-chip",
@@ -1034,7 +1040,7 @@ var render = function() {
                                   _c("v-icon", { attrs: { left: "" } }, [
                                     _vm._v("mdi-file-find")
                                   ]),
-                                  _vm._v(" Buscar Producto\n                ")
+                                  _vm._v("Buscar Producto\n              ")
                                 ],
                                 1
                               ),
@@ -1053,7 +1059,7 @@ var render = function() {
                                   _c("v-icon", { attrs: { left: "" } }, [
                                     _vm._v("mdi-checkbox-marked-circle")
                                   ]),
-                                  _vm._v(" Finalizar\n                ")
+                                  _vm._v("Finalizar\n              ")
                                 ],
                                 1
                               )

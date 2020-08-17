@@ -38,6 +38,7 @@ class CreateProductsTable extends Migration
             $table->decimal('prod_packingquantity', 12, 2); //Cantidad Empaque
             $table->bigInteger('prod_main_pk')->nullable(); //PK Articulo Padre
             $table->decimal('prod_fact_convert', 12, 4)->nullable(); //Factor Conversion
+            $table->integer('prod_minimumpurchase')->nullable(); //Compra Minima
             $table->boolean('prod_bulk'); //Aplica Granel 1) Si y 0) No
             $table->smallInteger('prod_status')->default(1); //Estatus
             $table->timestamps();
