@@ -277,8 +277,12 @@ import CripNotice from "crip-vue-notice";
 
         watch: {
             '$route'(val) {
-      this.title = val.name
-    },    
+                            this.title = val.name
+                          },   
+            checkbox: function() {
+              // Emit this information to the parents component
+              this.$emit("child-checkbox", this.boxEnabled);
+            } 
   },
 
   created() {
@@ -379,6 +383,7 @@ import CripNotice from "crip-vue-notice";
                     this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.editadoBox = this.editadoBoxDefault;
                    this.obtenerCaja();
+                   this.$router.go() ;
                   }
                   else{
                     this.normal('Notificación',response.data.message ,"error");                    
@@ -403,7 +408,8 @@ import CripNotice from "crip-vue-notice";
                     this.textMsg = "¡Actualizado correctamente!";
                     this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                     this.editadoBox = this.editadoBoxDefault;
-                   this.obtenerCaja();                   
+                   this.obtenerCaja();     
+                   this.$router.go() ;              
                   }
                   else{
                     this.normal('Notificación',response.data.message ,"error");                    

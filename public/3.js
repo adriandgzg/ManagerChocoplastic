@@ -117,6 +117,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -184,32 +187,49 @@ __webpack_require__.r(__webpack_exports__);
       loading: false,
       dialogQuestion: false,
       dialogQuestionDelete: false,
-      messageQuestion: ''
+      messageQuestion: '',
+      boxEnabled: false
     };
   },
   created: function created() {
     this.getCategories();
+    this.obtenerCaja();
   },
   methods: {
-    getCategories: function getCategories() {
+    obtenerCaja: function obtenerCaja() {
       var _this = this;
+
+      axios.get("/boxcut").then(function (response) {
+        if (response.data.data == null) {
+          _this.boxEnabled = true;
+        } else {
+          _this.boxEnabled = false;
+        }
+
+        console.log("boxEnabled -->" + _this.boxEnabled);
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    getCategories: function getCategories() {
+      var _this2 = this;
 
       this.loading = true;
       axios.get("/clientorders").then(function (response) {
         setTimeout(function () {
-          return _this.loading = false;
+          return _this2.loading = false;
         }, 2000);
 
         if (response.data.data != null) {
           console.log(response.data);
-          _this.categories = response.data.data;
+          _this2.categories = response.data.data;
         } else {
-          _this.normal('Notificación', response.data.status.message, "error");
+          _this2.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
 
-        _this.normal('Notificación', "Error al cargar los datos", "error");
+        _this2.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     cancelar: function cancelar() {
@@ -223,10 +243,10 @@ __webpack_require__.r(__webpack_exports__);
       this.createsale(item.clor_pk);
     },
     createsale: function createsale(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.post('/clientsales?clor_pk=' + id + '').then(function (response) {
-        _this2.sales = response.data;
+        _this3.sales = response.data;
         console.log(response.data);
       })["catch"](function (e) {
         console.log(e);
@@ -242,19 +262,19 @@ __webpack_require__.r(__webpack_exports__);
       this.dialogQuestionDelete = false;
     },
     "delete": function _delete() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post('/client/orders/destroy', this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.code == 200) {
-          _this3.textMsg = "¡Eliminado correctamente!";
+          _this4.textMsg = "¡Eliminado correctamente!";
 
-          _this3.normal('Notificación', _this3.textMsg, "error");
+          _this4.normal('Notificación', _this4.textMsg, "error");
 
-          _this3.getCategories();
+          _this4.getCategories();
         } else {
-          _this3.normal('Notificación', response.data.message, "error");
+          _this4.normal('Notificación', response.data.message, "error");
         }
       });
     },
@@ -299,6 +319,25 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-alert",
+            {
+              attrs: { type: "warning" },
+              model: {
+                value: _vm.boxEnabled,
+                callback: function($$v) {
+                  _vm.boxEnabled = $$v
+                },
+                expression: "boxEnabled"
+              }
+            },
+            [
+              _vm._v(
+                "\n      Para realizar una venta, primero debe abrir caja.\n    "
+              )
+            ]
+          ),
+          _vm._v(" "),
           _c(
             "v-dialog",
             {
@@ -625,7 +664,7 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                item.clor_status == 1
+                                item.clor_status == 1 && _vm.boxEnabled != true
                                   ? _c(
                                       "v-btn",
                                       {

@@ -1,6 +1,9 @@
 <template>
     <v-app>
         <v-container>
+        <v-alert type="warning" v-model="boxEnabled">
+          Para realizar una venta, primero debe abrir caja.
+        </v-alert>
         <v-dialog v-model="loading" persistent width="300">
           <v-card color="white">
             <v-card-text>
@@ -84,7 +87,7 @@
                     </template>
                      <template v-slot:item.action="{ item }">   
                                     
-                        <v-btn class="mr-2" fab dark small color="cyan" v-if="item.clor_status == 1"  title="Convertir Orden en Venta"
+                        <v-btn class="mr-2" fab dark small color="cyan" v-if="item.clor_status == 1 && boxEnabled != true"  title="Convertir Orden en Venta"
                                :href="'/detaiorder/'+item.clor_pk">
                             <v-icon dark>mdi-cash-register</v-icon>
                         </v-btn>
@@ -178,13 +181,32 @@ export default {
     dialogQuestion:false,
       dialogQuestionDelete:false,
       messageQuestion:'',
+      boxEnabled:false,
     };
   },
    created() {
        this.getCategories();
+       this.obtenerCaja();
    },
 
   methods: {
+      obtenerCaja(){
+          
+      axios
+        .get("/boxcut")
+        .then(response => {
+          if(response.data.data == null){
+            this.boxEnabled = true
+            }
+          else{
+            this.boxEnabled = false
+          }
+          console.log("boxEnabled -->" + this.boxEnabled)
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
 
       getCategories() {
           this.loading = true

@@ -3209,6 +3209,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   watch: {
     '$route': function $route(val) {
       this.title = val.name;
+    },
+    checkbox: function checkbox() {
+      // Emit this information to the parents component
+      this.$emit("child-checkbox", this.boxEnabled);
     }
   },
   created: function created() {
@@ -3314,6 +3318,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this3.editadoBox = _this3.editadoBoxDefault;
 
           _this3.obtenerCaja();
+
+          _this3.$router.go();
         } else {
           _this3.normal('Notificación', response.data.message, "error");
         }
@@ -3338,6 +3344,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this4.editadoBox = _this4.editadoBoxDefault;
 
           _this4.obtenerCaja();
+
+          _this4.$router.go();
         } else {
           _this4.normal('Notificación', response.data.message, "error");
         }

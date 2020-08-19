@@ -9,8 +9,10 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! crip-vue-notice */ "./node_modules/crip-vue-notice/lib/crip-vue-notice.js");
-/* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(crip_vue_notice__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _core_Toolbar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core/Toolbar */ "./resources/js/components/core/Toolbar.vue");
+/* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! crip-vue-notice */ "./node_modules/crip-vue-notice/lib/crip-vue-notice.js");
+/* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(crip_vue_notice__WEBPACK_IMPORTED_MODULE_1__);
+//
 //
 //
 //
@@ -216,9 +218,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      components: {
+        Header: _core_Toolbar__WEBPACK_IMPORTED_MODULE_0__["default"]
+      },
       clor_pk: this.$route.params.id,
       valid: false,
       sales: [],
@@ -473,7 +479,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     normal: function normal(Title, Description, Type) {
-      this.notice = new crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default.a({
+      this.notice = new crip_vue_notice__WEBPACK_IMPORTED_MODULE_1___default.a({
         title: Title,
         description: Description,
         className: "open-normal",
