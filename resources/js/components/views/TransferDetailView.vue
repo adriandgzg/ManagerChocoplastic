@@ -523,46 +523,31 @@ this.subtotal = 0;
     },
       
       finalizar(){
-         
-
           if(this.selectStore =='' || this.selectStore == null){              
               this.normal('Notificación', "Debe seleccionar una sucursal","error");
               return;
           }
-
-         
-
           this.messageQuestion = '¿Está seguro de finalizar el traspaso?';          
-
          this.dialogQuestion = true
-
-          
-           
-            
       },
        guardaFinalizar(){ 
          
             this.orderHeader.prtr_pk = this.prtr_pk         
             this.orderHeader.stor_fk_input = this.selectStore.stor_pk
             this.orderHeader.prtr_observation =   this.prtr_observation
-
-
             console.log(this.orderHeader)
-
-            
           axios.post('/product/transfers/update', this.orderHeader)
                 .then(response => {
-                  console.log(response)
+                  console.log(response);
+                  var vMessage = response.data.status.message;
                   if(response.data.status.code == 200){
-                    
-                    this.textMsg = "¡Actualizado correctamente!";
-                    this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+                    //this.textMsg = "¡Actualizado correctamente!";
+                    this.normal('Notificación', vMessage ,"success");
                     this.$router.push('/transferlist') ; 
                   }
                   else{
-                    this.normal('Notificación', "Ocurrio un error al finalizar la compra","error");
+                    this.normal('Notificación', vMessage, "error");
                   }
-                
                 })
                 .catch(e => {
                     this.errors.push(e)

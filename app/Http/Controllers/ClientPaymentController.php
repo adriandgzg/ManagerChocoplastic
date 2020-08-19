@@ -84,6 +84,13 @@ class ClientPaymentController extends Controller
                     $vCPC->clpa_amount = $vclpa_amount;
                     $vCPC->save();
 
+                    //Asignación de PK Pago Cliente
+                    $vclpa_pk = $vCPC->clpa_pk;
+
+                    //////////////////  Inserción de Log  //////////////////
+                    $this->getstorelog('client_payments', $vclpa_pk, 1);
+
+
                     //Validar montos para cambio de estatus
                     $vpayment_total_finaly = $vpayment_total + $vclpa_amount; //Monto total de pagos
 
@@ -94,10 +101,20 @@ class ClientPaymentController extends Controller
                         ->where('clde_pk', '=', $vclde_fk)
                         ->update(['clde_status' =>  2]);
 
+                        //////////////////  Inserción de Log  //////////////////
+                        $this->getstorelog('client_debts', $vclde_fk, 2);
+
+
+
+
                         //Modificar Estatus Venta
                         DB::table('client_sales')
                         ->where('clsa_pk', '=', $vClientDebt->clsa_fk)
                         ->update(['clsa_status' =>  3]);
+
+                        //////////////////  Inserción de Log  //////////////////
+                        $this->getstorelog('client_sales', $vClientDebt->clsa_fk, 2);
+
                     }
 
                     return response()->json([

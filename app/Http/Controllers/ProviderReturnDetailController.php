@@ -100,6 +100,9 @@ class ProviderReturnDetailController extends ApiResponseController
                     'prrd_quantity' =>  $vprrd_quantity
                 ]);
 
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('provider_return_details', $vprrd_pk, 2);
+
                 return $this->dbResponse($vprrd_pk, 200, null, 'Devolución Detalle Modificado Correctamente');
             }
             else
@@ -107,8 +110,10 @@ class ProviderReturnDetailController extends ApiResponseController
                 return $this->dbResponse($vprrd_pk, 404, null, 'Devolución Detalle NO Encontrado');
             }
 
-        } catch (Throwable $vTh) {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -145,6 +150,10 @@ class ProviderReturnDetailController extends ApiResponseController
                     'prrd_status' => 0
                 ]);
 
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('provider_return_details', $vprrd_pk, 3);
+
+
                 return $this->dbResponse($vprrd_pk, 200, null, 'Devolución Detalle Eliminado Correctamente');
             }
             else
@@ -152,8 +161,10 @@ class ProviderReturnDetailController extends ApiResponseController
                 return $this->dbResponse($vprrd_pk, 404, null, 'Devolución Detalle NO Encontrado');
             }
 
-        } catch (Throwable $vTh) {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 }

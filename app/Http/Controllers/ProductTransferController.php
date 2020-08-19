@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use DB;
-use Throwable; 
 use Validator;
 use App\System;
+use Throwable; 
 use App\ProductTransfer;
+use App\ProductInventory;
 use Illuminate\Http\Request;
+use App\ProductTransferDetail;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
 
@@ -200,71 +202,163 @@ class ProductTransferController extends ApiResponseController
             $vstor_fk_input = $vInput['stor_fk_input'];
             $vprtr_observation = $vInput['prtr_observation'];
 
-            //PK Sucursal Salida
-            $vstor_fk_output = Auth::user()->store_id;
+            
 
             //Buscar el folio consecutivo
             $vSystem = System::select('syst_transfer')->first();
             $vsyst_transfer = $vSystem->syst_transfer;
-            $vprtr_identifier =  "Tras_" . $vsyst_transfer;
+            $vTrans = $vsyst_transfer + 1;
+
+            $vprtr_identifier =  "Tras_" . $vTrans;
 
             //Validar Si Existe el Traspaso
-            $vPT = ProductTransfer::where('prtr_pk', '=', $vprtr_pk)->first();
-            if ($vPT) 
+            $vPTSel = ProductTransfer::where('prtr_pk', '=', $vprtr_pk)->where('prtr_status', '=', 1)->first();
+            if ($vPTSel) 
             {
-                //Modificar Traspaso
-                $vPTU = ProductTransfer::find($vprtr_pk);
-                $vPTU->stor_fk_output = $vstor_fk_output;
-                $vPTU->stor_fk_input = $vstor_fk_input;
-                $vPTU->prtr_identifier = $vprtr_identifier;
-                $vPTU->prtr_observation = $vprtr_observation;
-                $vPTU->prtr_status = 2;
-                $vPTU->save();
+                $vstor_fk_output = $vPTSel->stor_fk_output;
+                //Validar Inventario
 
-                //Modificar Folio del Traspaso
-                DB::table('systems')
-                ->update(['syst_transfer' =>  $vsyst_transfer + 1]);
+                //Consultar Traspaso Detallado
+                $vPTDSel = ProductTransferDetail::where('prtr_fk', '=', $vprtr_pk)
+                    ->where('prtd_status', '=', 1)
+                    ->get();
 
-
-                /*/////////////////////////////////Anexo de Inventario
-                $vPPD = ProviderPurchaseDetail::where('prpu_fk', '=', $vprpu_pk)
-                        ->where('prpd_status', '=', 1)
-                        ->get();
-                
-                foreach($vPPD as $vP)
+                //Recorrer Traspaso Detallado
+                foreach($vPTDSel as $vP)
                 {
-                    $vProduct = $vP->prod_fk;
-                    $vprpd_quantity = $vP->prpd_quantity;
+                    //Datos del Producto a Transpasar
+                    $vprod_fk = $vP->prod_fk; //PK Producto
+                    $vprtd_quantity = $vP->prtd_quantity; // Cantidad a Transpasar
+                    $vVal_Dev = false;
+                    $vMsj = '';
 
-                    //Buscar Producto en el Inventario 
-                    $vPI = ProductInventory::where('prod_fk', '=', $vProduct)
-                            ->where('prin_status', '=', 1)
-                            ->where('stor_fk', '=', $vPP->stor_fk)
-                            ->first();
 
-                    if ($vPI) 
+                    //Consutar Producto en el Inventario de la Sucursal de Salida
+                    $vPISel = ProductInventory::where('prod_fk', '=', $vprod_fk)
+                        ->join('products AS P', 'P.prod_pk', '=', 'product_inventories.prod_fk')
+                        ->where('prin_status', '=', 1)
+                        ->where('stor_fk', '=', $vstor_fk_output)
+                        ->first();
+
+                    if ($vPISel) 
                     {
-                        $vprin_pk = $vPI->prin_pk; //Llave primaria del Inventario
-                        $vprin_stock = $vPI->prin_stock; //Stock actual
-
-                        //Modificar Producto Inventario
-                        $vPIU = ProductInventory::find($vprin_pk);
-                        $vPIU->prin_stock = $vprin_stock + $vprpd_quantity;
-                        $vPIU->save();
+                        //Datos del producto en el Inventario
+                        $vprin_stock = $vPISel->prin_stock; //Stock actual
+                        $vprod_name = $vPISel->prod_name; //Descripcion Producto
                         
+                        //Validar la cantidad del producto
+                        if($vprin_stock > $vprtd_quantity)
+                        {
+                            //Si aplicar Transpaso
+                            $vVal_Dev = true;
+                        }
+                        else
+                        {
+                            //Producto Insuficiente para Transpaso
+                            $vVal_Dev = false;
+                            $vMsj = $vprod_name . '. Insuficiente para Traspaso. Inventario actual: ' . $vprin_stock;
+                            break;
+                        }
                     } 
                     else 
                     {
-                        //Insertar Producto Inventario
-                        $vPI = new ProductInventory();        
-                        $vPI->prod_fk = $vProduct;
-                        $vPI->stor_fk = $vPP->stor_fk;
-                        $vPI->prin_stock = $vprpd_quantity;
-                        $vPI->save();
+                        //Producto NO Encontrado, NO se puede Transpasar
+                        $vVal_Dev = false;
+                        $vMsj = 'Producto NO Encontrado. Revisar inventario actual';
+                        break;
                     }
                 }
-                */
-                return $this->dbResponse($vprtr_pk, 200, null, 'Traspaso Guardado Correctamente');
+
+                //Validar si es posible hacer toda el Transpaso
+                if ($vVal_Dev) 
+                {
+                    //Modificar Traspaso
+                    $vPTU = ProductTransfer::find($vprtr_pk);
+                    //$vPTU->stor_fk_output = $vstor_fk_output;
+                    $vPTU->stor_fk_input = $vstor_fk_input;
+                    $vPTU->prtr_identifier = $vprtr_identifier;
+                    $vPTU->prtr_observation = $vprtr_observation;
+                    $vPTU->prtr_status = 2;
+                    $vPTU->save();
+
+                    //////////////////  Insertar Log  //////////////////
+                    $this->getstorelog('product_transfers', $vprtr_pk, 2);
+
+                    //Modificar Folio del Traspaso
+                    DB::table('systems')
+                    ->update(['syst_transfer' =>  $vsyst_transfer + 1]);
+
+
+                    //Aplicar Modificaciones de Inventario 
+                    //Recorrer Traspaso Detallado
+                    foreach($vPTDSel as $vP)
+                    {
+                        //Datos del Producto a Transpasar
+                        $vprod_fk = $vP->prod_fk; //PK Producto
+                        $vprtd_quantity = $vP->prtd_quantity; // Cantidad a Transpasar
+
+                        ////////////////Modificar Inventario en Sucursal Salida
+                        //Consutar Producto en el Inventario de la Sucursal de Salida
+                        $vPIOutputSel = ProductInventory::where('prod_fk', '=', $vprod_fk)
+                            ->where('prin_status', '=', 1)
+                            ->where('stor_fk', '=', $vstor_fk_output)
+                            ->first();
+
+                        $vprin_pk = $vPIOutputSel->prin_pk; //Llave primaria del Inventario
+                        $vprin_stock = $vPIOutputSel->prin_stock; //Stock actual
+
+                        //Modificar Producto Inventario Sucursal Salida
+                        $vPIUOutput = ProductInventory::find($vprin_pk);
+                        $vPIUOutput->prin_stock = $vprin_stock - $vprtd_quantity;
+                        $vPIUOutput->save();
+
+                        //////////////////  Insertar Log  //////////////////
+                        $this->getstorelog('product_inventories', $vprin_pk, 2);
+
+                         ////////////////Modificar Inventario en Sucursal Entrada
+                        //Consutar Producto en el Inventario de la Sucursal de Entrada
+                        $vPIInputSel = ProductInventory::where('prod_fk', '=', $vprod_fk)
+                            ->where('prin_status', '=', 1)
+                            ->where('stor_fk', '=', $vstor_fk_input)
+                            ->first();
+
+                        if ($vPIInputSel) 
+                        {
+                            $vprin_pkInput = $vPIInputSel->prin_pk; //Llave primaria del Inventario Sucursal Entrada
+                            $vprin_stockInput = $vPIInputSel->prin_stock; //Stock actual Sucursal Entrada
+
+                            //Modificar Producto Inventario Sucursal Entrada
+                            $vPIU = ProductInventory::find($vprin_pkInput);
+                            $vPIU->prin_stock = $vprin_stockInput + $vprtd_quantity;
+                            $vPIU->save();
+
+                            //////////////////  Insertar Log  //////////////////
+                            $this->getstorelog('product_inventories', $vprin_pkInput, 2);
+                        } 
+                        else 
+                        {
+                            //Insertar Producto Inventario Sucursal Entrada
+                            $vPII = new ProductInventory();        
+                            $vPII->prod_fk = $vprod_fk;
+                            $vPII->stor_fk = $vstor_fk_input;
+                            $vPII->prin_stock = $vprtd_quantity;
+                            $vPII->save();
+
+                            //Asignar PK Inventario
+                            $vprin_pk = $vPII->prin_pk;
+
+                            //////////////////  Insertar Log  //////////////////
+                            $this->getstorelog('product_inventories', $vprin_pk, 1);
+                        }
+                    }
+
+                    return $this->dbResponse($vprtr_pk, 200, null, 'Traspaso Guardado Correctamente');
+                }
+                else
+                {
+                    return $this->dbResponse(null, 404, null, $vMsj);
+                }
+
             }
             else
             {
@@ -273,6 +367,7 @@ class ProductTransferController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
+            return $vTh;
             return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }

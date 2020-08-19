@@ -83,6 +83,12 @@ class ProviderPaymentController extends ApiResponseController
                     $vPP->prpa_amount = $vprpa_amount;
                     $vPP->save();
 
+                    //Asignación de PK de Pago Proveedor
+                    $vprpa_pk = $vPP->prpa_pk;
+
+                    //////////////////  Inserción de Log  //////////////////
+                    $this->getstorelog('provider_payments', $vprpa_pk, 1);
+
                     //Validar montos para cambio de estatus
                     $vpayment_total_finaly = $vpayment_total + $vprpa_amount; //Monto total de pagos
 
@@ -93,10 +99,20 @@ class ProviderPaymentController extends ApiResponseController
                         ->where('prde_pk', '=', $vprde_fk)
                         ->update(['prde_status' =>  2]);
 
+                        //////////////////  Inserción de Log  //////////////////
+                        $this->getstorelog('provider_debts', $vprde_fk, 2);
+
+
+
+
+
                         //Modificar Estatus Compra
                         DB::table('provider_purchases')
                         ->where('prpu_pk', '=', $vProvDebt->prpu_fk)
                         ->update(['prpu_status' =>  3]);
+
+                        //////////////////  Inserción de Log  //////////////////
+                        $this->getstorelog('provider_purchases', $vProvDebt->prpu_fk, 2);
                     }
 
 
@@ -116,7 +132,7 @@ class ProviderPaymentController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 

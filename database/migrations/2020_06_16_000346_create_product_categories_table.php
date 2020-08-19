@@ -17,6 +17,7 @@ class CreateProductCategoriesTable extends Migration
         Schema::create('product_categories', function (Blueprint $table) {
             $table->bigIncrements('prca_pk'); //Llave Primaria
             $table->string('prca_name', 300); //Nombre
+            $table->string('prca_abbreviation', 10); //Abreviatura
             $table->smallInteger('prca_status')->default(1); //Estatus
             $table->timestamps();
         });

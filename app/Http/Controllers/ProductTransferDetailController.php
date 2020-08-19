@@ -64,7 +64,7 @@ class ProductTransferDetailController extends ApiResponseController
             $vstor_fk_output = Auth::user()->store_id;
 
             if ($vprtr_fk == 0) {
-                //Insersión de la tabla principal (Traspaso)
+                //Inserción de la tabla principal (Traspaso)
                 $vPTI = new ProductTransfer();
                 $vPTI->stor_fk_output = $vstor_fk_output;
                 $vPTI->stor_fk_input = null;
@@ -75,14 +75,23 @@ class ProductTransferDetailController extends ApiResponseController
 
                 //Asignación de PK del Traspaso
                 $vprtr_fk = $vPTI->prtr_pk;
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('product_transfers', $vprtr_fk, 1);
             } 
 
-            //Insersión Artículos del Traspaso
+            //Inserción Productos del Traspaso Detalle
             $vPTDI = new ProductTransferDetail();
             $vPTDI->prtr_fk = $vprtr_fk;
             $vPTDI->prod_fk = $vprod_fk;
             $vPTDI->prtd_quantity = $vprtd_quantity;
             $vPTDI->save();
+
+            //Asignación de PK del Traspaso Detalle
+            $vprtd_pk = $vPTDI->prtd_pk;
+
+            //////////////////  Inserción de Log  //////////////////
+            $this->getstorelog('product_transfer_details', $vprtd_pk, 1);
             
             return $this->dbResponse($vprtr_fk, 200, null, 'Traspaso Detalle Guardado Correctamente');
         } 
@@ -147,6 +156,9 @@ class ProductTransferDetailController extends ApiResponseController
                 $vPTDU = ProductTransferDetail::find($vprtd_pk);
                 $vPTDU->prtd_quantity = $vprtd_quantity;
                 $vPTDU->save();
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('product_transfer_details', $vprtd_pk, 1);
                 
                 return $this->dbResponse($vprtd_pk, 200, null, 'Traspaso Detalle Modificado Correctamente');
             }
@@ -192,6 +204,9 @@ class ProductTransferDetailController extends ApiResponseController
                 $vPTDU = ProductTransferDetail::find($vprtd_pk);
                 $vPTDU->prtd_status = 0;
                 $vPTDU->save();
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('product_transfer_details', $vprtd_pk, 1);
                 
                 return $this->dbResponse(null, 200, null, 'Traspaso Detalle Eliminado Correctamente');
             }

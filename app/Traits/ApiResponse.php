@@ -2,19 +2,21 @@
 
 namespace App\Traits;
 
+use App\Log;
 use App\DevCode;
+use Illuminate\Support\Facades\Auth;
 
 trait ApiResponse
 {
 
     public function dbResponse($pdata, $pdeco_code, $ptechnicaldetail, $msj)
     {
-        $vDV = DevCode::where('deco_code', '=', $pdeco_code)->select('deco_pk', 'deco_status', 'deco_description', 'deco_message')->get();
+        //$vDV = DevCode::where('deco_codxe', '=', $pdeco_code)->select('deco_pk', 'deco_status', 'deco_description', 'deco_message')->first();
         $vtechnicaldetail = $ptechnicaldetail;
-        $vstatus = $vDV[0]->deco_status;
+        //$vstatus = $vDV[0]->deco_status;
         $vdeco_description = $msj; //$vDV[0]->deco_description;
         $vdeco_message = $msj; //$vDV[0]->deco_message;
-
+        /*
         if($vstatus == 1)
         {
             $pdeco_code = 200;
@@ -26,16 +28,96 @@ trait ApiResponse
         else
         {
             $vStatusBool = false;
+        }*/
+
+        if($pdeco_code == 200)
+        {
+            $vStatusBool= true;
+        }
+        else
+        {
+            $vStatusBool= false;
         }
 
         return response()->json(
             array(
-                "status" => array("status" => $vStatusBool, "code" => $pdeco_code, "description" => $vdeco_description, "message" => $vdeco_message, "technicaldetail" => $vtechnicaldetail), 
+                "status" => array
+                (
+                    "status" => $vStatusBool, 
+                    "code" => $pdeco_code, 
+                    "description" => $vdeco_description, 
+                    "message" => $vdeco_message, 
+                    "technicaldetail" => $vtechnicaldetail
+                ), 
                 "data" => $pdata
             )
             , 200
         );
     }
+
+
+    protected function getstorelog(string $ptable, int $ppk_register, int $poperation)
+    {
+        //ID Usuario
+        $vuser_fk = 1;//Auth::user()->id;
+
+        //Inserción de log
+        $vL = new Log();
+        $vL->user_fk = $vuser_fk;
+        $vL->table = $ptable;
+        $vL->pk_register = $ppk_register;
+        $vL->operation = $poperation;
+        $vL->save();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use DB;
+use Throwable;
 use Validator;
-use App\System;
 use App\Product;
 use Illuminate\Http\Request;
 use App\ProviderPurchaseOrder;
 use App\ProviderPurchaseOrderDetail;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
-
 
 class ProviderPurchaseOrderDetailController extends ApiResponseController
 {
@@ -65,7 +64,7 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
             $vppod_discountrate = $vInput['ppod_discountrate'];
 
             if ($vprpo_fk == 0) {
-                //Insersión de la tabla principal (Orden de Compra del Proveedor)
+                //Inserción de la tabla principal (Orden de Compra del Proveedor)
                 $vPPO = new ProviderPurchaseOrder();
                 $vPPO->prov_fk = null;
                 $vPPO->stor_fk = null;
@@ -75,11 +74,14 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
 
                 //Asignación de PK de la Orden de Compra del Proveedor
                 $vprpo_fk = $vPPO->prpo_pk;
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('provider_purchase_orders', $vprpo_fk, 1);
             } 
 
             $vProd = Product::where('prod_pk', '=', $vprod_fk)->first();
 
-            //Insersión Artículos de la Orden de Compra del Proveedor
+            //Inserción Productos de la Orden de Compra del Proveedor
             $vPPOD = new ProviderPurchaseOrderDetail();
             $vPPOD->prpo_fk = $vprpo_fk;
             $vPPOD->prod_fk = $vprod_fk;
@@ -91,12 +93,18 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
             $vPPOD->ppod_ieps = 0;
             $vPPOD->ppod_iva = 0;
             $vPPOD->save();
+
+            //Asignación de PK de la Orden de Compra Detalle
+            $vppod_pk = $vPPOD->ppod_pk;
+
+            //////////////////  Inserción de Log  //////////////////
+            $this->getstorelog('provider_purchase_order_details', $vppod_pk, 1);
             
             return $this->dbResponse($vprpo_fk, 200, null, 'POC Detalle Guardado Correctamente');
+        
         } 
-        catch (\Throwable $th) 
-        {
-            return $this->dbResponse(null, 500, $th, null);
+        catch (Throwable $vTh) {
+            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
         }
     }
 
@@ -169,6 +177,9 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
                 $vPPODU->ppod_providerprice = $vppod_providerprice;
                 $vPPODU->ppod_discountrate = $vppod_discountrate;
                 $vPPODU->save();
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('provider_purchase_order_details', $vppod_pk, 2);
                 
                 return $this->dbResponse(null, 200, null, 'Orden Compra Detalle Modificado Correctamente');
             }
@@ -177,9 +188,9 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Orden Compra Detalle NO Encontrado');
             }
         } 
-        catch (\Throwable $th) 
+        catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $th, null);
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -191,7 +202,8 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
      */
     public function destroy(Request $r)
     {
-        try {
+        try 
+        {
             $vInput = $r->all();
 
             $vVal = Validator::make($vInput, [
@@ -214,6 +226,9 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
                 $vPPODU = ProviderPurchaseOrderDetail::find($vppod_pk);
                 $vPPODU->ppod_status = 0;
                 $vPPODU->save();
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('provider_purchase_order_details', $vppod_pk, 3);
                 
                 return $this->dbResponse(null, 200, null, 'Orden Compra Detalle Eliminado Correctamente');
             }
@@ -222,9 +237,10 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Orden Compra Detalle NO Encontrado');
             }
         } 
-        catch (\Throwable $th) 
+        catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $th, null);
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
+
 }

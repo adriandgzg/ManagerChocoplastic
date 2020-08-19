@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use DB;
-use Validator;
 use Throwable;
+use Validator;
 use App\ProductInventory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
 
 class ProductInventoryController extends ApiResponseController
@@ -18,7 +19,11 @@ class ProductInventoryController extends ApiResponseController
      */
     public function index()
     {
-        try {
+        try 
+        {
+            //PK Sucursal 
+            $vStore = Auth::user()->store_id;
+
             $vPI = DB::table('product_inventories AS PI')
                 ->join('products AS P', 'P.prod_pk', '=', 'PI.prod_fk')
                 ->join('stores AS S', 'S.stor_pk', '=', 'PI.stor_fk')
@@ -39,9 +44,24 @@ class ProductInventoryController extends ApiResponseController
                     'PC.prca_name',
 
                     'S.stor_pk',
-                    'S.stor_name'
+                    'S.stor_name',
+                    DB::raw("
+                        (
+                        SELECT IFNULL(SUM(B.clod_quantity), 0) 
+                        FROM client_orders AS A INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                        WHERE A.clor_status = 1 AND B.clod_status = 1 AND B.prod_fk = P.prod_pk AND A.stor_fk = S.stor_pk
+                        ) AS stock_order
+                    "),
+                    DB::raw("
+                        (
+                        SELECT PI.prin_stock - IFNULL(SUM(B.clod_quantity), 0) 
+                        FROM client_orders AS A INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                        WHERE A.clor_status = 1 AND B.clod_status = 1 AND B.prod_fk = P.prod_pk AND A.stor_fk = S.stor_pk
+                        ) AS stock_app
+                    ")
                 )
                 ->where('PI.prin_status', '=', 1)
+                ->where('S.stor_pk', '=', $vStore)
                 ->orderByDesc('PI.prin_pk')
                 ->get();
             

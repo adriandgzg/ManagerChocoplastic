@@ -85,6 +85,14 @@ export default {
                         text: 'Stock',
                         value: 'prin_stock'
                     },
+                    {
+                        text: 'Pedido',
+                        value: 'stock_order'
+                    },
+                    {
+                        text: 'Stock App',
+                        value: 'stock_app'
+                    }
 
          ],
          select:0,
@@ -112,7 +120,7 @@ export default {
             value => (value && value.length == 10 ) || 'Requiere 10 caracteres',
                  ],
       loading:false,
-    dialogQuestion:false,
+      dialogQuestion:false,
       dialogQuestionDelete:false,
       messageQuestion:'',
     };

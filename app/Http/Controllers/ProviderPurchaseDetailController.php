@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Validator;
+use Throwable;
 use App\Product;
 use App\ProviderPurchase;
 use Illuminate\Http\Request;
@@ -67,7 +68,7 @@ class ProviderPurchaseDetailController extends ApiResponseController
             $vprpd_discountrate = $vInput['prpd_discountrate'];
 
             if ($vprpu_pk == 0) {
-                //Insersión de la tabla principal (Compra del Proveedor)
+                //Inserción de la tabla principal (Compra del Proveedor)
                 $vPP = new ProviderPurchase();
                 $vPP->prov_fk = $vprov_fk;
                 $vPP->stor_fk = $vstor_fk;
@@ -77,11 +78,14 @@ class ProviderPurchaseDetailController extends ApiResponseController
 
                 //Asignación de PK de la Compra del Proveedor
                 $vprpu_pk = $vPP->prpu_pk; 
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('provider_purchases', $vprpu_pk, 1);
             } 
 
             $vProd = Product::where('prod_pk', '=', $vprod_fk)->first();
 
-            //Insersión Artículos de la Orden de Compra del Proveedor
+            //Inserción Productos de la Orden de Compra del Proveedor
             $vPPD = new ProviderPurchaseDetail();
             $vPPD->prpu_fk = $vprpu_pk;
             $vPPD->prod_fk = $vprod_fk;
@@ -92,12 +96,19 @@ class ProviderPurchaseDetailController extends ApiResponseController
             $vPPD->prpd_ieps = 0;
             $vPPD->prpd_iva = 0;
             $vPPD->save();
+
+            //Asignación de PK de la Compra Detalle del Proveedor
+            $vprpd_pk = $vPPD->prpd_pk; 
+
+            //////////////////  Inserción de Log  //////////////////
+            $this->getstorelog('provider_purchase_details', $vprpd_pk, 1);
             
             return $this->dbResponse($vprpu_pk, 200, null, 'PC Detalle Guardado Correctamente');
 
-        } catch (\Throwable $th) {
-            //return $th;
-            return $this->dbResponse(null, 500, $th, null);
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -162,6 +173,9 @@ class ProviderPurchaseDetailController extends ApiResponseController
                 $vPPDU->prpd_price = $vprpd_price;
                 $vPPDU->prpd_discountrate = $vprpd_discountrate;
                 $vPPDU->save();
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('provider_purchase_details', $vprpd_pk, 2);
                 
                 return $this->dbResponse(null, 200, null, 'Compra Detalle Modificado Correctamente');
             }
@@ -170,9 +184,9 @@ class ProviderPurchaseDetailController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Compra Detalle NO Encontrado');
             }
         } 
-        catch (\Throwable $th) 
+        catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $th, null);
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -206,6 +220,9 @@ class ProviderPurchaseDetailController extends ApiResponseController
                 $vPPDU = ProviderPurchaseDetail::find($vprpd_pk);
                 $vPPDU->prpd_status = 0;
                 $vPPDU->save();
+
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('provider_purchase_details', $vprpd_pk, 3);
                 
                 return $this->dbResponse(null, 200, null, 'Compra Detalle Eliminado Correctamente');
             }
@@ -214,10 +231,9 @@ class ProviderPurchaseDetailController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Compra Detalle NO Encontrado');
             }
         } 
-        catch (\Throwable $th) 
+        catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $th, null);
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
-        
     }
 }

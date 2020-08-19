@@ -100,8 +100,8 @@ class ClientReturnController extends ApiResponseController
            $vclsa_pk = $vInput['clsa_pk'];
 
             $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)
-                        ->whereIn('clsa_status', [2, 3])
-                        ->first();
+                ->whereIn('clsa_status', [2, 3])
+                ->first();
 
             if($vClientSale)
             { 
@@ -114,8 +114,8 @@ class ClientReturnController extends ApiResponseController
                 else
                 {
                     //Insertar Encabezado de Devolución Cliente
-                    $vSelCReturn = ClientSale::where('clsa_pk', '=', $vclsa_pk)
-                    ->select(
+                    //$vSelCReturn = ClientSale::where('clsa_pk', '=', $vclsa_pk)->first();
+                    /*->select(
                         'clie_fk', 
                         'clsa_pk AS clsa_fk',
                         'stor_fk', 
@@ -123,7 +123,8 @@ class ClientReturnController extends ApiResponseController
                         DB::raw("NOW() AS created_at"),
                         DB::raw("NOW() AS updated_at")
                     );
-                    DB::table('client_returns')
+
+                    /*DB::table('client_returns')
                         ->insertUsing(
                             [
                                 'clie_fk', 
@@ -133,7 +134,53 @@ class ClientReturnController extends ApiResponseController
                                 'created_at', 
                                 'updated_at'
                             ]
-                        , $vSelCReturn);
+                        , $vSelCReturn);*/
+
+                    //Inserción Encabezado de Devolución Cliente
+                    $vCRI = new ClientReturn();
+                    $vCRI->clsa_fk = $vClientSale->clsa_pk;
+                    $vCRI->clie_fk = $vClientSale->clie_fk;
+                    $vCRI->stor_fk = $vClientSale->stor_fk;
+                    $vCRI->clre_status = 1;
+                    $vCRI->save();
+
+                    //Asignación de PK de Devolución Proveedor
+                    $vclre_pk = $vCRI->clre_pk; 
+
+                    //////////////////  Inserción de Log  //////////////////
+                    $this->getstorelog('client_returns', $vclre_pk, 1);
+
+
+                    //Insertar Detallado de Devolución
+                    $vSelCSD = ClientSaleDetail::where('clsa_fk', '=', $vclsa_pk)->where('clsd_status', '=', 1)
+                    ->select(
+                        array(
+                            DB::raw("$vclre_pk AS clre_fk"),
+                            'prod_fk AS prod_fk',
+                            'meas_fk AS meas_fk',
+                            'clsd_quantity AS clrd_quantity',
+                            'clsd_quantity AS clrd_quantity_sale',
+                            'clsd_price AS clrd_price',
+                            DB::raw("1 AS clrd_status"),
+                            DB::raw("NOW() AS created_at"),
+                            DB::raw("NOW() AS updated_at")
+                        )
+                    );
+
+                    DB::table('client_return_details')
+                        ->insertUsing(
+                            [
+                                'clre_fk',
+                                'prod_fk', 
+                                'meas_fk',
+                                'clrd_quantity', 
+                                'clrd_quantity_sale', 
+                                'clrd_price', 
+                                'clrd_status', 
+                                'created_at', 
+                                'updated_at'
+                            ]
+                        , $vSelCSD);
                 }
 
 
@@ -165,44 +212,6 @@ class ClientReturnController extends ApiResponseController
                     ->where('CR.clsa_fk', '=', $vclsa_pk)
                     ->orderByDesc('CR.clre_pk')
                     ->first();
-
-                if($vClientReturn)
-                {
-
-                }
-                else
-                {
-                    //Insertar Detallado de Devolución
-                    $vSelCSD = ClientSaleDetail::where('clsa_fk', '=', $vclsa_pk)->where('clsd_status', '=', 1)
-                    ->select(
-                        array(
-                            DB::raw("$vClientReturns->clre_pk AS clre_fk"),
-                            'prod_fk AS prod_fk',
-                            'meas_fk AS meas_fk',
-                            'clsd_quantity AS clrd_quantity',
-                            'clsd_quantity AS clrd_quantity_sale',
-                            'clsd_price AS clrd_price',
-                            DB::raw("1 AS clrd_status"),
-                            DB::raw("NOW() AS created_at"),
-                            DB::raw("NOW() AS updated_at")
-                        )
-                    );
-
-                    DB::table('client_return_details')
-                        ->insertUsing(
-                            [
-                                'clre_fk',
-                                'prod_fk', 
-                                'meas_fk',
-                                'clrd_quantity', 
-                                'clrd_quantity_sale', 
-                                'clrd_price', 
-                                'clrd_status', 
-                                'created_at', 
-                                'updated_at'
-                            ]
-                        , $vSelCSD);
-                }
 
                 $vClientReturnDetails = DB::table('client_return_details AS CRD')
                     ->join('products AS P', 'P.prod_pk', '=', 'CRD.prod_fk')
@@ -244,7 +253,7 @@ class ClientReturnController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -333,8 +342,9 @@ class ClientReturnController extends ApiResponseController
                 return $this->dbResponse(null, 404, null, 'Devolución de Cliente NO Encontrada');
             }
         } 
-        catch (Throwable $vTh) {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -388,6 +398,9 @@ class ClientReturnController extends ApiResponseController
                     'remo_fk' =>  $vremo_fk, 
                     'clre_observation' =>  $vclre_observation
                 ]);
+                
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('client_returns', $vclre_pk, 2);
 
                 return $this->dbResponse($vclre_pk, 200, null, 'Devolución Finalizada Correctamente');
             }
@@ -396,8 +409,10 @@ class ClientReturnController extends ApiResponseController
                 return $this->dbResponse($vclre_pk, 404, null, 'Devolución NO Encontrada');
             }
 
-        } catch (Throwable $vTh) {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
