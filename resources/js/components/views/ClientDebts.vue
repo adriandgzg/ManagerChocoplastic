@@ -104,7 +104,7 @@
                      <template v-slot:item.action="{ item }">   
                                     
                         
-                        <v-btn class="mr-2" fab dark small color="cyan" @click="abonar(item)"  title="Agregar pago">
+                        <v-btn v-if="boxEnabled != true" class="mr-2" fab dark small color="cyan" @click="abonar(item)"  title="Agregar pago">
                             <v-icon dark>mdi-coin</v-icon>
                         </v-btn>
 
@@ -238,14 +238,34 @@ export default {
     dialogQuestion:false,
       dialogQuestionDelete:false,
       messageQuestion:'',
+      boxEnabled:false,
     };
   },
    created() {
        this.getClientesPago();
        this.getPayment();
+       this.obtenerCaja();
    },
 
   methods: {
+
+      obtenerCaja(){
+          
+      axios
+        .get("/boxcut")
+        .then(response => {
+          if(response.data.data == null){
+            this.boxEnabled = true
+            }
+          else{
+            this.boxEnabled = false
+          }
+          console.log("boxEnabled -->" + this.boxEnabled)
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
 
       formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
           try {
