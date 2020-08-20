@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BoxCut;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use DB;
 
 class BoxCutController extends Controller
 {
@@ -26,6 +27,42 @@ class BoxCutController extends Controller
                 
             ], 200);
         
+    }
+    
+    public function ListBoxCuts()
+    {
+        try {
+            $vClientSales = DB::table('box_cuts AS BC')
+                ->select(
+                    'BC.bocu_pk',
+                    
+                    DB::raw('(CASE 
+                        WHEN BC.bocu_status = 1 THEN "Abierta" 
+                        WHEN BC.bocu_status = 2 THEN "Cerrada"                          
+                        ELSE "" END) AS bocu_status'),
+                        'BC.bocu_startdate',
+                        'BC.bocu_initialamount',
+                        'BC.bocu_enddate',
+                        'BC.bocu_endamount',
+                        'BC.bocu_observation',
+                        'BC.created_at',
+                )
+                ->get();
+
+            return response()->json([
+                'code' => 200,
+                'success' => true,
+                'message' => 'Ventas de los clientes',
+                'data' =>  $vClientSales
+            ], 200);
+            
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'success' => false,
+                'message' => $e
+            ], 200);
+        }  
     }
 
     /**

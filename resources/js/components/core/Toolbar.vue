@@ -175,7 +175,7 @@
               </v-col>
             </v-row>
            
-               <v-textarea auto-grow v-model="editadoBox.box_observation"
+               <v-textarea auto-grow v-model="editadoBox.bocu_observation"
                     filled color="deep-purple" label="Observaciones" rows="3"></v-textarea>
               </v-card-text>
           <v-spacer></v-spacer>
@@ -252,7 +252,7 @@ import CripNotice from "crip-vue-notice";
               bocu_initialamount:0,
               bocu_endamount:0,
               bocu_startdate:'',
-              box_observation:'',
+              bocu_observation:'',
               bocu_status:1
             },
             editadoBoxDefault:{                            
@@ -263,7 +263,7 @@ import CripNotice from "crip-vue-notice";
               bocu_initialamount:0,
               bocu_endamount:0,
               bocu_startdate:'',
-              box_observation:'',
+              bocu_observation:'',
               bocu_status:1
             },
             caja:[],   

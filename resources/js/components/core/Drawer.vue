@@ -42,7 +42,6 @@
         </v-list-item>
         
        </v-list-group>
-
         <v-list-group prepend-icon="account_circle" no-action>        
           <template v-slot:activator>          
             <v-list-item-title>Clientes</v-list-item-title>
@@ -79,6 +78,13 @@
           </v-list-item>
 
         </v-list-group>
+
+        <v-list-item href="/boxcutlist">
+          <v-list-item-action>
+            <v-icon>mdi-tag</v-icon>
+          </v-list-item-action>
+          <v-list-item-title>Cajas</v-list-item-title>
+        </v-list-item>
 
         <v-list-item href="/inventory">
           <v-list-item-action>

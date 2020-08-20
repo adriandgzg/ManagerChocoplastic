@@ -205,4 +205,9 @@ export default [{
         name: 'Detalle Traspaso.', 
         view: 'TransferDetailView'
     },
+    {
+        path: '/boxcutlist',
+        name: 'Cajas', 
+        view: 'BoxCuts'
+    },
 ]

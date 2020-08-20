@@ -2713,6 +2713,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3182,7 +3188,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         bocu_initialamount: 0,
         bocu_endamount: 0,
         bocu_startdate: '',
-        box_observation: '',
+        bocu_observation: '',
         bocu_status: 1
       },
       editadoBoxDefault: {
@@ -3193,7 +3199,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         bocu_initialamount: 0,
         bocu_endamount: 0,
         bocu_startdate: '',
-        box_observation: '',
+        bocu_observation: '',
         bocu_status: 1
       },
       caja: [],
@@ -30485,6 +30491,21 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-list-item",
+                { attrs: { href: "/boxcutlist" } },
+                [
+                  _c(
+                    "v-list-item-action",
+                    [_c("v-icon", [_vm._v("mdi-tag")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-list-item-title", [_vm._v("Cajas")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
                 { attrs: { href: "/inventory" } },
                 [
                   _c(
@@ -31676,11 +31697,15 @@ var render = function() {
                               rows: "3"
                             },
                             model: {
-                              value: _vm.editadoBox.box_observation,
+                              value: _vm.editadoBox.bocu_observation,
                               callback: function($$v) {
-                                _vm.$set(_vm.editadoBox, "box_observation", $$v)
+                                _vm.$set(
+                                  _vm.editadoBox,
+                                  "bocu_observation",
+                                  $$v
+                                )
                               },
-                              expression: "editadoBox.box_observation"
+                              expression: "editadoBox.bocu_observation"
                             }
                           })
                         ],
@@ -90801,177 +90826,181 @@ var map = {
 		"./resources/js/components/views/Administration.vue",
 		0
 	],
+	"./BoxCuts.vue": [
+		"./resources/js/components/views/BoxCuts.vue",
+		1
+	],
 	"./Categorie.vue": [
 		"./resources/js/components/views/Categorie.vue",
-		1
+		2
 	],
 	"./ClientDebts.vue": [
 		"./resources/js/components/views/ClientDebts.vue",
-		2
+		3
 	],
 	"./ClientOrders.vue": [
 		"./resources/js/components/views/ClientOrders.vue",
-		3
+		4
 	],
 	"./Clients.vue": [
 		"./resources/js/components/views/Clients.vue",
-		4
+		5
 	],
 	"./ClientsRDetail.vue": [
 		"./resources/js/components/views/ClientsRDetail.vue",
-		5
+		6
 	],
 	"./ClientsReturn.vue": [
 		"./resources/js/components/views/ClientsReturn.vue",
-		6
+		7
 	],
 	"./ClientsReturnDetails.vue": [
 		"./resources/js/components/views/ClientsReturnDetails.vue",
-		7
+		8
 	],
 	"./ClientsReturnList.vue": [
 		"./resources/js/components/views/ClientsReturnList.vue",
-		8
+		9
 	],
 	"./Dashboard.vue": [
 		"./resources/js/components/views/Dashboard.vue",
-		9
+		10
 	],
 	"./DetailOrder.vue": [
 		"./resources/js/components/views/DetailOrder.vue",
-		10
+		11
 	],
 	"./DetailOrderRead.vue": [
 		"./resources/js/components/views/DetailOrderRead.vue",
-		11
+		12
 	],
 	"./DetailSale.vue": [
 		"./resources/js/components/views/DetailSale.vue",
-		12
+		13
 	],
 	"./Entities.vue": [
 		"./resources/js/components/views/Entities.vue",
-		13
+		14
 	],
 	"./Frequents.vue": [
 		"./resources/js/components/views/Frequents.vue",
-		14
+		15
 	],
 	"./Inventory.vue": [
 		"./resources/js/components/views/Inventory.vue",
-		15
+		16
 	],
 	"./Measurements.vue": [
 		"./resources/js/components/views/Measurements.vue",
-		16
+		17
 	],
 	"./OrderDetail.vue": [
 		"./resources/js/components/views/OrderDetail.vue",
-		17
+		18
 	],
 	"./PaymentMethods.vue": [
 		"./resources/js/components/views/PaymentMethods.vue",
-		18
+		19
 	],
 	"./PaymentShapes.vue": [
 		"./resources/js/components/views/PaymentShapes.vue",
-		19
+		20
 	],
 	"./PointOfSale.vue": [
 		"./resources/js/components/views/PointOfSale.vue",
-		20
+		21
 	],
 	"./Product.vue": [
 		"./resources/js/components/views/Product.vue",
-		21
+		22
 	],
 	"./Proveedores.vue": [
 		"./resources/js/components/views/Proveedores.vue",
-		22
+		23
 	],
 	"./ProviderDebts.vue": [
 		"./resources/js/components/views/ProviderDebts.vue",
-		23
+		24
 	],
 	"./ProvidersReturn.vue": [
 		"./resources/js/components/views/ProvidersReturn.vue",
-		24
+		25
 	],
 	"./ProvidersReturnDetail.vue": [
 		"./resources/js/components/views/ProvidersReturnDetail.vue",
-		25
+		26
 	],
 	"./ProvidersReturnList.vue": [
 		"./resources/js/components/views/ProvidersReturnList.vue",
-		26
+		27
 	],
 	"./PurchaseList.vue": [
 		"./resources/js/components/views/PurchaseList.vue",
-		27
+		28
 	],
 	"./PurchaseOrder.vue": [
 		"./resources/js/components/views/PurchaseOrder.vue",
-		28
+		29
 	],
 	"./PurchaseOrdersList.vue": [
 		"./resources/js/components/views/PurchaseOrdersList.vue",
-		29
+		30
 	],
 	"./Purchases.vue": [
 		"./resources/js/components/views/Purchases.vue",
-		30
+		31
 	],
 	"./PurchasesDetail.vue": [
 		"./resources/js/components/views/PurchasesDetail.vue",
-		31
+		32
 	],
 	"./ReturnList.vue": [
 		"./resources/js/components/views/ReturnList.vue",
-		32
+		33
 	],
 	"./ReturnMotives.vue": [
 		"./resources/js/components/views/ReturnMotives.vue",
-		33
+		34
 	],
 	"./Sales.vue": [
 		"./resources/js/components/views/Sales.vue",
-		34
+		35
 	],
 	"./SalesDetail.vue": [
 		"./resources/js/components/views/SalesDetail.vue",
-		35
+		36
 	],
 	"./Stores.vue": [
 		"./resources/js/components/views/Stores.vue",
-		36
+		37
 	],
 	"./Table.vue": [
 		"./resources/js/components/views/Table.vue",
-		37
+		38
 	],
 	"./TransferDetail.vue": [
 		"./resources/js/components/views/TransferDetail.vue",
-		38
+		39
 	],
 	"./TransferDetailView.vue": [
 		"./resources/js/components/views/TransferDetailView.vue",
-		39
+		40
 	],
 	"./TransferList.vue": [
 		"./resources/js/components/views/TransferList.vue",
-		40
+		41
 	],
 	"./Upgrade.vue": [
 		"./resources/js/components/views/Upgrade.vue",
-		43
+		44
 	],
 	"./UserList.vue": [
 		"./resources/js/components/views/UserList.vue",
-		41
+		42
 	],
 	"./UserProfile.vue": [
 		"./resources/js/components/views/UserProfile.vue",
-		42
+		43
 	]
 };
 function webpackAsyncContext(req) {
@@ -91340,6 +91369,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
   path: '/transferdetailview/:id',
   name: 'Detalle Traspaso.',
   view: 'TransferDetailView'
+}, {
+  path: '/boxcutlist',
+  name: 'Cajas',
+  view: 'BoxCuts'
 }]);
 
 /***/ }),
