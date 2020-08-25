@@ -244,14 +244,31 @@ __webpack_require__.r(__webpack_exports__);
       loading: false,
       dialogQuestion: false,
       dialogQuestionDelete: false,
-      messageQuestion: ''
+      messageQuestion: '',
+      boxEnabled: false
     };
   },
   created: function created() {
     this.getClientesPago();
     this.getPayment();
+    this.obtenerCaja();
   },
   methods: {
+    obtenerCaja: function obtenerCaja() {
+      var _this = this;
+
+      axios.get("/boxcut").then(function (response) {
+        if (response.data.data == null) {
+          _this.boxEnabled = true;
+        } else {
+          _this.boxEnabled = false;
+        }
+
+        console.log("boxEnabled -->" + _this.boxEnabled);
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
     formatMoney: function formatMoney(amount) {
       var decimalCount = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
       var decimal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ".";
@@ -269,24 +286,24 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getClientesPago: function getClientesPago() {
-      var _this = this;
+      var _this2 = this;
 
       this.loading = true;
       axios.get("/client/debts").then(function (response) {
         setTimeout(function () {
-          return _this.loading = false;
+          return _this2.loading = false;
         }, 2000);
 
         if (response.data.data != null) {
           console.log(response.data);
-          _this.clientsdebts = response.data.data;
+          _this2.clientsdebts = response.data.data;
         } else {
-          _this.normal('Notificación', response.data.status.message, "error");
+          _this2.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
 
-        _this.normal('Notificación', "Error al cargar los datos", "error");
+        _this2.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     cancelar: function cancelar() {
@@ -303,16 +320,16 @@ __webpack_require__.r(__webpack_exports__);
       this.editado.clpa_amount = 0;
     },
     getPayment: function getPayment() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("/paymentshapesget").then(function (response) {
-        _this2.payments = response.data.data;
+        _this3.payments = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     guardar: function guardar() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.editado.pash_fk = this.selectpame.pash_pk;
 
@@ -325,27 +342,27 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.code == 200) {
-          _this3.textMsg = "¡Actualizado correctamente!";
+          _this4.textMsg = "¡Actualizado correctamente!";
 
-          _this3.normal('Notificación', '¡Actualizado correctamente!', "success");
+          _this4.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-          _this3.getClientesPago();
+          _this4.getClientesPago();
 
-          _this3.cancelar();
+          _this4.cancelar();
         } else {
-          _this3.normal('Notificación', response.data.message, "success");
+          _this4.normal('Notificación', response.data.message, "success");
         }
       })["catch"](function (e) {
-        _this3.errors.push(e);
+        _this4.errors.push(e);
       });
     },
     detalle: function detalle(item) {
-      var _this4 = this;
+      var _this5 = this;
 
       console.log(item);
       axios.get("/client/payments/" + item.clde_pk).then(function (response) {
-        _this4.detallepagos = response.data.data;
-        _this4.dialogdetail = true;
+        _this5.detallepagos = response.data.data;
+        _this5.dialogdetail = true;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -771,30 +788,32 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "cyan",
-                                      title: "Agregar pago"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.abonar(item)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-coin")
-                                    ])
-                                  ],
-                                  1
-                                ),
+                                _vm.boxEnabled != true
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        staticClass: "mr-2",
+                                        attrs: {
+                                          fab: "",
+                                          dark: "",
+                                          small: "",
+                                          color: "cyan",
+                                          title: "Agregar pago"
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.abonar(item)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-coin")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e(),
                                 _vm._v(" "),
                                 _c(
                                   "v-btn",
