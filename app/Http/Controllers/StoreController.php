@@ -28,6 +28,19 @@ class StoreController extends ApiResponseController
 
     public function Stores(){
         $stores = DB::table('stores AS P')
+        ->select
+                ('P.stor_pk',
+                    'P.stor_identifier',
+                    'P.stor_rfc',
+                    'P.stor_businessname',
+                    DB::raw('P.stor_name as stor_name_des'),
+                    DB::raw('CONCAT(P.stor_identifier, " - ", P.stor_name) AS stor_name'),
+                    
+                    'P.stor_phone',
+                    'P.stor_cellphone',
+                    'P.stor_addres',
+                    'P.stor_main'
+                    )
         ->where('stor_status','=',1)
         ->get();
         
