@@ -489,7 +489,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      this.messageQuestion = '¿Desea finalizar la devolución?';
+      this.messageQuestion = '¿Desea finalizar la Orden de compra?';
       this.dialogQuestion = true;
       /*
                 var r = confirm("¿Está seguro de finalizar la venta?");

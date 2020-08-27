@@ -436,7 +436,10 @@ export default {
                 })
         },
         getcambio() {
-            this.cambio = this.total - this.efectivo;
+            if ((this.efectivo - this.total) > 0)
+                this.cambio = this.efectivo - this.total;
+            else
+                this.cambio = 0
         },
         getTotal() {
 
