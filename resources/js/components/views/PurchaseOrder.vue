@@ -495,7 +495,7 @@ export default {
                 return;
             }
 
-            this.messageQuestion = '¿Desea finalizar la devolución?';
+            this.messageQuestion = '¿Desea finalizar la Orden de compra?';
 
             this.dialogQuestion = true
             /*
