@@ -111,35 +111,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -364,7 +335,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -519,7 +492,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -548,9 +523,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
               ),
               _c(
                 "v-btn",
@@ -562,7 +535,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\r\n                Cerrar\r\n            ")]
               )
             ],
             1
@@ -679,11 +652,11 @@ var render = function() {
                                       { attrs: { color: "red", dark: "" } },
                                       [
                                         _vm._v(
-                                          "  " +
+                                          " " +
                                             _vm._s(
                                               item.prpo_status_description
                                             ) +
-                                            "  "
+                                            " "
                                         )
                                       ]
                                     )
@@ -695,11 +668,11 @@ var render = function() {
                                       { attrs: { color: "orange", dark: "" } },
                                       [
                                         _vm._v(
-                                          "  " +
+                                          " " +
                                             _vm._s(
                                               item.prpo_status_description
                                             ) +
-                                            "  "
+                                            " "
                                         )
                                       ]
                                     )
@@ -711,11 +684,11 @@ var render = function() {
                                       { attrs: { color: "green", dark: "" } },
                                       [
                                         _vm._v(
-                                          "  " +
+                                          " " +
                                             _vm._s(
                                               item.prpo_status_description
                                             ) +
-                                            "  "
+                                            " "
                                         )
                                       ]
                                     )
@@ -727,11 +700,11 @@ var render = function() {
                                       { attrs: { color: "blue", dark: "" } },
                                       [
                                         _vm._v(
-                                          "  " +
+                                          " " +
                                             _vm._s(
                                               item.prpo_status_description
                                             ) +
-                                            "  "
+                                            " "
                                         )
                                       ]
                                     )
@@ -777,7 +750,8 @@ var render = function() {
                                           small: "",
                                           color: "orange",
                                           href:
-                                            "/purchases/" + item.prpo_pk + "/1"
+                                            "/purchases/" + item.prpo_pk + "/1",
+                                          title: "Convertir en compra"
                                         }
                                       },
                                       [
@@ -798,7 +772,8 @@ var render = function() {
                                       dark: "",
                                       small: "",
                                       color: "purple",
-                                      href: "/orderdetail/" + item.prpo_pk
+                                      href: "/orderdetail/" + item.prpo_pk,
+                                      title: "Detalle de la orden"
                                     }
                                   },
                                   [
@@ -818,7 +793,8 @@ var render = function() {
                                           fab: "",
                                           dark: "",
                                           small: "",
-                                          color: "error"
+                                          color: "error",
+                                          title: "Eliminar"
                                         },
                                         on: {
                                           click: function($event) {
