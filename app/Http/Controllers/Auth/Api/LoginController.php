@@ -223,6 +223,8 @@ class LoginController extends ApiResponseController
             'phone_number'=>$request->phone_number,
             'gender'=>$request->gender,
             'stor_fk'=>$request->stor_fk,
+            'verified'=>1,
+            
         ]);
 
         
@@ -247,6 +249,7 @@ class LoginController extends ApiResponseController
             $vUser->email    = $r->email;
             $vUser->gender   = $r->gender;
             $vUser->stor_fk  = $r->stor_fk;  
+            $vUser->verified = 1;
             $vUser->save();
             
             return $this->dbResponse(null, 200, null, 'Usuario Modificado Correctamente');

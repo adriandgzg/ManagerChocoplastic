@@ -161,72 +161,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -282,7 +216,8 @@ __webpack_require__.r(__webpack_exports__);
         profile_picture: '',
         user_type: '',
         user_type_id: 0,
-        stor_fk: 0
+        stor_fk: 0,
+        verified: 1
       },
       defaultItem: {
         id: '',
@@ -295,7 +230,8 @@ __webpack_require__.r(__webpack_exports__);
         profile_picture: '',
         user_type: '',
         user_type_id: 0,
-        stor_fk: 0
+        stor_fk: 0,
+        verified: 1
       },
       nameRules: [function (value) {
         return !!value || 'Requerido.';
@@ -396,7 +332,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.editado.gender = this.gender;
       this.editado.stor_fk = this.store;
-      console.log(this.editado); //this.editado.user_type_id = this.status
+      this.editado.verified = 1, console.log(this.editado); //this.editado.user_type_id = this.status
 
       axios.post('signup', this.editado).then(function (response) {
         if (response.data.status.code == 200) {
@@ -415,7 +351,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.editado.gender = this.gender;
       this.editado.stor_fk = this.store;
-      console.log(this.editado);
+      this.editado.verified = 1, console.log(this.editado);
       axios.post('/user/update', this.editado).then(function (response) {
         if (response.data.status.code == 200) {
           _this5.normal('Notificación', response.data.status.message, "success");
@@ -509,71 +445,11 @@ var render = function() {
               _c(
                 "v-card-text",
                 [
-                  _vm._v("\n          Cargando\n          "),
+                  _vm._v("\r\n                Cargando\r\n                "),
                   _c("v-progress-linear", {
                     staticClass: "mb-0",
                     attrs: { indeterminate: "", color: "green" }
                   })
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { persistent: "", "max-width": "290" },
-          model: {
-            value: _vm.dialogQuestionDelete,
-            callback: function($$v) {
-              _vm.dialogQuestionDelete = $$v
-            },
-            expression: "dialogQuestionDelete"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", { staticClass: "headline" }, [
-                _vm._v("Alerta")
-              ]),
-              _vm._v(" "),
-              _c("v-card-text", [
-                _vm._v("¿Está seguro de borrar el registro?")
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialogQuestionDelete = false
-                        }
-                      }
-                    },
-                    [_vm._v("Cancelar")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green darken-1", text: "" },
-                      on: { click: _vm.guardaBorrar }
-                    },
-                    [_vm._v("Continuar")]
-                  )
                 ],
                 1
               )
@@ -894,7 +770,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n                    Cancelar\n                "
+                                "\r\n                            Cancelar\r\n                        "
                               )
                             ]
                           ),
@@ -911,7 +787,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n                    Guardar\n                "
+                                "\r\n                            Guardar\r\n                        "
                               )
                             ]
                           )
@@ -1081,7 +957,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n                    Cancelar\n                "
+                                "\r\n                            Cancelar\r\n                        "
                               )
                             ]
                           ),
@@ -1098,7 +974,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n                    Guardar\n                "
+                                "\r\n                            Guardar\r\n                        "
                               )
                             ]
                           )
@@ -1209,7 +1085,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n                    Cancelar\n                "
+                                "\r\n                            Cancelar\r\n                        "
                               )
                             ]
                           ),
@@ -1226,7 +1102,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n                    Guardar\n                "
+                                "\r\n                            Guardar\r\n                        "
                               )
                             ]
                           )
