@@ -139,6 +139,7 @@ class ClientSaleController extends ApiResponseController
                 $vCSI = new ClientSale();        
                 $vCSI->clie_fk = $vClientOrder->clie_fk;
                 $vCSI->clor_fk = $vClientOrder->clor_pk;
+                $vCSI->stor_fk = $vClientOrder->stor_fk;
                 $vCSI->clsa_status = 0;
                 $vCSI->save();
 
@@ -455,13 +456,16 @@ class ClientSaleController extends ApiResponseController
                         ->where('stor_fk', '=', $vClientSale->stor_fk)
                         ->first();
 
+                    //Mensaje
+                    $vMessage = '';
+
                     if ($vPISel) 
                     {
                         //Datos del producto en el Inventario
                         $vprin_stock = $vPISel->prin_stock; //Stock actual
 
                         //Validar la cantidad del producto
-                        if($vprin_stock > $vclsd_quantity)
+                        if($vprin_stock >= $vclsd_quantity)
                         {
                             //Si aplicar Venta
                             $vVal_Dev = true;
@@ -470,6 +474,7 @@ class ClientSaleController extends ApiResponseController
                         {
                             //Producto Insuficiente para Venta
                             $vVal_Dev = false;
+                            $vMessage = 'Producto Insuficiente para Venta';
                             break;
                         }
                     } 
@@ -477,6 +482,7 @@ class ClientSaleController extends ApiResponseController
                     {
                         //Producto NO Encontrado, NO se puede Vender
                         $vVal_Dev = false;
+                        $vMessage = 'Producto NO Encontrado, NO se puede Vender ' . $vClientSale->stor_fk;
                         break;
                     }
                 }
@@ -617,7 +623,7 @@ class ClientSaleController extends ApiResponseController
                     return response()->json([
                         'code' => 501,
                         'success' => false,
-                        'message' => 'Productos insuficientes para Venta. Revisar Inventario Actual'
+                        'message' => $vMessage //'Productos insuficientes para Venta. Revisar Inventario Actual'
                     ], 200);
                 }
             }
