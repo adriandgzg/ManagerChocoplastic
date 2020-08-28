@@ -93,9 +93,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -692,31 +689,6 @@ var render = function() {
                                   [
                                     _c("v-icon", { attrs: { dark: "" } }, [
                                       _vm._v("mdi-eye")
-                                    ])
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "purple",
-                                      title: "Detalle de compra"
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.getCompra(item.prpu_pk)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-printer")
                                     ])
                                   ],
                                   1

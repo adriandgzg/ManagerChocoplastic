@@ -67,9 +67,6 @@
                             <v-btn class="mr-2" fab dark small color="purple" :href="'/purchasesdetail/'+item.prpu_pk" title="Detalle de compra">
                                 <v-icon dark>mdi-eye</v-icon>
                             </v-btn>
-                            <v-btn class="mr-2" fab dark small color="purple" @click="getCompra(item.prpu_pk)" title="Detalle de compra">
-                                <v-icon dark>mdi-printer</v-icon>
-                            </v-btn>
                             <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)" title="Eliminar" v-if="item.prpu_status == 1">
                                 <v-icon dark>mdi-delete</v-icon>
                             </v-btn>

@@ -649,4 +649,129 @@ class ClientSaleController extends ApiResponseController
     {
         //
     }
+
+    public function printOrder($clsa_pk)
+    {
+        $total = 0;
+        
+        //Asignacion de variables
+        $vclsa_pk = $clsa_pk;
+
+
+        if ($vclsa_pk == '' || $vclsa_pk == 0) {
+            return $this->dbResponse(null, 500, null, 'PK Obligatorio');
+        }
+
+        $vCS = DB::table('client_sales AS CS')
+            ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
+            ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
+            ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
+            ->select(
+                'CS.clsa_pk',
+                'CS.clsa_identifier',
+                'CS.clor_fk AS clor_pk',
+                DB::raw('(CASE 
+                    WHEN CS.clsa_status = 0 THEN "Pendiente" 
+                    WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
+                    WHEN CS.clsa_status = 3 THEN "Pagado" 
+                    ELSE "" END) AS clsa_status'),
+                'CS.created_at',
+
+                'C.clie_pk',
+                'C.clie_identifier',
+                'C.clie_name',
+                'C.clie_rfc',
+
+                'PM.pame_pk',
+                'PM.pame_name',
+
+                'S.stor_pk',
+                'S.stor_name',
+            )
+            ->where('CS.clsa_pk', '=', $vclsa_pk)
+            ->first();
+
+        if($vCS)
+        {
+            $vCSD = DB::table('client_sale_details AS CSD')
+                ->join('products AS P', 'P.prod_pk', '=', 'CSD.prod_fk')
+                ->join('measurements AS M', 'M.meas_pk', '=', 'CSD.meas_fk')
+                ->select(
+                    'CSD.clsd_pk',
+
+                    //'CSD.clsa_fk',
+
+                    'P.prod_pk',
+                    'P.prod_identifier',
+                    'P.prod_name',
+
+                    'M.meas_pk',
+                    'M.meas_name',
+                    'M.meas_abbreviation',
+
+                    'CSD.clsd_quantity',
+                    'CSD.clsd_price',
+                    'CSD.clsd_discountrate'
+                    //'CSD.clsd_ieps',
+                    //'CSD.clsd_iva'
+                )
+                ->where('CSD.clsa_fk', '=', $vclsa_pk)
+                ->where('clsd_status', '=', 1)
+                ->get();
+
+            
+        
+
+                
+
+                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(45, 350));
+                $pdf->SetMargins(1, 0, 1);
+                $pdf->AddPage();
+                $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
+                $pdf->Image(config('app.url') . '/images/logo_chocoplastic.png', 10, 2, 25);
+                $pdf->SetY(15);
+                $lineHeigth = 2;
+                $pdf->Cell(43, $lineHeigth, config('app.name'), '', '1', 'C');
+                $pdf->SetFont('Arial', '', 5);    //Letra Arial, negrita (Bold), tam. 20
+                $pdf->Cell(43, $lineHeigth, strtoupper($vCS->clsa_identifier . ' - ' . 'No. Venta: ' . $vCS->clsa_pk), '', '1');
+                $pdf->Cell(43, $lineHeigth, 'Cliente: ' . $vCS->clie_identifier, '', '1');
+                $pdf->SetY(25);
+                $pdf->Cell(8, $lineHeigth, 'ID');
+                $pdf->Cell(25, $lineHeigth, 'ARTICULO');
+                $pdf->Cell(10, $lineHeigth, 'MONTO', 0, 1, 'R');
+
+                foreach ($vCSD as $product) {
+                    $pdf->Cell(8, $lineHeigth, $product->prod_pk, '', '0');
+                    $pdf->Cell(25, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 30), '', '0');
+                    if ($product->clsd_quantity > 1) {
+                        $pdf->Ln();
+                        $pdf->Cell(33, $lineHeigth, $product->clsd_quantity . ' X ' . $product->clsd_price, '', '0', 'R');
+                        $price = $product->clsd_quantity * $product->clsd_price;
+                    } else {
+                        $price = $product->clsd_quantity * $product->clsd_price;
+                    }
+                    $total = $total + $price;
+                    $pdf->Cell(10, $lineHeigth, "$" . number_format($price, 2, ".", ","), 0, 1, 'R');
+        
+                }
+
+                $pdf->Cell(33, $lineHeigth, "SUBTOTAL: ");
+                $pdf->Cell(10, $lineHeigth, "$ " . number_format($total, 2, ".", ","), 0, 1, "R");
+                
+                $pdf->Cell(33, $lineHeigth, "IVA: ");
+                $pdf->Cell(10, $lineHeigth, "$ 0.00", 0, 1, "R");
+                $pdf->Cell(33, $lineHeigth, "TOTAL: ");
+                $pdf->Cell(10, $lineHeigth, "$ " . number_format($total, 2, ".", ","), 0, 1, "R");
+                $pdf->Ln(5);
+                
+                $pdf->Ln(5);
+                $pdf->Cell(43, $lineHeigth, 'GRACIAS POR TU PREFERENCIA ', 0, 1, 'C');
+
+                ob_get_clean();
+        $pdf->output('I', 'ticket', 'true');
+        //exit;
+
+            }
+            
+    }
 }
