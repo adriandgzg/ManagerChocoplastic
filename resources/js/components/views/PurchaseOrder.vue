@@ -488,11 +488,11 @@ export default {
                 this.normal('Notificación', "Debe seleccionar un proveedor", "error");
                 return;
             }
-
-            if (this.selectStore == '' || this.selectStore == null) {
-                this.normal('Notificación', "Debe seleccionar una sucursal", "error");
-                return;
-            }
+            if (!this.enabledStore)
+                if (this.selectStore == '' || this.selectStore == null) {
+                    this.normal('Notificación', "Debe seleccionar una sucursal", "error");
+                    return;
+                }
 
             if (this.desserts.length <= 0) {
                 this.normal('Notificación', "Debe agregar al menos un articulo para finalizar", "error");
@@ -511,7 +511,13 @@ export default {
         guardaFinalizar() {
             this.orderHeader.prpo_pk = this.prpo_pk
             this.orderHeader.prov_fk = this.selectProv.prov_pk
+
             this.orderHeader.stor_fk = this.selectStore.stor_pk
+
+            if (!this.enabledStore)
+                this.orderHeader.stor_fk = this.selectStore.stor_pk;
+            else
+                this.orderHeader.stor_fk = this.users.store_id;
 
             console.log(this.orderHeader)
 

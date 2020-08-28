@@ -373,15 +373,15 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      if (this.selectStore == '' || this.selectStore == null) {
+      if (!this.enabledStore) if (this.selectStore == '' || this.selectStore == null) {
         this.normal('Alerta', 'Debe seleccionar una sucursal', "error");
         return;
       }
-
       this.editadoSale.clsa_pk = this.saleHeader.clsa_pk;
       this.editadoSale.clie_fk = this.selectClient.clie_pk;
       this.editadoSale.pame_fk = this.selectpame.pame_pk;
-      this.editadoSale.stor_fk = this.selectStore.stor_pk;
+      if (!this.enabledStore) this.editadoSale.stor_fk = this.selectStore.stor_pk;else this.editadoSale.stor_fk = this.users.store_id;
+      console.log(this.editadoSale);
 
       if (this.editadoSale.pame_fk == 1) {
         this.dialogcontado = true;
@@ -410,6 +410,8 @@ __webpack_require__.r(__webpack_exports__);
           _this3.textMsg = "¡Actualizado correctamente!";
 
           _this3.normal('Notificación', '¡Actualizado correctamente!', "success");
+
+          _this3.$router.push('/client/sales/printOrder/' + response.data.data);
 
           _this3.$router.push('/sales');
         } else {

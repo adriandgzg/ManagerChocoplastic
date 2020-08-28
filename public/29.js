@@ -482,7 +482,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      if (this.selectStore == '' || this.selectStore == null) {
+      if (!this.enabledStore) if (this.selectStore == '' || this.selectStore == null) {
         this.normal('Notificación', "Debe seleccionar una sucursal", "error");
         return;
       }
@@ -505,6 +505,7 @@ __webpack_require__.r(__webpack_exports__);
       this.orderHeader.prpo_pk = this.prpo_pk;
       this.orderHeader.prov_fk = this.selectProv.prov_pk;
       this.orderHeader.stor_fk = this.selectStore.stor_pk;
+      if (!this.enabledStore) this.orderHeader.stor_fk = this.selectStore.stor_pk;else this.orderHeader.stor_fk = this.users.store_id;
       console.log(this.orderHeader);
       axios.post('/provider/purchase/orders', this.orderHeader).then(function (response) {
         console.log(response);

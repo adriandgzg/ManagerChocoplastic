@@ -198,23 +198,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -326,11 +309,11 @@ __webpack_require__.r(__webpack_exports__);
         this.normal('Alerta', 'Debe seleccionar un método de pago', "error");
         return;
       }
+      /*if (this.selectStore == '' || this.selectStore == null) {
+          this.normal('Alerta', 'Debe seleccionar una sucursal', "error");
+          return;
+      }*/
 
-      if (this.selectStore == '' || this.selectStore == null) {
-        this.normal('Alerta', 'Debe seleccionar una sucursal', "error");
-        return;
-      }
 
       this.editadoSale.clsa_pk = this.saleHeader.clsa_pk;
       this.editadoSale.clie_fk = this.selectClient.clie_pk;
@@ -356,11 +339,9 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.code == 200) {
-            _this2.textMsg = "¡Actualizado correctamente!";
+            _this2.normal('Notificación', '¡Actualizado correctamente!', "success"); //this.$router.push('/client/sales/printOrder/' + item.clsa_pk);
+            // this.$router.push('/sales');
 
-            _this2.normal('Notificación', '¡Actualizado correctamente!', "success");
-
-            _this2.$router.push('/sales');
           } else {
             _this2.normal('Notificación', response.data.message, "error");
           }
@@ -528,7 +509,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -557,9 +540,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
               ),
               _c(
                 "v-btn",
@@ -571,7 +552,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\r\n                Cerrar\r\n            ")]
               )
             ],
             1
@@ -628,7 +609,9 @@ var render = function() {
                                       _c("v-label", [
                                         _c("h4", [_vm._v("Cliente:")]),
                                         _vm._v(
-                                          " " + _vm._s(_vm.saleHeader.clie_name)
+                                          " " +
+                                            _vm._s(_vm.saleHeader.clie_name) +
+                                            "\r\n                                    "
                                         )
                                       ])
                                     ],
@@ -651,7 +634,9 @@ var render = function() {
                                     [
                                       _c("v-label", [
                                         _c("h4", [_vm._v("Vendedor:")]),
-                                        _vm._v("Carlos Jiménez Martinez")
+                                        _vm._v(
+                                          "Carlos Jiménez Martinez\r\n                                    "
+                                        )
                                       ])
                                     ],
                                     1
@@ -674,7 +659,9 @@ var render = function() {
                                       _c("v-label", [
                                         _c("h4", [_vm._v("Sucursal:")]),
                                         _vm._v(
-                                          " " + _vm._s(_vm.saleHeader.stor_name)
+                                          " " +
+                                            _vm._s(_vm.saleHeader.stor_name) +
+                                            "\r\n                                    "
                                         )
                                       ])
                                     ],
