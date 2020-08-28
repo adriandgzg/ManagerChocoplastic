@@ -169,10 +169,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -309,25 +305,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.getStores();
     this.getProviders();
     this.createCompra();
-    this.getPayment(); //this.getUsers();
+    this.getPayment();
   },
   methods: {
-    getUsers: function getUsers() {
-      var _this = this;
-
-      axios.get('/users').then(function (response) {
-        _this.users = response.data.data;
-
-        if (_this.users[0].store_id > 0) {
-          _this.enabledStore = true;
-          _this.selectStore = _this.stores.find(function (item) {
-            return item.stor_pk == _this.users[0].store_id;
-          });
-        } else _this.enabledStore = false;
-      })["catch"](function (e) {
-        _this.errors.push(e);
-      });
-    },
     formatMoney: function formatMoney(amount) {
       var decimalCount = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
       var decimal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ".";
@@ -345,34 +325,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     getStores: function getStores() {
-      var _this2 = this;
+      var _this = this;
 
       axios.get("/storeget").then(function (response) {
-        _this2.stores = response.data.data;
+        _this.stores = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getProviders: function getProviders() {
-      var _this3 = this;
+      var _this2 = this;
 
       axios.get("/providerlist").then(function (response) {
-        _this3.providers = response.data.data;
+        _this2.providers = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPayment: function getPayment() {
-      var _this4 = this;
+      var _this3 = this;
 
       axios.get("/paymentmethodsget").then(function (response) {
-        _this4.payments = response.data.data;
+        _this3.payments = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     agregar: function agregar(item) {
-      var _this5 = this;
+      var _this4 = this;
 
       if (this.desserts.length > 0) {
         this.detail.prtr_fk = this.prtr_pk;
@@ -391,17 +371,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this5.textMsg = "¡Actualizado correctamente!";
-          _this5.prtr_pk = response.data.data; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+          _this4.textMsg = "¡Actualizado correctamente!";
+          _this4.prtr_pk = response.data.data; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
 
-          _this5.createCompra();
+          _this4.createCompra();
 
-          _this5.dialog = false; //this.getTotal();
+          _this4.dialog = false; //this.getTotal();
         } else {
-          _this5.normal('Notificación', response.data.message, "error");
+          _this4.normal('Notificación', response.data.message, "error");
         }
       })["catch"](function (e) {
-        _this5.errors.push(e);
+        _this4.errors.push(e);
       });
     },
     borrar: function borrar(item) {
@@ -414,43 +394,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.dialogQuestionDelete = false;
     },
     "delete": function _delete() {
-      var _this6 = this;
+      var _this5 = this;
 
       axios.post('/product/transfer/details/destroy', this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this6.textMsg = "¡Eliminado correctamente!";
+          _this5.textMsg = "¡Eliminado correctamente!";
 
-          _this6.normal('Notificación', _this6.textMsg, "success");
+          _this5.normal('Notificación', _this5.textMsg, "success");
 
-          _this6.createCompra();
+          _this5.createCompra();
         } else {
-          _this6.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
+          _this5.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
         }
       });
     },
     createCompra: function createCompra() {
-      var _this7 = this;
+      var _this6 = this;
 
       this.loading = true;
       axios.get('/product/transfers/' + this.prtr_pk + '').then(function (response) {
         setTimeout(function () {
-          return _this7.loading = false;
+          return _this6.loading = false;
         }, 2000);
 
         if (response.data.data != null) {
           console.log(response);
-          _this7.desserts = response.data.data.ProductTransferDetails;
-          _this7.prtr_pk = response.data.data.ProductTransfers.prtr_pk;
-          _this7.editadoHeader = response.data.data.ProductTransfers;
+          _this6.desserts = response.data.data.ProductTransferDetails;
+          _this6.prtr_pk = response.data.data.ProductTransfers.prtr_pk;
+          _this6.editadoHeader = response.data.data.ProductTransfers;
         } else {
-          _this7.normal('Notificación', response.data.status.message, "error");
+          _this6.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
 
-        _this7.normal('Notificación', "Error al cargar los datos", "error");
+        _this6.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     cancelar: function cancelar() {
@@ -459,18 +439,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.editedIndex = -1;
     },
     buscar: function buscar() {
-      var _this8 = this;
+      var _this7 = this;
 
       axios.get('/product/search').then(function (response) {
-        _this8.products = response.data.data;
-        _this8.dialog = true;
+        _this7.products = response.data.data;
+        _this7.dialog = true;
         console.log(response.data);
       })["catch"](function (e) {
-        _this8.errors.push(e);
+        _this7.errors.push(e);
       });
     },
     onQuantityChange: function onQuantityChange(item) {
-      var _this9 = this;
+      var _this8 = this;
 
       this.detail.prtd_pk = item.prtd_pk, this.detail.prod_fk = item.prod_pk;
       this.detail.prtd_quantity = item.prtd_quantity;
@@ -480,12 +460,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this9.textMsg = "¡Actualizado correctamente!";
+          _this8.textMsg = "¡Actualizado correctamente!";
         } else {
-          _this9.normal('Notificación', response.data.status.message, "success");
+          _this8.normal('Notificación', response.data.status.message, "success");
         }
       })["catch"](function (e) {
-        _this9.errors.push(e);
+        _this8.errors.push(e);
       });
     },
     getTotal: function getTotal() {
@@ -508,7 +488,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.dialogQuestion = true;
     },
     guardaFinalizar: function guardaFinalizar() {
-      var _this10 = this;
+      var _this9 = this;
 
       this.orderHeader.prtr_pk = this.prtr_pk;
       this.orderHeader.stor_fk_input = this.selectStore.stor_pk;
@@ -520,18 +500,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         if (response.data.status.code == 200) {
           //this.textMsg = "¡Actualizado correctamente!";
-          _this10.normal('Notificación', vMessage, "success");
+          _this9.normal('Notificación', vMessage, "success");
 
-          _this10.$router.push('/transferlist');
+          _this9.$router.push('/transferlist');
         } else {
-          _this10.normal('Notificación', vMessage, "error");
+          _this9.normal('Notificación', vMessage, "error");
         }
       })["catch"](function (e) {
-        _this10.errors.push(e);
+        _this9.errors.push(e);
       });
     },
     finalizarVenta: function finalizarVenta() {
-      var _this11 = this;
+      var _this10 = this;
 
       console.log(this.total + '-' + (this.efectivo + this.tarjeta));
       if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
@@ -548,27 +528,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           console.log(response);
 
           if (response.data.code == 200) {
-            _this11.textMsg = "¡Actualizado correctamente!";
+            _this10.textMsg = "¡Actualizado correctamente!";
 
-            _this11.normal('Notificación', '¡Actualizado correctamente!', "success");
+            _this10.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-            _this11.$router.push('/sales');
+            _this10.$router.push('/sales');
           } else {
-            _this11.normal('Notificación', response.data.message, "error");
+            _this10.normal('Notificación', response.data.message, "error");
           }
         })["catch"](function (e) {
-          _this11.errors.push(e);
+          _this10.errors.push(e);
         });
       }
     },
     actualizar: function actualizar(item) {
-      var _this12 = this;
+      var _this11 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this12.textMsg = "¡Actualizado correctamente!";
+        _this11.textMsg = "¡Actualizado correctamente!";
       })["catch"](function (e) {
-        _this12.errors.push(e);
+        _this11.errors.push(e);
       });
     },
     normal: function normal(Title, Description, Type) {
@@ -627,7 +607,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -656,9 +638,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
               ),
               _c(
                 "v-btn",
@@ -670,7 +650,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\r\n                Cerrar\r\n            ")]
               )
             ],
             1
@@ -880,7 +860,11 @@ var render = function() {
                               ? _c(
                                   "v-chip",
                                   { attrs: { color: "green", outlined: "" } },
-                                  [_vm._v(" \n                    Granel")]
+                                  [
+                                    _vm._v(
+                                      "\r\n                            Granel"
+                                    )
+                                  ]
                                 )
                               : _c(
                                   "v-chip",
@@ -957,10 +941,11 @@ var render = function() {
                                   _c("v-label", [
                                     _c("h4", [_vm._v("ID traspaso")]),
                                     _vm._v(
-                                      " \n          " +
+                                      "\r\n                                    " +
                                         _vm._s(
                                           _vm.editadoHeader.prtr_identifier
-                                        )
+                                        ) +
+                                        "\r\n                                "
                                     )
                                   ])
                                 ],
@@ -984,10 +969,11 @@ var render = function() {
                                   _c("v-label", [
                                     _c("h4", [_vm._v("Sucursal Salida:")]),
                                     _vm._v(
-                                      " \n          " +
+                                      "\r\n                                    " +
                                         _vm._s(
                                           _vm.editadoHeader.stor_name_output
-                                        )
+                                        ) +
+                                        "\r\n                                "
                                     )
                                   ])
                                 ],
@@ -1011,10 +997,11 @@ var render = function() {
                                   _c("v-label", [
                                     _c("h4", [_vm._v("Sucursal Salida:")]),
                                     _vm._v(
-                                      "        \n          " +
+                                      "\r\n                                    " +
                                         _vm._s(
                                           _vm.editadoHeader.stor_name_input
-                                        )
+                                        ) +
+                                        "\r\n                                "
                                     )
                                   ])
                                 ],
@@ -1038,10 +1025,11 @@ var render = function() {
                                   _c("v-label", [
                                     _c("h4", [_vm._v("Observación:")]),
                                     _vm._v(
-                                      "        \n          " +
+                                      "\r\n                                    " +
                                         _vm._s(
                                           _vm.editadoHeader.prtr_observation
-                                        )
+                                        ) +
+                                        "\r\n                                "
                                     )
                                   ])
                                 ],

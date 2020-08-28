@@ -33,7 +33,10 @@
                         <v-row>
                             <v-col cols="6">
                                 <v-card-text class="category d-inline-flex font-weight-light">
-                                    <v-combobox required v-model="selectStore" :items="stores" :disabled="enabledStore" label="Sucursal" item-text="stor_name" item-value="stor_pk" filled chips placeholder="Seleccionar Cliente"></v-combobox>
+                                    <v-label v-if="enabledStore">
+                                        Sucursal: {{users.stor_name}}
+                                    </v-label>
+                                    <v-combobox v-else required v-model="selectStore" :items="stores" :disabled="enabledStore" label="Sucursal" item-text="stor_name" item-value="stor_pk" filled chips placeholder="Seleccionar una sucursal"></v-combobox>
                                 </v-card-text>
                             </v-col>
 
@@ -246,10 +249,11 @@ export default {
 
     methods: {
         getUsers() {
-            axios.get('/users')
+            axios.get('/listUser')
                 .then(response => {
                     this.users = response.data.data
-                    if (this.users[0].store_id > 0) {
+
+                    if (this.users.store_id > 0) {
                         this.enabledStore = true
                         this.selectStore = this.stores.find(item => item.stor_pk == this.users[0].store_id)
                     } else

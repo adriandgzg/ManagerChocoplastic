@@ -181,19 +181,6 @@ export default {
 
     methods: {
 
-        getUsers() {
-            axios.get('/users')
-                .then(response => {
-                    this.users = response.data.data
-                    this.idUserStore = this.users[0].store_id
-                    console.log(this.users[0].store_id)
-                    this.getCategories()
-                })
-                .catch(e => {
-                    console.log(e)
-                })
-        },
-
         getCategories() {
             this.loading = true
             axios

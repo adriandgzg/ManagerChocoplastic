@@ -185,37 +185,24 @@ __webpack_require__.r(__webpack_exports__);
     this.getCategories();
   },
   methods: {
-    getUsers: function getUsers() {
-      var _this = this;
-
-      axios.get('/users').then(function (response) {
-        _this.users = response.data.data;
-        _this.idUserStore = _this.users[0].store_id;
-        console.log(_this.users[0].store_id);
-
-        _this.getCategories();
-      })["catch"](function (e) {
-        console.log(e);
-      });
-    },
     getCategories: function getCategories() {
-      var _this2 = this;
+      var _this = this;
 
       this.loading = true;
       axios.get("/provider/purchase/orders").then(function (response) {
         setTimeout(function () {
-          return _this2.loading = false;
+          return _this.loading = false;
         }, 2000);
 
         if (response.data.data != null) {
-          _this2.ordenescompra = response.data.data;
+          _this.ordenescompra = response.data.data;
         } else {
-          _this2.normal('Notificación', response.data.status.message, "error");
+          _this.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
 
-        _this2.normal('Notificación', "Error al cargar los datos", "error");
+        _this.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     cancelar: function cancelar() {
@@ -229,24 +216,24 @@ __webpack_require__.r(__webpack_exports__);
       this.createsale(item.clor_pk);
     },
     createsale: function createsale(id) {
-      var _this3 = this;
+      var _this2 = this;
 
       this.loadingDialog = true;
       axios.post('/clientsales?clor_pk=' + id + '').then(function (response) {
         setTimeout(function () {
-          return _this3.loadingDialog = false;
+          return _this2.loadingDialog = false;
         }, 1000);
 
         if (response.data.data != null) {
-          _this3.sales = response.data;
+          _this2.sales = response.data;
           console.log(response.data);
         } else {
-          _this3.normal('Notificación', response.data.status.message, "error");
+          _this2.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
 
-        _this3.normal('Notificación', "Error al cargar los datos", "error");
+        _this2.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     borrar: function borrar(item) {
@@ -258,19 +245,19 @@ __webpack_require__.r(__webpack_exports__);
       this.dialogQuestionDelete = false;
     },
     "delete": function _delete() {
-      var _this4 = this;
+      var _this3 = this;
 
       axios.post('/provider/purchase/orders/destroy', this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this4.textMsg = "¡Eliminado correctamente!";
+          _this3.textMsg = "¡Eliminado correctamente!";
 
-          _this4.normal('Notificación', textMsg, "success");
+          _this3.normal('Notificación', textMsg, "success");
 
-          _this4.getCategories();
+          _this3.getCategories();
         } else {
-          _this4.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
+          _this3.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
         }
       });
     },

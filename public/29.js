@@ -188,6 +188,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -292,10 +295,10 @@ __webpack_require__.r(__webpack_exports__);
     getUsers: function getUsers() {
       var _this = this;
 
-      axios.get('/users').then(function (response) {
+      axios.get('/listUser').then(function (response) {
         _this.users = response.data.data;
 
-        if (_this.users[0].store_id > 0) {
+        if (_this.users.store_id > 0) {
           _this.enabledStore = true;
           _this.selectStore = _this.stores.find(function (item) {
             return item.stor_pk == _this.users[0].store_id;
@@ -983,26 +986,35 @@ var render = function() {
                                     "category d-inline-flex font-weight-light"
                                 },
                                 [
-                                  _c("v-combobox", {
-                                    attrs: {
-                                      required: "",
-                                      items: _vm.stores,
-                                      disabled: _vm.enabledStore,
-                                      label: "Sucursal",
-                                      "item-text": "stor_name",
-                                      "item-value": "stor_pk",
-                                      filled: "",
-                                      chips: "",
-                                      placeholder: "Seleccionar una sucursal"
-                                    },
-                                    model: {
-                                      value: _vm.selectStore,
-                                      callback: function($$v) {
-                                        _vm.selectStore = $$v
-                                      },
-                                      expression: "selectStore"
-                                    }
-                                  })
+                                  _vm.enabledStore
+                                    ? _c("v-label", [
+                                        _vm._v(
+                                          "\r\n                                    Sucursal: " +
+                                            _vm._s(_vm.users.stor_name) +
+                                            "\r\n                                "
+                                        )
+                                      ])
+                                    : _c("v-combobox", {
+                                        attrs: {
+                                          required: "",
+                                          items: _vm.stores,
+                                          disabled: _vm.enabledStore,
+                                          label: "Sucursal",
+                                          "item-text": "stor_name",
+                                          "item-value": "stor_pk",
+                                          filled: "",
+                                          chips: "",
+                                          placeholder:
+                                            "Seleccionar una sucursal"
+                                        },
+                                        model: {
+                                          value: _vm.selectStore,
+                                          callback: function($$v) {
+                                            _vm.selectStore = $$v
+                                          },
+                                          expression: "selectStore"
+                                        }
+                                      })
                                 ],
                                 1
                               )

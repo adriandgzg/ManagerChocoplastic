@@ -140,41 +140,27 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    //this.getUsers();
     this.getSales();
   },
   methods: {
-    getUsers: function getUsers() {
-      var _this = this;
-
-      axios.get('/users').then(function (response) {
-        _this.users = response.data.data;
-        _this.idUserStore = _this.users[0].store_id;
-        console.log(_this.users[0].store_id);
-
-        _this.getSales();
-      })["catch"](function (e) {
-        console.log(e);
-      });
-    },
     getSales: function getSales() {
-      var _this2 = this;
+      var _this = this;
 
       this.loading = true;
       axios.get("/boxcuts").then(function (response) {
         setTimeout(function () {
-          return _this2.loading = false;
+          return _this.loading = false;
         }, 2000);
 
         if (response.data.data != null) {
-          _this2.sales = response.data.data;
+          _this.sales = response.data.data;
         } else {
-          _this2.normal('Notificación', response.data.status.message, "error");
+          _this.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
 
-        _this2.normal('Notificación', "Error al cargar los datos", "error");
+        _this.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     formatMoney: function formatMoney(amount) {

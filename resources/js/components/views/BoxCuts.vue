@@ -133,24 +133,10 @@ export default {
         };
     },
     created() {
-        //this.getUsers();
         this.getSales();
     },
 
     methods: {
-
-        getUsers() {
-            axios.get('/users')
-                .then(response => {
-                    this.users = response.data.data
-                    this.idUserStore = this.users[0].store_id
-                    console.log(this.users[0].store_id)
-                    this.getSales()
-                })
-                .catch(e => {
-                    console.log(e)
-                })
-        },
 
         getSales() {
 

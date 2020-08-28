@@ -333,14 +333,11 @@ __webpack_require__.r(__webpack_exports__);
     getUsers: function getUsers() {
       var _this = this;
 
-      axios.get('/users').then(function (response) {
+      axios.get('/listUser').then(function (response) {
         _this.users = response.data.data;
 
-        if (_this.users[0].store_id > 0) {
+        if (_this.users.store_id > 0) {
           _this.enabledStore = true;
-          _this.selectStore = _this.stores.find(function (item) {
-            return item.stor_pk == _this.users[0].store_id;
-          });
         } else _this.enabledStore = false;
       })["catch"](function (e) {
         _this.errors.push(e);

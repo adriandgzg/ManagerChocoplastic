@@ -59,17 +59,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -130,41 +119,27 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    //this.getUsers();
     this.getSales();
   },
   methods: {
-    getUsers: function getUsers() {
-      var _this = this;
-
-      axios.get('/users').then(function (response) {
-        _this.users = response.data.data;
-        _this.idUserStore = _this.users[0].store_id;
-        console.log(_this.users[0].store_id);
-
-        _this.getSales();
-      })["catch"](function (e) {
-        console.log(e);
-      });
-    },
     getSales: function getSales() {
-      var _this2 = this;
+      var _this = this;
 
       this.loading = true;
       axios.get("/product/inventories").then(function (response) {
         setTimeout(function () {
-          return _this2.loading = false;
+          return _this.loading = false;
         }, 2000);
 
         if (response.data.data != null) {
-          _this2.sales = response.data.data;
+          _this.sales = response.data.data;
         } else {
-          _this2.normal('Notificación', response.data.status.message, "error");
+          _this.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
 
-        _this2.normal('Notificación', "Error al cargar los datos", "error");
+        _this.normal('Notificación', "Error al cargar los datos", "error");
       });
     }
   }
@@ -213,7 +188,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -242,9 +219,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
               ),
               _c(
                 "v-btn",
@@ -256,7 +231,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\r\n                Cerrar\r\n            ")]
               )
             ],
             1
