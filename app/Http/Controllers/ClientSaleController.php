@@ -608,7 +608,7 @@ class ClientSaleController extends ApiResponseController
                         'code' => 200,
                         'success' => true,
                         'message' => 'Venta Finaliza Correctamente',
-                        'data' => $vclsa_identifier 
+                        'data' => $vclsa_pk 
                     ], 200);
 
                 } 
