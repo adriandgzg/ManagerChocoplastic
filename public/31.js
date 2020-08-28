@@ -202,6 +202,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -394,7 +397,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      if (this.selectStore == '' || this.selectStore == null) {
+      if (!this.enabledStore) if (this.selectStore == '' || this.selectStore == null) {
         this.normal('Notificación', "Debe seleccionar una sucursal", "error");
         return;
       }
@@ -414,9 +417,10 @@ __webpack_require__.r(__webpack_exports__);
       this.detail.prpd_quantity = 1;
       this.detail.prpd_price = 0;
       this.detail.prpd_discountrate = 0;
-      this.detail.prov_fk = this.selectProv.prov_pk;
-      this.detail.stor_fk = this.selectStore.stor_pk;
+      this.detail.prov_fk = this.selectProv.prov_pk; //this.detail.stor_fk = this.selectStore.stor_pk
+
       this.detail.pame_fk = this.selectpame.pame_pk;
+      if (!this.enabledStore) this.detail.stor_fk = this.selectStore.stor_pk;else this.detail.stor_fk = this.users.store_id;
       axios.post('/provider/purchase/details', this.detail).then(function (response) {
         console.log(response);
 
@@ -1071,27 +1075,14 @@ var render = function() {
                                     : _vm._e(),
                                   _vm._v(" "),
                                   _vm.directa == 2
-                                    ? _c("v-combobox", {
-                                        attrs: {
-                                          required: "",
-                                          items: _vm.stores,
-                                          label: "Sucursal",
-                                          disabled: _vm.enabledStore,
-                                          "item-text": "stor_name",
-                                          "item-value": "stor_pk",
-                                          filled: "",
-                                          chips: "",
-                                          placeholder:
-                                            "Seleccionar una sucursal"
-                                        },
-                                        model: {
-                                          value: _vm.selectStore,
-                                          callback: function($$v) {
-                                            _vm.selectStore = $$v
-                                          },
-                                          expression: "selectStore"
-                                        }
-                                      })
+                                    ? _c("v-label", [
+                                        _c("h4", [_vm._v("Sucursal:")]),
+                                        _vm._v(
+                                          " " +
+                                            _vm._s(_vm.users.stor_name) +
+                                            "\r\n                                "
+                                        )
+                                      ])
                                     : _vm._e()
                                 ],
                                 1

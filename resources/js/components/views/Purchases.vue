@@ -79,7 +79,10 @@
                                 <v-label v-if="directa == 1">
                                     <h3>Proveedor:</h3> {{editadoHeader.prov_name}}
                                 </v-label>
-                                <v-combobox v-if="directa == 2" required v-model="selectStore" :items="stores" label="Sucursal" :disabled="enabledStore" item-text="stor_name" item-value="stor_pk" filled chips placeholder="Seleccionar una sucursal"></v-combobox>
+                                <v-label v-if="directa == 2">
+                                    <h4>Sucursal:</h4> {{users.stor_name}}
+                                </v-label>
+                                <!--<v-combobox v-if="directa == 2" required v-model="selectStore" :items="stores" label="Sucursal" :disabled="enabledStore" item-text="stor_name" item-value="stor_pk" filled chips placeholder="Seleccionar una sucursal"></v-combobox>-->
                             </v-card-text>
                         </v-col>
 
@@ -398,12 +401,12 @@ export default {
                 this.normal('Notificación', "Debe seleccionar un proveedor", "error");
                 return;
             }
+            if (!this.enabledStore)
+                if (this.selectStore == '' || this.selectStore == null) {
+                    this.normal('Notificación', "Debe seleccionar una sucursal", "error");
 
-            if (this.selectStore == '' || this.selectStore == null) {
-                this.normal('Notificación', "Debe seleccionar una sucursal", "error");
-
-                return;
-            }
+                    return;
+                }
 
             if (this.selectpame == '' || this.selectpame == null) {
                 this.normal('Notificación', "Debe seleccionar una forma de pago", "error");
@@ -422,8 +425,13 @@ export default {
             this.detail.prpd_discountrate = 0;
 
             this.detail.prov_fk = this.selectProv.prov_pk
-            this.detail.stor_fk = this.selectStore.stor_pk
+            //this.detail.stor_fk = this.selectStore.stor_pk
             this.detail.pame_fk = this.selectpame.pame_pk
+
+            if (!this.enabledStore)
+                this.detail.stor_fk = this.selectStore.stor_pk;
+            else
+                this.detail.stor_fk = this.users.store_id;
 
             axios.post('/provider/purchase/details', this.detail)
                 .then(response => {
