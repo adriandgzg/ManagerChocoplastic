@@ -245,42 +245,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -291,10 +255,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: 'Unidad de medida',
         value: 'meas_fk_output_name'
       }, {
-        text: 'Precio de Lista',
+        text: 'Precio Mayoreo',
         value: 'prod_listprice'
       }, {
-        text: 'Precio de venta',
+        text: 'Precio Menudeo',
         value: 'prod_saleprice'
       }, {
         text: 'Factor de conversión',
@@ -328,10 +292,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: 'Precio Preferencial',
         value: 'prod_preferentialprice'
       }, {
-        text: 'Precio Venta',
+        text: 'Precio Menudeo',
         value: 'prod_saleprice'
       }, {
-        text: 'Precio Lista',
+        text: 'Precio Mayoreo',
         value: 'prod_listprice'
       }, {
         text: 'Cantidad por Paquete',
@@ -839,7 +803,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -1004,9 +970,9 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "\n                " +
+                        "\r\n                    " +
                           _vm._s(_vm.textMsg) +
-                          "\n                "
+                          "\r\n                "
                       )
                     ]
                   )
@@ -1213,7 +1179,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
-                              label: "Precio Venta",
+                              label: "Precio Menudeo",
                               prefix: "$",
                               type: "number",
                               rules: _vm.numberRules,
@@ -1230,7 +1196,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
-                              label: "Precio Lista",
+                              label: "Precio Mayoreo",
                               prefix: "$",
                               type: "number",
                               rules: _vm.numberRules,
@@ -1425,7 +1391,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
-                              label: "Precio Lista",
+                              label: "Precio Mayoreo",
                               prefix: "$",
                               type: "number",
                               rules: _vm.numberRules,
@@ -1442,7 +1408,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
-                              label: "Precio Venta",
+                              label: "Precio Menudeo",
                               prefix: "$",
                               type: "number",
                               rules: _vm.numberRules,
@@ -1883,7 +1849,7 @@ var render = function() {
                                   ? _c(
                                       "v-chip",
                                       { attrs: { color: "green", dark: "" } },
-                                      [_vm._v("  Activo  ")]
+                                      [_vm._v(" Activo ")]
                                     )
                                   : _c(
                                       "v-chip",
@@ -1904,7 +1870,11 @@ var render = function() {
                                       {
                                         attrs: { color: "green", outlined: "" }
                                       },
-                                      [_vm._v(" \n                    Granel")]
+                                      [
+                                        _vm._v(
+                                          "\r\n                                Granel"
+                                        )
+                                      ]
                                     )
                                   : _c(
                                       "v-chip",

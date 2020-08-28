@@ -105,29 +105,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -142,7 +119,7 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Categoria',
         value: 'prca_name'
       }, {
-        text: 'Precio Venta',
+        text: 'Precio Menudeo',
         value: 'prod_saleprice'
       }, {
         text: 'Sucursal',
@@ -391,7 +368,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -480,9 +459,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
               ),
               _c(
                 "v-btn",
@@ -494,7 +471,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\r\n                Cerrar\r\n            ")]
               )
             ],
             1
@@ -728,7 +705,11 @@ var render = function() {
                                       {
                                         attrs: { color: "green", outlined: "" }
                                       },
-                                      [_vm._v(" \n                    Granel")]
+                                      [
+                                        _vm._v(
+                                          "\r\n                                Granel"
+                                        )
+                                      ]
                                     )
                                   : _c(
                                       "v-chip",
