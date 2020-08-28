@@ -61,17 +61,6 @@ class StoreSeeder extends Seeder
         ]);
 
         Store::create([
-            'stor_identifier' => "",
-            'stor_rfc' => "",
-            'stor_businessname' => "",
-            'stor_name' => "",
-            'stor_phone' => "",
-            'stor_cellphone' => "",
-            'stor_addres' => "",
-            'stor_main' => false
-        ]);
-
-        Store::create([
             'stor_identifier' => "ximenita",
             'stor_rfc' => "",
             'stor_businessname' => "JENNY GUADALUPE SILVAN MORENO",

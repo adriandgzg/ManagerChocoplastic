@@ -76,8 +76,24 @@ class ProductFrequentController extends ApiResponseController
                         )
                     ->where('prod_status', '=', 1)
                     ->where('P.prod_main_pk', '=', $vP->PK_Product)
-                    ->orderBy('P.prod_pk')
-                    ->get();
+                    ->orderBy('P.prod_pk');
+                
+                $vProdFirstVariat = 
+                    DB::table('products AS P')
+                        ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                        ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                        ->select(
+                            'P.prod_pk AS PK_Product',
+                            'P.prod_saleprice AS RetailPrice',
+                            'P.prod_bulk AS Bulk',
+                            DB::raw("$vP->Stock AS Stock"),
+                            'MO.meas_name AS Measurement'
+                        )
+                        ->where('prod_status', '=', 1) 
+                        ->where('P.prod_pk', '=', $vP->PK_Product)
+                        ->orderBy('P.prod_pk')
+                        ->union($vProdVariats)
+                        ->get();
 
                 //Consultar Suma de Cantidad Preventa (Pedidos Pendientes)
                 $vSumclod_quantity  =  DB::table('client_orders AS CO')
@@ -104,7 +120,7 @@ class ProductFrequentController extends ApiResponseController
                     "Category" => $vP->Category,
                     "Measurement" => $vP->Measurement,
                     "Store" => $vP->Store,
-                    "VariatsInfo" => $vProdVariats
+                    "VariatsInfo" => $vProdFirstVariat
                 );
                 //Anexo de producto a la lista principal
                 array_push($vProdJson, $vPP);

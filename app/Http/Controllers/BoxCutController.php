@@ -150,7 +150,7 @@ class BoxCutController extends Controller
         . "   bocu_enddate = '" . $request->bocu_enddate 
         . "', bocu_status = 2 " 
         . ",  bocu_endamount  = '" .  $request->bocu_endamount
-        . "', box_observation = '" .  $request->box_observation
+        . "', bocu_observation = '" .  $request->bocu_observation
         . "' where bocu_pk = ". $request->bocu_pk);
 
             
