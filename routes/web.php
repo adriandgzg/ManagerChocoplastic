@@ -144,6 +144,8 @@ Route::post('provider/purchases', 'ProviderPurchaseController@store'); //Convert
 Route::post('provider/purchases/update', 'ProviderPurchaseController@update'); //Finalizar Compra
 Route::post('provider/purchases/destroy', 'ProviderPurchaseController@destroy'); //Cancelar Compra
 
+Route::get('provider/purchases/print/{prpu_pk}', 'ProviderPurchaseController@printOrder');//Imprimir
+
 Route::post('provider/purchase/details', 'ProviderPurchaseDetailController@store'); 
 Route::post('provider/purchase/details/update', 'ProviderPurchaseDetailController@update'); 
 Route::post('provider/purchase/details/destroy', 'ProviderPurchaseDetailController@destroy'); 

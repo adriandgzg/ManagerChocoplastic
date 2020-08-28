@@ -96,25 +96,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -190,7 +171,23 @@ __webpack_require__.r(__webpack_exports__);
       loading: false,
       dialogQuestion: false,
       dialogQuestionDelete: false,
-      messageQuestion: ''
+      messageQuestion: '',
+      saleDetail: [],
+      editadoHeader: {
+        prpu_pk: 0,
+        prov_fk: 0,
+        prov_name: '',
+        prpo_fk: 0,
+        stor_fk: 0,
+        store_name: '',
+        pame_fk: 0,
+        pame_name: '',
+        prpu_identifier: '',
+        prpu_type: 0,
+        prpu_status: 0,
+        created_at: '',
+        updated_at: ''
+      }
     };
   },
   created: function created() {
@@ -237,6 +234,27 @@ __webpack_require__.r(__webpack_exports__);
         console.log(e);
       });
     },
+    getCompra: function getCompra(prpu_pk) {
+      var _this3 = this;
+
+      this.loading = true;
+      axios.get('/provider/purchases/' + prpu_pk + '').then(function (response) {
+        setTimeout(function () {
+          return _this3.loading = false;
+        }, 2000);
+
+        if (response.data.data != null) {
+          _this3.saleDetail = response.data.data.ProviderPurchaseDetail;
+          _this3.editadoHeader = response.data.data.ProviderPurchase;
+          console.log(response.data);
+        } else {
+          _this3.normal('Notificación', response.data.status.message, "error");
+        }
+      })["catch"](function (e) {
+        //this.errors.push(e)
+        console.log(e);
+      });
+    },
     borrar: function borrar(item) {
       this.editado = Object.assign({}, item);
       this.dialogQuestionDelete = true;
@@ -246,19 +264,19 @@ __webpack_require__.r(__webpack_exports__);
       this.dialogQuestionDelete = false;
     },
     "delete": function _delete() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post('/provider/purchases/destroy', this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this3.textMsg = "¡Eliminado correctamente!";
+          _this4.textMsg = "¡Eliminado correctamente!";
 
-          _this3.normal('Notificación', _this3.textMsg, "success");
+          _this4.normal('Notificación', _this4.textMsg, "success");
 
-          _this3.getCategories();
+          _this4.getCategories();
         } else {
-          _this3.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
+          _this4.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
         }
       });
     },
@@ -317,9 +335,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
               ),
               _c(
                 "v-btn",
@@ -331,7 +347,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\r\n                Cerrar\r\n            ")]
               )
             ],
             1
@@ -357,7 +373,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -541,11 +559,11 @@ var render = function() {
                                       { attrs: { color: "red", dark: "" } },
                                       [
                                         _vm._v(
-                                          "  " +
+                                          " " +
                                             _vm._s(
                                               item.prpu_status_description
                                             ) +
-                                            "  "
+                                            " "
                                         )
                                       ]
                                     )
@@ -557,11 +575,11 @@ var render = function() {
                                       { attrs: { color: "orange", dark: "" } },
                                       [
                                         _vm._v(
-                                          "  " +
+                                          " " +
                                             _vm._s(
                                               item.prpu_status_description
                                             ) +
-                                            "  "
+                                            " "
                                         )
                                       ]
                                     )
@@ -573,11 +591,11 @@ var render = function() {
                                       { attrs: { color: "green", dark: "" } },
                                       [
                                         _vm._v(
-                                          "  " +
+                                          " " +
                                             _vm._s(
                                               item.prpu_status_description
                                             ) +
-                                            "  "
+                                            " "
                                         )
                                       ]
                                     )
@@ -589,11 +607,11 @@ var render = function() {
                                       { attrs: { color: "blue", dark: "" } },
                                       [
                                         _vm._v(
-                                          "  " +
+                                          " " +
                                             _vm._s(
                                               item.prpu_status_description
                                             ) +
-                                            "  "
+                                            " "
                                         )
                                       ]
                                     )
@@ -674,6 +692,31 @@ var render = function() {
                                   [
                                     _c("v-icon", { attrs: { dark: "" } }, [
                                       _vm._v("mdi-eye")
+                                    ])
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    staticClass: "mr-2",
+                                    attrs: {
+                                      fab: "",
+                                      dark: "",
+                                      small: "",
+                                      color: "purple",
+                                      title: "Detalle de compra"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.getCompra(item.prpu_pk)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-printer")
                                     ])
                                   ],
                                   1
