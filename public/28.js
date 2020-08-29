@@ -621,7 +621,7 @@ var render = function() {
                             fn: function(ref) {
                               var item = ref.item
                               return [
-                                item.prpu_status == 1
+                                item.prpu_status == 1 && item.prpu_type == 1
                                   ? _c(
                                       "v-btn",
                                       {
@@ -649,7 +649,7 @@ var render = function() {
                                   : _vm._e(),
                                 _vm._v(" "),
                                 item.prpu_status_description != "Pendiente" ||
-                                item.prpu_status_description == "Cancelada"
+                                item.prpu_status_description != "Cancelada"
                                   ? _c(
                                       "v-btn",
                                       {
