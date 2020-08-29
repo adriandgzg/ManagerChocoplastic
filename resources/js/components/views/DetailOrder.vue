@@ -340,15 +340,12 @@ export default {
         },
         onChangeClient() {
             if (this.selectClient.clie_pk == 1) {
-                console.log('getPaymentShow')
                 this.getPaymentShow()
             } else {
-                console.log('getPayment')
                 this.getPayment()
             }
         },
         finalizar() {
-            console.log(this.selectClient);
             this.efectivo = 0;
             this.tarjeta = 0;
 
@@ -376,7 +373,6 @@ export default {
             else
                 this.editadoSale.stor_fk = this.users.store_id;
 
-            console.log(this.editadoSale)
             if (this.editadoSale.pame_fk == 1) {
                 this.dialogcontado = true;
                 this.getcambio();
@@ -385,7 +381,6 @@ export default {
 
         },
         finalizarVenta() {
-            console.log((this.total + '-' + (this.efectivo + this.tarjeta)));
             if (this.editadoSale.pame_fk == 1) {
                 var montototal = parseFloat(this.efectivo) + parseFloat(this.tarjeta);
                 var operacion = parseFloat(this.total) - montototal;
@@ -408,7 +403,6 @@ export default {
             this.editadoSale.clpa_amount_transfer = this.tarjeta
             axios.post('/clientsales/update', this.editadoSale)
                 .then(response => {
-                    console.log(response)
                     if (response.data.code == 200) {
 
                         this.textMsg = "¡Actualizado correctamente!";
@@ -431,12 +425,15 @@ export default {
             axios.post('/clientsales?clor_pk=' + this.clor_pk + '')
                 .then(response => {
                     setTimeout(() => (this.loading = false), 2000)
-                    console.log(response.data)
+
                     if (response.data.data != null) {
-                        console.log(response.data)
+
                         this.sales = response.data.data;
                         this.saleHeader = response.data.data.sale;
                         this.desserts = this.sales.sale_details;
+
+                        console.log("this.saleHeader");
+                        console.log(response.data);
                         this.getTotal();
                     } else {
                         this.normal('Notificación', response.data.message, "error");

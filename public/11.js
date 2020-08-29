@@ -351,15 +351,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     onChangeClient: function onChangeClient() {
       if (this.selectClient.clie_pk == 1) {
-        console.log('getPaymentShow');
         this.getPaymentShow();
       } else {
-        console.log('getPayment');
         this.getPayment();
       }
     },
     finalizar: function finalizar() {
-      console.log(this.selectClient);
       this.efectivo = 0;
       this.tarjeta = 0;
 
@@ -381,7 +378,6 @@ __webpack_require__.r(__webpack_exports__);
       this.editadoSale.clie_fk = this.selectClient.clie_pk;
       this.editadoSale.pame_fk = this.selectpame.pame_pk;
       if (!this.enabledStore) this.editadoSale.stor_fk = this.selectStore.stor_pk;else this.editadoSale.stor_fk = this.users.store_id;
-      console.log(this.editadoSale);
 
       if (this.editadoSale.pame_fk == 1) {
         this.dialogcontado = true;
@@ -389,8 +385,6 @@ __webpack_require__.r(__webpack_exports__);
       } else this.dialogcredito = true;
     },
     finalizarVenta: function finalizarVenta() {
-      console.log(this.total + '-' + (this.efectivo + this.tarjeta));
-
       if (this.editadoSale.pame_fk == 1) {
         var montototal = parseFloat(this.efectivo) + parseFloat(this.tarjeta);
         var operacion = parseFloat(this.total) - montototal;
@@ -411,8 +405,6 @@ __webpack_require__.r(__webpack_exports__);
       this.editadoSale.clpa_amount_cash = this.efectivo;
       this.editadoSale.clpa_amount_transfer = this.tarjeta;
       axios.post('/clientsales/update', this.editadoSale).then(function (response) {
-        console.log(response);
-
         if (response.data.code == 200) {
           _this3.textMsg = "¡Actualizado correctamente!";
 
@@ -436,13 +428,13 @@ __webpack_require__.r(__webpack_exports__);
         setTimeout(function () {
           return _this4.loading = false;
         }, 2000);
-        console.log(response.data);
 
         if (response.data.data != null) {
-          console.log(response.data);
           _this4.sales = response.data.data;
           _this4.saleHeader = response.data.data.sale;
           _this4.desserts = _this4.sales.sale_details;
+          console.log("this.saleHeader");
+          console.log(response.data);
 
           _this4.getTotal();
         } else {
