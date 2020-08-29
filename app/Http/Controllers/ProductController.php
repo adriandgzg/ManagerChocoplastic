@@ -46,7 +46,8 @@ class ProductController extends ApiResponseController
                     'P.prod_listprice AS WholesalePrice',
                     'P.prod_minimumpurchase AS MinimumPurchase',
                     'P.prod_bulk AS Bulk',
-                    'PI.prin_stock AS Stock',
+                    'PI.prin_stock Stock',
+                    //DB::raw("PI.prin_stock * P.prod_packingquantity AS Stock"),
                     'PC.prca_name AS Category',
                     'MO.meas_name AS Measurement',
                     'S.stor_name AS Store'
@@ -188,19 +189,6 @@ class ProductController extends ApiResponseController
 
     public function ProductSearch()
     {
-        /*
-        $vProducts = \DB::select("select m.meas_name as meas_fk_output_name, principal.* from(
-            select p.prod_pk, p.prca_fk, c.prca_name, p.meas_fk_input, 
-            m.meas_name as meas_fk_input_name,  p.meas_fk_output, p.prod_identifier, 
-            p.prod_name, p.prod_description, p.prod_image, p.prod_actualprice, p.prod_eventualprice, 
-            p.prod_preferentialprice, p.prod_saleprice, p.prod_listprice, 
-            p.prod_packingquantity, p.prod_status, p.prod_bulk
-            from products p LEFT JOIN product_categories c on p.prca_fk = c.prca_pk 
-            LEFT JOIN measurements m on p.meas_fk_input = m.meas_pk )as principal 
-            left join measurements m on principal.meas_fk_output = m.meas_pk
-            where principal.prod_status = 1 ");*/
-
-
         $vProducts = DB::table('products AS P')
                 ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
                 ->join('measurements AS MI', 'P.meas_fk_input', '=', 'MI.meas_pk')
@@ -493,6 +481,7 @@ class ProductController extends ApiResponseController
                         'P.prod_minimumpurchase AS MinimumPurchase',
                         'P.prod_bulk AS Bulk',
                         'PI.prin_stock AS Stock',
+                        //DB::raw("PI.prin_stock * P.prod_packingquantity AS Stock"),
                         'PC.prca_name AS Category',
                         'MO.meas_name AS Measurement',
                         'S.stor_name AS Store'
@@ -595,6 +584,7 @@ class ProductController extends ApiResponseController
                         'P.prod_minimumpurchase AS MinimumPurchase',
                         'P.prod_bulk AS Bulk',
                         'PI.prin_stock AS Stock',
+                        //DB::raw("PI.prin_stock * P.prod_packingquantity AS Stock"),
                         'PC.prca_name AS Category',
                         'MO.meas_name AS Measurement',
                         'S.stor_name AS Store'
