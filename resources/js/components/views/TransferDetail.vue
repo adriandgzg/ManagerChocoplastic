@@ -318,10 +318,10 @@ export default {
         .get("/users")
         .then((response) => {
           this.users = response.data.data;
-          if (this.users[0].store_id > 0) {
+          if (this.users.store_id > 0) {
             this.enabledStore = true;
             this.selectStore = this.stores.find(
-              (item) => item.stor_pk == this.users[0].store_id
+              (item) => item.stor_pk == this.users.store_id
             );
           } else this.enabledStore = false;
         })

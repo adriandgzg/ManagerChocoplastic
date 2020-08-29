@@ -296,7 +296,7 @@ export default {
 
                     if (this.users.store_id > 0) {
                         this.enabledStore = true
-                        this.selectStore = this.stores.find(item => item.stor_pk == this.users[0].store_id)
+                        this.selectStore = this.stores.find(item => item.stor_pk == this.users.store_id)
                     } else
                         this.enabledStore = false
 
@@ -386,19 +386,21 @@ export default {
         },
         finalizarVenta() {
             console.log((this.total + '-' + (this.efectivo + this.tarjeta)));
-            if (this.editadoSale.pame_fk == 1)
-                if ((this.total - this.efectivo - this.tarjeta) == 0) {
+            if (this.editadoSale.pame_fk == 1){
+                var montototal = parseFloat(this.efectivo) + parseFloat(this.tarjeta);
+                var operacion = parseFloat(this.total) - montototal;
+                if (operacion <= 0) {
 
                 }
-            else {
-                this.normal('Notificación', 'Los montos de pago deben ser igual al total', "success");
-                return;
-            }
+                else {
+                    this.normal('Notificación', 'Los montos de pago deben ser igual al total', "success");
+                    return;
+                }
 
-            this.messageQuestion = '¿Desea finalizar la operación?';
+            this.messageQuestion = '¿Desea finalizar la Venta?';
 
             this.dialogQuestion = true
-
+            }
         },
         guardaFinalizar() {
 

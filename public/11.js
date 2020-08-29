@@ -309,7 +309,7 @@ __webpack_require__.r(__webpack_exports__);
         if (_this.users.store_id > 0) {
           _this.enabledStore = true;
           _this.selectStore = _this.stores.find(function (item) {
-            return item.stor_pk == _this.users[0].store_id;
+            return item.stor_pk == _this.users.store_id;
           });
         } else _this.enabledStore = false;
       })["catch"](function (e) {
@@ -390,12 +390,19 @@ __webpack_require__.r(__webpack_exports__);
     },
     finalizarVenta: function finalizarVenta() {
       console.log(this.total + '-' + (this.efectivo + this.tarjeta));
-      if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
-        this.normal('Notificación', 'Los montos de pago deben ser igual al total', "success");
-        return;
+
+      if (this.editadoSale.pame_fk == 1) {
+        var montototal = parseFloat(this.efectivo) + parseFloat(this.tarjeta);
+        var operacion = parseFloat(this.total) - montototal;
+
+        if (operacion <= 0) {} else {
+          this.normal('Notificación', 'Los montos de pago deben ser igual al total', "success");
+          return;
+        }
+
+        this.messageQuestion = '¿Desea finalizar la Venta?';
+        this.dialogQuestion = true;
       }
-      this.messageQuestion = '¿Desea finalizar la operación?';
-      this.dialogQuestion = true;
     },
     guardaFinalizar: function guardaFinalizar() {
       var _this3 = this;
