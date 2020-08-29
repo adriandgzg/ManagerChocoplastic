@@ -399,10 +399,10 @@ __webpack_require__.r(__webpack_exports__);
           this.normal('Notificación', 'Los montos de pago deben ser igual al total', "success");
           return;
         }
-
-        this.messageQuestion = '¿Desea finalizar la Venta?';
-        this.dialogQuestion = true;
       }
+
+      this.messageQuestion = '¿Desea finalizar la Venta?';
+      this.dialogQuestion = true;
     },
     guardaFinalizar: function guardaFinalizar() {
       var _this3 = this;
