@@ -46,7 +46,7 @@ class ProductController extends ApiResponseController
                     'P.prod_listprice AS WholesalePrice',
                     'P.prod_minimumpurchase AS MinimumPurchase',
                     'P.prod_bulk AS Bulk',
-                    'PI.prin_stock Stock',
+                    'PI.prin_stock AS Stock',
                     //DB::raw("PI.prin_stock * P.prod_packingquantity AS Stock"),
                     'PC.prca_name AS Category',
                     'MO.meas_name AS Measurement',
