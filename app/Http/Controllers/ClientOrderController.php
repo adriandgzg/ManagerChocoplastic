@@ -153,22 +153,6 @@ class ClientOrderController extends ApiResponseController
 
                 //////////////////  Inserción de Log  //////////////////
                 $this->getstorelog('client_order_details', $vclod_pk, 1);
-
-
-                /*DB::table('client_order_details')->insert(array(
-                    'clor_fk' => $vclor_pk,
-                    'prod_fk' => $vprod_pk,
-                    'meas_fk' => $vProduct->meas_fk_output,
-                    'clod_quantity' => $cod["Quantity"],
-                    //'clod_type' => $cod["Type"],
-                    'clod_price' => $vProduct->prod_saleprice,
-                    'clod_discountrate' => 0,
-                    'clod_ieps' => 0,
-                    'clod_iva' => 0,
-                    'clod_status' => 1,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ));*/
             }
        
             return $this->dbResponse("Ped_" . $vsyst_clie_order, 200, null, 'Pedido Guardado Correctamente');
@@ -282,6 +266,7 @@ class ClientOrderController extends ApiResponseController
                 ->select(
                     'CO.clor_pk',
                     'CO.clor_identifier',
+                    'CO.created_at',
 
                     'C.clie_pk',
                     'C.clie_identifier',
@@ -289,7 +274,9 @@ class ClientOrderController extends ApiResponseController
                     'C.clie_rfc',                           
 
                     'S.stor_pk',
-                    'S.stor_name'
+                    'S.stor_name',
+
+                    DB::raw('(SELECT CONCAT(U.phone_number, "-", U.name) AS user FROM logs AS L INNER JOIN users AS U ON L.user_fk = U.id WHERE L.table = "client_orders" AND L.pk_register = CO.clor_pk AND L.operation = 1 LIMIT 1) AS user') //Vededor
                     )
                 ->where('CO.clor_pk', '=', $vclor_pk)
                 ->first();

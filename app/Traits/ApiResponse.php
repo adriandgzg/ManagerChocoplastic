@@ -59,7 +59,7 @@ trait ApiResponse
     protected function getstorelog(string $ptable, int $ppk_register, int $poperation)
     {
         //ID Usuario
-        $vuser_fk = 1;//Auth::user()->id;
+        $vuser_fk = Auth::user()->id;
 
         //Inserción de log
         $vL = new Log();
