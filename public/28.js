@@ -648,7 +648,7 @@ var render = function() {
                                     )
                                   : _vm._e(),
                                 _vm._v(" "),
-                                item.prpu_status_description != "Pendiente" ||
+                                item.prpu_status_description != "Pendiente" &&
                                 item.prpu_status_description != "Cancelada"
                                   ? _c(
                                       "v-btn",
