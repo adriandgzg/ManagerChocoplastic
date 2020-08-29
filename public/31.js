@@ -615,7 +615,6 @@ __webpack_require__.r(__webpack_exports__);
 
       this.orderHeader.pame_fk = this.selectpame.pame_pk;
       this.orderHeader.prpu_amount = this.total;
-      if (!this.enabledStore) this.orderHeader.stor_fk = this.selectStore.stor_pk;else this.orderHeader.stor_fk = this.users.store_id;
       console.log('this.orderHeader');
       console.log(this.orderHeader);
       axios.post('/provider/purchases/update', this.orderHeader).then(function (response) {
