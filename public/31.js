@@ -593,7 +593,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      if (this.selectStore == '' || this.selectStore == null) {
+      if (!this.enabledStore) if (this.selectStore == '' || this.selectStore == null) {
         this.normal('Notificación', "Debe seleccionar una sucursal", "error");
         return;
       }
