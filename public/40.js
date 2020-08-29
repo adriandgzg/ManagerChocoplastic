@@ -441,7 +441,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     buscar: function buscar() {
       var _this7 = this;
 
+      this.loading = true;
       axios.get('/product/search').then(function (response) {
+        setTimeout(function () {
+          return _this7.loading = false;
+        }, 500);
         _this7.products = response.data.data;
         _this7.dialog = true;
         console.log(response.data);

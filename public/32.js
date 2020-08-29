@@ -157,11 +157,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -414,7 +409,11 @@ __webpack_require__.r(__webpack_exports__);
     buscar: function buscar() {
       var _this7 = this;
 
+      this.loading = true;
       axios.get('/product/search').then(function (response) {
+        setTimeout(function () {
+          return _this7.loading = false;
+        }, 500);
         _this7.products = response.data.data;
         _this7.dialog = true;
         console.log(response.data);
@@ -596,7 +595,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -625,9 +626,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
               ),
               _c(
                 "v-btn",
@@ -639,7 +638,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\r\n                Cerrar\r\n            ")]
               )
             ],
             1
@@ -729,7 +728,11 @@ var render = function() {
                               ? _c(
                                   "v-chip",
                                   { attrs: { color: "green", outlined: "" } },
-                                  [_vm._v(" \n                    Granel")]
+                                  [
+                                    _vm._v(
+                                      "\r\n                            Granel"
+                                    )
+                                  ]
                                 )
                               : _c(
                                   "v-chip",
@@ -805,7 +808,9 @@ var render = function() {
                                   _c("v-label", [
                                     _c("h3", [_vm._v("Proveedor:")]),
                                     _vm._v(
-                                      " " + _vm._s(_vm.editadoHeader.prov_name)
+                                      " " +
+                                        _vm._s(_vm.editadoHeader.prov_name) +
+                                        "\r\n                                "
                                     )
                                   ])
                                 ],
@@ -829,7 +834,9 @@ var render = function() {
                                   _c("v-label", [
                                     _c("h3", [_vm._v("Sucursal:")]),
                                     _vm._v(
-                                      " " + _vm._s(_vm.editadoHeader.stor_name)
+                                      " " +
+                                        _vm._s(_vm.editadoHeader.stor_name) +
+                                        "\r\n                                "
                                     )
                                   ])
                                 ],
@@ -853,7 +860,9 @@ var render = function() {
                                   _c("v-label", [
                                     _c("h3", [_vm._v("Método de pago:")]),
                                     _vm._v(
-                                      " " + _vm._s(_vm.editadoHeader.pame_name)
+                                      " " +
+                                        _vm._s(_vm.editadoHeader.pame_name) +
+                                        "\r\n                                "
                                     )
                                   ])
                                 ],

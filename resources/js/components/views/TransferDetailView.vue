@@ -446,9 +446,10 @@ export default {
             this.editedIndex = -1
         },
         buscar() {
+            this.loading = true
             axios.get('/product/search')
                 .then(response => {
-
+                    setTimeout(() => (this.loading = false), 500)
                     this.products = response.data.data;
                     this.dialog = true
                     console.log(response.data)
