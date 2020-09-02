@@ -452,7 +452,7 @@ export default {
                 this.cambio = 0
         },
         getTotal() {
-
+            this.subtotal = 0
             for (var i = 0; i < this.desserts.length; i++) {
                 this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity);
             }

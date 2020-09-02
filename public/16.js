@@ -133,6 +133,7 @@ __webpack_require__.r(__webpack_exports__);
 
         if (response.data.data != null) {
           _this.sales = response.data.data;
+          console.log(_this.sales);
         } else {
           _this.normal('Notificación', response.data.status.message, "error");
         }

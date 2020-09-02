@@ -19,7 +19,7 @@
         <v-row>
             <v-col>
                 <v-card>
-                    <v-data-table :headers="headers" :items="sales" :search="search" sort-by="id" class="elevation-3">
+                    <v-data-table :headers="headers" :items="sales" :search="search" :sort-by="['created_at']" :sort-desc="[true]" class="elevation-3">
                         <template v-slot:top>
                             <v-system-bar color="indigo darken-2" dark></v-system-bar>
                             <v-toolbar flat color="indigo">

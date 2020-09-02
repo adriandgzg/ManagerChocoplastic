@@ -451,6 +451,8 @@ __webpack_require__.r(__webpack_exports__);
       if (this.efectivo - this.total > 0) this.cambio = this.efectivo - this.total;else this.cambio = 0;
     },
     getTotal: function getTotal() {
+      this.subtotal = 0;
+
       for (var i = 0; i < this.desserts.length; i++) {
         this.subtotal = this.subtotal + this.desserts[i].clsd_price * this.desserts[i].clsd_quantity;
       } //this.iva =  this.subtotal * 0.16;

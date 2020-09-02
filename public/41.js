@@ -73,26 +73,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -172,6 +152,7 @@ __webpack_require__.r(__webpack_exports__);
 
         if (response.data.data != null) {
           _this.sales = response.data.data;
+          console.log(_this.sales);
         } else {
           _this.normal('Notificación', response.data.status.message, "error");
         }
@@ -227,7 +208,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -256,9 +239,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
               ),
               _c(
                 "v-btn",
@@ -270,7 +251,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\r\n                Cerrar\r\n            ")]
               )
             ],
             1
@@ -385,11 +366,11 @@ var render = function() {
                                       { attrs: { color: "gray", dark: "" } },
                                       [
                                         _vm._v(
-                                          "  " +
+                                          " " +
                                             _vm._s(
                                               item.prtr_status_description
                                             ) +
-                                            "  "
+                                            " "
                                         )
                                       ]
                                     )
