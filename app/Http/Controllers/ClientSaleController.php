@@ -112,29 +112,6 @@ class ClientSaleController extends ApiResponseController
 
             if($vClientOrder)
             { 
-                //Consultar Pedido Cliente
-                /*$SelectCO = ClientOrder::where('clor_pk', '=', $vclor_pk)
-                    ->select(
-                        array(
-                            'clie_fk', 
-                            'clor_pk AS clor_fk',
-                            DB::raw("0 AS clsa_status"),
-                            DB::raw("NOW() AS created_at"),
-                            DB::raw("NOW() AS updated_at")
-                        )
-                    );
-
-                DB::table('client_sales')
-                    ->insertUsing(
-                        [
-                            'clie_fk',
-                            'clor_fk', 
-                            'clsa_status', 
-                            'created_at', 
-                            'updated_at'
-                        ]
-                    , $SelectCO);*/
-
                 //Insertar Pago del cliente
                 $vCSI = new ClientSale();        
                 $vCSI->clie_fk = $vClientOrder->clie_fk;
