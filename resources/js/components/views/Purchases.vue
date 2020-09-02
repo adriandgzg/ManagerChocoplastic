@@ -39,33 +39,73 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <v-dialog v-model="dialogAgregar" scrollable>
+            <v-card>
+                <v-toolbar dark color="cyan">
+                    <v-toolbar-title>Agregar producto</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                        <v-btn icon dark @click="dialogAgregar = false">
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                    </v-toolbar-items>
+                </v-toolbar>
+                <v-divider></v-divider>
+                <v-form v-model="validProvider">
+                    <v-card-text>
+                        <v-text-field v-model="detail.prod_identifier" label="ID" disabled />
+                        <v-text-field v-model="detail.prod_name" label="Nombre" disabled />
+                        <v-text-field v-model="detail.prpd_quantity" label="Stock" type="number" :rules="minNumberRules" autofocus required></v-text-field>
+                        <v-text-field v-model="detail.prpd_price" label="Precio" prefix="$" type="number" :rules="minNumberRules" required></v-text-field>
+                        <v-text-field v-model="detail.prpd_discountrate" label="Descuento" type="number" :rules="minNumberRules" autofocus></v-text-field>
+
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue-grey" class="ma-2 white--text" @click="dialogAgregar=false">Cancelar</v-btn>
+                        <v-btn :disabled="!validProvider" color="teal accent-4" class="ma-2 white--text" @click="agregar()">Guardar</v-btn>
+                    </v-card-actions>
+                </v-form>
+            </v-card>
+        </v-dialog>
+
         <!--  Modal del diálogo para Alta y Edicion    -->
         <v-dialog v-model="dialog" max-width="800px">
             <v-card>
-                <v-card-title class="cyan white--text">
-                    <span class="headline">Buscar producto</span>
-                </v-card-title>
-
-                <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3">
-                    <template v-slot:top>
-                        <v-col cols="12" sm="12">
-                            <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
-                        </v-col>
-                    </template>
-                    <template v-slot:item.prod_saleprice="{ item }">
-                        <v-label>${{formatMoney(item.prod_saleprice)}}</v-label>
-                    </template>
-                    <template v-slot:item.bulk="{ item }">
-                        <v-chip v-if="item.prod_bulk == 1" color="green" outlined>
-                            Granel</v-chip>
-                        <v-chip v-else color="red" outlined>NA Granel</v-chip>
-                    </template>
-                    <template v-slot:item.action="{ item }">
-                        <v-btn class="mr-2" fab dark small color="green" @click="agregar(item)" title="Agregar producto">
-                            <v-icon dark>mdi-checkbox-marked-circle</v-icon>
+                <v-toolbar dark color="cyan">
+                    <v-toolbar-title>Buscar producto</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                        <v-btn icon dark @click="dialog = false">
+                            <v-icon>mdi-close</v-icon>
                         </v-btn>
-                    </template>
-                </v-data-table>
+                    </v-toolbar-items>
+                </v-toolbar>
+                <v-divider></v-divider>
+                <v-card-text>
+
+                    <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3">
+                        <template v-slot:top>
+                            <v-col cols="12" sm="12">
+                                <v-text-field autofocus v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
+                            </v-col>
+                        </template>
+                        <template v-slot:item.prod_saleprice="{ item }">
+                            <v-label>${{formatMoney(item.prod_saleprice)}}</v-label>
+                        </template>
+                        <template v-slot:item.bulk="{ item }">
+                            <v-chip v-if="item.prod_bulk == 1" color="green" outlined>
+                                Granel</v-chip>
+                            <v-chip v-else color="red" outlined>NA Granel</v-chip>
+                        </template>
+                        <template v-slot:item.action="{ item }">
+                            <v-btn class="mr-2" fab dark small color="green" @click="openAgregar(item)" title="Agregar producto">
+                                <v-icon dark>mdi-checkbox-marked-circle</v-icon>
+                            </v-btn>
+                        </template>
+                    </v-data-table>
+                </v-card-text>
             </v-card>
 
         </v-dialog>
@@ -224,6 +264,7 @@ export default {
             directa: this.$route.params.directa,
             prpu_pk: 0,
             valid: false,
+            validProvider: false,
             stores: [],
             providers: [],
             desserts: [],
@@ -287,6 +328,8 @@ export default {
                 prpd_quantity: 0,
                 prpd_price: 0,
                 prpd_discountrate: 0,
+                prod_identifier: 0,
+                prod_name: '',
             },
             detailDefault: {
                 prpo_fk: 0,
@@ -295,6 +338,8 @@ export default {
                 prpd_quantity: 0,
                 prpd_price: 0,
                 prpd_discountrate: 0,
+                prod_identifier: 0,
+                prod_name: '',
             },
             orderHeader: {
                 prpu_pk: 0,
@@ -312,7 +357,7 @@ export default {
             dialogQuestion: false,
             dialogQuestionDelete: false,
             messageQuestion: '',
-
+            dialogAgregar: false,
             minNumberRules: [
                 value => !!value || 'Requerido.',
                 value => value > 0 || 'El número debe ser mayor o igual a cero',
@@ -395,25 +440,7 @@ export default {
 
         },
 
-        agregar(item) {
-            if (this.selectProv == '' || this.selectProv == null) {
-
-                this.normal('Notificación', "Debe seleccionar un proveedor", "error");
-                return;
-            }
-            if (!this.enabledStore)
-                if (this.selectStore == '' || this.selectStore == null) {
-                    this.normal('Notificación', "Debe seleccionar una sucursal", "error");
-
-                    return;
-                }
-
-            if (this.selectpame == '' || this.selectpame == null) {
-                this.normal('Notificación', "Debe seleccionar una forma de pago", "error");
-
-                return;
-            }
-
+        openAgregar(item) {
             if (this.desserts.length > 0) {
                 this.detail.prpu_pk = this.prpo_pk;
             } else {
@@ -433,6 +460,32 @@ export default {
             else
                 this.detail.stor_fk = this.users.store_id;
 
+            this.detail.prod_identifier = item.prod_identifier
+            this.detail.prod_name = item.prod_name
+
+            console.log(this.detail)
+            this.dialogAgregar = true
+        },
+
+        agregar(item) {
+            if (this.selectProv == '' || this.selectProv == null) {
+
+                this.normal('Notificación', "Debe seleccionar un proveedor", "error");
+                return;
+            }
+            if (!this.enabledStore)
+                if (this.selectStore == '' || this.selectStore == null) {
+                    this.normal('Notificación', "Debe seleccionar una sucursal", "error");
+
+                    return;
+                }
+
+            if (this.selectpame == '' || this.selectpame == null) {
+                this.normal('Notificación', "Debe seleccionar una forma de pago", "error");
+
+                return;
+            }
+
             axios.post('/provider/purchase/details', this.detail)
                 .then(response => {
                     console.log(response)
@@ -442,7 +495,7 @@ export default {
                         this.prpo_pk = response.data.data;
                         //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                         this.createCompra();
-                        this.dialog = false;
+                        this.dialogAgregar = false;
                         this.getTotal();
 
                     } else {

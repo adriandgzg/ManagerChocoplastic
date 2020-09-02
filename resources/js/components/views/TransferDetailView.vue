@@ -39,7 +39,7 @@
             </v-card>
         </v-dialog>
         <!--  Modal del diálogo para Alta y Edicion    -->
-        <v-dialog v-model="dialog" max-width="800px">
+        <v-dialog v-model="dialog" scrollable max-width="800px">
             <v-card>
                 <v-card-title class="cyan white--text">
                     <span class="headline">Buscar producto</span>
@@ -48,7 +48,7 @@
                 <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3">
                     <template v-slot:top>
                         <v-col cols="12" sm="12">
-                            <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
+                            <v-text-field autofocus v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
                         </v-col>
                     </template>
                     <template v-slot:item.prod_saleprice="{ item }">

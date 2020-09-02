@@ -429,6 +429,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this7 = this;
 
       this.loading = true;
+      $("#txtBuscar").focus(function () {// alert("Handler for .focus() called.");
+      });
       axios.get('/product/search').then(function (response) {
         setTimeout(function () {
           return _this7.loading = false;
@@ -773,6 +775,7 @@ var render = function() {
                               [
                                 _c("v-text-field", {
                                   attrs: {
+                                    id: "txtBuscar",
                                     "append-icon": "search",
                                     label: "Buscar",
                                     "single-line": "",

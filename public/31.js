@@ -205,6 +205,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -230,6 +270,7 @@ __webpack_require__.r(__webpack_exports__);
       directa: this.$route.params.directa,
       prpu_pk: 0,
       valid: false,
+      validProvider: false,
       stores: [],
       providers: [],
       desserts: [],
@@ -292,7 +333,9 @@ __webpack_require__.r(__webpack_exports__);
         prpd_pk: 0,
         prpd_quantity: 0,
         prpd_price: 0,
-        prpd_discountrate: 0
+        prpd_discountrate: 0,
+        prod_identifier: 0,
+        prod_name: ''
       },
       detailDefault: {
         prpo_fk: 0,
@@ -300,7 +343,9 @@ __webpack_require__.r(__webpack_exports__);
         prpd_pk: 0,
         prpd_quantity: 0,
         prpd_price: 0,
-        prpd_discountrate: 0
+        prpd_discountrate: 0,
+        prod_identifier: 0,
+        prod_name: ''
       },
       orderHeader: {
         prpu_pk: 0,
@@ -318,6 +363,7 @@ __webpack_require__.r(__webpack_exports__);
       dialogQuestion: false,
       dialogQuestionDelete: false,
       messageQuestion: '',
+      dialogAgregar: false,
       minNumberRules: [function (value) {
         return !!value || 'Requerido.';
       }, function (value) {
@@ -389,6 +435,26 @@ __webpack_require__.r(__webpack_exports__);
         console.log(e);
       });
     },
+    openAgregar: function openAgregar(item) {
+      if (this.desserts.length > 0) {
+        this.detail.prpu_pk = this.prpo_pk;
+      } else {
+        this.detail.prpu_pk = 0;
+      }
+
+      this.detail.prod_fk = item.prod_pk;
+      this.detail.prpd_quantity = 1;
+      this.detail.prpd_price = 0;
+      this.detail.prpd_discountrate = 0;
+      this.detail.prov_fk = this.selectProv.prov_pk; //this.detail.stor_fk = this.selectStore.stor_pk
+
+      this.detail.pame_fk = this.selectpame.pame_pk;
+      if (!this.enabledStore) this.detail.stor_fk = this.selectStore.stor_pk;else this.detail.stor_fk = this.users.store_id;
+      this.detail.prod_identifier = item.prod_identifier;
+      this.detail.prod_name = item.prod_name;
+      console.log(this.detail);
+      this.dialogAgregar = true;
+    },
     agregar: function agregar(item) {
       var _this5 = this;
 
@@ -407,20 +473,6 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      if (this.desserts.length > 0) {
-        this.detail.prpu_pk = this.prpo_pk;
-      } else {
-        this.detail.prpu_pk = 0;
-      }
-
-      this.detail.prod_fk = item.prod_pk;
-      this.detail.prpd_quantity = 1;
-      this.detail.prpd_price = 0;
-      this.detail.prpd_discountrate = 0;
-      this.detail.prov_fk = this.selectProv.prov_pk; //this.detail.stor_fk = this.selectStore.stor_pk
-
-      this.detail.pame_fk = this.selectpame.pame_pk;
-      if (!this.enabledStore) this.detail.stor_fk = this.selectStore.stor_pk;else this.detail.stor_fk = this.users.store_id;
       axios.post('/provider/purchase/details', this.detail).then(function (response) {
         console.log(response);
 
@@ -430,7 +482,7 @@ __webpack_require__.r(__webpack_exports__);
 
           _this5.createCompra();
 
-          _this5.dialog = false;
+          _this5.dialogAgregar = false;
 
           _this5.getTotal();
         } else {
@@ -907,6 +959,193 @@ var render = function() {
           _c(
             "v-dialog",
             {
+              attrs: { scrollable: "" },
+              model: {
+                value: _vm.dialogAgregar,
+                callback: function($$v) {
+                  _vm.dialogAgregar = $$v
+                },
+                expression: "dialogAgregar"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-toolbar",
+                    { attrs: { dark: "", color: "cyan" } },
+                    [
+                      _c("v-toolbar-title", [_vm._v("Agregar producto")]),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-toolbar-items",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { icon: "", dark: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.dialogAgregar = false
+                                }
+                              }
+                            },
+                            [_c("v-icon", [_vm._v("mdi-close")])],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-divider"),
+                  _vm._v(" "),
+                  _c(
+                    "v-form",
+                    {
+                      model: {
+                        value: _vm.validProvider,
+                        callback: function($$v) {
+                          _vm.validProvider = $$v
+                        },
+                        expression: "validProvider"
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c("v-text-field", {
+                            attrs: { label: "ID", disabled: "" },
+                            model: {
+                              value: _vm.detail.prod_identifier,
+                              callback: function($$v) {
+                                _vm.$set(_vm.detail, "prod_identifier", $$v)
+                              },
+                              expression: "detail.prod_identifier"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: { label: "Nombre", disabled: "" },
+                            model: {
+                              value: _vm.detail.prod_name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.detail, "prod_name", $$v)
+                              },
+                              expression: "detail.prod_name"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Stock",
+                              type: "number",
+                              rules: _vm.minNumberRules,
+                              autofocus: "",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.detail.prpd_quantity,
+                              callback: function($$v) {
+                                _vm.$set(_vm.detail, "prpd_quantity", $$v)
+                              },
+                              expression: "detail.prpd_quantity"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Precio",
+                              prefix: "$",
+                              type: "number",
+                              rules: _vm.minNumberRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.detail.prpd_price,
+                              callback: function($$v) {
+                                _vm.$set(_vm.detail, "prpd_price", $$v)
+                              },
+                              expression: "detail.prpd_price"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Descuento",
+                              type: "number",
+                              rules: _vm.minNumberRules,
+                              autofocus: ""
+                            },
+                            model: {
+                              value: _vm.detail.prpd_discountrate,
+                              callback: function($$v) {
+                                _vm.$set(_vm.detail, "prpd_discountrate", $$v)
+                              },
+                              expression: "detail.prpd_discountrate"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: { color: "blue-grey" },
+                              on: {
+                                click: function($event) {
+                                  _vm.dialogAgregar = false
+                                }
+                              }
+                            },
+                            [_vm._v("Cancelar")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: {
+                                disabled: !_vm.validProvider,
+                                color: "teal accent-4"
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.agregar()
+                                }
+                              }
+                            },
+                            [_vm._v("Guardar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
               attrs: { "max-width": "800px" },
               model: {
                 value: _vm.dialog,
@@ -920,122 +1159,160 @@ var render = function() {
               _c(
                 "v-card",
                 [
-                  _c("v-card-title", { staticClass: "cyan white--text" }, [
-                    _c("span", { staticClass: "headline" }, [
-                      _vm._v("Buscar producto")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("v-data-table", {
-                    staticClass: "elevation-3",
-                    attrs: {
-                      headers: _vm.headers,
-                      items: _vm.products,
-                      search: _vm.search,
-                      "sort-by": "id"
-                    },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "top",
-                        fn: function() {
-                          return [
-                            _c(
-                              "v-col",
-                              { attrs: { cols: "12", sm: "12" } },
-                              [
-                                _c("v-text-field", {
-                                  attrs: {
-                                    "append-icon": "search",
-                                    label: "Buscar",
-                                    "single-line": "",
-                                    "hide-details": ""
-                                  },
-                                  model: {
-                                    value: _vm.search,
-                                    callback: function($$v) {
-                                      _vm.search = $$v
-                                    },
-                                    expression: "search"
-                                  }
-                                })
-                              ],
-                              1
-                            )
-                          ]
-                        },
-                        proxy: true
-                      },
-                      {
-                        key: "item.prod_saleprice",
-                        fn: function(ref) {
-                          var item = ref.item
-                          return [
-                            _c("v-label", [
-                              _vm._v(
-                                "$" +
-                                  _vm._s(_vm.formatMoney(item.prod_saleprice))
-                              )
-                            ])
-                          ]
-                        }
-                      },
-                      {
-                        key: "item.bulk",
-                        fn: function(ref) {
-                          var item = ref.item
-                          return [
-                            item.prod_bulk == 1
-                              ? _c(
-                                  "v-chip",
-                                  { attrs: { color: "green", outlined: "" } },
-                                  [
-                                    _vm._v(
-                                      "\r\n                            Granel"
-                                    )
-                                  ]
-                                )
-                              : _c(
-                                  "v-chip",
-                                  { attrs: { color: "red", outlined: "" } },
-                                  [_vm._v("NA Granel")]
-                                )
-                          ]
-                        }
-                      },
-                      {
-                        key: "item.action",
-                        fn: function(ref) {
-                          var item = ref.item
-                          return [
-                            _c(
-                              "v-btn",
-                              {
-                                staticClass: "mr-2",
-                                attrs: {
-                                  fab: "",
-                                  dark: "",
-                                  small: "",
-                                  color: "green",
-                                  title: "Agregar producto"
-                                },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.agregar(item)
-                                  }
+                  _c(
+                    "v-toolbar",
+                    { attrs: { dark: "", color: "cyan" } },
+                    [
+                      _c("v-toolbar-title", [_vm._v("Buscar producto")]),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-toolbar-items",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { icon: "", dark: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.dialog = false
                                 }
-                              },
-                              [
-                                _c("v-icon", { attrs: { dark: "" } }, [
-                                  _vm._v("mdi-checkbox-marked-circle")
+                              }
+                            },
+                            [_c("v-icon", [_vm._v("mdi-close")])],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-divider"),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c("v-data-table", {
+                        staticClass: "elevation-3",
+                        attrs: {
+                          headers: _vm.headers,
+                          items: _vm.products,
+                          search: _vm.search,
+                          "sort-by": "id"
+                        },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "top",
+                            fn: function() {
+                              return [
+                                _c(
+                                  "v-col",
+                                  { attrs: { cols: "12", sm: "12" } },
+                                  [
+                                    _c("v-text-field", {
+                                      attrs: {
+                                        autofocus: "",
+                                        "append-icon": "search",
+                                        label: "Buscar",
+                                        "single-line": "",
+                                        "hide-details": ""
+                                      },
+                                      model: {
+                                        value: _vm.search,
+                                        callback: function($$v) {
+                                          _vm.search = $$v
+                                        },
+                                        expression: "search"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ]
+                            },
+                            proxy: true
+                          },
+                          {
+                            key: "item.prod_saleprice",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c("v-label", [
+                                  _vm._v(
+                                    "$" +
+                                      _vm._s(
+                                        _vm.formatMoney(item.prod_saleprice)
+                                      )
+                                  )
                                 ])
-                              ],
-                              1
-                            )
-                          ]
-                        }
-                      }
-                    ])
-                  })
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.bulk",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                item.prod_bulk == 1
+                                  ? _c(
+                                      "v-chip",
+                                      {
+                                        attrs: { color: "green", outlined: "" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\r\n                                Granel"
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "v-chip",
+                                      { attrs: { color: "red", outlined: "" } },
+                                      [_vm._v("NA Granel")]
+                                    )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.action",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c(
+                                  "v-btn",
+                                  {
+                                    staticClass: "mr-2",
+                                    attrs: {
+                                      fab: "",
+                                      dark: "",
+                                      small: "",
+                                      color: "green",
+                                      title: "Agregar producto"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.openAgregar(item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-checkbox-marked-circle")
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  )
                 ],
                 1
               )

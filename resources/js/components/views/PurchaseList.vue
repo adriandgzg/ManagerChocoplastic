@@ -46,7 +46,7 @@
                             </v-toolbar>
 
                             <v-col cols="12" sm="12">
-                                <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
+                                <v-text-field autofocus v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
                             </v-col>
                         </template>
                         <template v-slot:item.status="{ item }">

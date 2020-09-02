@@ -37,7 +37,7 @@
                 <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3" :loading="loading" loading-text="Cargando... Espere un momento.">
                     <template v-slot:top>
                         <v-col cols="12" sm="12">
-                            <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
+                            <v-text-field id="txtBuscar" v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
                         </v-col>
                     </template>
                     <template v-slot:item.prod_saleprice="{ item }">
@@ -429,6 +429,9 @@ export default {
         },
         buscar() {
             this.loading = true
+            $("#txtBuscar").focus(function () {
+                // alert("Handler for .focus() called.");
+            });
             axios.get('/product/search')
                 .then(response => {
                     setTimeout(() => (this.loading = false), 500)

@@ -188,9 +188,6 @@ export default {
                 }, {
                     text: 'No. Empleado',
                     value: 'phone_number'
-                }, {
-                    text: 'Tipo Usuario',
-                    value: 'user_type'
                 },
                 {
                     text: '',

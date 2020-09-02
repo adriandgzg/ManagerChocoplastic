@@ -38,35 +38,70 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <!--  Modal del diálogo para Alta y Edicion    -->
-        <v-dialog v-model="dialog" max-width="800px">
+        <v-dialog v-model="dialogAgregar" scrollable>
             <v-card>
-                <v-card-title class="cyan white--text">
-                    <span class="headline">Buscar producto</span>
-                </v-card-title>
-
-                <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3">
-                    <template v-slot:top>
-                        <v-col cols="12" sm="12">
-                            <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
-                        </v-col>
-                    </template>
-                    <template v-slot:item.prod_saleprice="{ item }">
-                        <v-label>${{formatMoney(item.prod_saleprice)}}</v-label>
-                    </template>
-                    <template v-slot:item.bulk="{ item }">
-                        <v-chip v-if="item.prod_bulk == 1" color="green" outlined>
-                            Granel</v-chip>
-                        <v-chip v-else color="red" outlined>NA Granel</v-chip>
-                    </template>
-                    <template v-slot:item.action="{ item }">
-                        <v-btn class="mr-2" fab dark small color="green" @click="agregar(item)">
-                            <v-icon dark>mdi-checkbox-marked-circle</v-icon>
+                <v-toolbar dark color="cyan">
+                    <v-toolbar-title>Agregar producto</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                        <v-btn icon dark @click="dialogAgregar = false">
+                            <v-icon>mdi-close</v-icon>
                         </v-btn>
-                    </template>
-                </v-data-table>
+                    </v-toolbar-items>
+                </v-toolbar>
+                <v-divider></v-divider>
+                <v-form v-model="validProvider">
+                    <v-card-text>
+                        <v-text-field v-model="detail.prod_identifier" label="ID" disabled />
+                        <v-text-field v-model="detail.prod_name" label="Nombre" disabled />
+                        <v-text-field v-model="detail.ppod_quantity" label="Stock" type="number" :rules="minNumberRules" autofocus></v-text-field>
+                        <v-text-field v-model="detail.ppod_providerprice" label="Precio" prefix="$" type="number" :rules="minNumberRules" required></v-text-field>
+                        <v-text-field v-model="detail.ppod_discountrate" label="Descuento" type="number" :rules="minNumberRules"></v-text-field>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue-grey" class="ma-2 white--text" @click="!dialogAgregar">Cancelar</v-btn>
+                        <v-btn :disabled="!validProvider" color="teal accent-4" class="ma-2 white--text" @click="agregar()">Guardar</v-btn>
+                    </v-card-actions>
+                </v-form>
             </v-card>
-
+        </v-dialog>
+        <!--  Modal del diálogo para Alta y Edicion    -->
+        <v-dialog v-model="dialog" scrollable>
+            <v-card>
+                <v-toolbar dark color="cyan">
+                    <v-toolbar-title>Buscar producto</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                        <v-btn icon dark @click="dialog = false">
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                    </v-toolbar-items>
+                </v-toolbar>
+                <v-divider></v-divider>
+                <v-card-text>
+                    <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3">
+                        <template v-slot:top>
+                            <v-col cols="12" sm="12">
+                                <v-text-field autofocus v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
+                            </v-col>
+                        </template>
+                        <template v-slot:item.prod_saleprice="{ item }">
+                            <v-label>${{formatMoney(item.prod_saleprice)}}</v-label>
+                        </template>
+                        <template v-slot:item.bulk="{ item }">
+                            <v-chip v-if="item.prod_bulk == 1" color="green" outlined>
+                                Granel</v-chip>
+                            <v-chip v-else color="red" outlined>NA Granel</v-chip>
+                        </template>
+                        <template v-slot:item.action="{ item }">
+                            <v-btn class="mr-2" fab dark small color="green" @click="openAgregar(item)">
+                                <v-icon dark>mdi-checkbox-marked-circle</v-icon>
+                            </v-btn>
+                        </template>
+                    </v-data-table>
+                </v-card-text>
+            </v-card>
         </v-dialog>
         <v-row>
             <v-col>
@@ -208,6 +243,7 @@ export default {
             ],
             prpo_pk: this.$route.params.id,
             valid: false,
+            validProvider: false,
             stores: [],
             providers: [],
             desserts: [],
@@ -250,6 +286,8 @@ export default {
                 ppod_quantity: 0,
                 ppod_providerprice: 0,
                 ppod_discountrate: 0,
+                prod_identifier: 0,
+                prod_name: '',
             },
             detailDefault: {
                 prpo_fk: 0,
@@ -258,6 +296,8 @@ export default {
                 ppod_quantity: 0,
                 ppod_providerprice: 0,
                 ppod_discountrate: 0,
+                prod_identifier: 0,
+                prod_name: '',
             },
             orderHeader: {
                 prpo_pk: 0,
@@ -272,6 +312,7 @@ export default {
             dialogQuestion: false,
             dialogQuestionDelete: false,
             messageQuestion: '',
+            dialogAgregar: false,
 
             minNumberRules: [
                 value => !!value || 'Requerido.',
@@ -343,7 +384,7 @@ export default {
 
         },
 
-        agregar(item) {
+        openAgregar(item) {
             if (this.desserts.length > 0) {
                 this.detail.prpo_fk = this.prpo_pk;
             } else {
@@ -353,6 +394,23 @@ export default {
             this.detail.ppod_quantity = 1;
             this.detail.ppod_providerprice = 0;
             this.detail.ppod_discountrate = 0;
+            this.detail.prod_identifier = item.prod_identifier
+            this.detail.prod_name = item.prod_name
+
+            console.log(this.detail)
+            this.dialogAgregar = true
+        },
+
+        agregar(item) {
+            /*if (this.desserts.length > 0) {
+                this.detail.prpo_fk = this.prpo_pk;
+            } else {
+                this.detail.prpo_fk = 0;
+            }
+            this.detail.prod_fk = item.prod_pk;
+            this.detail.ppod_quantity = 1;
+            this.detail.ppod_providerprice = 0;
+            this.detail.ppod_discountrate = 0;*/
 
             axios.post('/provider/purchase/order/details', this.detail)
                 .then(response => {
@@ -363,7 +421,7 @@ export default {
                         this.prpo_pk = response.data.data;
                         //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
                         this.createCompra();
-                        this.dialog = false;
+                        this.dialogAgregar = false;
                         this.getTotal();
 
                     } else {
@@ -407,7 +465,7 @@ export default {
             this.loading = true
             axios.get('/provider/purchase/orders/' + this.prpo_pk + '')
                 .then(response => {
-                    setTimeout(() => (this.loading = false), 2000)
+                    setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
                         console.log(response)
                         this.desserts = response.data.data.provider_purchase_order_details

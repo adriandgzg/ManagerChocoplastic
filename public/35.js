@@ -146,6 +146,7 @@ __webpack_require__.r(__webpack_exports__);
         }, 2000);
 
         if (response.data.data != null) {
+          console.log(response.data.data);
           _this.sales = response.data.data;
         } else {
           _this.normal('Notificación', response.data.status.message, "error");
@@ -297,6 +298,7 @@ var render = function() {
                                   [
                                     _c("v-text-field", {
                                       attrs: {
+                                        autofocus: "",
                                         "append-icon": "search",
                                         label: "Buscar",
                                         "single-line": "",

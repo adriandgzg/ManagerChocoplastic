@@ -685,6 +685,7 @@ var render = function() {
                               [
                                 _c("v-text-field", {
                                   attrs: {
+                                    autofocus: "",
                                     "append-icon": "search",
                                     label: "Buscar",
                                     "single-line": "",

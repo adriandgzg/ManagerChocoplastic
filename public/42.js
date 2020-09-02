@@ -198,9 +198,6 @@ __webpack_require__.r(__webpack_exports__);
         text: 'No. Empleado',
         value: 'phone_number'
       }, {
-        text: 'Tipo Usuario',
-        value: 'user_type'
-      }, {
         text: '',
         value: 'action'
       }],

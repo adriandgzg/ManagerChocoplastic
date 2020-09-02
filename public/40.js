@@ -783,7 +783,7 @@ var render = function() {
           _c(
             "v-dialog",
             {
-              attrs: { "max-width": "800px" },
+              attrs: { scrollable: "", "max-width": "800px" },
               model: {
                 value: _vm.dialog,
                 callback: function($$v) {
@@ -821,6 +821,7 @@ var render = function() {
                               [
                                 _c("v-text-field", {
                                   attrs: {
+                                    autofocus: "",
                                     "append-icon": "search",
                                     label: "Buscar",
                                     "single-line": "",

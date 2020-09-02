@@ -29,7 +29,7 @@
 
                             </v-toolbar>
                             <v-col cols="12" sm="12">
-                                <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
+                                <v-text-field autofocus v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
                             </v-col>
                         </template>
                         <template v-slot:item.status="{ item }">
@@ -141,6 +141,7 @@ export default {
                 .then(response => {
                     setTimeout(() => (this.loading = false), 2000)
                     if (response.data.data != null) {
+                        console.log(response.data.data)
                         this.sales = response.data.data;
                     } else {
                         this.normal('Notificación', response.data.status.message, "error");

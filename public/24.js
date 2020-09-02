@@ -120,6 +120,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -179,8 +186,11 @@ __webpack_require__.r(__webpack_exports__);
         //PK Cliente
         pash_fk: 0,
         //PK Forma de Pago
-        prpa_amount: 0 //Monto
-
+        prpa_amount: 0,
+        //Monto
+        prde_amount: 0,
+        prde_amount_paid: 0,
+        prde_amount_outstanding: 0
       },
       defaultItem: {
         prde_fk: 0,
@@ -190,8 +200,11 @@ __webpack_require__.r(__webpack_exports__);
         //PK Cliente
         pash_fk: 0,
         //PK Forma de Pago
-        prpa_amount: 0 //Monto
-
+        prpa_amount: 0,
+        //Monto
+        prde_amount: 0,
+        prde_amount_paid: 0,
+        prde_amount_outstanding: 0
       },
       editedIndex: -1,
       sales: [],
@@ -273,6 +286,9 @@ __webpack_require__.r(__webpack_exports__);
       this.editado.pash_fk = 0;
       this.editado.prpa_amount = 0;
       this.editado.prpu_identifier = item.prpu_identifier;
+      this.editado.prde_amount = item.prde_amount;
+      this.editado.prde_amount_paid = item.prde_amount_paid;
+      this.editado.prde_amount_outstanding = item.prde_amount_outstanding;
     },
     getPayment: function getPayment() {
       var _this2 = this;
@@ -467,52 +483,118 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c(
-                    "v-card-text",
+                    "v-form",
+                    {
+                      model: {
+                        value: _vm.valid,
+                        callback: function($$v) {
+                          _vm.valid = $$v
+                        },
+                        expression: "valid"
+                      }
+                    },
                     [
                       _c(
-                        "v-form",
-                        {
-                          model: {
-                            value: _vm.valid,
-                            callback: function($$v) {
-                              _vm.valid = $$v
-                            },
-                            expression: "valid"
-                          }
-                        },
+                        "v-card-text",
                         [
                           _c(
-                            "v-card-title",
-                            { staticClass: "subheading font-weight-bold" },
+                            "v-row",
                             [
-                              _vm._v(
-                                "Compra: " + _vm._s(_vm.editado.prpu_identifier)
-                              )
-                            ]
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" Compra:")]),
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.editado.prpu_identifier) +
+                                    "\r\n                            "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" Monto total:")]),
+                                _vm._v(
+                                  " $" +
+                                    _vm._s(
+                                      _vm.formatMoney(_vm.editado.prde_amount)
+                                    ) +
+                                    "\r\n                            "
+                                )
+                              ])
+                            ],
+                            1
                           ),
-                          _vm._v(" "),
-                          _c("v-divider"),
                           _vm._v(" "),
                           _c(
                             "v-row",
                             [
-                              _c("v-text-field", {
-                                attrs: {
-                                  label: "Monto abonado",
-                                  prefix: "$",
-                                  type: "number",
-                                  rules: _vm.numberRules,
-                                  required: ""
-                                },
-                                model: {
-                                  value: _vm.editado.prpa_amount,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.editado, "prpa_amount", $$v)
-                                  },
-                                  expression: "editado.prpa_amount"
-                                }
-                              }),
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" Monto pagado:")]),
+                                _vm._v(
+                                  " $" +
+                                    _vm._s(
+                                      _vm.formatMoney(
+                                        _vm.editado.prde_amount_paid
+                                      )
+                                    ) +
+                                    "\r\n                            "
+                                )
+                              ]),
                               _vm._v(" "),
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" Monto pendiente:")]),
+                                _vm._v(
+                                  " $" +
+                                    _vm._s(
+                                      _vm.formatMoney(
+                                        _vm.editado.prde_amount_outstanding
+                                      )
+                                    ) +
+                                    "\r\n                            "
+                                )
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-card-text",
+                                {
+                                  staticClass:
+                                    "category d-inline-flex font-weight-light"
+                                },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Monto abonado",
+                                      prefix: "$",
+                                      type: "number",
+                                      rules: _vm.numberRules,
+                                      required: ""
+                                    },
+                                    model: {
+                                      value: _vm.editado.prpa_amount,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editado,
+                                          "prpa_amount",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "editado.prpa_amount"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
                               _c(
                                 "v-card-text",
                                 {
