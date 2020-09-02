@@ -192,8 +192,11 @@ __webpack_require__.r(__webpack_exports__);
         //PK Cliente
         pash_fk: 0,
         //PK Forma de Pago
-        clpa_amount: 0 //Monto
-
+        clpa_amount: 0,
+        //Monto
+        clde_amount: 0,
+        clde_amount_paid: 0,
+        clde_amount_outstanding: 0
       },
       defaultItem: {
         clde_fk: 0,
@@ -203,8 +206,11 @@ __webpack_require__.r(__webpack_exports__);
         //PK Cliente
         pash_fk: 0,
         //PK Forma de Pago
-        clpa_amount: 0 //Monto
-
+        clpa_amount: 0,
+        //Monto clde
+        clde_amount: 0,
+        clde_amount_paid: 0,
+        clde_amount_outstanding: 0
       },
       editedIndex: -1,
       sales: [],
@@ -431,7 +437,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -561,17 +569,62 @@ var render = function() {
                         },
                         [
                           _c(
-                            "v-card-title",
-                            { staticClass: "subheading font-weight-bold" },
+                            "v-row",
                             [
-                              _vm._v(
-                                "No. Venta: " +
-                                  _vm._s(_vm.editado.clsa_identifier)
-                              )
-                            ]
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" No. Venta:")]),
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.editado.clsa_identifier) +
+                                    "\r\n                            "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" Monto total:")]),
+                                _vm._v(
+                                  " $" +
+                                    _vm._s(
+                                      _vm.formatMoney(_vm.editado.clde_amount)
+                                    ) +
+                                    "\r\n                            "
+                                )
+                              ])
+                            ],
+                            1
                           ),
                           _vm._v(" "),
-                          _c("v-divider"),
+                          _c(
+                            "v-row",
+                            [
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" Monto pagado:")]),
+                                _vm._v(
+                                  " $" +
+                                    _vm._s(
+                                      _vm.formatMoney(
+                                        _vm.editado.clde_amount_paid
+                                      )
+                                    ) +
+                                    "\r\n                            "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" Monto pendiente:")]),
+                                _vm._v(
+                                  " $" +
+                                    _vm._s(
+                                      _vm.formatMoney(
+                                        _vm.editado.clde_amount_outstanding
+                                      )
+                                    ) +
+                                    "\r\n                            "
+                                )
+                              ])
+                            ],
+                            1
+                          ),
                           _vm._v(" "),
                           _c(
                             "v-row",
