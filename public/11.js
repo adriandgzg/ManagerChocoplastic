@@ -481,7 +481,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this7 = this;
 
       axios.get("/paymentmethodsshow/1").then(function (response) {
+        console.log(response.data.data);
         _this7.payments = response.data.data;
+        _this7.selectpame = _this7.payments[0];
       })["catch"](function (e) {
         console.log(e);
       });

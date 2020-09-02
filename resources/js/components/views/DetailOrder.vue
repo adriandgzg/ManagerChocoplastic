@@ -476,7 +476,9 @@ export default {
             axios
                 .get("/paymentmethodsget")
                 .then(response => {
+
                     this.payments = response.data.data;
+
                 })
                 .catch(e => {
                     console.log(e);
@@ -486,7 +488,9 @@ export default {
             axios
                 .get("/paymentmethodsshow/1")
                 .then(response => {
+                    console.log(response.data.data)
                     this.payments = response.data.data;
+                    this.selectpame = this.payments[0]
                 })
                 .catch(e => {
                     console.log(e);
