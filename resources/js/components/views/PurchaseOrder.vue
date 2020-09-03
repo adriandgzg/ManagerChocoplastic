@@ -54,9 +54,9 @@
                     <v-card-text>
                         <v-text-field v-model="detail.prod_identifier" label="ID" disabled />
                         <v-text-field v-model="detail.prod_name" label="Nombre" disabled />
-                        <v-text-field v-model="detail.ppod_quantity" label="Stock" type="number" :rules="minNumberRules" autofocus></v-text-field>
+                        <v-text-field v-model="detail.ppod_quantity" label="Cantidad" type="number" :rules="minNumberRules" autofocus></v-text-field>
                         <v-text-field v-model="detail.ppod_providerprice" label="Precio" prefix="$" type="number" :rules="minNumberRules" required></v-text-field>
-                        <v-text-field v-model="detail.ppod_discountrate" label="Descuento" type="number" :rules="minNumberRules"></v-text-field>
+                        <v-text-field v-model="detail.ppod_discountrate" label="Descuento" type="number" ></v-text-field>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
