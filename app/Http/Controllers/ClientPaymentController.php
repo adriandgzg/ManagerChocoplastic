@@ -62,6 +62,7 @@ class ClientPaymentController extends Controller
            $vclie_fk = $vInput['clie_fk'];
            $vpash_fk = $vInput['pash_fk'];
            $vclpa_amount = $vInput['clpa_amount'];
+           $vclpa_reference = $vInput['clpa_reference'];
 
             $vClientDebt = ClientDebt::where('clde_pk', '=', $vclde_fk)->where('clde_status', '=', 1)->first();
 
@@ -82,6 +83,7 @@ class ClientPaymentController extends Controller
                     $vCPC->clde_fk = $vclde_fk;
                     $vCPC->pash_fk = $vpash_fk;
                     $vCPC->clpa_amount = $vclpa_amount;
+                    $vCPC->clpa_reference = $vclpa_reference;
                     $vCPC->save();
 
                     //Asignación de PK Pago Cliente
@@ -104,9 +106,6 @@ class ClientPaymentController extends Controller
                         //////////////////  Inserción de Log  //////////////////
                         $this->getstorelog('client_debts', $vclde_fk, 2);
 
-
-
-
                         //Modificar Estatus Venta
                         DB::table('client_sales')
                         ->where('clsa_pk', '=', $vClientDebt->clsa_fk)
@@ -114,7 +113,6 @@ class ClientPaymentController extends Controller
 
                         //////////////////  Inserción de Log  //////////////////
                         $this->getstorelog('client_sales', $vClientDebt->clsa_fk, 2);
-
                     }
 
                     return response()->json([
@@ -169,6 +167,7 @@ class ClientPaymentController extends Controller
                 ->select(
                     'CP.clpa_pk',
                     'CP.clpa_amount',
+                    'CP.clpa_reference',
                     'CP.created_at',
 
                     'PS.pash_pk',        

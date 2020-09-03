@@ -27,6 +27,7 @@ class CreateClientPaymentsTable extends Migration
             $table->foreign('pash_fk')->references('pash_pk')->on('payment_shapes')->onUpdate('cascade');
             
             $table->decimal('clpa_amount', 12, 2); //Monto
+            $table->string('clpa_reference', 100)->nullable(); //Referencia
             $table->smallInteger('clpa_status')->default(1); //Estatus
             $table->timestamps();
         });

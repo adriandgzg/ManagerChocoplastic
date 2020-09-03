@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use Exception;
+use Throwable;
 use App\BoxCut;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use DB;
 
 class BoxCutController extends Controller
 {
@@ -108,7 +110,7 @@ class BoxCutController extends Controller
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
 
     }
@@ -166,7 +168,7 @@ class BoxCutController extends Controller
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
 
     }

@@ -60,6 +60,7 @@ class ProviderPaymentController extends ApiResponseController
            $vprov_fk = $vInput['prov_fk'];
            $vpash_fk = $vInput['pash_fk'];
            $vprpa_amount = $vInput['prpa_amount'];
+           $vprpa_reference = $vInput['prpa_reference'];
 
             $vProvDebt = ProviderDebt::where('prde_pk', '=', $vprde_fk)->where('prde_status', '=', 1)->first();
 
@@ -81,6 +82,7 @@ class ProviderPaymentController extends ApiResponseController
                     $vPP->prde_fk = $vprde_fk;
                     $vPP->pash_fk = $vpash_fk;
                     $vPP->prpa_amount = $vprpa_amount;
+                    $vPP->prpa_reference = $vprpa_reference;
                     $vPP->save();
 
                     //Asignación de PK de Pago Proveedor
@@ -103,9 +105,6 @@ class ProviderPaymentController extends ApiResponseController
                         $this->getstorelog('provider_debts', $vprde_fk, 2);
 
 
-
-
-
                         //Modificar Estatus Compra
                         DB::table('provider_purchases')
                         ->where('prpu_pk', '=', $vProvDebt->prpu_fk)
@@ -114,10 +113,7 @@ class ProviderPaymentController extends ApiResponseController
                         //////////////////  Inserción de Log  //////////////////
                         $this->getstorelog('provider_purchases', $vProvDebt->prpu_fk, 2);
                     }
-
-
                     return $this->dbResponse(null, 200, null, 'Pago Guardado Correctamente');
-
                 }
                 else
                 {
@@ -152,6 +148,7 @@ class ProviderPaymentController extends ApiResponseController
                 ->select(
                     'PP.prpa_pk',
                     'PP.prpa_amount',
+                    'PP.prpa_reference',
                     'PP.created_at',
 
                     'PS.pash_pk',        
@@ -173,7 +170,7 @@ class ProviderPaymentController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, "Error || Consultar con el Administrador del Sistema");
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
