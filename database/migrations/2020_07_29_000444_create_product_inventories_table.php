@@ -20,10 +20,13 @@ class CreateProductInventoriesTable extends Migration
             $table->bigInteger('prod_fk')->unsigned(); //Llave Foranea Catálogo de Productos
             $table->foreign('prod_fk')->references('prod_pk')->on('products')->onUpdate('cascade');
 
+            $table->bigInteger('meas_fk_output')->unsigned(); //Llave Foranea Catálogo Unidad de Medida Salida
+            $table->foreign('meas_fk_output')->references('meas_pk')->on('measurements')->onUpdate('cascade');
+
             $table->bigInteger('stor_fk')->unsigned(); //Llave Foranea Catálogo Sucursal
             $table->foreign('stor_fk')->references('stor_pk')->on('stores')->onUpdate('cascade');
 
-            $table->integer('prin_stock'); //Stock
+            $table->decimal('prin_stock', 12, 4); //Stock
 
             $table->smallInteger('prin_status')->default(1); //Estatus
 
