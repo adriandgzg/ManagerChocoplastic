@@ -705,7 +705,7 @@ export default {
                         this.normal('Notificación', '¡Actualizado correctamente!', "success");
                         this.$router.push('/purchaselist');
                     } else {
-                        this.normal('Notificación', "Ocurrio un error al finalizar la compra", "error");
+                        this.normal('Notificación', response.data.status.code.message, "error");
                     }
 
                 })

@@ -62,6 +62,10 @@ export default {
                     value: 'prod_name'
                 },
                 {
+                    text: 'Unidad Medida Salida',
+                    value: 'meas_name'
+                },
+                {
                     text: 'Categoria',
                     value: 'prca_name'
                 },

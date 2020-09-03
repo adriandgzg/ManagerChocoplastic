@@ -26,6 +26,7 @@ class ProductInventoryController extends ApiResponseController
 
             $vPI = DB::table('product_inventories AS PI')
                 ->join('products AS P', 'P.prod_pk', '=', 'PI.prod_fk')
+                ->join('measurements AS M', 'M.meas_pk', '=', 'PI.meas_fk_output')
                 ->join('stores AS S', 'S.stor_pk', '=', 'PI.stor_fk')
                 ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
                 ->select(
@@ -39,6 +40,9 @@ class ProductInventoryController extends ApiResponseController
                     'P.prod_description',
                     'P.prod_image',
                     'P.prod_bulk',
+
+                    'M.meas_pk',
+                    'M.meas_name',
 
                     'PC.prca_pk',
                     'PC.prca_name',

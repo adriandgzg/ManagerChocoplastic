@@ -550,20 +550,27 @@ class ProviderPurchaseController extends ApiResponseController
 
 
                 /////////////////////////////////Anexo de Inventario
-                $vPPD = ProviderPurchaseDetail::where('prpu_fk', '=', $vprpu_pk)
-                        ->where('prpd_status', '=', 1)
-                        ->get();
+                $vPPD = DB::table('provider_purchase_details AS PPD')
+                    ->join('products AS P', 'P.prod_pk', '=', 'PPD.prod_fk')
+                    ->select('P.prod_pk','P.meas_fk_output','P.prod_packingquantity', 'PPD.prpd_quantity')
+                    ->where('PPD.prpu_fk', '=', $vprpu_pk)
+                    ->where('PPD.prpd_status', '=', 1)
+                    ->get();
                 
                 foreach($vPPD as $vP)
                 {
-                    $vProduct = $vP->prod_fk;
-                    $vprpd_quantity = $vP->prpd_quantity;
+                    $vprod_pk = $vP->prod_pk; //Llave primaria de producto
+                    $vmeas_fk_output = $vP->meas_fk_output; //Llave foranea de la unidad de medida de salida
+                    $vprod_packingquantity = $vP->prod_packingquantity; //Cantidad Empaque
+                    $vprpd_quantity = $vP->prpd_quantity; //Catidad de la compra
+
+                    $vCantOutput = $vprpd_quantity * $vprod_packingquantity;//Cantidad a antexar al inventario
 
                     //Buscar Producto en el Inventario 
-                    $vPI = ProductInventory::where('prod_fk', '=', $vProduct)
-                            ->where('prin_status', '=', 1)
-                            ->where('stor_fk', '=', $vPP->stor_fk)
-                            ->first();
+                    $vPI = ProductInventory::where('prod_fk', '=', $vprod_pk)
+                        ->where('prin_status', '=', 1)
+                        ->where('stor_fk', '=', $vPP->stor_fk)
+                        ->first();
 
                     if ($vPI) 
                     {
@@ -572,7 +579,7 @@ class ProviderPurchaseController extends ApiResponseController
 
                         //Modificar Producto Inventario
                         $vPIU = ProductInventory::find($vprin_pk);
-                        $vPIU->prin_stock = $vprin_stock + $vprpd_quantity;
+                        $vPIU->prin_stock = $vprin_stock + $vCantOutput;
                         $vPIU->save();
                         
                     } 
@@ -580,9 +587,10 @@ class ProviderPurchaseController extends ApiResponseController
                     {
                         //Insertar Producto Inventario
                         $vPI = new ProductInventory();        
-                        $vPI->prod_fk = $vProduct;
-                        $vPI->stor_fk = 1;
-                        $vPI->prin_stock = $vprpd_quantity;
+                        $vPI->prod_fk = $vprod_pk;
+                        $vPI->meas_fk_output = $vmeas_fk_output;
+                        $vPI->prin_stock = $vCantOutput;
+                        $vPI->stor_fk = 1; //Todo alta de inventario por compra es a matriz
                         $vPI->save();
                     }
                 }

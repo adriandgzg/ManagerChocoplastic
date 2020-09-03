@@ -684,7 +684,7 @@ __webpack_require__.r(__webpack_exports__);
 
           _this10.$router.push('/purchaselist');
         } else {
-          _this10.normal('Notificación', "Ocurrio un error al finalizar la compra", "error");
+          _this10.normal('Notificación', response.data.status.code.message, "error");
         }
       })["catch"](function (e) {
         _this10.errors.push(e);

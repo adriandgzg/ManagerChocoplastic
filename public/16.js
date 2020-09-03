@@ -70,6 +70,9 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Producto',
         value: 'prod_name'
       }, {
+        text: 'Unidad Medida Salida',
+        value: 'meas_name'
+      }, {
         text: 'Categoria',
         value: 'prca_name'
       }, {
