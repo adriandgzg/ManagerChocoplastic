@@ -1044,7 +1044,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
-                              label: "Stock",
+                              label: "Cantidad",
                               type: "number",
                               rules: _vm.minNumberRules,
                               autofocus: "",
@@ -1077,12 +1077,7 @@ var render = function() {
                           }),
                           _vm._v(" "),
                           _c("v-text-field", {
-                            attrs: {
-                              label: "Descuento",
-                              type: "number",
-                              rules: _vm.minNumberRules,
-                              autofocus: ""
-                            },
+                            attrs: { label: "Descuento", type: "number" },
                             model: {
                               value: _vm.detail.prpd_discountrate,
                               callback: function($$v) {

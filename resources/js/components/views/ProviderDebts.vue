@@ -57,7 +57,11 @@
                             <v-card-text class="category d-inline-flex font-weight-light">
                                 <v-combobox required v-model="selectpame" :items="payments" label="Forma de pago" item-text="pash_name" item-value="pash_pk" filled chips placeholder="Seleccionar una opción"></v-combobox>
                             </v-card-text>
-
+                        </v-row>
+                        <v-row>
+                            <v-card-text class="category d-inline-flex font-weight-light">
+                                <v-text-field v-model="editado.prpa_reference" label="Referencia" type="text"></v-text-field>
+                            </v-card-text>
                         </v-row>
 
                     </v-card-text>
@@ -133,6 +137,11 @@ export default {
                     value: 'prpa_amount'
                 },
                 {
+                    text: 'Referencia',
+                    value: 'prpa_reference'
+                },
+
+                {
                     text: 'Fecha pago',
                     value: 'created_at'
                 },
@@ -158,9 +167,10 @@ export default {
                     text: 'Monto Pagado',
                     value: 'prde_amount_paid'
                 },
+
                 {
-                    text: 'Monto Pendiente',
-                    value: 'prde_amount_outstanding'
+                    text: 'Referencia',
+                    value: 'prpa_reference'
                 },
                 {
                     text: 'Fecha',
@@ -190,6 +200,7 @@ export default {
                 prde_amount: 0,
                 prde_amount_paid: 0,
                 prde_amount_outstanding: 0,
+                prpa_reference: ''
             },
             defaultItem: {
                 prde_fk: 0, //PK Cliente Deuda
@@ -200,6 +211,7 @@ export default {
                 prde_amount: 0,
                 prde_amount_paid: 0,
                 prde_amount_outstanding: 0,
+                prpa_reference: ''
             },
             editedIndex: -1,
             sales: [],

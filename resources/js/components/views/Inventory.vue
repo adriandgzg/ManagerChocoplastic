@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import CripNotice from "crip-vue-notice";
 export default {
     data() {
         return {
@@ -141,6 +142,17 @@ export default {
                     console.log(e);
                     this.normal('Notificación', "Error al cargar los datos", "error");
                 });
+        },
+
+        normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })
         },
     }
 }

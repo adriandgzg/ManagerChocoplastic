@@ -127,6 +127,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -619,6 +623,40 @@ var render = function() {
                                         _vm.selectpame = $$v
                                       },
                                       expression: "selectpame"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-card-text",
+                                {
+                                  staticClass:
+                                    "category d-inline-flex font-weight-light"
+                                },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Referencia",
+                                      type: "text"
+                                    },
+                                    model: {
+                                      value: _vm.editado.prpa_reference,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editado,
+                                          "prpa_reference",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "editado.prpa_reference"
                                     }
                                   })
                                 ],

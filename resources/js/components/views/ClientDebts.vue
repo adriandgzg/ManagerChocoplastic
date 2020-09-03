@@ -58,13 +58,18 @@
                         </v-row>
 
                         <v-row>
-
                             <v-text-field v-model="editado.clpa_amount" label="Monto abonado" prefix="$" type="number" :rules="numberRules" required></v-text-field>
+                        </v-row>
 
+                        <v-row>
                             <v-card-text class="category d-inline-flex font-weight-light">
                                 <v-combobox required v-model="selectpame" :items="payments" label="Forma de pago" item-text="pash_name" item-value="pash_pk" filled chips placeholder="Seleccionar una opción"></v-combobox>
                             </v-card-text>
-
+                        </v-row>
+                        <v-row>
+                            <v-card-text class="category d-inline-flex font-weight-light">
+                                <v-text-field v-model="editado.clpa_reference" label="Referencia" type="text"></v-text-field>
+                            </v-card-text>
                         </v-row>
                     </v-form>
                 </v-card-text>
@@ -137,6 +142,10 @@ export default {
                 {
                     text: 'Monto pagado',
                     value: 'clpa_amount'
+                },
+                {
+                    text: 'Referencia',
+                    value: 'clpa_reference'
                 },
                 {
                     text: 'Fecha pago',
@@ -317,6 +326,9 @@ export default {
             this.editado.clie_fk = item.clie_pk
             this.editado.pash_fk = 0
             this.editado.clpa_amount = 0
+            this.editado.clde_amount = item.clde_amount
+            this.editado.clde_amount_paid = item.clde_amount_paid
+            this.editado.clde_amount_outstanding = item.clde_amount_outstanding
         },
         getPayment() {
             axios

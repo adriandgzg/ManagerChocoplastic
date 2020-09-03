@@ -324,6 +324,9 @@ __webpack_require__.r(__webpack_exports__);
       this.editado.clie_fk = item.clie_pk;
       this.editado.pash_fk = 0;
       this.editado.clpa_amount = 0;
+      this.editado.clde_amount = item.clde_amount;
+      this.editado.clde_amount_paid = item.clde_amount_paid;
+      this.editado.clde_amount_outstanding = item.clde_amount_outstanding;
     },
     getPayment: function getPayment() {
       var _this3 = this;
