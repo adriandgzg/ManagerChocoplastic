@@ -995,7 +995,7 @@ var render = function() {
                               attrs: { color: "blue-grey" },
                               on: {
                                 click: function($event) {
-                                  !_vm.dialogAgregar
+                                  _vm.dialogAgregar = false
                                 }
                               }
                             },

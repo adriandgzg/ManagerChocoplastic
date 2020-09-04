@@ -60,7 +60,7 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="blue-grey" class="ma-2 white--text" @click="!dialogAgregar">Cancelar</v-btn>
+                        <v-btn color="blue-grey" class="ma-2 white--text" @click="dialogAgregar=false">Cancelar</v-btn>
                         <v-btn :disabled="!validProvider" color="teal accent-4" class="ma-2 white--text" @click="agregar()">Guardar</v-btn>
                     </v-card-actions>
                 </v-form>
