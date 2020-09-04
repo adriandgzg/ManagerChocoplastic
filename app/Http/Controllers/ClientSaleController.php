@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use DB;
+//use DB;
 use Exception;
 use Throwable;
 use Validator;
@@ -16,6 +16,8 @@ use App\ProductInventory;
 use App\ClientOrderDetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ClientSaleController extends ApiResponseController
 {
@@ -702,53 +704,115 @@ class ClientSaleController extends ApiResponseController
                 ->where('clsd_status', '=', 1)
                 ->get();
 
-            
-        
+                $status =Auth::user();
+
+    
+        $admin = collect(\DB::select("SELECT a.*, CONCAT(s.stor_identifier, ' - ', s.stor_name) as stor_name, s.stor_addres FROM admins a left join stores s 
+        on a.store_id = s.stor_pk where a.store_id = " . $status->id . "
+        "))->first();
 
                 
+               
 
-                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(45, 350));
-                $pdf->SetMargins(1, 0, 1);
+                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 120));
+                $pdf->SetMargins(1, 1, 1);
                 $pdf->AddPage();
                 $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
-                $pdf->Image(config('app.url') . '/images/logo_chocoplastic.png', 10, 2, 25);
-                $pdf->SetY(15);
+                $pdf->Image(config('app.url') . '/images/logo_chocoplastic.png', 20, 2, 25);
+                $pdf->SetY(12);
                 $lineHeigth = 2;
-                $pdf->Cell(43, $lineHeigth, config('app.name'), '', '1', 'C');
-                $pdf->SetFont('Arial', '', 5);    //Letra Arial, negrita (Bold), tam. 20
-                $pdf->Cell(43, $lineHeigth, strtoupper($vCS->clsa_identifier . ' - ' . 'No. Venta: ' . $vCS->clsa_pk), '', '1');
+
+                
+                $pdf->SetFont('Arial','',8);
+                // Número de página
+                
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(33, $lineHeigth, 'RFC:', '', '1', 'C');
+                $pdf->SetFont('Arial', '', 5);
+                $pdf->SetX(22);
+                $pdf->Cell(50, $lineHeigth-4, $vCS->clie_rfc, '', '1', 'L');
+                
+                $pdf->SetY(15);
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(25, $lineHeigth, 'Domicilio Fiscal:', '', '1', 'C');
+                
+                $pdf->SetFont('Arial', '', 5);
+                $pdf->Cell(50, $lineHeigth-4, 'Dirección', '', '1', 'C');
+                
+                $pdf->SetY(20);
+                $pdf->Cell(43, $lineHeigth+2,'---------------------------------------------------------------------------------------------', '', '1', 'L');
+                $pdf->SetFont('Arial', 'B', 7);
+                $pdf->Cell(57, $lineHeigth, $admin->stor_name, '', '1', 'C');
+                $pdf->SetFont('Arial', '', 3);
+                $pdf->Cell(57,$lineHeigth+2,$admin->stor_addres, '', '1', 'C');
+                $pdf->Cell(43, $lineHeigth,'---------------------------------------------------------------------------------------------', '', '1', 'L');
+                $pdf->SetFont('Arial', '', 5);
+                $pdf->Cell(43, $lineHeigth, 'No. Pedido: ' . $vCS->clor_pk, '', '1');
+                $pdf->Cell(43, $lineHeigth, '' . $vCS->created_at, '', '1');
+                $pdf->Cell(43, $lineHeigth, 'Tipo de Pago: ' . $vCS->pame_name, '', '1');
                 $pdf->Cell(43, $lineHeigth, 'Cliente: ' . $vCS->clie_identifier, '', '1');
-                $pdf->SetY(25);
-                $pdf->Cell(8, $lineHeigth, 'ID');
-                $pdf->Cell(25, $lineHeigth, 'ARTICULO');
-                $pdf->Cell(10, $lineHeigth, 'MONTO', 0, 1, 'R');
+                
 
+                
+                $pdf->SetFont('Arial', '', 5);
+                 $header = array('CLAVE', 'CANT.', 'UNIDAD', 'COSTO','IMPORTE');
+                 foreach($header as $col)
+                 {
+                        $pdf->Cell(12,7,$col,0,'C');
+                    
+                 }
+                $pdf->Ln();
+                $disprice = 0;
+                $total = 0;
                 foreach ($vCSD as $product) {
-                    $pdf->Cell(8, $lineHeigth, $product->prod_pk, '', '0');
-                    $pdf->Cell(25, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 30), '', '0');
-                    if ($product->clsd_quantity > 1) {
+                    $pdf->SetFont('Arial', 'B', 5);
+                    $price = $product->clsd_quantity * $product->clsd_price;  
+                    $disprice = $disprice + $product->clsd_discountrate;
+                    $pdf->SetFont('Arial', '', 5);
+                        $total = $total + $price;
+                        $pdf->Cell(25, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 30), '', '0');
                         $pdf->Ln();
-                        $pdf->Cell(33, $lineHeigth, $product->clsd_quantity . ' X ' . $product->clsd_price, '', '0', 'R');
-                        $price = $product->clsd_quantity * $product->clsd_price;
-                    } else {
-                        $price = $product->clsd_quantity * $product->clsd_price;
-                    }
-                    $total = $total + $price;
-                    $pdf->Cell(10, $lineHeigth, "$" . number_format($price, 2, ".", ","), 0, 1, 'R');
-        
+                        $pdf->Cell(12, $lineHeigth, $product->prod_identifier, '', '0');
+                        $pdf->Cell(12, $lineHeigth, $product->clsd_quantity, '', '0');
+                        $pdf->Cell(12, $lineHeigth, $product->meas_abbreviation, '', '0');
+                        $pdf->Cell(8, $lineHeigth, "$" . number_format($product->clsd_price, 2), '', '0','R');
+                        $pdf->Cell(13, $lineHeigth, "$" . number_format($product->clsd_price, 2, ".", ","), 0, 1,'R');
+                        $pdf->Ln();
                 }
+                $total1 = $total - $disprice;
 
-                $pdf->Cell(33, $lineHeigth, "SUBTOTAL: ");
-                $pdf->Cell(10, $lineHeigth, "$ " . number_format($total, 2, ".", ","), 0, 1, "R");
+                $pdf->Ln();
+                $pdf->Ln();
+                $pdf->Ln();
+                $pdf->Cell(32, $lineHeigth, '', '', '0','L');
+                $pdf->Cell(10, $lineHeigth, 'SUBTOTAL', '', '0','L');
+                $pdf->Cell(15, $lineHeigth, "$" . number_format($total, 2), '', '0','R');
+                $pdf->Ln(3);
+
+                $pdf->Cell(32, $lineHeigth, '', '', '0','L');
+                $pdf->Cell(10, $lineHeigth, 'DESCUENTO', '', '0','L');
+                $pdf->Cell(15, $lineHeigth, "$" . number_format($disprice, 2), '', '0','R');
+                $pdf->Ln(3);
+
+                $pdf->Cell(32, $lineHeigth, '', '', '0','L');
+                $pdf->Cell(10, $lineHeigth, 'TOTAL', '', '0','L');
+                $pdf->Cell(15, $lineHeigth, "$" . number_format($total1, 2), '', '0','R');
                 
-                $pdf->Cell(33, $lineHeigth, "IVA: ");
-                $pdf->Cell(10, $lineHeigth, "$ 0.00", 0, 1, "R");
-                $pdf->Cell(33, $lineHeigth, "TOTAL: ");
-                $pdf->Cell(10, $lineHeigth, "$ " . number_format($total, 2, ".", ","), 0, 1, "R");
-                $pdf->Ln(5);
-                
-                $pdf->Ln(5);
-                $pdf->Cell(43, $lineHeigth, 'GRACIAS POR TU PREFERENCIA ', 0, 1, 'C');
+
+                // Posición: a 1,5 cm del final
+                $pdf->SetY(-35);
+                // Arial italic 8
+                $pdf->SetFont('Arial','I',4);
+                // Número de página
+                $pdf->Cell(0,10,'',0,0,'C');
+                 
+// PIE DE PAGINA
+$pdf->Ln(10);
+$pdf->Cell(60,0,'',0,1,'C');
+$pdf->Ln(3);
+$pdf->Cell(60,0,'Favor de revisar su mercancía. No se aceptan cambios ni devoluciones.',0,1,'C');
+
+
 
                 ob_get_clean();
         $pdf->output('I', 'ticket', 'true');
@@ -757,4 +821,6 @@ class ClientSaleController extends ApiResponseController
             }
             
     }
+
+    
 }
