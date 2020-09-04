@@ -58,7 +58,7 @@
                         <v-text-field v-model="detail.prod_name" label="Nombre" disabled />
                         <v-text-field v-model="detail.prpd_quantity" label="Cantidad" type="number" :rules="minNumberRules" autofocus required></v-text-field>
                         <v-text-field v-model="detail.prpd_price" label="Precio" prefix="$" type="number" :rules="minNumberRules" required></v-text-field>
-                        <v-text-field v-model="detail.prpd_discountrate" label="Descuento" type="number"></v-text-field>
+                        <v-text-field v-model="detail.prpd_discountrate" label="Descuento(%)" type="number"></v-text-field>
 
                     </v-card-text>
                     <v-card-actions>
@@ -385,6 +385,8 @@ export default {
                     } else
                         this.enabledStore = false
 
+                    console.log('this.enabledStore');
+                    console.log(this.enabledStore);
                 })
                 .catch(e => {
                     this.errors.push(e)

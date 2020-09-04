@@ -1,1 +1,805 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[19],{46:function(t,e,a){"use strict";a.r(e);var o=a(1),r=a.n(o),i={data:function(){return{headers:[{text:"Ident",value:"prod_identifier"},{text:"Nombre",value:"prod_name"},{text:"Unidad",value:"meas_fk_input_name"},{text:"Tipo",value:"bulk"},{text:"",value:"action",width:"20%"}],prpo_pk:this.$route.params.id,prpu_pk:0,valid:!1,stores:[],providers:[],desserts:[],products:[],selectProv:"",selectStore:"",payments:[],selectpame:"",search:"",snackbar:!1,timeout:2e3,subtotal:0,total:0,iva:0,textMsg:"",editadoHeader:{created_at:"",prov_identifier:"",prov_name:"",prov_rfc:"",prpo_identifier:"",prpo_pk:0,prpo_status:0,stor_name:""},editado:{ppod_pk:0,ppod_quantity:0,ppod_providerprice:0,ppod_discountrate:0,prod_pk:0,prod_identifier:0,prod_name:"",prod_description:"",meas_name:""},defaultItem:{ppod_pk:0,ppod_quantity:0,ppod_providerprice:0,ppod_discountrate:0,prod_pk:0,prod_identifier:0,prod_name:"",prod_description:"",meas_name:""},detail:{prpo_fk:0,prod_fk:0,ppod_pk:0,ppod_quantity:0,ppod_providerprice:0,ppod_discountrate:0},detailDefault:{prpo_fk:0,prod_fk:0,ppod_pk:0,ppod_quantity:0,ppod_providerprice:0,ppod_discountrate:0},orderHeader:{prpu_pk:0,prpo_pk:0,prov_fk:0,stor_fk:0,pame_fk:0,prpu_amount:0},dialogcredito:!1,dialogcontado:!1,dialog:!1,minNumberRules:[function(t){return!!t||"Requerido."},function(t){return t>0||"El número debe ser mayor o igual a cero"}],loading:!1,dialogQuestion:!1,dialogQuestionDelete:!1,messageQuestion:""}},created:function(){this.createCompra()},methods:{formatMoney:function(t){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:2,a=arguments.length>2&&void 0!==arguments[2]?arguments[2]:".",o=arguments.length>3&&void 0!==arguments[3]?arguments[3]:",";try{e=Math.abs(e),e=isNaN(e)?2:e;var r=t<0?"-":"",i=parseInt(t=Math.abs(Number(t)||0).toFixed(e)).toString(),s=i.length>3?i.length%3:0;return r+(s?i.substr(0,s)+o:"")+i.substr(s).replace(/(\d{3})(?=\d)/g,"$1"+o)+(e?a+Math.abs(t-i).toFixed(e).slice(2):"")}catch(t){console.log(t)}},getStores:function(){var t=this;axios.get("/storeget").then((function(e){t.stores=e.data.data})).catch((function(t){console.log(t)}))},getProviders:function(){var t=this;axios.get("/providerlist").then((function(e){t.providers=e.data.data})).catch((function(t){console.log(t)}))},getPayment:function(){var t=this;axios.get("/paymentmethodsget").then((function(e){t.payments=e.data.data})).catch((function(t){console.log(t)}))},agregar:function(t){var e=this;this.desserts.length>0?this.detail.prpo_fk=this.prpo_pk:this.detail.prpo_fk=0,this.detail.prod_fk=t.prod_pk,this.detail.ppod_quantity=1,this.detail.ppod_providerprice=0,this.detail.ppod_discountrate=0,axios.post("/provider/purchase/order/details",this.detail).then((function(t){console.log(t),200==t.data.status.code?(e.textMsg="¡Actualizado correctamente!",e.normal("Notificación",e.textMsg,"success"),e.prpo_pk=t.data.data,e.createCompra(),e.dialog=!1,e.getTotal()):e.normal("Notificación",t.data.message,"error")})).catch((function(t){e.errors.push(t)}))},borrar:function(t){console.log(t),this.editado=Object.assign({},t),this.dialogQuestionDelete=!0},guardaBorrar:function(){this.delete(),this.dialogQuestionDelete=!1},delete:function(){var t=this;axios.post("/provider/purchase/details/destroy",this.editado).then((function(e){console.log(e),200==e.data.status.code?(t.textMsg="¡Eliminado correctamente!",t.normal("Notificación",t.textMsg,"error"),t.createCompra()):t.normal("Notificación","Ocurrio un error al eliminar el producto","error")}))},createCompra:function(){var t=this;this.loading=!0,axios.get("/provider/purchase/orders/"+this.prpo_pk).then((function(e){setTimeout((function(){return t.loading=!1}),2e3),null!=e.data.data?(console.log(e.data),t.desserts=e.data.data.provider_purchase_order_details,t.prpu_pk=e.data.data.provider_purchase_orders.prpu_pk,t.editadoHeader=e.data.data.provider_purchase_orders[0],t.getTotal()):t.normal("Notificación",e.data.status.message,"error")})).catch((function(e){console.log(e),t.normal("Notificación","Error al cargar los datos","error")}))},cancelar:function(){this.dialog=!1,this.editado=Object.assign({},this.defaultItem),this.editedIndex=-1},buscar:function(){var t=this;this.loading=!0,$("#txtBuscar").focus((function(){})),axios.get("/product/search").then((function(e){setTimeout((function(){return t.loading=!1}),500),t.products=e.data.data,t.dialog=!0,console.log(e.data)})).catch((function(e){t.errors.push(e)}))},onQuantityChange:function(t){var e=this;this.detail.ppod_pk=t.ppod_pk,this.detail.prod_fk=t.prod_pk,this.detail.ppod_quantity=t.ppod_quantity,this.detail.ppod_providerprice=t.ppod_providerprice,this.detail.ppod_discountrate=t.ppod_discountrate,axios.post("/provider/purchase/details/update",this.detail).then((function(t){console.log(t),200==t.data.status.code?(e.textMsg="¡Actualizado correctamente!",e.getTotal()):e.normal("Notificación",t.data.status.message,"error")})).catch((function(t){e.errors.push(t)}))},getTotal:function(){this.subtotal=0;for(var t=0;t<this.desserts.length;t++)this.subtotal=this.subtotal+this.desserts[t].ppod_providerprice*this.desserts[t].ppod_quantity*(1-this.desserts[t].ppod_discountrate/100),console.log(this.subtotal);this.total=this.subtotal+this.iva},finalizar:function(){var t=this;this.total<=0?this.normal("Notificación","La orden de compra no puede ser menor o igual a cero","error"):""!=this.selectProv&&null!=this.selectProv?""!=this.selectStore&&null!=this.selectStore?""!=this.selectpame&&null!=this.selectpame?1==confirm("¿Está seguro de finalizar la orden compra?")&&(this.orderHeader.prpu_pk=this.prpu_pk,this.orderHeader.prpo_pk=this.prpo_pk,this.orderHeader.prov_fk=this.selectProv.prov_pk,this.orderHeader.stor_fk=this.selectStore.stor_pk,this.orderHeader.pame_fk=this.selectpame.pame_pk,this.orderHeader.prpu_amount=this.total,console.log(this.orderHeader),axios.post("/provider/purchases/update",this.orderHeader).then((function(e){console.log(e),200==e.data.status.code?(t.textMsg="¡Actualizado correctamente!",t.normal("Notificación","¡Actualizado correctamente!","success"),t.$router.push("/purchaselist")):t.normal("Notificación","Ocurrio un error al finalizar la compra","error")})).catch((function(e){t.errors.push(e)}))):this.normal("Notificación","Debe seleccionar una forma de pago","error"):this.normal("Notificación","Debe seleccionar una sucursal","error"):this.normal("Notificación","Debe seleccionar un proveedor","error")},finalizarVenta:function(){var t=this;(console.log(this.total+"-"+(this.efectivo+this.tarjeta)),1!=this.editadoSale.pame_fk||this.total-this.efectivo-this.tarjeta==0)?1==confirm("¿Está seguro de finalizar la venta?")&&(this.editadoSale.clde_amount=this.total,this.editadoSale.clpa_amount_cash=this.efectivo,this.editadoSale.clpa_amount_transfer=this.tarjeta,axios.post("/clientsales/update",this.editadoSale).then((function(e){console.log(e),200==e.data.code?(t.textMsg="¡Actualizado correctamente!",t.normal("Notificación","¡Actualizado correctamente!","success"),t.$router.push("/sales")):t.normal("Notificación",e.data.message,"error")})).catch((function(e){t.errors.push(e)}))):this.normal("Notificación","Los montos de pago deben ser igual al total","error")},actualizar:function(t){var e=this;this.editado=Object.assign({},t),axios.post("/client_sale_details/update",this.editado).then((function(t){e.textMsg="¡Actualizado correctamente!",e.normal("Notificación",e.textMsg,"success")})).catch((function(t){e.errors.push(t)}))},normal:function(t,e,a){this.notice=new r.a({title:t,description:e,className:"open-normal",closable:!0,duration:3,type:a})}}},s=a(0),n=Object(s.a)(i,(function(){var t=this,e=t.$createElement,a=t._self._c||e;return a("v-app",[a("v-container",[a("v-dialog",{attrs:{persistent:"",width:"300"},model:{value:t.loading,callback:function(e){t.loading=e},expression:"loading"}},[a("v-card",{attrs:{color:"white"}},[a("v-card-text",[t._v("\r\n                    Cargando\r\n                    "),a("v-progress-linear",{staticClass:"mb-0",attrs:{indeterminate:"",color:"green"}})],1)],1)],1),t._v(" "),a("v-dialog",{attrs:{persistent:"","max-width":"290"},model:{value:t.dialogQuestionDelete,callback:function(e){t.dialogQuestionDelete=e},expression:"dialogQuestionDelete"}},[a("v-card",[a("v-card-title",{staticClass:"headline"},[t._v("Alerta")]),t._v(" "),a("v-card-text",[t._v("¿Está seguro de borrar el registro?")]),t._v(" "),a("v-card-actions",[a("v-spacer"),t._v(" "),a("v-btn",{attrs:{color:"green darken-1",text:""},on:{click:function(e){t.dialogQuestionDelete=!1}}},[t._v("Cancelar")]),t._v(" "),a("v-btn",{attrs:{color:"green darken-1",text:""},on:{click:t.guardaBorrar}},[t._v("Continuar")])],1)],1)],1),t._v(" "),a("v-snackbar",{attrs:{color:"#000000",timeout:t.timeout},model:{value:t.snackbar,callback:function(e){t.snackbar=e},expression:"snackbar"}},[t._v("\r\n            "+t._s(t.textMsg)+"\r\n            "),a("v-btn",{attrs:{color:"blue",text:""},on:{click:function(e){t.snackbar=!1}}},[t._v("\r\n                Cerrar\r\n            ")])],1),t._v(" "),a("v-dialog",{attrs:{"max-width":"800px"},model:{value:t.dialog,callback:function(e){t.dialog=e},expression:"dialog"}},[a("v-card",[a("v-card-title",{staticClass:"cyan white--text"},[a("span",{staticClass:"headline"},[t._v("Buscar producto")])]),t._v(" "),a("v-data-table",{staticClass:"elevation-3",attrs:{headers:t.headers,items:t.products,search:t.search,"sort-by":"id",loading:t.loading,"loading-text":"Cargando... Espere un momento."},scopedSlots:t._u([{key:"top",fn:function(){return[a("v-col",{attrs:{cols:"12",sm:"12"}},[a("v-text-field",{attrs:{id:"txtBuscar","append-icon":"search",label:"Buscar","single-line":"","hide-details":""},model:{value:t.search,callback:function(e){t.search=e},expression:"search"}})],1)]},proxy:!0},{key:"item.prod_saleprice",fn:function(e){var o=e.item;return[a("v-label",[t._v("$"+t._s(t.formatMoney(o.prod_saleprice)))])]}},{key:"item.bulk",fn:function(e){return[1==e.item.prod_bulk?a("v-chip",{attrs:{color:"green",outlined:""}},[t._v("\r\n                            Granel")]):a("v-chip",{attrs:{color:"red",outlined:""}},[t._v("NA Granel")])]}},{key:"item.action",fn:function(e){var o=e.item;return[a("v-btn",{staticClass:"mr-2",attrs:{fab:"",dark:"",small:"",color:"green"},on:{click:function(e){return t.agregar(o)}}},[a("v-icon",{attrs:{dark:""}},[t._v("mdi-checkbox-marked-circle")])],1)]}}])})],1)],1),t._v(" "),a("v-row",[a("v-col",[a("v-card",[a("v-row",[a("v-col",{attrs:{cols:"4"}},[a("v-card-text",{staticClass:"category d-inline-flex font-weight-light"},[a("v-label",[a("h3",[t._v("Proveedor:")]),t._v(" "+t._s(t.editadoHeader.prov_name)+"\r\n                                ")])],1)],1),t._v(" "),a("v-col",{attrs:{cols:"4"}},[a("v-card-text",{staticClass:"category d-inline-flex font-weight-light"},[a("v-label",[a("h3",[t._v("Sucursal:")]),t._v(" "+t._s(t.editadoHeader.stor_name)+"\r\n                                ")])],1)],1)],1)],1)],1)],1),t._v(" "),a("v-row",[a("v-col",[a("v-card",[a("v-simple-table",{scopedSlots:t._u([{key:"default",fn:function(){return[a("thead",[a("tr",[a("th",{staticClass:"text-left"},[t._v("ID")]),t._v(" "),a("th",{staticClass:"text-left"},[t._v("Producto")]),t._v(" "),a("th",{staticClass:"text-left"},[t._v("Unidad Medida")]),t._v(" "),a("th",{staticClass:"text-left"},[t._v("Cantidad")]),t._v(" "),a("th",{staticClass:"text-left"},[t._v("Precio")]),t._v(" "),a("th",{staticClass:"text-left"},[t._v("Descuento")]),t._v(" "),a("th",{staticClass:"text-left"},[t._v("Importe")]),t._v(" "),a("th")])]),t._v(" "),a("tbody",[t._l(t.desserts,(function(e){return a("tr",{key:e.prod_name},[a("td",[t._v(t._s(e.prod_identifier))]),t._v(" "),a("td",[t._v(t._s(e.prod_name))]),t._v(" "),a("td",[t._v(t._s(e.meas_name))]),t._v(" "),a("td",[t._v(t._s(e.ppod_quantity))]),t._v(" "),a("td",[t._v(t._s(e.ppod_providerprice))]),t._v(" "),a("td",[t._v(t._s(e.ppod_discountrate))]),t._v(" "),a("td",[t._v("$"+t._s(t.formatMoney(e.ppod_quantity*e.ppod_providerprice*(1-e.ppod_discountrate/100))))])])})),t._v(" "),a("tr",[a("td"),t._v(" "),a("td"),t._v(" "),a("td"),t._v(" "),a("td"),t._v(" "),a("td"),t._v(" "),a("td",[t._v("Subtotal")]),t._v(" "),a("td",[t._v("$"+t._s(t.formatMoney(t.subtotal)))])]),t._v(" "),a("tr",[a("td"),t._v(" "),a("td"),t._v(" "),a("td"),t._v(" "),a("td"),t._v(" "),a("td"),t._v(" "),a("td",[t._v("I.V.A.")]),t._v(" "),a("td",[t._v("$"+t._s(t.formatMoney(t.iva)))])])],2),t._v(" "),a("tfoot",[a("tr",[a("td"),t._v(" "),a("td"),t._v(" "),a("td"),t._v(" "),a("td"),t._v(" "),a("td"),t._v(" "),a("td",[t._v("Total")]),t._v(" "),a("td",[t._v("$"+t._s(t.formatMoney(t.total)))])])])]},proxy:!0}])})],1)],1)],1)],1)],1)}),[],!1,null,null,null);e.default=n.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[19],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PaymentMethods.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/PaymentMethods.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      headers: [{
+        text: 'ID',
+        value: 'pame_pk',
+        width: '10%'
+      }, {
+        text: 'Nombre',
+        value: 'pame_name'
+      }, {
+        text: 'Estatus',
+        value: 'status'
+      }, {
+        text: '',
+        value: 'action',
+        width: '20%'
+      }],
+      select: 0,
+      principal: false,
+      estado: true,
+      editado: {
+        pame_pk: 0,
+        pame_name: '',
+        pame_status: 0
+      },
+      defaultItem: {
+        pame_pk: 0,
+        pame_name: '',
+        pame_status: 0
+      },
+      editedIndex: -1,
+      payments: [],
+      entities: [],
+      search: "",
+      dialog: false,
+      snackbar: false,
+      timeout: 2000,
+      textMsg: "",
+      valid: false,
+      validProvider: false,
+      folioRules: [function (value) {
+        return !!value || "Requerido.";
+      }, function (value) {
+        return value && value.length >= 10 || "Min 10 caracter";
+      }],
+      nameRules: [function (value) {
+        return !!value || 'Requerido.';
+      }, function (value) {
+        return value && value.length >= 3 || 'Min 3 caracteres';
+      }],
+      phoneRules: [function (value) {
+        return !!value || 'Requerido.';
+      }, function (value) {
+        return value && value.length == 10 || 'Requiere 10 caracteres';
+      }],
+      loading: false,
+      dialogQuestion: false,
+      dialogQuestionDelete: false,
+      messageQuestion: ''
+    };
+  },
+  created: function created() {
+    this.getPayment();
+  },
+  methods: {
+    getPayment: function getPayment() {
+      var _this = this;
+
+      this.loading = true;
+      axios.get("/paymentmethodsList").then(function (response) {
+        setTimeout(function () {
+          return _this.loading = false;
+        }, 2000);
+        console.log(response.data);
+        _this.payments = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+
+        _this.normal('Notificación', "Error al cargar los datos", "error");
+      });
+    },
+    cancelar: function cancelar() {
+      this.dialog = false;
+      this.editado = Object.assign({}, this.defaultItem);
+      this.editedIndex = -1;
+    },
+    edita: function edita(item) {
+      this.editedIndex = this.payments.indexOf(item);
+      this.editado = Object.assign({}, item);
+      this.estado = this.editado.pame_status;
+      this.dialog = true;
+    },
+    guardar: function guardar() {
+      if (this.estado == true) this.editado.pame_status = 1;else this.editado.pame_status = 0;
+
+      if (this.editedIndex > -1) {
+        this.editar();
+      } else {
+        this.alta();
+      }
+
+      this.cancelar();
+    },
+    alta: function alta() {
+      var _this2 = this;
+
+      axios.post('/paymentmethods/add', this.editado).then(function (response) {
+        _this2.snackbar = true;
+        _this2.textMsg = '¡Alta exitosa!';
+
+        _this2.getPayment();
+      });
+    },
+    editar: function editar() {
+      var _this3 = this;
+
+      axios.put('/paymentmethods/update', this.editado).then(function (response) {
+        _this3.snackbar = true;
+        _this3.textMsg = '¡Actualización Exitosa!';
+
+        _this3.getPayment();
+      });
+    },
+    borrar: function borrar(item) {
+      var index = this.payments.indexOf(item);
+      this.editado = Object.assign({}, item);
+      this.dialogQuestionDelete = true;
+    },
+    guardaBorrar: function guardaBorrar() {
+      this["delete"]();
+      this.dialogQuestionDelete = false;
+    },
+    "delete": function _delete() {
+      var _this4 = this;
+
+      axios.put('/paymentmethods/delete', this.editado).then(function (response) {
+        _this4.textMsg = "¡Eliminado correctamente!";
+
+        _this4.normal('Notificación', _this4.textMsg, "success");
+
+        _this4.getPayment();
+      });
+    }
+  },
+  computed: {
+    formTitle: function formTitle() {
+      return this.editedIndex === -1 ? 'Nuevo Registro' : 'Editar Registro';
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PaymentMethods.vue?vue&type=template&id=6e96f6f8&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/PaymentMethods.vue?vue&type=template&id=6e96f6f8& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-app",
+    [
+      _c(
+        "v-container",
+        [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", width: "300" },
+              model: {
+                value: _vm.loading,
+                callback: function($$v) {
+                  _vm.loading = $$v
+                },
+                expression: "loading"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                { attrs: { color: "white" } },
+                [
+                  _c(
+                    "v-card-text",
+                    [
+                      _vm._v("\n          Cargando\n          "),
+                      _c("v-progress-linear", {
+                        staticClass: "mb-0",
+                        attrs: { indeterminate: "", color: "green" }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "290" },
+              model: {
+                value: _vm.dialogQuestionDelete,
+                callback: function($$v) {
+                  _vm.dialogQuestionDelete = $$v
+                },
+                expression: "dialogQuestionDelete"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "headline" }, [
+                    _vm._v("Alerta")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-card-text", [
+                    _vm._v("¿Está seguro de borrar el registro?")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialogQuestionDelete = false
+                            }
+                          }
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: { click: _vm.guardaBorrar }
+                        },
+                        [_vm._v("Continuar")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-snackbar",
+            {
+              attrs: { color: "#000000", timeout: _vm.timeout },
+              model: {
+                value: _vm.snackbar,
+                callback: function($$v) {
+                  _vm.snackbar = $$v
+                },
+                expression: "snackbar"
+              }
+            },
+            [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.textMsg) +
+                  "\n                "
+              ),
+              _c(
+                "v-btn",
+                {
+                  attrs: { color: "blue", text: "" },
+                  on: {
+                    click: function($event) {
+                      _vm.snackbar = false
+                    }
+                  }
+                },
+                [_vm._v("\n                    Cerrar\n                ")]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "500px", persistent: "" },
+              model: {
+                value: _vm.dialog,
+                callback: function($$v) {
+                  _vm.dialog = $$v
+                },
+                expression: "dialog"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "cyan white--text" }, [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v(_vm._s(_vm.formTitle))
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-form",
+                    {
+                      model: {
+                        value: _vm.validProvider,
+                        callback: function($$v) {
+                          _vm.validProvider = $$v
+                        },
+                        expression: "validProvider"
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Nombre",
+                              maxlength: "300",
+                              rules: _vm.nameRules,
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.editado.pame_name,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editado, "pame_name", $$v)
+                              },
+                              expression: "editado.pame_name"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Activo/Inactivo")]),
+                          _vm._v(" "),
+                          _c("v-switch", {
+                            model: {
+                              value: _vm.estado,
+                              callback: function($$v) {
+                                _vm.estado = $$v
+                              },
+                              expression: "estado"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: { color: "blue-grey" },
+                              on: { click: _vm.cancelar }
+                            },
+                            [_vm._v("Cancelar")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: {
+                                disabled: !_vm.validProvider,
+                                color: "teal accent-4"
+                              },
+                              on: { click: _vm.guardar }
+                            },
+                            [_vm._v("Guardar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            [
+              _c(
+                "v-col",
+                [
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-data-table", {
+                        staticClass: "elevation-3",
+                        attrs: {
+                          headers: _vm.headers,
+                          items: _vm.payments,
+                          search: _vm.search,
+                          "sort-by": "id"
+                        },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "top",
+                            fn: function() {
+                              return [
+                                _c("v-system-bar", {
+                                  attrs: { color: "indigo darken-2", dark: "" }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "v-toolbar",
+                                  {
+                                    attrs: { flat: "", color: "indigo" },
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "extension",
+                                        fn: function() {
+                                          return [
+                                            _c(
+                                              "v-btn",
+                                              {
+                                                attrs: {
+                                                  fab: "",
+                                                  color: "cyan accent-2",
+                                                  bottom: "",
+                                                  left: "",
+                                                  absolute: ""
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    _vm.dialog = !_vm.dialog
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("v-icon", [
+                                                  _vm._v("mdi-plus")
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          ]
+                                        },
+                                        proxy: true
+                                      }
+                                    ])
+                                  },
+                                  [
+                                    _vm._v(" "),
+                                    _c("v-divider", {
+                                      staticClass: "mx-4",
+                                      attrs: { inset: "", vertical: "" }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("v-spacer")
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-col",
+                                  { attrs: { cols: "12", sm: "12" } },
+                                  [
+                                    _c("v-text-field", {
+                                      attrs: {
+                                        "append-icon": "search",
+                                        label: "Buscar",
+                                        "single-line": "",
+                                        "hide-details": ""
+                                      },
+                                      model: {
+                                        value: _vm.search,
+                                        callback: function($$v) {
+                                          _vm.search = $$v
+                                        },
+                                        expression: "search"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ]
+                            },
+                            proxy: true
+                          },
+                          {
+                            key: "item.status",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                item.pame_status == 1
+                                  ? _c(
+                                      "v-chip",
+                                      { attrs: { color: "green", dark: "" } },
+                                      [_vm._v("  Activo  ")]
+                                    )
+                                  : _c(
+                                      "v-chip",
+                                      { attrs: { color: "red", dark: "" } },
+                                      [_vm._v("Inactivo")]
+                                    )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.action",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c(
+                                  "v-btn",
+                                  {
+                                    staticClass: "mr-2",
+                                    attrs: {
+                                      fab: "",
+                                      dark: "",
+                                      small: "",
+                                      color: "cyan"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.edita(item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-pencil")
+                                    ])
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    staticClass: "mr-2",
+                                    attrs: {
+                                      fab: "",
+                                      dark: "",
+                                      small: "",
+                                      color: "error"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.borrar(item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-delete")
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/views/PaymentMethods.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/views/PaymentMethods.vue ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PaymentMethods_vue_vue_type_template_id_6e96f6f8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PaymentMethods.vue?vue&type=template&id=6e96f6f8& */ "./resources/js/components/views/PaymentMethods.vue?vue&type=template&id=6e96f6f8&");
+/* harmony import */ var _PaymentMethods_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PaymentMethods.vue?vue&type=script&lang=js& */ "./resources/js/components/views/PaymentMethods.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PaymentMethods_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PaymentMethods_vue_vue_type_template_id_6e96f6f8___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PaymentMethods_vue_vue_type_template_id_6e96f6f8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/views/PaymentMethods.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/views/PaymentMethods.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/views/PaymentMethods.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentMethods_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PaymentMethods.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PaymentMethods.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentMethods_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/views/PaymentMethods.vue?vue&type=template&id=6e96f6f8&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/views/PaymentMethods.vue?vue&type=template&id=6e96f6f8& ***!
+  \*****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentMethods_vue_vue_type_template_id_6e96f6f8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PaymentMethods.vue?vue&type=template&id=6e96f6f8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/PaymentMethods.vue?vue&type=template&id=6e96f6f8&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentMethods_vue_vue_type_template_id_6e96f6f8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentMethods_vue_vue_type_template_id_6e96f6f8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);
