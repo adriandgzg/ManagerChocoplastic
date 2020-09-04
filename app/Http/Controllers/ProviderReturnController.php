@@ -120,17 +120,6 @@ class ProviderReturnController extends ApiResponseController
                 }
                 else
                 {
-                    //Consulta de Compra Proveedor
-                    //$vPPS = ProviderPurchase::where('prpu_pk', '=', $vprpu_pk)->first();
-                    /*->select(
-                        'prov_fk', 
-                        'prpu_pk AS prpu_fk',
-                        'stor_fk', 
-                        DB::raw("1 AS prre_status"),
-                        DB::raw("NOW() AS created_at"),
-                        DB::raw("NOW() AS updated_at")
-                    );*/
-
                     //Inserción Encabezado de Devolución Proveedor
                     $vPRI = new ProviderReturn();
                     $vPRI->prpu_fk = $vProviderPurchase->prpu_pk;
@@ -145,28 +134,21 @@ class ProviderReturnController extends ApiResponseController
                     //////////////////  Inserción de Log  //////////////////
                     $this->getstorelog('provider_returns', $vprre_pk, 1);
 
-                    /*DB::table('provider_returns')
-                        ->insertUsing(
-                            [
-                                'prov_fk', 
-                                'prpu_fk',
-                                'stor_fk', 
-                                'prre_status', 
-                                'created_at', 
-                                'updated_at'
-                            ]
-                        , $vSelPP);*/
+     
 
 
                     //Insertar Detallado de Devolución
-                    $vSelPPD = ProviderPurchaseDetail::where('prpu_fk', '=', $vprpu_pk)->where('prpd_status', '=', 1)
+                    $vSelPPD = DB::table('provider_purchase_details AS PPD')
+                    ->join('products AS P', 'P.prod_pk', '=', 'PPD.prod_fk')
+                    ->where('prpu_fk', '=', $vprpu_pk)
+                    ->where('prpd_status', '=', 1)
                     ->select(
                         array(
                             DB::raw("$vprre_pk AS prre_fk"),
                             'prod_fk AS prod_fk',
-                            'meas_fk AS meas_fk',
-                            'prpd_quantity AS prrd_quantity',
-                            'prpd_quantity AS prrd_quantity_purchase',
+                            'P.meas_fk_output AS meas_fk',
+                            DB::raw("prpd_quantity * prod_packingquantity AS prrd_quantity"),
+                            DB::raw("prpd_quantity * prod_packingquantity AS prrd_quantity_purchase"),
                             'prpd_price AS prrd_price',
                             DB::raw("1 AS prrd_status"),
                             DB::raw("NOW() AS created_at"),
@@ -418,43 +400,48 @@ class ProviderReturnController extends ApiResponseController
             { 
                 //Consulta Devolución Detallado
                 $vPRD = ProviderReturnDetail::where('prre_fk', '=', $vprre_pk)
-                        ->where('prrd_status', '=', 1)
-                        ->get();
+                    ->where('prrd_status', '=', 1)
+                    ->get();
 
+
+                $vMensajeInventario = '';
                 //Validar Devolución Detallado
                 foreach($vPRD as $vP)
                 {
                     //Datos del Producto a devolver
                     $vprod_fk = $vP->prod_fk;
                     $vprrd_quantity = $vP->prrd_quantity;
-
+                    
                     //Buscar el Producto en el Inventario de la Sucursal 
-                    $vPI = ProductInventory::where('prod_fk', '=', $vprod_fk)
-                            ->where('prin_status', '=', 1)
-                            ->where('stor_fk', '=', $vProviderReturn->stor_fk)
-                            ->first();
-
+                    $vPI = DB::table('product_inventories AS PI')
+                        ->join('products AS P', 'P.prod_pk', '=', 'PI.prod_fk')
+                        ->where('PI.prod_fk', '=', $vprod_fk)
+                        ->where('PI.prin_status', '=', 1)
+                        ->where('PI.stor_fk', '=', $vProviderReturn->stor_fk)
+                        ->first();
+                        
                     if ($vPI) 
                     {
                         //Datos del producto en el Inventario
                         $vprin_stock = $vPI->prin_stock; //Stock actual
+                        $vprod_identifier = $vPI->prod_identifier; //Stock actual
 
                         //Validar la cantidad del producto
-                        if($vprin_stock > $vprrd_quantity)
+                        if($vprin_stock >= $vprrd_quantity)
                         {
                             //Si aplicar Devolucion
                             $vVal_Dev = true;
                         }
                         else
                         {
-                            //Producto Insuficiente para Devolución
+                            $vMensajeInventario = 'Producto Insuficiente para Devolución. Inventario Actual de ' . $vprod_identifier . ': ' . $vprin_stock;
                             $vVal_Dev = false;
                             break;
                         }
                     } 
                     else 
                     {
-                        //Producto NO Encontrado, NO se puede devolver
+                        $vMensajeInventario = 'Producto NO Encontrado, NO se puede devolver';
                         $vVal_Dev = false;
                         break;
                     }
@@ -503,7 +490,7 @@ class ProviderReturnController extends ApiResponseController
                 } 
                 else 
                 {
-                    return $this->dbResponse($vprre_pk, 501, null, 'Productos insuficientes para devolución. Revisar Inventario Actual');
+                    return $this->dbResponse($vprre_pk, 501, null, $vMensajeInventario);
                 }
             }
             else

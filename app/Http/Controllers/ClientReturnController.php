@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use DB;
-use Validator;
 use Throwable;
-use App\ClientReturn;
+use Validator;
 use App\ClientSale;
+use App\ClientReturn;
 use App\ClientSaleDetail;
+use App\ProductInventory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
 
@@ -113,28 +114,6 @@ class ClientReturnController extends ApiResponseController
                 }
                 else
                 {
-                    //Insertar Encabezado de Devolución Cliente
-                    //$vSelCReturn = ClientSale::where('clsa_pk', '=', $vclsa_pk)->first();
-                    /*->select(
-                        'clie_fk', 
-                        'clsa_pk AS clsa_fk',
-                        'stor_fk', 
-                        DB::raw("1 AS clre_status"),
-                        DB::raw("NOW() AS created_at"),
-                        DB::raw("NOW() AS updated_at")
-                    );
-
-                    /*DB::table('client_returns')
-                        ->insertUsing(
-                            [
-                                'clie_fk', 
-                                'clsa_fk',
-                                'stor_fk', 
-                                'clre_status', 
-                                'created_at', 
-                                'updated_at'
-                            ]
-                        , $vSelCReturn);*/
 
                     //Inserción Encabezado de Devolución Cliente
                     $vCRI = new ClientReturn();
@@ -389,7 +368,7 @@ class ClientReturnController extends ApiResponseController
 
             if($vClientReturn)
             { 
-              
+
                 //Modificar Devolución (Finalizar)
                 DB::table('client_returns')
                 ->where('clre_pk', '=', $vclre_pk)
@@ -402,6 +381,46 @@ class ClientReturnController extends ApiResponseController
                 //////////////////  Inserción de Log  //////////////////
                 $this->getstorelog('client_returns', $vclre_pk, 2);
 
+                /////////////////////////////////Anexo de Inventario
+                $vPPD = DB::table('client_return_details AS CRD')
+                    ->select('prod_fk','meas_fk','clrd_quantity')
+                    ->where('CRD.clre_fk', '=', $vclre_pk)
+                    ->where('CRD.clrd_status', '=', 1)
+                    ->get();
+                
+                foreach($vPPD as $vP)
+                {
+                    $vprod_pk = $vP->prod_fk; //Llave primaria de producto
+                    $vmeas_fk = $vP->meas_fk; //Llave foranea de la unidad de medida de salida
+                    $vclrd_quantity = $vP->clrd_quantity; //Catidad de la devolución
+
+                    //Buscar Producto en el Inventario 
+                    $vPI = ProductInventory::where('prod_fk', '=', $vprod_pk)
+                        ->where('prin_status', '=', 1)
+                        ->where('stor_fk', '=', $vClientReturn->stor_fk)
+                        ->first();
+
+                    if ($vPI) 
+                    {
+                        $vprin_pk = $vPI->prin_pk; //Llave primaria del Inventario
+                        $vprin_stock = $vPI->prin_stock; //Stock actual
+
+                        //Modificar Producto Inventario
+                        $vPIU = ProductInventory::find($vprin_pk);
+                        $vPIU->prin_stock = $vprin_stock + $vclrd_quantity;
+                        $vPIU->save();
+                    } 
+                    else 
+                    {
+                        //Insertar Producto Inventario
+                        $vPI = new ProductInventory();        
+                        $vPI->prod_fk = $vprod_pk;
+                        $vPI->meas_fk_output = $vmeas_fk;
+                        $vPI->prin_stock = $vclrd_quantity;
+                        $vPI->stor_fk = 1; //Todo alta de inventario por compra es a matriz
+                        $vPI->save();
+                    }
+                }
                 return $this->dbResponse($vclre_pk, 200, null, 'Devolución Finalizada Correctamente');
             }
             else
@@ -412,6 +431,7 @@ class ClientReturnController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
+            return $vTh;
             return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
