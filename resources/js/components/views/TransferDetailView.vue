@@ -130,8 +130,8 @@
                                 <tr>
                                     <th class="text-left">ID</th>
                                     <th class="text-left">Producto</th>
+                                    <th class="text-left">Unidad Medida Salida</th>
                                     <th class="text-left" style="width:200px">Cantidad a traspasar</th>
-
                                     <th></th>
                                 </tr>
                             </thead>
@@ -139,6 +139,7 @@
                                 <tr v-for="item in desserts" :key="item.prod_name">
                                     <td>{{ item.prod_identifier }}</td>
                                     <td>{{ item.prod_name }}</td>
+                                    <td>{{ item.meas_name }}</td>
                                     <td>{{ item.prtd_quantity }}</td>
                                     <td></td>
                                 </tr>

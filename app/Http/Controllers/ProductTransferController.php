@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\ProductTransferDetail;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
+use App\Product;
 
 class ProductTransferController extends ApiResponseController 
 {
@@ -126,7 +127,8 @@ class ProductTransferController extends ApiResponseController
             if($vPT)
             { 
                 $vPTD = DB::table('product_transfer_details AS PTD')
-                ->join('products AS P', 'P.prod_pk', '=', 'PTD.prod_fk')
+                    ->join('products AS P', 'P.prod_pk', '=', 'PTD.prod_fk')
+                    ->join('measurements AS M', 'P.meas_fk_output', '=', 'M.meas_pk')
                 ->select(
                     'PTD.prtd_pk',
                     'PTD.prtr_fk',
@@ -139,6 +141,9 @@ class ProductTransferController extends ApiResponseController
                     'P.prod_description',
                     'P.prod_image',
                     'P.prod_bulk',
+
+                    'M.meas_pk',
+                    'M.meas_name'
                 )
                 ->where('PTD.prtd_status', '=', 1)
                 ->where('PTD.prtr_fk', '=', $prtr_pk)
@@ -202,7 +207,6 @@ class ProductTransferController extends ApiResponseController
             $vstor_fk_input = $vInput['stor_fk_input'];
             $vprtr_observation = $vInput['prtr_observation'];
 
-            
 
             //Buscar el folio consecutivo
             $vSystem = System::select('syst_transfer')->first();
@@ -297,6 +301,9 @@ class ProductTransferController extends ApiResponseController
                         $vprod_fk = $vP->prod_fk; //PK Producto
                         $vprtd_quantity = $vP->prtd_quantity; // Cantidad a Transpasar
 
+                        //Buscar unidad de medida salida
+                        $vProduct = Product::where('prod_pk', '=', $vprod_fk)->first();
+
                         ////////////////Modificar Inventario en Sucursal Salida
                         //Consutar Producto en el Inventario de la Sucursal de Salida
                         $vPIOutputSel = ProductInventory::where('prod_fk', '=', $vprod_fk)
@@ -340,6 +347,7 @@ class ProductTransferController extends ApiResponseController
                             //Insertar Producto Inventario Sucursal Entrada
                             $vPII = new ProductInventory();        
                             $vPII->prod_fk = $vprod_fk;
+                            $vPII->meas_fk_output = $vProduct->meas_fk_output;
                             $vPII->stor_fk = $vstor_fk_input;
                             $vPII->prin_stock = $vprtd_quantity;
                             $vPII->save();
@@ -367,6 +375,7 @@ class ProductTransferController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
+            return $vTh;
             return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
