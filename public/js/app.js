@@ -2645,159 +2645,78 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       logo: "/images/logo_chocoplastic_miniatura.png",
-      links: [{
-        to: "/admins",
-        icon: "mdi-chart-bubble",
-        text: "Administración",
-        access: "admin"
+      linksChoco: [{
+        icon: 'account_circle',
+        text: 'Proveedores',
+        access: 'providers',
+        submenu: [{
+          to: '/purchaseorderslist',
+          icon: 'mdi-chart-bubble',
+          text: 'Órdenes de Compra',
+          access: 'providers'
+        }, {
+          to: '/purchaselist',
+          icon: 'mdi-chart-bubble',
+          text: 'Compras',
+          access: 'providers'
+        }, {
+          to: '/providerdebts',
+          icon: 'mdi-tag',
+          text: 'Cuentas por Pagar',
+          access: 'providers'
+        }, {
+          to: '/providersreturnlist',
+          icon: 'mdi-tag',
+          text: 'Devoluciones',
+          access: 'providers'
+        }]
       }, {
-        to: "/stores",
-        icon: "mdi-chart-bubble",
-        text: "Tiendas",
-        access: ""
-      }, {
-        to: "/sales",
-        icon: "mdi-cart",
-        text: "Ventas",
-        access: "users"
-      }, {
-        to: "/coverage",
-        icon: "mdi-shape-polygon-plus",
-        text: "Coberturas",
-        access: "admin"
-      }, {
-        to: "/user-profile",
-        icon: "mdi-account",
-        text: "Perfil",
-        access: "user"
-      }, {
-        to: "/table",
-        icon: "mdi-group",
-        text: "Tablas"
-      }, {
-        to: "/maps",
-        icon: "mdi-map-marker",
-        text: "Mapa"
-      }, {
-        to: "/notifications",
-        icon: "mdi-bell",
-        text: "Notificaciones"
+        icon: 'account_circle',
+        text: 'Clientes',
+        access: 'clients',
+        submenu: [{
+          to: '/orders',
+          icon: 'mdi-cart',
+          text: 'Pedidos',
+          access: 'clients'
+        }, {
+          to: '/sales',
+          icon: 'mdi-cart',
+          text: 'Venta',
+          access: 'clients'
+        }, {
+          to: '/clientdebts',
+          icon: 'mdi-tag',
+          text: 'Cuentas por Cobrar',
+          access: 'clients'
+        }, {
+          to: '/clientsreturnlist',
+          icon: 'mdi-tag',
+          text: 'Devoluciones',
+          access: 'clients'
+        }]
       }],
-      linksAdmin: [{
-        to: "/admins",
-        icon: "mdi-chart-bubble",
-        text: "Administración",
-        access: "admin"
+      submenu: [{
+        to: '/boxcutlist',
+        icon: 'mdi-tag',
+        text: 'Cajas',
+        access: 'box'
       }, {
-        to: "/stores",
-        icon: "mdi-chart-bubble",
-        text: "Tiendas",
-        access: "storemanager"
+        to: '/inventory',
+        icon: 'mdi-cart',
+        text: 'Inventarios',
+        access: 'inventory'
       }, {
-        to: "/stores",
-        icon: "mdi-chart-bubble",
-        text: "Tiendas",
-        access: "admin"
-      }, {
-        to: "/sales",
-        icon: "mdi-cart",
-        text: "Ventas",
-        access: "admin"
-      }, {
-        to: "/salesbusiness",
-        icon: "mdi-cart",
-        text: "Ventas Negocio",
-        access: "storemanager"
-      }, {
-        to: "/coverage",
-        icon: "mdi-shape-polygon-plus",
-        text: "Coberturas",
-        access: "admin"
-      }, {
-        to: "/userlist",
-        icon: "mdi-shape-polygon-plus",
-        text: "Administración",
-        access: "admin"
+        to: '/transferlist',
+        icon: 'mdi-cart',
+        text: 'Traspasos',
+        access: 'transfer'
       }],
       responsive: false,
       user: "",
@@ -30329,210 +30248,101 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c(
-                "v-list-group",
-                {
-                  attrs: { "prepend-icon": "account_circle", "no-action": "" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function() {
-                        return [
-                          _c("v-list-item-title", [_vm._v("Proveedores")])
-                        ]
+              _vm._l(_vm.linksChoco, function(link, i) {
+                return _vm.can(link.access)
+                  ? _c(
+                      "v-list-group",
+                      {
+                        key: i,
+                        attrs: {
+                          "prepend-icon": link.icon,
+                          "no-action": "",
+                          to: link.to,
+                          "active-class": _vm.color
+                        },
+                        scopedSlots: _vm._u(
+                          [
+                            {
+                              key: "activator",
+                              fn: function() {
+                                return [
+                                  _c("v-list-item-title", [
+                                    _vm._v(_vm._s(link.text))
+                                  ])
+                                ]
+                              },
+                              proxy: true
+                            }
+                          ],
+                          null,
+                          true
+                        )
                       },
-                      proxy: true
-                    }
-                  ])
-                },
-                [
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/purchaseorderslist" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Órdenes de Compra")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/purchaselist" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Compras")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/providerdebts" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-tag")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Cuentas por Pagar")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/providersreturnlist" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-tag")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Devoluciones")])
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
+                      [
+                        _vm._v(" "),
+                        _vm._l(link.submenu, function(linkMenu, j) {
+                          return _vm.can(linkMenu.access)
+                            ? _c(
+                                "v-list-item",
+                                {
+                                  key: j,
+                                  staticClass: "v-list-item",
+                                  attrs: {
+                                    to: linkMenu.to,
+                                    "active-class": _vm.color
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-list-item-action",
+                                    [
+                                      _c("v-icon", [
+                                        _vm._v(_vm._s(linkMenu.icon))
+                                      ])
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-list-item-title", {
+                                    domProps: {
+                                      textContent: _vm._s(linkMenu.text)
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            : _vm._e()
+                        })
+                      ],
+                      2
+                    )
+                  : _vm._e()
+              }),
               _vm._v(" "),
-              _c(
-                "v-list-group",
-                {
-                  attrs: { "prepend-icon": "account_circle", "no-action": "" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function() {
-                        return [_c("v-list-item-title", [_vm._v("Clientes")])]
+              _vm._l(_vm.submenu, function(link, k) {
+                return _vm.can(link.access)
+                  ? _c(
+                      "v-list-item",
+                      {
+                        key: k + 100,
+                        staticClass: "v-list-item",
+                        attrs: { to: link.to, "active-class": _vm.color }
                       },
-                      proxy: true
-                    }
-                  ])
-                },
-                [
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/orders" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Pedidos")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/sales" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Venta")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/clientdebts" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Cuentas por Cobrar")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/clientsreturnlist" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Devoluciones")])
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
-                { attrs: { href: "/boxcutlist" } },
-                [
-                  _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-tag")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-list-item-title", [_vm._v("Cajas")])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
-                { attrs: { href: "/inventory" } },
-                [
-                  _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-cart")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-list-item-title", [_vm._v("Inventarios")])
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-list-item",
-                { attrs: { href: "/transferlist" } },
-                [
-                  _c(
-                    "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-cart")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-list-item-title", [_vm._v("Traspaso")])
-                ],
-                1
-              ),
+                      [
+                        _c(
+                          "v-list-item-action",
+                          [_c("v-icon", [_vm._v(_vm._s(link.icon))])],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("v-list-item-title", {
+                          domProps: { textContent: _vm._s(link.text) }
+                        })
+                      ],
+                      1
+                    )
+                  : _vm._e()
+              }),
               _vm._v(" "),
               _c(
                 "v-list-group",
@@ -30763,7 +30573,7 @@ var render = function() {
                 1
               )
             ],
-            1
+            2
           )
         ],
         1

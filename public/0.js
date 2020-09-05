@@ -175,48 +175,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -544,7 +502,7 @@ var render = function() {
           }
         },
         [
-          _vm._v(_vm._s(_vm.textMsg) + "\n"),
+          _vm._v(_vm._s(_vm.textMsg) + "\r\n        "),
           _c(
             "v-btn",
             {
@@ -955,7 +913,7 @@ var render = function() {
                           "open-on-click": "",
                           "open-all": "",
                           "item-key": "id",
-                          "item-text": "name",
+                          "item-text": "description",
                           "item-children": "permissions"
                         },
                         model: {
@@ -1101,7 +1059,11 @@ var render = function() {
                       attrs: { color: "blue-grey" },
                       on: { click: _vm.cancelar }
                     },
-                    [_vm._v("\n                  Cancelar\n              ")]
+                    [
+                      _vm._v(
+                        "\r\n                    Cancelar\r\n                "
+                      )
+                    ]
                   ),
                   _vm._v(" "),
                   _c(
@@ -1111,7 +1073,11 @@ var render = function() {
                       attrs: { color: "teal accent-4" },
                       on: { click: _vm.guardar }
                     },
-                    [_vm._v("\n                  Guardar\n              ")]
+                    [
+                      _vm._v(
+                        "\r\n                    Guardar\r\n                "
+                      )
+                    ]
                   )
                 ],
                 1
@@ -1203,7 +1169,11 @@ var render = function() {
                       attrs: { color: "blue-grey" },
                       on: { click: _vm.cancelarNegocio }
                     },
-                    [_vm._v("\n                  Cancelar\n              ")]
+                    [
+                      _vm._v(
+                        "\r\n                    Cancelar\r\n                "
+                      )
+                    ]
                   ),
                   _vm._v(" "),
                   _c(
@@ -1213,7 +1183,11 @@ var render = function() {
                       attrs: { color: "teal accent-4" },
                       on: { click: _vm.guardarNegocio }
                     },
-                    [_vm._v("\n                  Guardar\n              ")]
+                    [
+                      _vm._v(
+                        "\r\n                    Guardar\r\n                "
+                      )
+                    ]
                   )
                 ],
                 1
