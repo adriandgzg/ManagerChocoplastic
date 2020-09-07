@@ -14,6 +14,7 @@ use App\ClientPayment;
 use App\ClientSaleDetail;
 use App\ProductInventory;
 use App\ClientOrderDetail;
+use App\ClientPaymentAmount;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
 use Illuminate\Support\Facades\Auth;
@@ -384,8 +385,8 @@ class ClientSaleController extends ApiResponseController
             'pame_fk' => 'required', //PK Metodo Pago
             'stor_fk' => 'required', //PK Sucursal
             'clde_amount' => 'required', //Monto Total
-            'clpa_amount_cash' => 'required', //Monto Efectivo
-            'clpa_amount_transfer' => 'required', //Monto Transferencia
+            //'clpa_amount_cash' => 'required', //Monto Efectivo
+            //'clpa_amount_transfer' => 'required', //Monto Transferencia
         ]);
 
 
@@ -406,8 +407,8 @@ class ClientSaleController extends ApiResponseController
             $vpame_fk = $vInput['pame_fk'];
             $vstor_fk = $vInput['stor_fk'];
             $vclde_amount = $vInput['clde_amount'];
-            $vclpa_amount_cash = $vInput['clpa_amount_cash'];
-            $vclpa_amount_transfer = $vInput['clpa_amount_transfer'];
+            //$vclpa_amount_cash = $vInput['clpa_amount_cash'];
+            //$vclpa_amount_transfer = $vInput['clpa_amount_transfer'];
 
             //Consultar Venta Cliente
             $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)->where('clsa_status', '=', 0)->first();
@@ -523,8 +524,39 @@ class ClientSaleController extends ApiResponseController
 
                         //Insertar Abonos de Cliente
 
+                        //Consultar Pagos
+                        $vCPASel = ClientPaymentAmount::where('clsa_fk', '=', $vclsa_pk)->where('cpam_status', '=', 1)
+                        ->select
+                        (
+                            array
+                            (
+                                DB::raw("$vclie_fk AS clie_fk"),
+                                DB::raw("$vclde_fk AS clde_fk"),
+                                'pash_fk AS pash_fk',
+                                'cpam_amount AS clpa_amount',
+                                'cpam_reference AS clpa_reference',
+                                DB::raw("1 AS clpa_status"),
+                                DB::raw("NOW() AS created_at"),
+                                DB::raw("NOW() AS updated_at")
+                            )
+                        );
+                        //Insertar Venta Detallado Cliente
+                        DB::table('client_payments')
+                            ->insertUsing(
+                                [
+                                    'clie_fk',
+                                    'clde_fk', 
+                                    'pash_fk',
+                                    'clpa_amount', 
+                                    'clpa_reference', 
+                                    'clpa_status', 
+                                    'created_at', 
+                                    'updated_at'
+                                ]
+                            , $vCPASel);
+
                         //Efectivo
-                        if($vclpa_amount_cash > 0)
+                        /*if($vclpa_amount_cash > 0)
                         {
                             $vCPC = new ClientPayment();        
                             $vCPC->clie_fk = $vclie_fk;
@@ -555,7 +587,7 @@ class ClientSaleController extends ApiResponseController
 
                             //////////////////  Inserción de Log  //////////////////
                             $this->getstorelog('client_payments', $vclpa_pk2, 1);
-                        }
+                        }*/
                     }
 
                     //Modificar Folio del Venta
