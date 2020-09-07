@@ -387,8 +387,8 @@ class ClientSaleController extends ApiResponseController
             'pame_fk' => 'required', //PK Metodo Pago
             'stor_fk' => 'required', //PK Sucursal
             'clde_amount' => 'required', //Monto Total
-            //'clpa_amount_cash' => 'required', //Monto Efectivo
-            //'clpa_amount_transfer' => 'required', //Monto Transferencia
+            'clpa_amount_cash' => 'required', //Monto Efectivo
+            'clpa_amount_transfer' => 'required', //Monto Transferencia
         ]);
 
 
@@ -409,8 +409,8 @@ class ClientSaleController extends ApiResponseController
             $vpame_fk = $vInput['pame_fk'];
             $vstor_fk = $vInput['stor_fk'];
             $vclde_amount = $vInput['clde_amount'];
-            //$vclpa_amount_cash = $vInput['clpa_amount_cash'];
-            //$vclpa_amount_transfer = $vInput['clpa_amount_transfer'];
+            $vclpa_amount_cash = $vInput['clpa_amount_cash'];
+            $vclpa_amount_transfer = $vInput['clpa_amount_transfer'];
 
             //Consultar Venta Cliente
             $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)->where('clsa_status', '=', 0)->first();
@@ -525,7 +525,7 @@ class ClientSaleController extends ApiResponseController
 
 
                         //Insertar Abonos de Cliente
-
+/*
                         //Consultar Pagos
                         $vCPASel = ClientPaymentAmount::where('clsa_fk', '=', $vclsa_pk)->where('cpam_status', '=', 1)
                         ->select
@@ -556,9 +556,9 @@ class ClientSaleController extends ApiResponseController
                                     'updated_at'
                                 ]
                             , $vCPASel);
-
+*/
                         //Efectivo
-                        /*if($vclpa_amount_cash > 0)
+                        if($vclpa_amount_cash > 0)
                         {
                             $vCPC = new ClientPayment();        
                             $vCPC->clie_fk = $vclie_fk;
@@ -589,7 +589,7 @@ class ClientSaleController extends ApiResponseController
 
                             //////////////////  Inserción de Log  //////////////////
                             $this->getstorelog('client_payments', $vclpa_pk2, 1);
-                        }*/
+                        }
                     }
 
                     //Modificar Folio del Venta
