@@ -31,96 +31,19 @@
                 <v-list-item-title v-text="link.text" />
             </v-list-item>
 
-            <v-list-group prepend-icon="account_circle" no-action>
+            <v-list-group :prepend-icon="link.icon" no-action v-for="(link, i) in linksCatalogos" :key="i" :to="link.to" :active-class="color" v-if="can(link.access)">
                 <template v-slot:activator>
-                    <v-list-item-title>Catálogos</v-list-item-title>
+                    <v-list-item-title>{{link.text}}</v-list-item-title>
                 </template>
 
-                <v-list-item href="/products">
+                <v-list-item v-for="(linkMenu, j) in link.submenu" :key="j" :to="linkMenu.to" :active-class="color" v-if="can(linkMenu.access) " class="v-list-item">
                     <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
+                        <v-icon>{{ linkMenu.icon }}</v-icon>
                     </v-list-item-action>
-                    <v-list-item-title>Productos</v-list-item-title>
+                    <v-list-item-title v-text="linkMenu.text" />
                 </v-list-item>
-
-                <v-list-item href="/proveedores">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Proveedores</v-list-item-title>
-                </v-list-item>
-                <v-list-item href="/frequents">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Productos Frecuentes</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item href="/userlist">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Usuarios</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item href="/clients">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Clientes</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item href="/admins">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Administración</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item href="/stores">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Tiendas</v-list-item-title>
-                </v-list-item>
-                <v-list-item href="/categoriesView">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Categorías</v-list-item-title>
-                </v-list-item>
-                <v-list-item href="/measurementsView">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Medidas</v-list-item-title>
-                </v-list-item>
-                <v-list-item href="/entities">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Entidades Federativas</v-list-item-title>
-                </v-list-item>
-                <v-list-item href="/paymentmethods">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Métodos de Pago</v-list-item-title>
-                </v-list-item>
-                <v-list-item href="/paymentshapes ">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Formas de Pago</v-list-item-title>
-                </v-list-item>
-                <v-list-item href="/returnmotives ">
-                    <v-list-item-action>
-                        <v-icon>mdi-cart</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title>Motivo de Cancelación</v-list-item-title>
-                </v-list-item>
-
             </v-list-group>
+
             <v-list-item href="/logout">
                 <v-list-item-action>
                     <v-icon>mdi-group</v-icon>
@@ -223,6 +146,93 @@ export default {
                 text: 'Traspasos',
                 access: 'transfer',
             },
+        ],
+
+        linksCatalogos: [{
+                icon: 'account_circle',
+                text: 'Catálogos',
+                access: 'admin',
+                submenu: [{
+                        to: '/admins',
+                        icon: 'mdi-chart-bubble',
+                        text: 'Administración',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/categoriesView',
+                        icon: 'mdi-chart-bubble',
+                        text: 'Categorías',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/clients',
+                        icon: 'mdi-chart-bubble',
+                        text: 'Clientes',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/entities',
+                        icon: 'mdi-chart-bubble',
+                        text: 'Entidades Federativas',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/paymentshapes',
+                        icon: 'mdi-chart-bubble',
+                        text: 'Formas de Pago',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/measurementsView',
+                        icon: 'mdi-chart-bubble',
+                        text: 'Medidas',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/paymentmethods',
+                        icon: 'mdi-chart-bubble',
+                        text: 'Métodos de Pago',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/returnmotives',
+                        icon: 'mdi-chart-bubble',
+                        text: 'Motivo de Cancelación',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/products',
+                        icon: 'mdi-chart-bubble',
+                        text: 'Productos',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/proveedores',
+                        icon: 'mdi-chart-bubble',
+                        text: 'Proveedores',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/frequents',
+                        icon: 'mdi-tag',
+                        text: 'Productos Frecuentes',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/stores',
+                        icon: 'mdi-tag',
+                        text: 'Tiendas',
+                        access: 'admin',
+                    },
+                    {
+                        to: '/userlist',
+                        icon: 'mdi-tag',
+                        text: 'Usuarios',
+                        access: 'admin',
+                    },
+                ]
+            },
+
         ],
 
         responsive: false,

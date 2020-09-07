@@ -2568,83 +2568,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2717,6 +2640,77 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         icon: 'mdi-cart',
         text: 'Traspasos',
         access: 'transfer'
+      }],
+      linksCatalogos: [{
+        icon: 'account_circle',
+        text: 'Catálogos',
+        access: 'admin',
+        submenu: [{
+          to: '/admins',
+          icon: 'mdi-chart-bubble',
+          text: 'Administración',
+          access: 'admin'
+        }, {
+          to: '/categoriesView',
+          icon: 'mdi-chart-bubble',
+          text: 'Categorías',
+          access: 'admin'
+        }, {
+          to: '/clients',
+          icon: 'mdi-chart-bubble',
+          text: 'Clientes',
+          access: 'admin'
+        }, {
+          to: '/entities',
+          icon: 'mdi-chart-bubble',
+          text: 'Entidades Federativas',
+          access: 'admin'
+        }, {
+          to: '/paymentshapes',
+          icon: 'mdi-chart-bubble',
+          text: 'Formas de Pago',
+          access: 'admin'
+        }, {
+          to: '/measurementsView',
+          icon: 'mdi-chart-bubble',
+          text: 'Medidas',
+          access: 'admin'
+        }, {
+          to: '/paymentmethods',
+          icon: 'mdi-chart-bubble',
+          text: 'Métodos de Pago',
+          access: 'admin'
+        }, {
+          to: '/returnmotives',
+          icon: 'mdi-chart-bubble',
+          text: 'Motivo de Cancelación',
+          access: 'admin'
+        }, {
+          to: '/products',
+          icon: 'mdi-chart-bubble',
+          text: 'Productos',
+          access: 'admin'
+        }, {
+          to: '/proveedores',
+          icon: 'mdi-chart-bubble',
+          text: 'Proveedores',
+          access: 'admin'
+        }, {
+          to: '/frequents',
+          icon: 'mdi-tag',
+          text: 'Productos Frecuentes',
+          access: 'admin'
+        }, {
+          to: '/stores',
+          icon: 'mdi-tag',
+          text: 'Tiendas',
+          access: 'admin'
+        }, {
+          to: '/userlist',
+          icon: 'mdi-tag',
+          text: 'Usuarios',
+          access: 'admin'
+        }]
       }],
       responsive: false,
       user: "",
@@ -3079,26 +3073,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
+    var _ref;
+
+    return _ref = {
       notifications: [],
       title: null,
       responsive: false,
       responsiveInput: false,
       dialogCaja: false,
       dialogCerrarCaja: false,
+      dialogDrawals: false,
+      validDrawals: false,
       validCerrarCaja: false,
       validCaja: false,
       dateFormatted: '',
       boxEnabled: false,
+      boxDrawals: false,
       editadoBox: {
         admi_fk: 0,
         bocu_amountcash: 0,
@@ -3108,7 +3102,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         bocu_endamount: 0,
         bocu_startdate: '',
         bocu_observation: '',
-        bocu_status: 1
+        bocu_status: 1,
+        bocu_pk: 0
       },
       editadoBoxDefault: {
         admi_fk: 0,
@@ -3119,17 +3114,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         bocu_endamount: 0,
         bocu_startdate: '',
         bocu_observation: '',
-        bocu_status: 1
+        bocu_status: 1,
+        bocu_pk: 0
       },
-      caja: [],
-      user: '',
-      montoApertura: 0,
-      numberRules: [function (value) {
-        return !!value || 'Requerido.';
-      }, function (value) {
-        return value > 0 || 'El número debe ser mayor a cero';
-      }]
-    };
+      editadoDrawals: {
+        bocu_fk: 0,
+        cawi_amount: 0
+      }
+    }, _defineProperty(_ref, "editadoBoxDefault", {
+      bocu_fk: 0,
+      cawi_amount: 0
+    }), _defineProperty(_ref, "caja", []), _defineProperty(_ref, "user", ''), _defineProperty(_ref, "montoApertura", 0), _defineProperty(_ref, "numberRules", [function (value) {
+      return !!value || 'Requerido.';
+    }, function (value) {
+      return value > 0 || 'El número debe ser mayor a cero';
+    }]), _ref;
   },
   watch: {
     '$route': function $route(val) {
@@ -3202,6 +3201,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this2 = this;
 
       axios.get("/boxcut").then(function (response) {
+        console.log('response.data.data.box');
+        console.log(response.data.data);
+
         if (response.data.data == null) {
           _this2.boxEnabled = true;
         } else {
@@ -3220,11 +3222,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.dialogCerrarCaja = true;
       this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' + this.formatHour(new Date().toISOString().substr(11, 15));
     },
+    retirarCaja: function retirarCaja() {
+      this.dialogDrawals = true;
+      this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' + this.formatHour(new Date().toISOString().substr(11, 15));
+      this.editadoDrawals.bocu_fk = this.editadoBox.bocu_pk;
+    },
     cancelar: function cancelar() {
       this.dialogCaja = false;
     },
     cancelarCerrar: function cancelarCerrar() {
       this.dialogCerrarCaja = false;
+    },
+    cancelarRetirar: function cancelarRetirar() {
+      this.dialogDrawals = false;
     },
     guardar: function guardar() {
       var _this3 = this;
@@ -3273,6 +3283,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this4.$router.go();
         } else {
           _this4.normal('Notificación', response.data.message, "error");
+        }
+      })["catch"](function (e) {
+        //this.errors.push(e)
+        console.log(e);
+      });
+    },
+    guardarRetiro: function guardarRetiro() {
+      var _this5 = this;
+
+      axios.post('/cash/withdrawals', this.editadoDrawals).then(function (response) {
+        console.log(response);
+
+        if (response.data.status.code == 200) {
+          _this5.dialogDrawals = false;
+          _this5.textMsg = "¡Actualizado correctamente!";
+
+          _this5.normal('Notificación', '¡Actualizado correctamente!', "success");
+
+          _this5.editadoDrawals = _this5.editadoDrawalsDefault;
+
+          var route = _this5.$router.resolve({
+            path: '/cash/withdrawals/printRetiro/' + response.data.data
+          });
+
+          window.open(route.href, '_blank');
+
+          _this5.$router.go();
+        } else {
+          _this5.normal('Notificación', response.data.message, "error");
         }
       })["catch"](function (e) {
         //this.errors.push(e)
@@ -8416,7 +8455,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#core-toolbar a {\n  text-decoration: none;\n}\n", ""]);
+exports.push([module.i, "\n#core-toolbar a {\r\n    text-decoration: none;\n}\r\n", ""]);
 
 // exports
 
@@ -30344,219 +30383,76 @@ var render = function() {
                   : _vm._e()
               }),
               _vm._v(" "),
-              _c(
-                "v-list-group",
-                {
-                  attrs: { "prepend-icon": "account_circle", "no-action": "" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function() {
-                        return [_c("v-list-item-title", [_vm._v("Catálogos")])]
+              _vm._l(_vm.linksCatalogos, function(link, i) {
+                return _vm.can(link.access)
+                  ? _c(
+                      "v-list-group",
+                      {
+                        key: i,
+                        attrs: {
+                          "prepend-icon": link.icon,
+                          "no-action": "",
+                          to: link.to,
+                          "active-class": _vm.color
+                        },
+                        scopedSlots: _vm._u(
+                          [
+                            {
+                              key: "activator",
+                              fn: function() {
+                                return [
+                                  _c("v-list-item-title", [
+                                    _vm._v(_vm._s(link.text))
+                                  ])
+                                ]
+                              },
+                              proxy: true
+                            }
+                          ],
+                          null,
+                          true
+                        )
                       },
-                      proxy: true
-                    }
-                  ])
-                },
-                [
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/products" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Productos")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/proveedores" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Proveedores")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/frequents" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Productos Frecuentes")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/userlist" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Usuarios")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/clients" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Clientes")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/admins" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Administración")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/stores" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Tiendas")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/categoriesView" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Categorías")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/measurementsView" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Medidas")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/entities" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Entidades Federativas")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/paymentmethods" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Métodos de Pago")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/paymentshapes " } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Formas de Pago")])
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { href: "/returnmotives " } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-cart")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-list-item-title", [_vm._v("Motivo de Cancelación")])
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
+                      [
+                        _vm._v(" "),
+                        _vm._l(link.submenu, function(linkMenu, j) {
+                          return _vm.can(linkMenu.access)
+                            ? _c(
+                                "v-list-item",
+                                {
+                                  key: j,
+                                  staticClass: "v-list-item",
+                                  attrs: {
+                                    to: linkMenu.to,
+                                    "active-class": _vm.color
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-list-item-action",
+                                    [
+                                      _c("v-icon", [
+                                        _vm._v(_vm._s(linkMenu.icon))
+                                      ])
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c("v-list-item-title", {
+                                    domProps: {
+                                      textContent: _vm._s(linkMenu.text)
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            : _vm._e()
+                        })
+                      ],
+                      2
+                    )
+                  : _vm._e()
+              }),
               _vm._v(" "),
               _c(
                 "v-list-item",
@@ -31029,7 +30925,7 @@ var render = function() {
                                             },
                                             [
                                               _vm._v(
-                                                "\n                          mdi-cash-multiple\n                        "
+                                                "\r\n                                            mdi-cash-multiple\r\n                                        "
                                               )
                                             ]
                                           ),
@@ -31070,7 +30966,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                          Total de Venta\n                        "
+                                                        "\r\n                                                    Total de Venta\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31098,7 +30994,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                            $150,000.00\n                          "
+                                                        "\r\n                                                    $150,000.00\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31132,7 +31028,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                          Efectivo\n                        "
+                                                        "\r\n                                                    Efectivo\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31160,7 +31056,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                            $30,000.00\n                          "
+                                                        "\r\n                                                    $30,000.00\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31194,7 +31090,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                          Tarjeta\n                        "
+                                                        "\r\n                                                    Tarjeta\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31222,7 +31118,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                            $70,000.00\n                          "
+                                                        "\r\n                                                    $70,000.00\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31256,7 +31152,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                          Crédito\n                        "
+                                                        "\r\n                                                    Crédito\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31284,7 +31180,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                            $50,000.00\n                          "
+                                                        "\r\n                                                    $50,000.00\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31324,7 +31220,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                          Total en Caja\n                        "
+                                                        "\r\n                                                    Total en Caja\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31352,7 +31248,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                            $10,000.00\n                          "
+                                                        "\r\n                                                    $10,000.00\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31386,7 +31282,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                          Cobrado\n                        "
+                                                        "\r\n                                                    Cobrado\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31414,7 +31310,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                            $30,000.00\n                          "
+                                                        "\r\n                                                    $30,000.00\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31448,7 +31344,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                          Retiros\n                        "
+                                                        "\r\n                                                    Retiros\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31476,7 +31372,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                            $20,000.00\n                          "
+                                                        "\r\n                                                    $20,000.00\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31563,6 +31459,136 @@ var render = function() {
           ),
           _vm._v(" "),
           _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "500px" },
+              model: {
+                value: _vm.dialogDrawals,
+                callback: function($$v) {
+                  _vm.dialogDrawals = $$v
+                },
+                expression: "dialogDrawals"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "cyan white--text" }, [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v("Retiro de Caja")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-form",
+                    {
+                      model: {
+                        value: _vm.validDrawals,
+                        callback: function($$v) {
+                          _vm.validDrawals = $$v
+                        },
+                        expression: "validDrawals"
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c(
+                            "v-row",
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Usuario",
+                                  "prepend-icon": "mdi-account",
+                                  disabled: ""
+                                },
+                                model: {
+                                  value: _vm.user.name,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.user, "name", $$v)
+                                  },
+                                  expression: "user.name"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Monto de Retiro",
+                                  "prepend-icon": "mdi-square-inc-cash",
+                                  prefix: "",
+                                  type: "number",
+                                  rules: _vm.numberRules,
+                                  required: ""
+                                },
+                                on: { keydown: _vm.isNumberValid },
+                                model: {
+                                  value: _vm.editadoDrawals.cawi_amount,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.editadoDrawals,
+                                      "cawi_amount",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "editadoDrawals.cawi_amount"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: { color: "blue-grey" },
+                              on: { click: _vm.cancelarRetirar }
+                            },
+                            [_vm._v("Cancelar")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "ma-2 white--text",
+                              attrs: {
+                                disabled: !_vm.validDrawals,
+                                color: "teal accent-4"
+                              },
+                              on: { click: _vm.guardarRetiro }
+                            },
+                            [_vm._v("Guardar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
             "div",
             { staticClass: "v-toolbar-title" },
             [
@@ -31584,7 +31610,11 @@ var render = function() {
                     [_c("v-icon", [_vm._v("mdi-view-list")])],
                     1
                   ),
-                  _vm._v("\n        " + _vm._s(_vm.title) + "\n      ")
+                  _vm._v(
+                    "\r\n                " +
+                      _vm._s(_vm.title) +
+                      "\r\n            "
+                  )
                 ],
                 1
               )
@@ -31601,6 +31631,26 @@ var render = function() {
                 "v-flex",
                 { attrs: { "align-center": "", layout: "", "py-2": "" } },
                 [
+                  !_vm.boxEnabled
+                    ? _c(
+                        "v-btn",
+                        {
+                          staticClass: "ma-2 white--text",
+                          attrs: { color: "#e3ae10" },
+                          on: { click: _vm.retirarCaja }
+                        },
+                        [
+                          _vm._v(
+                            "\r\n                    Retiro de Caja\r\n                    "
+                          ),
+                          _c("v-icon", { attrs: { right: "", dark: "" } }, [
+                            _vm._v("mdi-inbox-arrow-up")
+                          ])
+                        ],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
                   _vm.boxEnabled
                     ? _c(
                         "v-btn",
@@ -31610,7 +31660,9 @@ var render = function() {
                           on: { click: _vm.abrirCaja }
                         },
                         [
-                          _vm._v("\n        Abrir Caja\n        "),
+                          _vm._v(
+                            "\r\n                    Abrir Caja\r\n                    "
+                          ),
                           _c("v-icon", { attrs: { right: "", dark: "" } }, [
                             _vm._v("mdi-inbox-arrow-down")
                           ])
@@ -31625,7 +31677,9 @@ var render = function() {
                           on: { click: _vm.cerrarCaja }
                         },
                         [
-                          _vm._v("\n        Cerrar Caja\n        "),
+                          _vm._v(
+                            "\r\n                    Cerrar Caja\r\n                    "
+                          ),
                           _c("v-icon", { attrs: { right: "", dark: "" } }, [
                             _vm._v("mdi-inbox-arrow-up")
                           ])
