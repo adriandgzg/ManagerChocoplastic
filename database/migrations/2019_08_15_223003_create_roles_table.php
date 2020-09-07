@@ -28,11 +28,66 @@ class CreateRolesTable extends Migration
 
         DB::table('roles')->insert(
             array(
-                'name' => 'SuperAdmin',
-                'description' => 'Super power'
+                'name' => 'admin',
+                'description' => 'Administración'
             )
         );
 
+        DB::table('roles')->insert(
+            array(
+                'name' => 'user',
+                'description' => 'Usuarios'
+            )
+        );
+
+        DB::table('roles')->insert(
+            array(
+                'name' => 'role',
+                'description' => 'Roles'
+            )
+        );
+
+        DB::table('roles')->insert(
+            array(
+                'name' => 'permission',
+                'description' => 'Permisos'
+            )
+        );
+
+        DB::table('roles')->insert(
+            array(
+                'name' => 'providers',
+                'description' => 'Proveedores'
+            )
+        );
+
+        DB::table('roles')->insert(
+            array(
+                'name' => 'clients',
+                'description' => 'Clientes'
+            )
+        );
+
+        DB::table('roles')->insert(
+            array(
+                'name' => 'box',
+                'description' => 'Cajas'
+            )
+        );
+
+        DB::table('roles')->insert(
+            array(
+                'name' => 'inventary',
+                'description' => 'Inventarios'
+            )
+        );
+
+        DB::table('roles')->insert(
+            array(
+                'name' => 'transfer',
+                'description' => 'Traspasos'
+            )
+        );
     }
 
     /**
