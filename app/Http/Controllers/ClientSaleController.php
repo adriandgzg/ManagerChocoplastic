@@ -282,6 +282,7 @@ class ClientSaleController extends ApiResponseController
             }
 
             $vCS = DB::table('client_sales AS CS')
+                ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
                 ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
                 ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
                 ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
@@ -306,6 +307,7 @@ class ClientSaleController extends ApiResponseController
 
                     'S.stor_pk',
                     'S.stor_name',
+                    DB::raw('(SELECT CONCAT(U.phone_number, "-", U.name) AS user FROM logs AS L INNER JOIN users AS U ON L.user_fk = U.id WHERE L.table = "client_orders" AND L.pk_register = CO.clor_pk AND L.operation = 1 LIMIT 1) AS user') //Vededor
                 )
                 ->where('CS.clsa_pk', '=', $vclsa_pk)
                 ->first();

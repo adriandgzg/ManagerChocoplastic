@@ -45,7 +45,7 @@ class CashWithdrawalController extends ApiResponseController
             $vInput = $r->all();
 
             $vVal = Validator::make($vInput, [
-                'bocu_fk' => 'required|int', // PK Compra
+                'bocu_fk' => 'required|int', // PK Caja
                 'cawi_amount' => 'required', //Monto
             ]);
 
