@@ -39,9 +39,9 @@ class ClientPaymentController extends Controller
      */
     public function store(Request $r)
     {
-        $vInput = $r->all();
+        $vInput = $r->all(); 
 
-        $validator = Validator::make($vInput, [
+        $validator = Validator::make($vInput, [ 
             'clde_fk' => 'required', //PK Cliente Deuda
             'clie_fk' => 'required', //PK Cliente
             'pash_fk' => 'required', //PK Forma de Pago

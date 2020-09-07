@@ -134,9 +134,6 @@ class ProviderReturnController extends ApiResponseController
                     //////////////////  Inserción de Log  //////////////////
                     $this->getstorelog('provider_returns', $vprre_pk, 1);
 
-     
-
-
                     //Insertar Detallado de Devolución
                     $vSelPPD = DB::table('provider_purchase_details AS PPD')
                     ->join('products AS P', 'P.prod_pk', '=', 'PPD.prod_fk')

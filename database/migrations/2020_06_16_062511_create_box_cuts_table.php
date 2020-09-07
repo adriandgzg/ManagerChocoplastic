@@ -16,6 +16,10 @@ class CreateBoxCutsTable extends Migration
         //Corte de caja
         Schema::create('box_cuts', function (Blueprint $table) {
             $table->bigIncrements('bocu_pk');
+            
+            $table->bigInteger('stor_fk')->unsigned()->nullable(); //Llave Foranea Catálogo Tienda
+            $table->foreign('stor_fk')->references('stor_pk')->on('stores')->onUpdate('cascade');
+
             $table->bigInteger('admi_fk');
             $table->dateTimeTz('bocu_startdate', 0); //Fecha Inicio
             $table->decimal('bocu_initialamount', 12, 2)->default(0); //Monto inicial

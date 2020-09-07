@@ -200,6 +200,36 @@ Route::post('product/transfer/details/destroy', 'ProductTransferDetailController
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Route::get('/client/payment/amounts/{clsa_fk}', 'ClientPaymentAmountController@show'); //Listado de montos pagos, filtrado por venta
+Route::post('/client/payment/amounts', 'ClientPaymentAmountController@store'); //Guardar montos pagos (Cliente)
+Route::post('/client/payment/amounts/update', 'ClientPaymentAmountController@update');  //Modificar montos pagos (Cliente)
+Route::post('/client/payment/amounts/destroy', 'ClientPaymentAmountController@destroy');  //Eliminar montos pagos (Cliente)
+
+
+
+
+
+Route::get('/cash/withdrawals/{cawi_pk}', 'CashWithdrawalController@show'); //Consultar Retiro
+Route::post('/cash/withdrawals', 'CashWithdrawalController@store'); //Guardar Retiro
+
+
 /****** *************/
 Auth::routes(['register' => false, 'reset' => false]);
 Route::get('/logout', 'Auth\LoginController@logout');

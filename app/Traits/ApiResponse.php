@@ -11,24 +11,10 @@ trait ApiResponse
 
     public function dbResponse($pdata, $pdeco_code, $ptechnicaldetail, $msj)
     {
-        //$vDV = DevCode::where('deco_codxe', '=', $pdeco_code)->select('deco_pk', 'deco_status', 'deco_description', 'deco_message')->first();
         $vtechnicaldetail = $ptechnicaldetail;
-        //$vstatus = $vDV[0]->deco_status;
         $vdeco_description = $msj; //$vDV[0]->deco_description;
         $vdeco_message = $msj; //$vDV[0]->deco_message;
-        /*
-        if($vstatus == 1)
-        {
-            $pdeco_code = 200;
-        }
-
-        if ($vstatus == 1) {
-            $vStatusBool = true;
-        }
-        else
-        {
-            $vStatusBool = false;
-        }*/
+      
 
         if($pdeco_code == 200)
         {
@@ -59,7 +45,7 @@ trait ApiResponse
     protected function getstorelog(string $ptable, int $ppk_register, int $poperation)
     {
         //ID Usuario
-        $vuser_fk = Auth::user()->id;
+        $vuser_fk = 1;//Auth::user()->id;
 
         //Inserción de log
         $vL = new Log();

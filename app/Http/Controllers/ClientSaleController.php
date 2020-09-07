@@ -108,7 +108,7 @@ class ClientSaleController extends ApiResponseController
         try 
         {
             //Asignacion de variables
-           $vclor_pk = $vInput['clor_pk'];
+            $vclor_pk = $vInput['clor_pk'];
 
             $vClientOrder = ClientOrder::where('clor_pk', '=', $vclor_pk)->where('clor_status', '=', 1)->first();
 

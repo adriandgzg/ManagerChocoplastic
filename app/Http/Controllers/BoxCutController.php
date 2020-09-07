@@ -88,9 +88,11 @@ class BoxCutController extends Controller
         try{
 
             $vUser = Auth::user()->id;
+            $vstor_fk = Auth::user()->store_id;
 
             $box = new BoxCut();  
             $box->admi_fk = $vUser;
+            $box->stor_fk = $vstor_fk;
             $box->bocu_startdate = $request->bocu_startdate;
             $box->bocu_initialamount = $request->bocu_initialamount;
 

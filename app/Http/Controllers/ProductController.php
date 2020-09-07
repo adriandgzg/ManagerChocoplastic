@@ -6,7 +6,6 @@ use DB;
 use Exception;
 use Throwable;
 use Validator;
-use App\Store;
 use App\Product;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -239,6 +238,7 @@ class ProductController extends ApiResponseController
             'meas_fk_output' => 'required|int', //PK Unidad Medida Salida
             'prod_saleprice' => 'required', //Precio Venta
             'prod_listprice' => 'required', //Precio Lista
+            'prod_bulk' => 'required', //Aplicar a granel
             'prod_fact_convert' => 'required' //Factor Conversión Unidad Medida
         ]);
 
@@ -253,6 +253,7 @@ class ProductController extends ApiResponseController
            $vprod_saleprice = $vInput['prod_saleprice'];
            $vprod_listprice = $vInput['prod_listprice'];
            $vprod_fact_convert = $vInput['prod_fact_convert'];
+           $vprod_bulk = $vInput['prod_bulk'];
 
             $vProduct = Product::where('prod_pk', '=', $vprod_pk)->first();
 
@@ -274,8 +275,8 @@ class ProductController extends ApiResponseController
                             'prod_preferentialprice', 
                             DB::raw("$vprod_saleprice AS prod_saleprice"),
                             DB::raw("$vprod_listprice AS prod_listprice"),
-                            'prod_packingquantity', 
-                            'prod_bulk', 
+                            'prod_packingquantity',
+                            DB::raw("$vprod_bulk AS prod_bulk"),
                             DB::raw("$vprod_pk AS prod_main_pk"),
                             DB::raw("$vprod_fact_convert AS prod_fact_convert"),
                             DB::raw("NOW() AS created_at"),
@@ -329,6 +330,7 @@ class ProductController extends ApiResponseController
             'meas_fk_output' => 'required|int', //PK Unidad Medida Salida
             'prod_saleprice' => 'required', //Precio Venta
             'prod_listprice' => 'required', //Precio Lista
+            'prod_bulk' => 'required', //Aplicar a granel
             'prod_fact_convert' => 'required' //Factor Conversión Unidad Medida
 
         ]);
@@ -339,11 +341,12 @@ class ProductController extends ApiResponseController
 
         try {
             //Asignacion de variables
-           $vprod_pk = $vInput['prod_pk'];
-           $vmeas_fk_output = $vInput['meas_fk_output'];
-           $vprod_saleprice = $vInput['prod_saleprice'];
-           $vprod_listprice = $vInput['prod_listprice'];
-           $vprod_fact_convert = $vInput['prod_fact_convert'];
+            $vprod_pk = $vInput['prod_pk'];
+            $vmeas_fk_output = $vInput['meas_fk_output'];
+            $vprod_saleprice = $vInput['prod_saleprice'];
+            $vprod_listprice = $vInput['prod_listprice'];
+            $vprod_fact_convert = $vInput['prod_fact_convert'];
+            $vprod_bulk = $vInput['prod_bulk'];
 
             $vProduct = Product::where('prod_pk', '=', $vprod_pk)->first();
 
@@ -356,8 +359,9 @@ class ProductController extends ApiResponseController
                     'meas_fk_output' => $vmeas_fk_output, 
                     'prod_saleprice' => $vprod_saleprice, 
                     'prod_listprice' => $vprod_listprice,
-                    'prod_fact_convert' => $vprod_fact_convert
-                    ]);
+                    'prod_fact_convert' => $vprod_fact_convert,
+                    'prod_bulk' => $vprod_bulk
+                ]);
 
                 return $this->dbResponse(null, 200, null, 'Producto Derivado Modificado Correctamente');
                          
