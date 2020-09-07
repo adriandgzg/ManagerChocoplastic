@@ -238,6 +238,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -248,6 +252,7 @@ __webpack_require__.r(__webpack_exports__);
       stores: [],
       clients: [],
       payments: [],
+      paymentsShapes: [],
       paymentsOriginal: [],
       saleHeader: '',
       saleDetail: [],
@@ -255,6 +260,7 @@ __webpack_require__.r(__webpack_exports__);
       selectClient: '',
       selectStore: '',
       selectpame: '',
+      selectpash: '',
       snackbar: false,
       timeout: 2000,
       subtotal: 0,
@@ -298,6 +304,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getPaymentShow();
     this.getStores();
     this.getUsers();
+    this.getPaymentShapes();
   },
   methods: {
     getUsers: function getUsers() {
@@ -470,31 +477,40 @@ __webpack_require__.r(__webpack_exports__);
         console.log(e);
       });
     },
-    getPayment: function getPayment() {
+    getPaymentShapes: function getPaymentShapes() {
       var _this6 = this;
 
+      axios.get("/paymentshapesget").then(function (response) {
+        _this6.paymentsShapes = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    getPayment: function getPayment() {
+      var _this7 = this;
+
       axios.get("/paymentmethodsget").then(function (response) {
-        _this6.payments = response.data.data;
+        _this7.payments = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPaymentShow: function getPaymentShow() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.get("/paymentmethodsshow/1").then(function (response) {
         console.log(response.data.data);
-        _this7.payments = response.data.data;
-        _this7.selectpame = _this7.payments[0];
+        _this8.payments = response.data.data;
+        _this8.selectpame = _this8.payments[0];
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getStores: function getStores() {
-      var _this8 = this;
+      var _this9 = this;
 
       axios.get("/storeget").then(function (response) {
-        _this8.stores = response.data.data;
+        _this9.stores = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -508,26 +524,26 @@ __webpack_require__.r(__webpack_exports__);
       this.dialogQuestionDelete = false;
     },
     "delete": function _delete() {
-      var _this9 = this;
+      var _this10 = this;
 
       axios.post('/client_sale_details/destroy', this.editado).then(function (response) {
-        _this9.textMsg = "¡Eliminado correctamente!";
+        _this10.textMsg = "¡Eliminado correctamente!";
 
-        _this9.normal('Notificación', _this9.textMsg, "success");
+        _this10.normal('Notificación', _this10.textMsg, "success");
 
-        _this9.createsale();
+        _this10.createsale();
       });
     },
     actualizar: function actualizar(item) {
-      var _this10 = this;
+      var _this11 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this10.textMsg = "¡Actualizado correctamente!";
+        _this11.textMsg = "¡Actualizado correctamente!";
 
-        _this10.normal('Notificación', _this10.textMsg, "success");
+        _this11.normal('Notificación', _this11.textMsg, "success");
       })["catch"](function (e) {
-        _this10.errors.push(e);
+        _this11.errors.push(e);
       });
     },
     normal: function normal(Title, Description, Type) {
@@ -1392,42 +1408,52 @@ var render = function() {
                         [_vm._v("Forma de Pago:")]
                       ),
                       _vm._v(" "),
-                      _c("v-text-field", {
-                        attrs: {
-                          label: "Efectivo: ",
-                          rules: _vm.minNumberRules,
-                          prefix: "$",
-                          type: "number"
-                        },
-                        on: {
-                          change: function($event) {
-                            return _vm.getcambio()
-                          }
-                        },
-                        model: {
-                          value: _vm.efectivo,
-                          callback: function($$v) {
-                            _vm.efectivo = $$v
-                          },
-                          expression: "efectivo"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("v-text-field", {
-                        attrs: {
-                          label: "Transferencia: ",
-                          rules: _vm.minNumberRules,
-                          prefix: "$",
-                          type: "number"
-                        },
-                        model: {
-                          value: _vm.tarjeta,
-                          callback: function($$v) {
-                            _vm.tarjeta = $$v
-                          },
-                          expression: "tarjeta"
-                        }
-                      }),
+                      _c(
+                        "v-card-text",
+                        [
+                          _c("v-combobox", {
+                            attrs: {
+                              required: "",
+                              items: _vm.paymentsShapes,
+                              label: "Forma de pago",
+                              "item-text": "pash_name",
+                              "item-value": "pash_pk",
+                              filled: "",
+                              chips: "",
+                              placeholder: "Seleccionar una opción"
+                            },
+                            model: {
+                              value: _vm.selectpash,
+                              callback: function($$v) {
+                                _vm.selectpash = $$v
+                              },
+                              expression: "selectpash"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              label: "Efectivo: ",
+                              rules: _vm.minNumberRules,
+                              prefix: "$",
+                              type: "number"
+                            },
+                            on: {
+                              change: function($event) {
+                                return _vm.getcambio()
+                              }
+                            },
+                            model: {
+                              value: _vm.efectivo,
+                              callback: function($$v) {
+                                _vm.efectivo = $$v
+                              },
+                              expression: "efectivo"
+                            }
+                          })
+                        ],
+                        1
+                      ),
                       _vm._v(" "),
                       _c("br"),
                       _vm._v(" "),

@@ -461,11 +461,10 @@ __webpack_require__.r(__webpack_exports__);
     agregar: function agregar(item) {
       var _this5 = this;
 
-      if (this.selectProv == '' || this.selectProv == null) {
+      if (!this.directa == 2) if (this.selectProv == '' || this.selectProv == null) {
         this.normal('Notificación', "Debe seleccionar un proveedor", "error");
         return;
       }
-
       if (!this.enabledStore) if (this.selectStore == '' || this.selectStore == null) {
         this.normal('Notificación', "Debe seleccionar una sucursal", "error");
         return;
@@ -533,6 +532,7 @@ __webpack_require__.r(__webpack_exports__);
           }, 2000);
 
           if (response.data.data != null) {
+            console.log(response.data.data);
             _this7.desserts = response.data.data.ProviderPurchaseDetail;
 
             _this7.getTotal();
@@ -647,11 +647,10 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      if (this.selectProv == '' || this.selectProv == null) {
+      if (!this.directa == 2) if (this.selectProv == '' || this.selectProv == null) {
         this.normal('Notificación', "Debe seleccionar un proveedor", "error");
         return;
       }
-
       if (!this.enabledStore) if (this.selectStore == '' || this.selectStore == null) {
         this.normal('Notificación', "Debe seleccionar una sucursal", "error");
         return;

@@ -470,11 +470,12 @@ export default {
         },
 
         agregar(item) {
-            if (this.selectProv == '' || this.selectProv == null) {
+            if (!this.directa == 2)
+                if (this.selectProv == '' || this.selectProv == null) {
 
-                this.normal('Notificación', "Debe seleccionar un proveedor", "error");
-                return;
-            }
+                    this.normal('Notificación', "Debe seleccionar un proveedor", "error");
+                    return;
+                }
             if (!this.enabledStore)
                 if (this.selectStore == '' || this.selectStore == null) {
                     this.normal('Notificación', "Debe seleccionar una sucursal", "error");
@@ -544,6 +545,7 @@ export default {
                     .then(response => {
                         setTimeout(() => (this.loading = false), 2000)
                         if (response.data.data != null) {
+                            console.log(response.data.data)
                             this.desserts = response.data.data.ProviderPurchaseDetail;
                             this.getTotal();
                             this.prpu_pk = response.data.data.ProviderPurchase.prpu_pk;
@@ -661,10 +663,11 @@ export default {
                 this.normal('Notificación', "La orden de compra no puede ser menor o igual a cero", "error");
                 return;
             }
-            if (this.selectProv == '' || this.selectProv == null) {
-                this.normal('Notificación', "Debe seleccionar un proveedor", "error");
-                return;
-            }
+            if (!this.directa == 2)
+                if (this.selectProv == '' || this.selectProv == null) {
+                    this.normal('Notificación', "Debe seleccionar un proveedor", "error");
+                    return;
+                }
 
             if (!this.enabledStore)
                 if (this.selectStore == '' || this.selectStore == null) {
