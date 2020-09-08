@@ -200,6 +200,7 @@ export default {
         },
 
         cancelar() {
+
             this.dialog = false
             this.editado = Object.assign({}, this.defaultItem)
             this.editedIndex = -1
