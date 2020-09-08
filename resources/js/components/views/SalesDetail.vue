@@ -32,7 +32,7 @@
                             <v-col cols="4">
                                 <v-card-text class="category d-inline-flex font-weight-light">
                                     <v-label>
-                                        <h4>Vendedor:</h4>Carlos Jiménez Martinez
+                                        <h4>Vendedor:</h4>{{saleHeader.user}}
                                     </v-label>
                                 </v-card-text>
                             </v-col>

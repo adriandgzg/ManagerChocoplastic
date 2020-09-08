@@ -294,6 +294,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -959,18 +963,15 @@ var render = function() {
                                         "category d-inline-flex font-weight-light"
                                     },
                                     [
-                                      _c(
-                                        "span",
-                                        {
-                                          staticClass:
-                                            "subheading font-weight-bold"
-                                        },
-                                        [_vm._v("Vendedor:")]
-                                      ),
-                                      _vm._v(
-                                        "  Carlos Jiménez Martinez\r\n                                "
-                                      )
-                                    ]
+                                      _c("v-label", [
+                                        _c("h4", [_vm._v("Vendedor:")]),
+                                        _vm._v(
+                                          _vm._s(_vm.saleHeader.user) +
+                                            "\r\n                                    "
+                                        )
+                                      ])
+                                    ],
+                                    1
                                   )
                                 ],
                                 1
@@ -987,18 +988,16 @@ var render = function() {
                                         "category d-inline-flex font-weight-light"
                                     },
                                     [
-                                      _c(
-                                        "span",
-                                        {
-                                          staticClass:
-                                            "subheading font-weight-bold"
-                                        },
-                                        [_vm._v("Fecha:")]
-                                      ),
-                                      _vm._v(
-                                        "  10/10/2020\r\n                                "
-                                      )
-                                    ]
+                                      _c("v-label", [
+                                        _c("h4", [_vm._v("Sucursal:")]),
+                                        _vm._v(
+                                          " " +
+                                            _vm._s(_vm.saleHeader.stor_name) +
+                                            "\r\n                                    "
+                                        )
+                                      ])
+                                    ],
+                                    1
                                   )
                                 ],
                                 1

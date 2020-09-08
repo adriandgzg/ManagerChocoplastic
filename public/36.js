@@ -635,7 +635,8 @@ var render = function() {
                                       _c("v-label", [
                                         _c("h4", [_vm._v("Vendedor:")]),
                                         _vm._v(
-                                          "Carlos Jiménez Martinez\r\n                                    "
+                                          _vm._s(_vm.saleHeader.user) +
+                                            "\r\n                                    "
                                         )
                                       ])
                                     ],
