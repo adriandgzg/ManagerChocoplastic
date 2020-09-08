@@ -242,6 +242,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -269,7 +321,21 @@ __webpack_require__.r(__webpack_exports__);
       iva: 0,
       efectivo: 0,
       tarjeta: 0,
+      monto: 0,
+      referencia: '',
       textMsg: "",
+      editadoPago: {
+        clsa_fk: 0,
+        pash_fk: 0,
+        cpam_amount: 0,
+        cpam_reference: ''
+      },
+      editadoPagoDefault: {
+        clsa_fk: 0,
+        pash_fk: 0,
+        cpam_amount: 0,
+        cpam_reference: ''
+      },
       editado: {
         clsd_pk: 0,
         clsd_quantity: 0
@@ -283,6 +349,12 @@ __webpack_require__.r(__webpack_exports__);
         clpa_amount_cash: 0,
         clpa_amount_transfer: 0
       },
+      editadoPash: {
+        clsa_fk: 0,
+        pash_fk: 0,
+        cpam_amount: 0,
+        cpam_reference: 0
+      },
       enabledStore: false,
       dialogcredito: false,
       dialogcontado: false,
@@ -295,7 +367,8 @@ __webpack_require__.r(__webpack_exports__);
       loading: false,
       dialogQuestion: false,
       dialogQuestionDelete: false,
-      messageQuestion: ''
+      messageQuestion: '',
+      pagos: []
     };
   },
   created: function created() {
@@ -388,6 +461,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.editadoSale.pame_fk == 1) {
         this.dialogcontado = true;
+        this.getPagos();
         this.getcambio();
       } else this.dialogcredito = true;
     },
@@ -454,6 +528,32 @@ __webpack_require__.r(__webpack_exports__);
         _this4.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
+    agregarPago: function agregarPago() {},
+    getPagos: function getPagos() {
+      var _this5 = this;
+
+      this.loading = true;
+      console.log('this.saleHeader--->');
+      console.log(this.saleHeader);
+      axios.get("/client/payment/amounts/" + this.saleHeader.clsa_pk).then(function (response) {
+        setTimeout(function () {
+          return _this5.loading = false;
+        }, 500);
+        console.log("/client/payment/amounts/" + _this5.saleHeader.clsa_pk);
+        console.log(response.data.data);
+
+        if (response.data.data != null) {
+          _this5.pagos = response.data.data;
+        } else {
+          _this5.normal('Notificación', response.data.status.message, "error");
+        }
+      })["catch"](function (e) {
+        console.log("Error al cargar los datos");
+        console.log(e);
+
+        _this5.normal('Notificación', "Error al cargar los datos", "error");
+      });
+    },
     getcambio: function getcambio() {
       if (this.efectivo - this.total > 0) this.cambio = this.efectivo - this.total;else this.cambio = 0;
     },
@@ -468,49 +568,49 @@ __webpack_require__.r(__webpack_exports__);
       this.total = this.subtotal + this.iva;
     },
     getClients: function getClients() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.get("/clientsget").then(function (response) {
-        _this5.clients = response.data.data;
-        _this5.selectClient = _this5.clients[0];
+        _this6.clients = response.data.data;
+        _this6.selectClient = _this6.clients[0];
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPaymentShapes: function getPaymentShapes() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.get("/paymentshapesget").then(function (response) {
-        _this6.paymentsShapes = response.data.data;
+        _this7.paymentsShapes = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPayment: function getPayment() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.get("/paymentmethodsget").then(function (response) {
-        _this7.payments = response.data.data;
+        _this8.payments = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPaymentShow: function getPaymentShow() {
-      var _this8 = this;
+      var _this9 = this;
 
       axios.get("/paymentmethodsshow/1").then(function (response) {
         console.log(response.data.data);
-        _this8.payments = response.data.data;
-        _this8.selectpame = _this8.payments[0];
+        _this9.payments = response.data.data;
+        _this9.selectpame = _this9.payments[0];
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getStores: function getStores() {
-      var _this9 = this;
+      var _this10 = this;
 
       axios.get("/storeget").then(function (response) {
-        _this9.stores = response.data.data;
+        _this10.stores = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -524,26 +624,26 @@ __webpack_require__.r(__webpack_exports__);
       this.dialogQuestionDelete = false;
     },
     "delete": function _delete() {
-      var _this10 = this;
+      var _this11 = this;
 
       axios.post('/client_sale_details/destroy', this.editado).then(function (response) {
-        _this10.textMsg = "¡Eliminado correctamente!";
+        _this11.textMsg = "¡Eliminado correctamente!";
 
-        _this10.normal('Notificación', _this10.textMsg, "success");
+        _this11.normal('Notificación', _this11.textMsg, "success");
 
-        _this10.createsale();
+        _this11.createsale();
       });
     },
     actualizar: function actualizar(item) {
-      var _this11 = this;
+      var _this12 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this11.textMsg = "¡Actualizado correctamente!";
+        _this12.textMsg = "¡Actualizado correctamente!";
 
-        _this11.normal('Notificación', _this11.textMsg, "success");
+        _this12.normal('Notificación', _this12.textMsg, "success");
       })["catch"](function (e) {
-        _this11.errors.push(e);
+        _this12.errors.push(e);
       });
     },
     normal: function normal(Title, Description, Type) {
@@ -1270,12 +1370,6 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _c(
-                        "span",
-                        { staticClass: "subheading font-weight-bold" },
-                        [_vm._v("Forma de Pago:")]
-                      ),
-                      _vm._v(" "),
                       _c("v-text-field", {
                         attrs: {
                           label: "Efectivo: ",
@@ -1293,16 +1387,16 @@ var render = function() {
                       _vm._v(" "),
                       _c("v-text-field", {
                         attrs: {
-                          label: "Transferencia: ",
+                          label: "Monto: ",
                           prefix: "$",
                           type: "number"
                         },
                         model: {
-                          value: _vm.tarjeta,
+                          value: _vm.monto,
                           callback: function($$v) {
-                            _vm.tarjeta = $$v
+                            _vm.monto = $$v
                           },
-                          expression: "tarjeta"
+                          expression: "monto"
                         }
                       }),
                       _vm._v(" "),
@@ -1384,7 +1478,7 @@ var render = function() {
           _c(
             "v-dialog",
             {
-              attrs: { "max-width": "500" },
+              attrs: { "max-width": "640" },
               model: {
                 value: _vm.dialogcontado,
                 callback: function($$v) {
@@ -1403,59 +1497,287 @@ var render = function() {
                     "v-card-text",
                     [
                       _c(
-                        "span",
-                        { staticClass: "subheading font-weight-bold" },
-                        [_vm._v("Forma de Pago:")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-card-text",
+                        "v-form",
+                        {
+                          model: {
+                            value: _vm.valid,
+                            callback: function($$v) {
+                              _vm.valid = $$v
+                            },
+                            expression: "valid"
+                          }
+                        },
                         [
-                          _c("v-combobox", {
-                            attrs: {
-                              required: "",
-                              items: _vm.paymentsShapes,
-                              label: "Forma de pago",
-                              "item-text": "pash_name",
-                              "item-value": "pash_pk",
-                              filled: "",
-                              chips: "",
-                              placeholder: "Seleccionar una opción"
-                            },
-                            model: {
-                              value: _vm.selectpash,
-                              callback: function($$v) {
-                                _vm.selectpash = $$v
-                              },
-                              expression: "selectpash"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Efectivo: ",
-                              rules: _vm.minNumberRules,
-                              prefix: "$",
-                              type: "number"
-                            },
-                            on: {
-                              change: function($event) {
-                                return _vm.getcambio()
-                              }
-                            },
-                            model: {
-                              value: _vm.efectivo,
-                              callback: function($$v) {
-                                _vm.efectivo = $$v
-                              },
-                              expression: "efectivo"
-                            }
-                          })
+                          _c(
+                            "v-expansion-panels",
+                            { attrs: { multiple: "" } },
+                            [
+                              _c(
+                                "v-expansion-panel",
+                                [
+                                  _c("v-expansion-panel-header", [
+                                    _vm._v("Agregar Pago")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-expansion-panel-content",
+                                    [
+                                      _c(
+                                        "v-row",
+                                        [
+                                          _c("v-combobox", {
+                                            attrs: {
+                                              required: "",
+                                              items: _vm.paymentsShapes,
+                                              label: "Forma de pago",
+                                              "item-text": "pash_name",
+                                              "item-value": "pash_pk",
+                                              filled: "",
+                                              chips: "",
+                                              placeholder:
+                                                "Seleccionar una opción"
+                                            },
+                                            model: {
+                                              value: _vm.selectpash,
+                                              callback: function($$v) {
+                                                _vm.selectpash = $$v
+                                              },
+                                              expression: "selectpash"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-row",
+                                        [
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "6" } },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  required: "",
+                                                  label: "Monto: ",
+                                                  rules: _vm.minNumberRules,
+                                                  prefix: "$",
+                                                  type: "number"
+                                                },
+                                                on: {
+                                                  change: function($event) {
+                                                    return _vm.getcambio()
+                                                  }
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.editadoPago.cpam_amount,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.editadoPago,
+                                                      "cpam_amount",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "editadoPago.cpam_amount"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "6" } },
+                                            [
+                                              _c("v-text-field", {
+                                                attrs: {
+                                                  label: "Referencia: "
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.editadoPago
+                                                      .cpam_reference,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.editadoPago,
+                                                      "cpam_reference",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "editadoPago.cpam_reference"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c("v-divider"),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "primary",
+                                            disabled: !_vm.valid
+                                          },
+                                          on: { click: _vm.agregarPago }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\r\n                                        Agregar\r\n                                    "
+                                          )
+                                        ]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
                         ],
                         1
                       ),
                       _vm._v(" "),
-                      _c("br"),
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            [
+                              _c(
+                                "v-card",
+                                [
+                                  _c("v-simple-table", {
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "default",
+                                        fn: function() {
+                                          return [
+                                            _c("thead", [
+                                              _c("tr", [
+                                                _c(
+                                                  "th",
+                                                  { staticClass: "text-left" },
+                                                  [_vm._v("Forma de Pago")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "th",
+                                                  { staticClass: "text-left" },
+                                                  [_vm._v("Monto")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "th",
+                                                  { staticClass: "text-left" },
+                                                  [_vm._v("Referencia")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c("th")
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c(
+                                              "tbody",
+                                              _vm._l(_vm.pagos, function(item) {
+                                                return _c(
+                                                  "tr",
+                                                  { key: item.pash_name },
+                                                  [
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        _vm._s(item.pash_name)
+                                                      )
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        _vm._s(item.cpam_amount)
+                                                      )
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          item.cpam_reference
+                                                        )
+                                                      )
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "td",
+                                                      [
+                                                        _c(
+                                                          "v-icon",
+                                                          {
+                                                            attrs: {
+                                                              small: ""
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                return _vm.borrar(
+                                                                  item
+                                                                )
+                                                              }
+                                                            }
+                                                          },
+                                                          [_vm._v("mdi-delete")]
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ]
+                                                )
+                                              }),
+                                              0
+                                            ),
+                                            _vm._v(" "),
+                                            _c("tfoot", [
+                                              _c("tr", [
+                                                _c("td"),
+                                                _vm._v(" "),
+                                                _c("td", [_vm._v("Total")]),
+                                                _vm._v(" "),
+                                                _c("td", [
+                                                  _vm._v(
+                                                    "$" +
+                                                      _vm._s(
+                                                        _vm.formatMoney(
+                                                          _vm.total
+                                                        )
+                                                      )
+                                                  )
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("td")
+                                              ])
+                                            ])
+                                          ]
+                                        },
+                                        proxy: true
+                                      }
+                                    ])
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
                       _vm._v(" "),
                       _c("tr", [
                         _c("td", [_vm._v("Cambio")]),
