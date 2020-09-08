@@ -191,51 +191,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -522,7 +477,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -553,7 +510,7 @@ var render = function() {
                 expression: "alert"
               }
             },
-            [_vm._v("\n  " + _vm._s(_vm.textMsg) + "\n")]
+            [_vm._v("\r\n            " + _vm._s(_vm.textMsg) + "\r\n        ")]
           ),
           _vm._v(" "),
           _c(
@@ -570,9 +527,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
               ),
               _c(
                 "v-btn",
@@ -584,7 +539,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\r\n                Cerrar\r\n            ")]
               )
             ],
             1
@@ -641,7 +596,9 @@ var render = function() {
                                       _c("v-label", [
                                         _c("h4", [_vm._v("Cliente:")]),
                                         _vm._v(
-                                          " " + _vm._s(_vm.saleHeader.prov_name)
+                                          " " +
+                                            _vm._s(_vm.saleHeader.prov_name) +
+                                            "\r\n                                    "
                                         )
                                       ])
                                     ],
@@ -665,7 +622,9 @@ var render = function() {
                                       _c("v-label", [
                                         _c("h4", [_vm._v("Sucursal:")]),
                                         _vm._v(
-                                          " " + _vm._s(_vm.saleHeader.stor_name)
+                                          " " +
+                                            _vm._s(_vm.saleHeader.stor_name) +
+                                            "\r\n                                    "
                                         )
                                       ])
                                     ],
@@ -690,7 +649,8 @@ var render = function() {
                                         _c("h4", [_vm._v("Fecha:")]),
                                         _vm._v(
                                           " " +
-                                            _vm._s(_vm.saleHeader.created_at)
+                                            _vm._s(_vm.saleHeader.created_at) +
+                                            "\r\n                                    "
                                         )
                                       ])
                                     ],
@@ -725,7 +685,8 @@ var render = function() {
                                           " " +
                                             _vm._s(
                                               _vm.saleHeader.remo_description
-                                            )
+                                            ) +
+                                            "\r\n                                    "
                                         )
                                       ])
                                     ],
@@ -752,7 +713,8 @@ var render = function() {
                                           " " +
                                             _vm._s(
                                               _vm.saleHeader.prre_observation
-                                            )
+                                            ) +
+                                            "\r\n                                    "
                                         )
                                       ])
                                     ],
@@ -797,7 +759,13 @@ var render = function() {
                     expression: "alertError"
                   }
                 },
-                [_vm._v("\n  " + _vm._s(_vm.textMsg) + "\n")]
+                [
+                  _vm._v(
+                    "\r\n                " +
+                      _vm._s(_vm.textMsg) +
+                      "\r\n            "
+                  )
+                ]
               ),
               _vm._v(" "),
               _c(
@@ -834,146 +802,43 @@ var render = function() {
                                       _vm._v("Cantidad Devuelta")
                                     ]),
                                     _vm._v(" "),
-                                    _c("th", { staticClass: "text-left" }, [
-                                      _vm._v("Precio")
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("th", { staticClass: "text-left" }, [
-                                      _vm._v("Importe")
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("th"),
-                                    _vm._v(" "),
                                     _c("th")
                                   ])
                                 ]),
                                 _vm._v(" "),
                                 _c(
                                   "tbody",
-                                  [
-                                    _vm._l(_vm.desserts, function(item) {
-                                      return _c("tr", { key: item.prod_name }, [
-                                        _c("td", [
-                                          _vm._v(_vm._s(item.prod_identifier))
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(_vm._s(item.prod_name))
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(_vm._s(item.meas_name))
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n              " +
-                                              _vm._s(
-                                                item.prrd_quantity_purchase
-                                              ) +
-                                              "\n              "
-                                          )
-                                        ]),
-                                        _c("td", [
-                                          _vm._v(
-                                            "\n              " +
-                                              _vm._s(item.prrd_quantity) +
-                                              "                 \n              "
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "$" +
-                                              _vm._s(
-                                                _vm.formatMoney(item.prrd_price)
-                                              )
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            "$" +
-                                              _vm._s(
-                                                _vm.formatMoney(
-                                                  item.prrd_quantity *
-                                                    item.prrd_price
-                                                )
-                                              )
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td")
-                                      ])
-                                    }),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td"),
+                                  _vm._l(_vm.desserts, function(item) {
+                                    return _c("tr", { key: item.prod_name }, [
+                                      _c("td", [
+                                        _vm._v(_vm._s(item.prod_identifier))
+                                      ]),
                                       _vm._v(" "),
-                                      _c("td"),
+                                      _c("td", [
+                                        _vm._v(_vm._s(item.prod_name))
+                                      ]),
                                       _vm._v(" "),
-                                      _c("td"),
-                                      _vm._v(" "),
-                                      _c("td"),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v("Subtotal")]),
+                                      _c("td", [
+                                        _vm._v(_vm._s(item.meas_name))
+                                      ]),
                                       _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
-                                          "$" +
-                                            _vm._s(
-                                              _vm.formatMoney(_vm.subtotal)
-                                            )
+                                          _vm._s(item.prrd_quantity_purchase)
                                         )
                                       ]),
                                       _vm._v(" "),
-                                      _c("td")
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("tr", [
-                                      _c("td"),
-                                      _vm._v(" "),
-                                      _c("td"),
-                                      _vm._v(" "),
-                                      _c("td"),
-                                      _vm._v(" "),
-                                      _c("td"),
-                                      _vm._v(" "),
-                                      _c("td", [_vm._v("I.V.A.")]),
-                                      _vm._v(" "),
                                       _c("td", [
-                                        _vm._v(
-                                          "$" + _vm._s(_vm.formatMoney(_vm.iva))
-                                        )
+                                        _vm._v(_vm._s(item.prrd_quantity))
                                       ]),
                                       _vm._v(" "),
                                       _c("td")
                                     ])
-                                  ],
-                                  2
+                                  }),
+                                  0
                                 ),
                                 _vm._v(" "),
-                                _c("tfoot", [
-                                  _c("tr", [
-                                    _c("td"),
-                                    _vm._v(" "),
-                                    _c("td"),
-                                    _vm._v(" "),
-                                    _c("td"),
-                                    _vm._v(" "),
-                                    _c("td"),
-                                    _vm._v(" "),
-                                    _c("td", [_vm._v("Total")]),
-                                    _vm._v(" "),
-                                    _c("td", [
-                                      _vm._v(
-                                        "$" + _vm._s(_vm.formatMoney(_vm.total))
-                                      )
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("td")
-                                  ])
-                                ])
+                                _c("tfoot")
                               ]
                             },
                             proxy: true

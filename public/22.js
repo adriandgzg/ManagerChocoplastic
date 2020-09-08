@@ -1211,25 +1211,6 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Stock",
-                              type: "number",
-                              rules: _vm.numberRules
-                            },
-                            model: {
-                              value: _vm.editado.prod_packingquantity,
-                              callback: function($$v) {
-                                _vm.$set(
-                                  _vm.editado,
-                                  "prod_packingquantity",
-                                  $$v
-                                )
-                              },
-                              expression: "editado.prod_packingquantity"
-                            }
-                          }),
-                          _vm._v(" "),
                           _c("span", [_vm._v("Venta a Granel")]),
                           _vm._v(" "),
                           _c("v-switch", {

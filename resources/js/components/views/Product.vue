@@ -61,7 +61,7 @@
                         <v-text-field v-model="editado.prod_preferentialprice" label="Precio Preferencial" prefix="$" type="number" :rules="numberRules" required></v-text-field>
                         <v-text-field v-model="editado.prod_saleprice" label="Precio Menudeo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
                         <v-text-field v-model="editado.prod_listprice" label="Precio Mayoreo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
-                        <v-text-field v-model="editado.prod_packingquantity" label="Stock" type="number" :rules="numberRules"></v-text-field>
+                        <!--<v-text-field v-model="editado.prod_packingquantity" label="Stock" type="number" :rules="numberRules"></v-text-field>-->
                         <span>Venta a Granel</span>
                         <v-switch v-model="estadoGranel" />
                         <span>Activo/Inactivo</span>
