@@ -177,6 +177,7 @@ Route::get('/boxcut', 'BoxCutController@index');
 Route::post('/box/insert', 'BoxCutController@store'); //Guardar Corte de caja
 Route::post('/box/update', 'BoxCutController@update'); //Guardar Corte de caja
 Route::get('/boxcuts', 'BoxCutController@ListBoxCuts'); ////
+Route::get('/box/cuts/{bocu_pk}', 'BoxCutController@show'); //Consultar Box
 
 
 
