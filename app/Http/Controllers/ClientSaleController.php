@@ -130,7 +130,21 @@ class ClientSaleController extends ApiResponseController
                 $this->getstorelog('client_sales', $vclsa_pk, 1);
 
                 //Consultar Venta Clente
-                $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)->first();
+                $vClientSale = DB::table('client_sales AS CS')
+                    ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
+                    ->select(
+                        'CS.clsa_pk',
+                        'CS.clie_fk',
+                        'CS.clor_fk',
+                        'CS.pame_fk',
+                        'CS.stor_fk',
+                        'CS.clsa_identifier',
+                        'CS.clsa_status',
+                        'CS.created_at',
+                        DB::raw('(SELECT CONCAT(U.phone_number, "-", U.name) AS user FROM logs AS L INNER JOIN users AS U ON L.user_fk = U.id WHERE L.table = "client_orders" AND L.pk_register = CO.clor_pk AND L.operation = 1 LIMIT 1) AS user') //Vededor
+                    )
+                    ->where('clsa_pk', '=', $vclsa_pk)
+                    ->first();
 
                 //Consultar Pedido Detallado
                 $SelectCOD = ClientOrderDetail::where('clor_fk', '=', $vclor_pk)->where('clod_status', '=', 1)
@@ -217,30 +231,44 @@ class ClientSaleController extends ApiResponseController
             }
             else
             {
-                $vClientSale = ClientSale::where('clor_fk', '=', $vclor_pk)->first();
+                $vClientSale = DB::table('client_sales AS CS')
+                    ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
+                    ->select(
+                        'CS.clsa_pk',
+                        'CS.clie_fk',
+                        'CS.clor_fk',
+                        'CS.pame_fk',
+                        'CS.stor_fk',
+                        'CS.clsa_identifier',
+                        'CS.clsa_status',
+                        'CS.created_at',
+                        DB::raw('(SELECT CONCAT(U.phone_number, "-", U.name) AS user FROM logs AS L INNER JOIN users AS U ON L.user_fk = U.id WHERE L.table = "client_orders" AND L.pk_register = CO.clor_pk AND L.operation = 1 LIMIT 1) AS user') //Vededor
+                    )
+                    ->where('clor_fk', '=', $vclor_pk)
+                    ->first();
 
                 $vClientSaleDetail = DB::table('client_sale_details AS CSD')
-                ->join('products AS P', 'P.prod_pk', '=', 'CSD.prod_fk')
-                ->join('measurements AS M', 'M.meas_pk', '=', 'CSD.meas_fk')
-                ->select(
-                    'CSD.clsd_pk',
-                    'CSD.clsa_fk',
-                    'P.prod_pk',
-                    'P.prod_identifier',
-                    'P.prod_name',
-                    'M.meas_pk',
-                    'M.meas_name',
-                    'M.meas_abbreviation',
-                    'CSD.clsd_quantity',
-                    'CSD.clsd_price',
-                    'CSD.clsd_discountrate',
-                    'CSD.clsd_ieps',
-                    'CSD.clsd_iva',
-                    'CSD.clsd_status'
-                )
-                ->where('clsa_fk', '=', $vClientSale->clsa_pk)
-                ->where('clsd_status', '=', 1)
-                ->get();
+                    ->join('products AS P', 'P.prod_pk', '=', 'CSD.prod_fk')
+                    ->join('measurements AS M', 'M.meas_pk', '=', 'CSD.meas_fk')
+                    ->select(
+                        'CSD.clsd_pk',
+                        'CSD.clsa_fk',
+                        'P.prod_pk',
+                        'P.prod_identifier',
+                        'P.prod_name',
+                        'M.meas_pk',
+                        'M.meas_name',
+                        'M.meas_abbreviation',
+                        'CSD.clsd_quantity',
+                        'CSD.clsd_price',
+                        'CSD.clsd_discountrate',
+                        'CSD.clsd_ieps',
+                        'CSD.clsd_iva',
+                        'CSD.clsd_status'
+                    )
+                    ->where('clsa_fk', '=', $vClientSale->clsa_pk)
+                    ->where('clsd_status', '=', 1)
+                    ->get();
 
 
                 return response()->json([

@@ -613,6 +613,8 @@ export default {
 
             this.editadoPago.pash_fk = this.selectpash.pash_pk;
             this.editadoPago.bocu_fk = this.bocu_pk
+                    console.log(this.editadoPago);
+
             axios.post('/client/payment/amounts', this.editadoPago)
                 .then(response => {
                     setTimeout(() => (this.loading = false), 500)

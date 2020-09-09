@@ -75,6 +75,7 @@ Route::put('/returnmotives/update', 'ReturnMotiveController@update');
 Route::put('/returnmotives/delete', 'ReturnMotiveController@delete');
 
 Route::get('/productList', 'ProductController@ProductList');
+Route::get('/product/measurements/{prod_pk}', 'ProductController@ProductMeasurements');
 Route::get('/product/search', 'ProductController@ProductSearch');
 Route::post('/product/add', 'ProductController@add');
 Route::put('/product/update', 'ProductController@update');
@@ -94,7 +95,7 @@ Route::post('/client/orders/destroy', 'ClientOrderController@destroy'); //Cancel
 
 
 Route::get('/clientsales', 'ClientSaleController@index'); ////Lista de Ventas (Cliente)
-Route::get('/client/sales/{clsa_pk}', 'ClientSaleController@show'); //Detalle de Venta (Cliente)  
+Route::get('/client/sales/{clsa_pk}', 'ClientSaleController@show'); //Detalle de Venta (Cliente)   
 Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente) 
 Route::post('/clientsales/update', 'ClientSaleController@update'); //Finalizar Venta (Cliente)
 Route::get('/client/sales/printOrder/{clsa_pk}', 'ClientSaleController@printOrder'); //Detalle de Venta (Cliente) 

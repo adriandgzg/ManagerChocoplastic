@@ -36,14 +36,26 @@ class CreatePermissionsTable extends Migration
                 ['name' => 'admin', 'description' => 'Administración', 'permission_id' => null],
                 ['name' => 'user', 'description' => 'Usuarios', 'permission_id' => 1],
                 ['name' => 'role', 'description' => 'Roles', 'permission_id' => 1],
-                ['name' => 'permission', 'description' => 'Permisos', 'permission_id' => 1]
+                ['name' => 'permission', 'description' => 'Permisos', 'permission_id' => 1],
+                ['name' => 'providers', 'description' => 'Proveedores', 'permission_id' => null],
+                ['name' => 'clients', 'description' => 'Clientes', 'permission_id' => null],
+                ['name' => 'box', 'description' => 'Cajas', 'permission_id' => null],
+                ['name' => 'inventory', 'description' => 'Inventarios', 'permission_id' => null],
+                ['name' => 'transfer', 'description' => 'Traspasos', 'permission_id' => null]
             ]
         );
+
+
         DB::table('admin_permission')->insert([
                 ['admin_id' => 1, 'permission_id' => 1],
                 ['admin_id' => 1, 'permission_id' => 2],
                 ['admin_id' => 1, 'permission_id' => 3],
-                ['admin_id' => 1, 'permission_id' => 4]
+                ['admin_id' => 1, 'permission_id' => 4],
+                ['admin_id' => 1, 'permission_id' => 5],
+                ['admin_id' => 1, 'permission_id' => 6],
+                ['admin_id' => 1, 'permission_id' => 7],
+                ['admin_id' => 1, 'permission_id' => 8],
+                ['admin_id' => 1, 'permission_id' => 9]
             ]
         );
 
