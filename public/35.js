@@ -393,29 +393,31 @@ var render = function() {
                                   1
                                 ),
                                 _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    staticClass: "mr-2",
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      small: "",
-                                      color: "orange",
-                                      href:
-                                        "/client/sales/printOrder/" +
-                                        item.clsa_pk,
-                                      target: "_blank",
-                                      title: "Imprimir ticket"
-                                    }
-                                  },
-                                  [
-                                    _c("v-icon", { attrs: { dark: "" } }, [
-                                      _vm._v("mdi-printer")
-                                    ])
-                                  ],
-                                  1
-                                ),
+                                item.clsa_status != "Pendiente"
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        staticClass: "mr-2",
+                                        attrs: {
+                                          fab: "",
+                                          dark: "",
+                                          small: "",
+                                          color: "orange",
+                                          href:
+                                            "/client/sales/printOrder/" +
+                                            item.clsa_pk,
+                                          target: "_blank",
+                                          title: "Imprimir ticket"
+                                        }
+                                      },
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-printer")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e(),
                                 _vm._v(" "),
                                 item.clsa_status == "Pendiente"
                                   ? _c(

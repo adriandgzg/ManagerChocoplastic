@@ -45,7 +45,7 @@
                                 <v-icon dark>mdi-eye</v-icon>
                             </v-btn>
 
-                            <v-btn class="mr-2" fab dark small color="orange" :href="'/client/sales/printOrder/'+item.clsa_pk" target="_blank" title="Imprimir ticket">
+                            <v-btn v-if="item.clsa_status != 'Pendiente'" class="mr-2" fab dark small color="orange" :href="'/client/sales/printOrder/'+item.clsa_pk" target="_blank" title="Imprimir ticket">
                                 <v-icon dark>mdi-printer</v-icon>
                             </v-btn>
                             <v-btn class="mr-2" fab dark small color="cyan" title="Continuar venta" v-if="item.clsa_status == 'Pendiente'" :href="'/detaiorder/'+item.clor_pk">
