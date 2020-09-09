@@ -24,6 +24,9 @@ class CreateClientPaymentAmountsTable extends Migration
 
             $table->bigInteger('pash_fk')->unsigned(); //Llave Foranea Catalgo Forma de Pago 
             $table->foreign('pash_fk')->references('pash_pk')->on('payment_shapes')->onUpdate('cascade');
+
+            $table->bigInteger('bocu_fk')->unsigned(); //Llave Foranea Caja
+            $table->foreign('bocu_fk')->references('bocu_pk')->on('box_cuts')->onUpdate('cascade');
             
             $table->decimal('cpam_amount', 12, 2); //Monto
             $table->string('cpam_reference', 100)->nullable(); //Referencia

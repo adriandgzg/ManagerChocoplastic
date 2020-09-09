@@ -39,55 +39,7 @@ class CreateRolesTable extends Migration
                 'description' => 'Usuarios'
             )
         );
-
-        DB::table('roles')->insert(
-            array(
-                'name' => 'role',
-                'description' => 'Roles'
-            )
-        );
-
-        DB::table('roles')->insert(
-            array(
-                'name' => 'permission',
-                'description' => 'Permisos'
-            )
-        );
-
-        DB::table('roles')->insert(
-            array(
-                'name' => 'providers',
-                'description' => 'Proveedores'
-            )
-        );
-
-        DB::table('roles')->insert(
-            array(
-                'name' => 'clients',
-                'description' => 'Clientes'
-            )
-        );
-
-        DB::table('roles')->insert(
-            array(
-                'name' => 'box',
-                'description' => 'Cajas'
-            )
-        );
-
-        DB::table('roles')->insert(
-            array(
-                'name' => 'inventary',
-                'description' => 'Inventarios'
-            )
-        );
-
-        DB::table('roles')->insert(
-            array(
-                'name' => 'transfer',
-                'description' => 'Traspasos'
-            )
-        );
+     
     }
 
     /**

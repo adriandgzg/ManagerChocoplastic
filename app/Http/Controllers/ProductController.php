@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Query\Builder;
 
 class ProductController extends ApiResponseController 
 {
@@ -224,6 +223,46 @@ class ProductController extends ApiResponseController
             'message' => 'Products loaded',
             'data' => $vProducts,
         ], 200);
+    }
+
+
+    public function ProductMeasurements(int $prod_pk)
+    {
+        try 
+        {
+            //Consultar Unidades 
+        
+
+            $vProdMeasOutput = 
+                DB::table('products AS P')
+                ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                ->select(
+                    'P.prod_pk',
+                    'MO.meas_pk',
+                    'MO.meas_name'
+                )
+                ->where('P.prod_pk', '=', $prod_pk);
+            
+
+            $vProdMeasInput = 
+                DB::table('products AS P')
+                    ->join('measurements AS MO', 'P.meas_fk_input', '=', 'MO.meas_pk')
+                    ->select(
+                        'P.prod_pk',
+                        'MO.meas_pk',
+                        'MO.meas_name'
+                    )
+                ->where('P.prod_pk', '=', $prod_pk)
+                ->union($vProdMeasOutput)
+                ->get();
+
+            return $this->dbResponse($vProdMeasInput, 200, null, 'Unidades de Medida por Producto');
+          
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
+        } 
     }
 
 

@@ -617,6 +617,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.editadoPago.pash_fk = this.selectpash.pash_pk;
       this.editadoPago.bocu_fk = this.bocu_pk;
+      console.log(this.editadoPago);
       axios.post('/client/payment/amounts', this.editadoPago).then(function (response) {
         setTimeout(function () {
           return _this6.loading = false;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BoxCut;
 use DB;
 use Validator;
 use Throwable;
@@ -59,37 +60,50 @@ class ClientPaymentAmountController extends ApiResponseController
             $vpash_fk = $vInput['pash_fk'];
             $vcpam_amount = $vInput['cpam_amount'];
             $vcpam_reference = $vInput['cpam_reference'];
+            $vbocu_fk = $vInput['bocu_fk'];
 
             $vCSSel = ClientSale::where('clsa_pk', '=', $vclsa_fk)->first(); //Consultar Venta
 
             if($vCSSel)
             { 
-                //Consultar Pago
-                $vCPASel = ClientPaymentAmount::where('clsa_fk', '=', $vclsa_fk)->where('pash_fk', '=', $vpash_fk)->where('cpam_status', '=', 1)->first(); //Consultar Pago
 
-                if($vCPASel)
-                {
-                    return $this->dbResponse(null, 404, null, 'Forma de pago Registrado Anteriormente.');
+                $vBoxCut = BoxCut::where('bocu_pk', '=', $vbocu_fk)->where('bocu_status', '=', 1)->first(); //Consultar Caja Abierta
+
+                if($vBoxCut)
+                { 
+                    //Consultar Pago
+                    $vCPASel = ClientPaymentAmount::where('clsa_fk', '=', $vclsa_fk)->where('pash_fk', '=', $vpash_fk)->where('cpam_status', '=', 1)->first(); //Consultar Pago
+
+                    if($vCPASel)
+                    {
+                        return $this->dbResponse(null, 404, null, 'Forma de pago Registrado Anteriormente.');
+                    }
+                    else
+                    {
+                        //Insertar Pago del cliente monto
+                        $vCPA = new ClientPaymentAmount();        
+                        $vCPA->clie_fk = $vCSSel->clie_fk;
+                        $vCPA->clsa_fk = $vclsa_fk;
+                        $vCPA->pash_fk = $vpash_fk;
+                        $vCPA->cpam_amount = $vcpam_amount;
+                        $vCPA->cpam_reference = $vcpam_reference;
+                        $vCPA->bocu_fk = $vbocu_fk;
+                        $vCPA->save();
+
+                        //Asignación de PK Pago Cliente
+                        $vcpam_pk = $vCPA->cpam_pk;
+
+                        //////////////////  Inserción de Log  //////////////////
+                        $this->getstorelog('client_payment_amounts', $vcpam_pk, 1);
+
+                        return $this->dbResponse($vcpam_pk, 200, null, 'Pago Guardado Correctamente.');
+                    }
                 }
                 else
                 {
-                    //Insertar Pago del cliente monto
-                    $vCPA = new ClientPaymentAmount();        
-                    $vCPA->clie_fk = $vCSSel->clie_fk;
-                    $vCPA->clsa_fk = $vclsa_fk;
-                    $vCPA->pash_fk = $vpash_fk;
-                    $vCPA->cpam_amount = $vcpam_amount;
-                    $vCPA->cpam_reference = $vcpam_reference;
-                    $vCPA->save();
-
-                    //Asignación de PK Pago Cliente
-                    $vcpam_pk = $vCPA->cpam_pk;
-
-                    //////////////////  Inserción de Log  //////////////////
-                    $this->getstorelog('client_payment_amounts', $vcpam_pk, 1);
-
-                    return $this->dbResponse($vcpam_pk, 200, null, 'Pago Guardado Correctamente.');
+                   return $this->dbResponse(null, 404, null, 'Caja NO Disponible');
                 }
+                
             }
             else
             {
