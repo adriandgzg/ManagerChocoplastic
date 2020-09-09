@@ -31,6 +31,17 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-dialog v-model="dialogQuestionDeletePago" persistent max-width="290">
+            <v-card>
+                <v-card-title class="headline">Alerta</v-card-title>
+                <v-card-text>¿Está seguro de borrar el registro?</v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green darken-1" text @click="dialogQuestionDeletePago = false">Cancelar</v-btn>
+                    <v-btn color="green darken-1" text @click="guardaBorrarPago">Continuar</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
         <v-snackbar color="#000000" v-model="snackbar" :timeout="timeout">
             {{ textMsg }}
             <v-btn color="blue" text @click="snackbar = false">
@@ -51,12 +62,16 @@
                             </v-col>
                             <v-col cols="4">
                                 <v-card-text class="category d-inline-flex font-weight-light">
-                                    <span class="subheading font-weight-bold">Vendedor:</span>&nbsp; Carlos Jiménez Martinez
+                                    <v-label>
+                                        <h4>Vendedor:</h4>{{saleHeader.user}}
+                                    </v-label>
                                 </v-card-text>
                             </v-col>
                             <v-col cols="4">
                                 <v-card-text class="category d-inline-flex font-weight-light">
-                                    <span class="subheading font-weight-bold">Fecha:</span>&nbsp; 10/10/2020
+                                    <v-label>
+                                        <h4>Sucursal:</h4> {{saleHeader.stor_name}}
+                                    </v-label>
                                 </v-card-text>
                             </v-col>
                         </v-row>
@@ -156,11 +171,45 @@
             <v-card>
                 <v-card-title>Crédito:</v-card-title>
                 <v-card-text>
-                    <span class="subheading font-weight-bold">Forma de Pago:</span>
-                    <v-text-field label="Efectivo: " prefix="$" type="number" v-model="efectivo"></v-text-field>
-                    <v-text-field label="Transferencia: " v-model="tarjeta" prefix="$" type="number"></v-text-field>
-
-                    <br />
+                    <v-row>
+                        <v-btn @click="abrirPago()" color="warning">Agregar pago</v-btn>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-card>
+                                <v-simple-table>
+                                    <template v-slot:default>
+                                        <thead>
+                                            <tr>
+                                                <th class="text-left">Forma de Pago</th>
+                                                <th class="text-left">Monto</th>
+                                                <th class="text-left">Referencia</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="item in pagos" :key="item.pash_name">
+                                                <td>{{ item.pash_name }}</td>
+                                                <td>{{ item.cpam_amount }}</td>
+                                                <td>{{ item.cpam_reference }}</td>
+                                                <td>
+                                                    <v-icon @click="borrarPago(item)" small>mdi-delete</v-icon>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td />
+                                                <td>Total</td>
+                                                <td>${{formatMoney(montototal)}}</td>
+                                                <td />
+                                            </tr>
+                                        </tfoot>
+                                    </template>
+                                </v-simple-table>
+                            </v-card>
+                        </v-col>
+                    </v-row>
                     <tr>
                         <td>Subtotal</td>
                         <td> ${{formatMoney(subtotal)}}</td>
@@ -186,17 +235,51 @@
             </v-card>
         </v-dialog>
 
-        <v-dialog v-model="dialogcontado" max-width="500">
+        <v-dialog v-model="dialogcontado" max-width="640">
             <v-card>
                 <v-card-title>Contado</v-card-title>
 
                 <v-card-text>
-                    <span class="subheading font-weight-bold">Forma de Pago:</span>
+                    <v-row>
+                        <v-btn @click="abrirPago()" color="warning">Agregar pago</v-btn>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-card>
+                                <v-simple-table>
+                                    <template v-slot:default>
+                                        <thead>
+                                            <tr>
+                                                <th class="text-left">Forma de Pago</th>
+                                                <th class="text-left">Monto</th>
+                                                <th class="text-left">Referencia</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="item in pagos" :key="item.pash_name">
+                                                <td>{{ item.pash_name }}</td>
+                                                <td>{{ item.cpam_amount }}</td>
+                                                <td>{{ item.cpam_reference }}</td>
+                                                <td>
+                                                    <v-icon @click="borrarPago(item)" small>mdi-delete</v-icon>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td />
+                                                <td>Total</td>
+                                                <td>${{formatMoney(montototal)}}</td>
+                                                <td />
+                                            </tr>
+                                        </tfoot>
+                                    </template>
+                                </v-simple-table>
+                            </v-card>
+                        </v-col>
+                    </v-row>
 
-                    <v-text-field label="Efectivo: " v-model="efectivo" :rules="minNumberRules" prefix="$" type="number" @change="getcambio()"></v-text-field>
-                    <v-text-field label="Transferencia: " v-model="tarjeta" :rules="minNumberRules" prefix="$" type="number"></v-text-field>
-
-                    <br />
                     <tr>
                         <td>Cambio</td>
                         <td> <span>${{formatMoney(cambio)}} </span></td>
@@ -221,6 +304,32 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+        <v-dialog v-model="dialogPago" max-width="640">
+            <v-card>
+                <v-card-title>Agregar pago</v-card-title>
+
+                <v-card-text>
+                    <v-form v-model="valid">
+                        <v-row>
+                            <v-combobox required v-model="selectpash" :items="paymentsShapes" label="Forma de pago" item-text="pash_name" item-value="pash_pk" filled chips placeholder="Seleccionar una opción"></v-combobox>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="6">
+                                <v-text-field required label="Monto: " v-model="editadoPago.cpam_amount" :rules="minNumberRules" prefix="$" type="number" @change="getcambio()"></v-text-field>
+                            </v-col>
+                            <v-col cols="6">
+                                <v-text-field label="Referencia: " v-model="editadoPago.cpam_reference"></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-divider></v-divider>
+                        <v-btn @click="dialogPago = !dialogPago">Cancelar</v-btn>
+                        <v-btn color="primary" :disabled="!valid" @click="agregarPago">
+                            Agregar
+                        </v-btn>
+                    </v-form>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
     </v-container>
 </v-app>
 </template>
@@ -236,6 +345,7 @@ export default {
             stores: [],
             clients: [],
             payments: [],
+            paymentsShapes: [],
             paymentsOriginal: [],
             saleHeader: '',
             saleDetail: [],
@@ -243,6 +353,7 @@ export default {
             selectClient: '',
             selectStore: '',
             selectpame: '',
+            selectpash: '',
             snackbar: false,
             timeout: 2000,
             subtotal: 0,
@@ -251,7 +362,21 @@ export default {
             iva: 0,
             efectivo: 0,
             tarjeta: 0,
+            monto: 0,
+            referencia: '',
             textMsg: "",
+            editadoPago: {
+                clsa_fk: 0,
+                pash_fk: 0,
+                cpam_amount: 0,
+                cpam_reference: '',
+            },
+            editadoPagoDefault: {
+                clsa_fk: 0,
+                pash_fk: 0,
+                cpam_amount: 0,
+                cpam_reference: '',
+            },
             editado: {
                 clsd_pk: 0,
                 clsd_quantity: 0,
@@ -265,9 +390,16 @@ export default {
                 clpa_amount_cash: 0,
                 clpa_amount_transfer: 0,
             },
+            editadoPash: {
+                clsa_fk: 0,
+                pash_fk: 0,
+                cpam_amount: 0,
+                cpam_reference: 0,
+            },
             enabledStore: false,
             dialogcredito: false,
             dialogcontado: false,
+            dialogPago: false,
             storeUser: '',
             minNumberRules: [
                 value => !!value || 'Requerido.',
@@ -276,7 +408,10 @@ export default {
             loading: false,
             dialogQuestion: false,
             dialogQuestionDelete: false,
+            dialogQuestionDeletePago: false,
             messageQuestion: '',
+            pagos: [],
+            montototal: 0,
         };
     },
     created() {
@@ -286,6 +421,8 @@ export default {
         this.getPaymentShow();
         this.getStores();
         this.getUsers();
+        this.getPaymentShapes();
+
     },
 
     methods: {
@@ -349,6 +486,8 @@ export default {
             this.efectivo = 0;
             this.tarjeta = 0;
 
+            this.getPagos();
+
             if (this.selectClient == '' || this.selectClient == null) {
                 this.normal('Alerta', 'Debe seleccionar un cliente', "error");
                 return;
@@ -382,8 +521,8 @@ export default {
         },
         finalizarVenta() {
             if (this.editadoSale.pame_fk == 1) {
-                var montototal = parseFloat(this.efectivo) + parseFloat(this.tarjeta);
-                var operacion = parseFloat(this.total) - montototal;
+                //var montototal = parseFloat(this.efectivo) + parseFloat(this.tarjeta);
+                var operacion = parseFloat(this.total) - parseFloat(this.montototal);
                 if (operacion <= 0) {
 
                 } else {
@@ -445,6 +584,59 @@ export default {
                     this.normal('Notificación', "Error al cargar los datos", "error");
                 })
         },
+        abrirPago() {
+            this.editadoPago.cpam_amount = 0;
+            this.dialogPago = true
+        },
+        agregarPago() {
+            this.loading = true
+            this.editadoPago.clsa_fk = this.saleHeader.clsa_pk;
+            if (this.selectpash == '' || this.selectpash == null) {
+                this.normal('Alerta', 'Debe seleccionar una forma de pago', "error");
+                return;
+            }
+
+            this.editadoPago.pash_fk = this.selectpash.pash_pk;
+
+            axios.post('/client/payment/amounts', this.editadoPago)
+                .then(response => {
+                    setTimeout(() => (this.loading = false), 500)
+                    console.log(response.data)
+                    if (response.data.data != null) {
+                        this.textMsg = "¡Actualizado correctamente!";
+                        this.normal('Notificación', '¡Actualizado correctamente!', "success");
+                        this.dialogPago = false
+                        this.getPagos();
+                    } else {
+                        this.normal('Notificación', response.data.status.message, "error");
+                    }
+                })
+                .catch(e => {
+                    //this.errors.push(e)
+                    console.log(e)
+                    this.normal('Notificación', "Error al cargar los datos", "error");
+                })
+
+        },
+        getPagos() {
+            this.loading = true
+            axios
+                .get("/client/payment/amounts/" + this.saleHeader.clsa_pk)
+                .then(response => {
+                    setTimeout(() => (this.loading = false), 500)
+                    if (response.data.data != null) {
+                        this.pagos = response.data.data;
+                        this.getEfectivo();
+                    } else {
+                        this.normal('Notificación', response.data.status.message, "error");
+                    }
+                })
+                .catch(e => {
+                    console.log("Error al cargar los datos");
+                    console.log(e);
+                    this.normal('Notificación', "Error al cargar los datos", "error");
+                });
+        },
         getcambio() {
             if ((this.efectivo - this.total) > 0)
                 this.cambio = this.efectivo - this.total;
@@ -456,9 +648,19 @@ export default {
             for (var i = 0; i < this.desserts.length; i++) {
                 this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity);
             }
-            //this.iva =  this.subtotal * 0.16;
 
             this.total = this.subtotal + this.iva;
+        },
+        getEfectivo() {
+            this.efectivo = 0;
+            for (var i = 0; i < this.pagos.length; i++) {
+                console.log(this.pagos[i])
+                if (this.pagos[i].pash_name == 'Efectivo') {
+                    this.efectivo = parseFloat(this.efectivo) + parseFloat(this.pagos[i].cpam_amount)
+                }
+                this.montototal = parseFloat(this.montototal) + parseFloat(this.pagos[i].cpam_amount)
+            }
+            this.getcambio()
         },
         getClients() {
             axios.get("/clientsget")
@@ -471,6 +673,16 @@ export default {
                     console.log(e);
                 });
 
+        },
+        getPaymentShapes() {
+            axios
+                .get("/paymentshapesget")
+                .then(response => {
+                    this.paymentsShapes = response.data.data;
+                })
+                .catch(e => {
+                    console.log(e);
+                });
         },
         getPayment() {
             axios
@@ -516,6 +728,21 @@ export default {
         guardaBorrar() {
             this.delete()
             this.dialogQuestionDelete = false
+        },
+
+        borrarPago(item) {
+
+            this.editadoPago = Object.assign({}, item)
+            this.dialogQuestionDeletePago = true
+        },
+
+        guardaBorrarPago() {
+            this.dialogQuestionDeletePago = false
+            axios.post('/client/payment/amounts/destroy', this.editadoPago).then(response => {
+                this.textMsg = "¡Eliminado correctamente!";
+                this.normal('Notificación', this.textMsg, "success");
+                this.getPagos();
+            });
         },
 
         delete: function () {

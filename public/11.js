@@ -298,6 +298,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -362,6 +411,7 @@ __webpack_require__.r(__webpack_exports__);
       enabledStore: false,
       dialogcredito: false,
       dialogcontado: false,
+      dialogPago: false,
       storeUser: '',
       minNumberRules: [function (value) {
         return !!value || 'Requerido.';
@@ -371,8 +421,10 @@ __webpack_require__.r(__webpack_exports__);
       loading: false,
       dialogQuestion: false,
       dialogQuestionDelete: false,
+      dialogQuestionDeletePago: false,
       messageQuestion: '',
-      pagos: []
+      pagos: [],
+      montototal: 0
     };
   },
   created: function created() {
@@ -443,6 +495,7 @@ __webpack_require__.r(__webpack_exports__);
     finalizar: function finalizar() {
       this.efectivo = 0;
       this.tarjeta = 0;
+      this.getPagos();
 
       if (this.selectClient == '' || this.selectClient == null) {
         this.normal('Alerta', 'Debe seleccionar un cliente', "error");
@@ -465,14 +518,13 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.editadoSale.pame_fk == 1) {
         this.dialogcontado = true;
-        this.getPagos();
         this.getcambio();
       } else this.dialogcredito = true;
     },
     finalizarVenta: function finalizarVenta() {
       if (this.editadoSale.pame_fk == 1) {
-        var montototal = parseFloat(this.efectivo) + parseFloat(this.tarjeta);
-        var operacion = parseFloat(this.total) - montototal;
+        //var montototal = parseFloat(this.efectivo) + parseFloat(this.tarjeta);
+        var operacion = parseFloat(this.total) - parseFloat(this.montototal);
 
         if (operacion <= 0) {} else {
           this.normal('Notificación', 'Los montos de pago deben ser igual al total', "success");
@@ -532,30 +584,67 @@ __webpack_require__.r(__webpack_exports__);
         _this4.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
-    agregarPago: function agregarPago() {},
-    getPagos: function getPagos() {
+    abrirPago: function abrirPago() {
+      this.editadoPago.cpam_amount = 0;
+      this.dialogPago = true;
+    },
+    agregarPago: function agregarPago() {
       var _this5 = this;
 
       this.loading = true;
-      console.log('this.saleHeader--->');
-      console.log(this.saleHeader);
-      axios.get("/client/payment/amounts/" + this.saleHeader.clsa_pk).then(function (response) {
+      this.editadoPago.clsa_fk = this.saleHeader.clsa_pk;
+
+      if (this.selectpash == '' || this.selectpash == null) {
+        this.normal('Alerta', 'Debe seleccionar una forma de pago', "error");
+        return;
+      }
+
+      this.editadoPago.pash_fk = this.selectpash.pash_pk;
+      axios.post('/client/payment/amounts', this.editadoPago).then(function (response) {
         setTimeout(function () {
           return _this5.loading = false;
         }, 500);
-        console.log("/client/payment/amounts/" + _this5.saleHeader.clsa_pk);
-        console.log(response.data.data);
+        console.log(response.data);
 
         if (response.data.data != null) {
-          _this5.pagos = response.data.data;
+          _this5.textMsg = "¡Actualizado correctamente!";
+
+          _this5.normal('Notificación', '¡Actualizado correctamente!', "success");
+
+          _this5.dialogPago = false;
+
+          _this5.getPagos();
         } else {
           _this5.normal('Notificación', response.data.status.message, "error");
+        }
+      })["catch"](function (e) {
+        //this.errors.push(e)
+        console.log(e);
+
+        _this5.normal('Notificación', "Error al cargar los datos", "error");
+      });
+    },
+    getPagos: function getPagos() {
+      var _this6 = this;
+
+      this.loading = true;
+      axios.get("/client/payment/amounts/" + this.saleHeader.clsa_pk).then(function (response) {
+        setTimeout(function () {
+          return _this6.loading = false;
+        }, 500);
+
+        if (response.data.data != null) {
+          _this6.pagos = response.data.data;
+
+          _this6.getEfectivo();
+        } else {
+          _this6.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log("Error al cargar los datos");
         console.log(e);
 
-        _this5.normal('Notificación', "Error al cargar los datos", "error");
+        _this6.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     getcambio: function getcambio() {
@@ -566,55 +655,69 @@ __webpack_require__.r(__webpack_exports__);
 
       for (var i = 0; i < this.desserts.length; i++) {
         this.subtotal = this.subtotal + this.desserts[i].clsd_price * this.desserts[i].clsd_quantity;
-      } //this.iva =  this.subtotal * 0.16;
-
+      }
 
       this.total = this.subtotal + this.iva;
     },
+    getEfectivo: function getEfectivo() {
+      this.efectivo = 0;
+
+      for (var i = 0; i < this.pagos.length; i++) {
+        console.log(this.pagos[i]);
+
+        if (this.pagos[i].pash_name == 'Efectivo') {
+          this.efectivo = parseFloat(this.efectivo) + parseFloat(this.pagos[i].cpam_amount);
+        }
+
+        this.montototal = parseFloat(this.montototal) + parseFloat(this.pagos[i].cpam_amount);
+      }
+
+      this.getcambio();
+    },
     getClients: function getClients() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.get("/clientsget").then(function (response) {
-        _this6.clients = response.data.data;
-        _this6.selectClient = _this6.clients[0];
+        _this7.clients = response.data.data;
+        _this7.selectClient = _this7.clients[0];
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPaymentShapes: function getPaymentShapes() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.get("/paymentshapesget").then(function (response) {
-        _this7.paymentsShapes = response.data.data;
+        _this8.paymentsShapes = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPayment: function getPayment() {
-      var _this8 = this;
+      var _this9 = this;
 
       axios.get("/paymentmethodsget").then(function (response) {
-        _this8.payments = response.data.data;
+        _this9.payments = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPaymentShow: function getPaymentShow() {
-      var _this9 = this;
+      var _this10 = this;
 
       axios.get("/paymentmethodsshow/1").then(function (response) {
         console.log(response.data.data);
-        _this9.payments = response.data.data;
-        _this9.selectpame = _this9.payments[0];
+        _this10.payments = response.data.data;
+        _this10.selectpame = _this10.payments[0];
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getStores: function getStores() {
-      var _this10 = this;
+      var _this11 = this;
 
       axios.get("/storeget").then(function (response) {
-        _this10.stores = response.data.data;
+        _this11.stores = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -627,27 +730,43 @@ __webpack_require__.r(__webpack_exports__);
       this["delete"]();
       this.dialogQuestionDelete = false;
     },
+    borrarPago: function borrarPago(item) {
+      this.editadoPago = Object.assign({}, item);
+      this.dialogQuestionDeletePago = true;
+    },
+    guardaBorrarPago: function guardaBorrarPago() {
+      var _this12 = this;
+
+      this.dialogQuestionDeletePago = false;
+      axios.post('/client/payment/amounts/destroy', this.editadoPago).then(function (response) {
+        _this12.textMsg = "¡Eliminado correctamente!";
+
+        _this12.normal('Notificación', _this12.textMsg, "success");
+
+        _this12.getPagos();
+      });
+    },
     "delete": function _delete() {
-      var _this11 = this;
+      var _this13 = this;
 
       axios.post('/client_sale_details/destroy', this.editado).then(function (response) {
-        _this11.textMsg = "¡Eliminado correctamente!";
+        _this13.textMsg = "¡Eliminado correctamente!";
 
-        _this11.normal('Notificación', _this11.textMsg, "success");
+        _this13.normal('Notificación', _this13.textMsg, "success");
 
-        _this11.createsale();
+        _this13.createsale();
       });
     },
     actualizar: function actualizar(item) {
-      var _this12 = this;
+      var _this14 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this12.textMsg = "¡Actualizado correctamente!";
+        _this14.textMsg = "¡Actualizado correctamente!";
 
-        _this12.normal('Notificación', _this12.textMsg, "success");
+        _this14.normal('Notificación', _this14.textMsg, "success");
       })["catch"](function (e) {
-        _this12.errors.push(e);
+        _this14.errors.push(e);
       });
     },
     normal: function normal(Title, Description, Type) {
@@ -830,6 +949,66 @@ var render = function() {
                         {
                           attrs: { color: "green darken-1", text: "" },
                           on: { click: _vm.guardaBorrar }
+                        },
+                        [_vm._v("Continuar")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "290" },
+              model: {
+                value: _vm.dialogQuestionDeletePago,
+                callback: function($$v) {
+                  _vm.dialogQuestionDeletePago = $$v
+                },
+                expression: "dialogQuestionDeletePago"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "headline" }, [
+                    _vm._v("Alerta")
+                  ]),
+                  _vm._v(" "),
+                  _c("v-card-text", [
+                    _vm._v("¿Está seguro de borrar el registro?")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialogQuestionDeletePago = false
+                            }
+                          }
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: { click: _vm.guardaBorrarPago }
                         },
                         [_vm._v("Continuar")]
                       )
@@ -1369,37 +1548,156 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _c("v-text-field", {
-                        attrs: {
-                          label: "Efectivo: ",
-                          prefix: "$",
-                          type: "number"
-                        },
-                        model: {
-                          value: _vm.efectivo,
-                          callback: function($$v) {
-                            _vm.efectivo = $$v
-                          },
-                          expression: "efectivo"
-                        }
-                      }),
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "warning" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.abrirPago()
+                                }
+                              }
+                            },
+                            [_vm._v("Agregar pago")]
+                          )
+                        ],
+                        1
+                      ),
                       _vm._v(" "),
-                      _c("v-text-field", {
-                        attrs: {
-                          label: "Monto: ",
-                          prefix: "$",
-                          type: "number"
-                        },
-                        model: {
-                          value: _vm.monto,
-                          callback: function($$v) {
-                            _vm.monto = $$v
-                          },
-                          expression: "monto"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("br"),
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            [
+                              _c(
+                                "v-card",
+                                [
+                                  _c("v-simple-table", {
+                                    scopedSlots: _vm._u([
+                                      {
+                                        key: "default",
+                                        fn: function() {
+                                          return [
+                                            _c("thead", [
+                                              _c("tr", [
+                                                _c(
+                                                  "th",
+                                                  { staticClass: "text-left" },
+                                                  [_vm._v("Forma de Pago")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "th",
+                                                  { staticClass: "text-left" },
+                                                  [_vm._v("Monto")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "th",
+                                                  { staticClass: "text-left" },
+                                                  [_vm._v("Referencia")]
+                                                ),
+                                                _vm._v(" "),
+                                                _c("th")
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c(
+                                              "tbody",
+                                              _vm._l(_vm.pagos, function(item) {
+                                                return _c(
+                                                  "tr",
+                                                  { key: item.pash_name },
+                                                  [
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        _vm._s(item.pash_name)
+                                                      )
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        _vm._s(item.cpam_amount)
+                                                      )
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c("td", [
+                                                      _vm._v(
+                                                        _vm._s(
+                                                          item.cpam_reference
+                                                        )
+                                                      )
+                                                    ]),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "td",
+                                                      [
+                                                        _c(
+                                                          "v-icon",
+                                                          {
+                                                            attrs: {
+                                                              small: ""
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                return _vm.borrarPago(
+                                                                  item
+                                                                )
+                                                              }
+                                                            }
+                                                          },
+                                                          [_vm._v("mdi-delete")]
+                                                        )
+                                                      ],
+                                                      1
+                                                    )
+                                                  ]
+                                                )
+                                              }),
+                                              0
+                                            ),
+                                            _vm._v(" "),
+                                            _c("tfoot", [
+                                              _c("tr", [
+                                                _c("td"),
+                                                _vm._v(" "),
+                                                _c("td", [_vm._v("Total")]),
+                                                _vm._v(" "),
+                                                _c("td", [
+                                                  _vm._v(
+                                                    "$" +
+                                                      _vm._s(
+                                                        _vm.formatMoney(
+                                                          _vm.montototal
+                                                        )
+                                                      )
+                                                  )
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("td")
+                                              ])
+                                            ])
+                                          ]
+                                        },
+                                        proxy: true
+                                      }
+                                    ])
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
                       _vm._v(" "),
                       _c("tr", [
                         _c("td", [_vm._v("Subtotal")]),
@@ -1496,151 +1794,19 @@ var render = function() {
                     "v-card-text",
                     [
                       _c(
-                        "v-form",
-                        {
-                          model: {
-                            value: _vm.valid,
-                            callback: function($$v) {
-                              _vm.valid = $$v
-                            },
-                            expression: "valid"
-                          }
-                        },
+                        "v-row",
                         [
                           _c(
-                            "v-expansion-panels",
-                            { attrs: { multiple: "" } },
-                            [
-                              _c(
-                                "v-expansion-panel",
-                                [
-                                  _c("v-expansion-panel-header", [
-                                    _vm._v("Agregar Pago")
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-expansion-panel-content",
-                                    [
-                                      _c(
-                                        "v-row",
-                                        [
-                                          _c("v-combobox", {
-                                            attrs: {
-                                              required: "",
-                                              items: _vm.paymentsShapes,
-                                              label: "Forma de pago",
-                                              "item-text": "pash_name",
-                                              "item-value": "pash_pk",
-                                              filled: "",
-                                              chips: "",
-                                              placeholder:
-                                                "Seleccionar una opción"
-                                            },
-                                            model: {
-                                              value: _vm.selectpash,
-                                              callback: function($$v) {
-                                                _vm.selectpash = $$v
-                                              },
-                                              expression: "selectpash"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-row",
-                                        [
-                                          _c(
-                                            "v-col",
-                                            { attrs: { cols: "6" } },
-                                            [
-                                              _c("v-text-field", {
-                                                attrs: {
-                                                  required: "",
-                                                  label: "Monto: ",
-                                                  rules: _vm.minNumberRules,
-                                                  prefix: "$",
-                                                  type: "number"
-                                                },
-                                                on: {
-                                                  change: function($event) {
-                                                    return _vm.getcambio()
-                                                  }
-                                                },
-                                                model: {
-                                                  value:
-                                                    _vm.editadoPago.cpam_amount,
-                                                  callback: function($$v) {
-                                                    _vm.$set(
-                                                      _vm.editadoPago,
-                                                      "cpam_amount",
-                                                      $$v
-                                                    )
-                                                  },
-                                                  expression:
-                                                    "editadoPago.cpam_amount"
-                                                }
-                                              })
-                                            ],
-                                            1
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-col",
-                                            { attrs: { cols: "6" } },
-                                            [
-                                              _c("v-text-field", {
-                                                attrs: {
-                                                  label: "Referencia: "
-                                                },
-                                                model: {
-                                                  value:
-                                                    _vm.editadoPago
-                                                      .cpam_reference,
-                                                  callback: function($$v) {
-                                                    _vm.$set(
-                                                      _vm.editadoPago,
-                                                      "cpam_reference",
-                                                      $$v
-                                                    )
-                                                  },
-                                                  expression:
-                                                    "editadoPago.cpam_reference"
-                                                }
-                                              })
-                                            ],
-                                            1
-                                          )
-                                        ],
-                                        1
-                                      ),
-                                      _vm._v(" "),
-                                      _c("v-divider"),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            color: "primary",
-                                            disabled: !_vm.valid
-                                          },
-                                          on: { click: _vm.agregarPago }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\r\n                                        Agregar\r\n                                    "
-                                          )
-                                        ]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
+                            "v-btn",
+                            {
+                              attrs: { color: "warning" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.abrirPago()
+                                }
+                              }
+                            },
+                            [_vm._v("Agregar pago")]
                           )
                         ],
                         1
@@ -1725,7 +1891,7 @@ var render = function() {
                                                               click: function(
                                                                 $event
                                                               ) {
-                                                                return _vm.borrar(
+                                                                return _vm.borrarPago(
                                                                   item
                                                                 )
                                                               }
@@ -1753,7 +1919,7 @@ var render = function() {
                                                     "$" +
                                                       _vm._s(
                                                         _vm.formatMoney(
-                                                          _vm.total
+                                                          _vm.montototal
                                                         )
                                                       )
                                                   )
@@ -1839,6 +2005,165 @@ var render = function() {
                           on: { click: _vm.finalizarVenta }
                         },
                         [_vm._v("Confirmar")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "640" },
+              model: {
+                value: _vm.dialogPago,
+                callback: function($$v) {
+                  _vm.dialogPago = $$v
+                },
+                expression: "dialogPago"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", [_vm._v("Agregar pago")]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(
+                        "v-form",
+                        {
+                          model: {
+                            value: _vm.valid,
+                            callback: function($$v) {
+                              _vm.valid = $$v
+                            },
+                            expression: "valid"
+                          }
+                        },
+                        [
+                          _c(
+                            "v-row",
+                            [
+                              _c("v-combobox", {
+                                attrs: {
+                                  required: "",
+                                  items: _vm.paymentsShapes,
+                                  label: "Forma de pago",
+                                  "item-text": "pash_name",
+                                  "item-value": "pash_pk",
+                                  filled: "",
+                                  chips: "",
+                                  placeholder: "Seleccionar una opción"
+                                },
+                                model: {
+                                  value: _vm.selectpash,
+                                  callback: function($$v) {
+                                    _vm.selectpash = $$v
+                                  },
+                                  expression: "selectpash"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      required: "",
+                                      label: "Monto: ",
+                                      rules: _vm.minNumberRules,
+                                      prefix: "$",
+                                      type: "number"
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        return _vm.getcambio()
+                                      }
+                                    },
+                                    model: {
+                                      value: _vm.editadoPago.cpam_amount,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editadoPago,
+                                          "cpam_amount",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "editadoPago.cpam_amount"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "Referencia: " },
+                                    model: {
+                                      value: _vm.editadoPago.cpam_reference,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editadoPago,
+                                          "cpam_reference",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "editadoPago.cpam_reference"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-divider"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              on: {
+                                click: function($event) {
+                                  _vm.dialogPago = !_vm.dialogPago
+                                }
+                              }
+                            },
+                            [_vm._v("Cancelar")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "primary", disabled: !_vm.valid },
+                              on: { click: _vm.agregarPago }
+                            },
+                            [
+                              _vm._v(
+                                "\r\n                            Agregar\r\n                        "
+                              )
+                            ]
+                          )
+                        ],
+                        1
                       )
                     ],
                     1
