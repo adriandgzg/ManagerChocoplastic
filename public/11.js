@@ -679,6 +679,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     getEfectivo: function getEfectivo() {
       this.efectivo = 0;
+      this.montototal = 0;
 
       for (var i = 0; i < this.pagos.length; i++) {
         console.log(this.pagos[i]);

@@ -614,7 +614,7 @@ export default {
 
             this.editadoPago.pash_fk = this.selectpash.pash_pk;
             this.editadoPago.bocu_fk = this.bocu_pk
-                    console.log(this.editadoPago);
+            console.log(this.editadoPago);
 
             axios.post('/client/payment/amounts', this.editadoPago)
                 .then(response => {
@@ -671,6 +671,7 @@ export default {
         },
         getEfectivo() {
             this.efectivo = 0;
+            this.montototal = 0;
             for (var i = 0; i < this.pagos.length; i++) {
                 console.log(this.pagos[i])
                 if (this.pagos[i].pash_name == 'Efectivo') {
