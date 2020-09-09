@@ -368,12 +368,14 @@ export default {
             editadoPago: {
                 clsa_fk: 0,
                 pash_fk: 0,
+                bocu_fk: 0,
                 cpam_amount: 0,
                 cpam_reference: '',
             },
             editadoPagoDefault: {
                 clsa_fk: 0,
                 pash_fk: 0,
+                bocu_fk: 0,
                 cpam_amount: 0,
                 cpam_reference: '',
             },
@@ -412,6 +414,7 @@ export default {
             messageQuestion: '',
             pagos: [],
             montototal: 0,
+            bocu_pk: 0,
         };
     },
     created() {
@@ -422,10 +425,22 @@ export default {
         this.getStores();
         this.getUsers();
         this.getPaymentShapes();
-
+        this.obtenerCaja();
     },
 
     methods: {
+        obtenerCaja() {
+            axios
+                .get("/boxcut")
+                .then(response => {
+                    if (response.data.data == null) {
+                        this.bocu_pk = response.data.data.bocu_pk;
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+        },
         getUsers() {
             axios.get('/listUser')
                 .then(response => {
@@ -597,7 +612,7 @@ export default {
             }
 
             this.editadoPago.pash_fk = this.selectpash.pash_pk;
-
+            this.editadoPago.bocu_fk = this.bocu_pk
             axios.post('/client/payment/amounts', this.editadoPago)
                 .then(response => {
                     setTimeout(() => (this.loading = false), 500)

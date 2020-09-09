@@ -380,12 +380,14 @@ __webpack_require__.r(__webpack_exports__);
       editadoPago: {
         clsa_fk: 0,
         pash_fk: 0,
+        bocu_fk: 0,
         cpam_amount: 0,
         cpam_reference: ''
       },
       editadoPagoDefault: {
         clsa_fk: 0,
         pash_fk: 0,
+        bocu_fk: 0,
         cpam_amount: 0,
         cpam_reference: ''
       },
@@ -424,7 +426,8 @@ __webpack_require__.r(__webpack_exports__);
       dialogQuestionDeletePago: false,
       messageQuestion: '',
       pagos: [],
-      montototal: 0
+      montototal: 0,
+      bocu_pk: 0
     };
   },
   created: function created() {
@@ -434,22 +437,34 @@ __webpack_require__.r(__webpack_exports__);
     this.getStores();
     this.getUsers();
     this.getPaymentShapes();
+    this.obtenerCaja();
   },
   methods: {
-    getUsers: function getUsers() {
+    obtenerCaja: function obtenerCaja() {
       var _this = this;
 
-      axios.get('/listUser').then(function (response) {
-        _this.users = response.data.data;
-
-        if (_this.users.store_id > 0) {
-          _this.enabledStore = true;
-          _this.selectStore = _this.stores.find(function (item) {
-            return item.stor_pk == _this.users.store_id;
-          });
-        } else _this.enabledStore = false;
+      axios.get("/boxcut").then(function (response) {
+        if (response.data.data == null) {
+          _this.bocu_pk = response.data.data.bocu_pk;
+        }
       })["catch"](function (e) {
-        _this.errors.push(e);
+        console.log(e);
+      });
+    },
+    getUsers: function getUsers() {
+      var _this2 = this;
+
+      axios.get('/listUser').then(function (response) {
+        _this2.users = response.data.data;
+
+        if (_this2.users.store_id > 0) {
+          _this2.enabledStore = true;
+          _this2.selectStore = _this2.stores.find(function (item) {
+            return item.stor_pk == _this2.users.store_id;
+          });
+        } else _this2.enabledStore = false;
+      })["catch"](function (e) {
+        _this2.errors.push(e);
       });
     },
     formatMoney: function formatMoney(amount) {
@@ -473,16 +488,16 @@ __webpack_require__.r(__webpack_exports__);
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
     onQuantityChange: function onQuantityChange(item) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this2.textMsg = "¡Actualizado correctamente!";
+        _this3.textMsg = "¡Actualizado correctamente!";
         console.log("¡Actualizado correctamente!");
 
-        _this2.getTotal();
+        _this3.getTotal();
       })["catch"](function (e) {
-        _this2.errors.push(e);
+        _this3.errors.push(e);
       });
     },
     onChangeClient: function onChangeClient() {
@@ -536,52 +551,52 @@ __webpack_require__.r(__webpack_exports__);
       this.dialogQuestion = true;
     },
     guardaFinalizar: function guardaFinalizar() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.editadoSale.clde_amount = this.total;
       this.editadoSale.clpa_amount_cash = this.efectivo;
       this.editadoSale.clpa_amount_transfer = this.tarjeta;
       axios.post('/clientsales/update', this.editadoSale).then(function (response) {
         if (response.data.code == 200) {
-          _this3.textMsg = "¡Actualizado correctamente!";
+          _this4.textMsg = "¡Actualizado correctamente!";
 
-          _this3.normal('Notificación', '¡Actualizado correctamente!', "success");
+          _this4.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-          _this3.$router.push('/client/sales/printOrder/' + response.data.data);
+          _this4.$router.push('/client/sales/printOrder/' + response.data.data);
 
-          _this3.$router.push('/sales');
+          _this4.$router.push('/sales');
         } else {
-          _this3.normal('Notificación', response.data.message, "error");
+          _this4.normal('Notificación', response.data.message, "error");
         }
       })["catch"](function (e) {
-        _this3.errors.push(e);
+        _this4.errors.push(e);
       });
     },
     createsale: function createsale() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.loading = true;
       axios.post('/clientsales?clor_pk=' + this.clor_pk + '').then(function (response) {
         setTimeout(function () {
-          return _this4.loading = false;
+          return _this5.loading = false;
         }, 2000);
 
         if (response.data.data != null) {
-          _this4.sales = response.data.data;
-          _this4.saleHeader = response.data.data.sale;
-          _this4.desserts = _this4.sales.sale_details;
+          _this5.sales = response.data.data;
+          _this5.saleHeader = response.data.data.sale;
+          _this5.desserts = _this5.sales.sale_details;
           console.log("this.saleHeader");
           console.log(response.data);
 
-          _this4.getTotal();
+          _this5.getTotal();
         } else {
-          _this4.normal('Notificación', response.data.message, "error");
+          _this5.normal('Notificación', response.data.message, "error");
         }
       })["catch"](function (e) {
         //this.errors.push(e)
         console.log(e);
 
-        _this4.normal('Notificación', "Error al cargar los datos", "error");
+        _this5.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     abrirPago: function abrirPago() {
@@ -589,7 +604,7 @@ __webpack_require__.r(__webpack_exports__);
       this.dialogPago = true;
     },
     agregarPago: function agregarPago() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.loading = true;
       this.editadoPago.clsa_fk = this.saleHeader.clsa_pk;
@@ -600,51 +615,52 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.editadoPago.pash_fk = this.selectpash.pash_pk;
+      this.editadoPago.bocu_fk = this.bocu_pk;
       axios.post('/client/payment/amounts', this.editadoPago).then(function (response) {
         setTimeout(function () {
-          return _this5.loading = false;
+          return _this6.loading = false;
         }, 500);
         console.log(response.data);
 
         if (response.data.data != null) {
-          _this5.textMsg = "¡Actualizado correctamente!";
+          _this6.textMsg = "¡Actualizado correctamente!";
 
-          _this5.normal('Notificación', '¡Actualizado correctamente!', "success");
+          _this6.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-          _this5.dialogPago = false;
+          _this6.dialogPago = false;
 
-          _this5.getPagos();
+          _this6.getPagos();
         } else {
-          _this5.normal('Notificación', response.data.status.message, "error");
+          _this6.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         //this.errors.push(e)
         console.log(e);
 
-        _this5.normal('Notificación', "Error al cargar los datos", "error");
+        _this6.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     getPagos: function getPagos() {
-      var _this6 = this;
+      var _this7 = this;
 
       this.loading = true;
       axios.get("/client/payment/amounts/" + this.saleHeader.clsa_pk).then(function (response) {
         setTimeout(function () {
-          return _this6.loading = false;
+          return _this7.loading = false;
         }, 500);
 
         if (response.data.data != null) {
-          _this6.pagos = response.data.data;
+          _this7.pagos = response.data.data;
 
-          _this6.getEfectivo();
+          _this7.getEfectivo();
         } else {
-          _this6.normal('Notificación', response.data.status.message, "error");
+          _this7.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log("Error al cargar los datos");
         console.log(e);
 
-        _this6.normal('Notificación', "Error al cargar los datos", "error");
+        _this7.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
     getcambio: function getcambio() {
@@ -675,49 +691,49 @@ __webpack_require__.r(__webpack_exports__);
       this.getcambio();
     },
     getClients: function getClients() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.get("/clientsget").then(function (response) {
-        _this7.clients = response.data.data;
-        _this7.selectClient = _this7.clients[0];
+        _this8.clients = response.data.data;
+        _this8.selectClient = _this8.clients[0];
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPaymentShapes: function getPaymentShapes() {
-      var _this8 = this;
+      var _this9 = this;
 
       axios.get("/paymentshapesget").then(function (response) {
-        _this8.paymentsShapes = response.data.data;
+        _this9.paymentsShapes = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPayment: function getPayment() {
-      var _this9 = this;
+      var _this10 = this;
 
       axios.get("/paymentmethodsget").then(function (response) {
-        _this9.payments = response.data.data;
+        _this10.payments = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getPaymentShow: function getPaymentShow() {
-      var _this10 = this;
+      var _this11 = this;
 
       axios.get("/paymentmethodsshow/1").then(function (response) {
         console.log(response.data.data);
-        _this10.payments = response.data.data;
-        _this10.selectpame = _this10.payments[0];
+        _this11.payments = response.data.data;
+        _this11.selectpame = _this11.payments[0];
       })["catch"](function (e) {
         console.log(e);
       });
     },
     getStores: function getStores() {
-      var _this11 = this;
+      var _this12 = this;
 
       axios.get("/storeget").then(function (response) {
-        _this11.stores = response.data.data;
+        _this12.stores = response.data.data;
       })["catch"](function (e) {
         console.log(e);
       });
@@ -735,38 +751,38 @@ __webpack_require__.r(__webpack_exports__);
       this.dialogQuestionDeletePago = true;
     },
     guardaBorrarPago: function guardaBorrarPago() {
-      var _this12 = this;
+      var _this13 = this;
 
       this.dialogQuestionDeletePago = false;
       axios.post('/client/payment/amounts/destroy', this.editadoPago).then(function (response) {
-        _this12.textMsg = "¡Eliminado correctamente!";
-
-        _this12.normal('Notificación', _this12.textMsg, "success");
-
-        _this12.getPagos();
-      });
-    },
-    "delete": function _delete() {
-      var _this13 = this;
-
-      axios.post('/client_sale_details/destroy', this.editado).then(function (response) {
         _this13.textMsg = "¡Eliminado correctamente!";
 
         _this13.normal('Notificación', _this13.textMsg, "success");
 
-        _this13.createsale();
+        _this13.getPagos();
+      });
+    },
+    "delete": function _delete() {
+      var _this14 = this;
+
+      axios.post('/client_sale_details/destroy', this.editado).then(function (response) {
+        _this14.textMsg = "¡Eliminado correctamente!";
+
+        _this14.normal('Notificación', _this14.textMsg, "success");
+
+        _this14.createsale();
       });
     },
     actualizar: function actualizar(item) {
-      var _this14 = this;
+      var _this15 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this14.textMsg = "¡Actualizado correctamente!";
+        _this15.textMsg = "¡Actualizado correctamente!";
 
-        _this14.normal('Notificación', _this14.textMsg, "success");
+        _this15.normal('Notificación', _this15.textMsg, "success");
       })["catch"](function (e) {
-        _this14.errors.push(e);
+        _this15.errors.push(e);
       });
     },
     normal: function normal(Title, Description, Type) {
