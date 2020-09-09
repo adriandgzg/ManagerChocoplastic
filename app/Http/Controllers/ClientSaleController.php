@@ -7,6 +7,7 @@ use Exception;
 use Throwable;
 use Validator;
 use App\System;
+use App\Product;
 use App\ClientDebt;
 use App\ClientSale;
 use App\ClientOrder;
@@ -16,9 +17,9 @@ use App\ProductInventory;
 use App\ClientOrderDetail;
 use App\ClientPaymentAmount;
 use Illuminate\Http\Request;
-use App\Http\Controllers\api\ApiResponseController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\api\ApiResponseController;
 
 class ClientSaleController extends ApiResponseController
 {
@@ -415,8 +416,8 @@ class ClientSaleController extends ApiResponseController
             'pame_fk' => 'required', //PK Metodo Pago
             'stor_fk' => 'required', //PK Sucursal
             'clde_amount' => 'required', //Monto Total
-            'clpa_amount_cash' => 'required', //Monto Efectivo
-            'clpa_amount_transfer' => 'required', //Monto Transferencia
+            //'clpa_amount_cash' => 'required', //Monto Efectivo
+            //'clpa_amount_transfer' => 'required', //Monto Transferencia
         ]);
 
 
@@ -437,8 +438,8 @@ class ClientSaleController extends ApiResponseController
             $vpame_fk = $vInput['pame_fk'];
             $vstor_fk = $vInput['stor_fk'];
             $vclde_amount = $vInput['clde_amount'];
-            $vclpa_amount_cash = $vInput['clpa_amount_cash'];
-            $vclpa_amount_transfer = $vInput['clpa_amount_transfer'];
+            //$vclpa_amount_cash = $vInput['clpa_amount_cash'];
+            //$vclpa_amount_transfer = $vInput['clpa_amount_transfer'];
 
             //Consultar Venta Cliente
             $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)->where('clsa_status', '=', 0)->first();
@@ -490,9 +491,11 @@ class ClientSaleController extends ApiResponseController
                     } 
                     else 
                     {
+                        $vPSel = Product::where('prod_pk', '=', $vprod_fk)->first();
+
                         //Producto NO Encontrado, NO se puede Vender
                         $vVal_Dev = false;
-                        $vMessage = 'Producto NO Encontrado, NO se puede Vender ' . $vClientSale->stor_fk;
+                        $vMessage = $vPSel->prod_identifier . ' - ' . $vPSel->prod_name . ' Sin Inventario.';
                         break;
                     }
                 }
@@ -553,7 +556,7 @@ class ClientSaleController extends ApiResponseController
 
 
                         //Insertar Abonos de Cliente
-/*
+
                         //Consultar Pagos
                         $vCPASel = ClientPaymentAmount::where('clsa_fk', '=', $vclsa_pk)->where('cpam_status', '=', 1)
                         ->select
@@ -562,7 +565,8 @@ class ClientSaleController extends ApiResponseController
                             (
                                 DB::raw("$vclie_fk AS clie_fk"),
                                 DB::raw("$vclde_fk AS clde_fk"),
-                                'pash_fk AS pash_fk',
+                                'pash_fk',
+                                'bocu_fk',
                                 'cpam_amount AS clpa_amount',
                                 'cpam_reference AS clpa_reference',
                                 DB::raw("1 AS clpa_status"),
@@ -577,6 +581,7 @@ class ClientSaleController extends ApiResponseController
                                     'clie_fk',
                                     'clde_fk', 
                                     'pash_fk',
+                                    'bocu_fk',
                                     'clpa_amount', 
                                     'clpa_reference', 
                                     'clpa_status', 
@@ -584,7 +589,7 @@ class ClientSaleController extends ApiResponseController
                                     'updated_at'
                                 ]
                             , $vCPASel);
-*/
+/*
                         //Efectivo
                         if($vclpa_amount_cash > 0)
                         {
@@ -617,7 +622,7 @@ class ClientSaleController extends ApiResponseController
 
                             //////////////////  Inserción de Log  //////////////////
                             $this->getstorelog('client_payments', $vclpa_pk2, 1);
-                        }
+                        }*/
                     }
 
                     //Modificar Folio del Venta

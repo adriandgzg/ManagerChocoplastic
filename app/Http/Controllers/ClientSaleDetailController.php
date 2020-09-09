@@ -78,6 +78,7 @@ class ClientSaleDetailController extends ApiResponseController
         $validator = Validator::make($vInput, [
             'clsd_pk' => 'required', //PK Venta Detalle Producto
             'clsd_quantity' => 'required', //Cantidad Venta Detalle Producto
+            'clsd_discountrate' => 'required', //Descuento Venta Detalle Producto
         ]);
 
 
@@ -94,17 +95,19 @@ class ClientSaleDetailController extends ApiResponseController
             //Asignacion de variables
             $vclsd_pk = $vInput['clsd_pk'];
             $vclsd_quantity = $vInput['clsd_quantity'];
+            $vclsd_discountrate = $vInput['clsd_discountrate'];
 
             //Consultar Venta Detalle Cliente
             $vClientSaleDetail = ClientSaleDetail::where('clsd_pk', '=', $vclsd_pk)->first();
 
             if($vClientSaleDetail)
             { 
-       
+
                 //Modificar Venta Detalle
-                DB::table('client_sale_details')
-                ->where('clsd_pk', '=', $vclsd_pk)
-                ->update(['clsd_quantity' => $vclsd_quantity]);
+                $vCSDU = ClientSaleDetail::find($vclsd_pk);
+                $vCSDU->clsd_quantity = $vclsd_quantity;
+                $vCSDU->clsd_discountrate = $vclsd_discountrate;
+                $vCSDU->save();
 
                 //////////////////  Inserción de Log  //////////////////
                 $this->getstorelog('client_sale_details', $vclsd_pk, 2);
