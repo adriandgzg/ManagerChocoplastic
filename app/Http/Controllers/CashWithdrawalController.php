@@ -222,13 +222,13 @@ class CashWithdrawalController extends ApiResponseController
                 $pdf->Cell(8,$lineHeigth,'',0,'C');
                 $pdf->Cell(15,$lineHeigth,'Domicilio Fiscal: ',0,'R');
                 $pdf->SetFont('Arial', '', 5);
-                $pdf->Cell(20, $lineHeigth, 'Ubicación de la tienda', '', '1', 'L');
+                $pdf->Cell(20, $lineHeigth, utf8_decode('Ubicación de la tienda'), '', '1', 'L');
 
                 $pdf->Cell(60, $lineHeigth+2,'---------------------------------------------------------------------------------------------', '', '1', 'C');                
                 $pdf->SetFont('Arial', 'B', 7);
-                $pdf->Cell(57, $lineHeigth, $vCWSel->stor_name, '', '1', 'C');
+                $pdf->Cell(57, $lineHeigth, utf8_decode($vCWSel->stor_name), '', '1', 'C');
                 $pdf->SetFont('Arial', '', 3);
-                $pdf->Cell(57,$lineHeigth+2,$vCWSel->stor_addres, '', '1', 'C');
+                $pdf->Cell(57,$lineHeigth+2,utf8_decode($vCWSel->stor_addres), '', '1', 'C');
                 $pdf->SetFont('Arial', '', 5);
                 $pdf->Cell(60, $lineHeigth,'---------------------------------------------------------------------------------------------', '', '1', 'C');
                                 
@@ -239,7 +239,7 @@ class CashWithdrawalController extends ApiResponseController
                
                 $pdf->Cell(50, $lineHeigth, $vCWSel->created_at, '', '1', 'L');
                 $pdf->Cell(17, $lineHeigth, 'Nombre de usuario', '', 0, 'L');
-                $pdf->Cell(20, $lineHeigth, $vCWSel->user, '', '1', 'L');
+                $pdf->Cell(20, $lineHeigth, utf8_decode($vCWSel->user), '', '1', 'L');
 
                 $pdf->Ln(7);
                 $pdf->SetFont('Arial', '', 7);

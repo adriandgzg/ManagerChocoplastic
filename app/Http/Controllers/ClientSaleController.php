@@ -799,7 +799,7 @@ class ClientSaleController extends ApiResponseController
                 $pdf->Cell(25, $lineHeigth, 'Domicilio Fiscal:', '', '1', 'C');
                 
                 $pdf->SetFont('Arial', '', 5);
-                $pdf->Cell(50, $lineHeigth-4, 'Dirección', '', '1', 'C');
+                $pdf->Cell(50, $lineHeigth-4, utf8_decode('Dirección'), '', '1', 'C');
                 
                 $pdf->SetY(20);
                 $pdf->Cell(43, $lineHeigth+2,'---------------------------------------------------------------------------------------------', '', '1', 'L');
@@ -811,8 +811,8 @@ class ClientSaleController extends ApiResponseController
                 $pdf->SetFont('Arial', '', 5);
                 $pdf->Cell(43, $lineHeigth, 'No. Pedido: ' . $vCS->clor_pk, '', '1');
                 $pdf->Cell(43, $lineHeigth, '' . $vCS->created_at, '', '1');
-                $pdf->Cell(43, $lineHeigth, 'Tipo de Pago: ' . $vCS->pame_name, '', '1');
-                $pdf->Cell(43, $lineHeigth, 'Cliente: ' . $vCS->clie_identifier, '', '1');
+                $pdf->Cell(43, $lineHeigth, 'Tipo de Pago: ' . utf8_decode($vCS->pame_name), '', '1');
+                $pdf->Cell(43, $lineHeigth, 'Cliente: ' . utf8_decode($vCS->clie_identifier), '', '1');
                 
 
                 
@@ -872,7 +872,7 @@ class ClientSaleController extends ApiResponseController
 $pdf->Ln(10);
 $pdf->Cell(60,0,'',0,1,'C');
 $pdf->Ln(3);
-$pdf->Cell(60,0,'Favor de revisar su mercancía. No se aceptan cambios ni devoluciones.',0,1,'C');
+$pdf->Cell(60,0,utf8_decode('Favor de revisar su mercancía. No se aceptan cambios ni devoluciones.'),0,1,'C');
 
 
 

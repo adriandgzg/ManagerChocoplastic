@@ -310,7 +310,7 @@ class BoxCutController extends ApiResponseController
             if($vBCSel)
             {    
 
-        $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 120));
+        $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 140));
         $pdf->SetMargins(1, 1, 1);
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
@@ -328,13 +328,13 @@ class BoxCutController extends ApiResponseController
         $pdf->Cell(8,$lineHeigth,'',0,'C');
         $pdf->Cell(15,$lineHeigth,'Domicilio Fiscal: ',0,'R');
         $pdf->SetFont('Arial', '', 5);
-        $pdf->Cell(20, $lineHeigth, 'Ubicación de la tienda', '', '1', 'L');
+        $pdf->Cell(20, $lineHeigth, utf8_decode('Ubicación de la tienda'), '', '1', 'L');
 
         $pdf->Cell(60, $lineHeigth+2,'---------------------------------------------------------------------------------------------', '', '1', 'C');                
         $pdf->SetFont('Arial', 'B', 7);
-        $pdf->Cell(57, $lineHeigth, $vBCSel->stor_name, '', '1', 'C');
+        $pdf->Cell(57, $lineHeigth, utf8_decode($vBCSel->stor_name), '', '1', 'C');
         $pdf->SetFont('Arial', '', 3);
-        $pdf->Cell(57,$lineHeigth+2, $vBCSel->stor_addres, '', '1', 'C');
+        $pdf->Cell(57,$lineHeigth+2, utf8_decode($vBCSel->stor_addres), '', '1', 'C');
         $pdf->SetFont('Arial', '', 5);
         $pdf->Cell(60, $lineHeigth,'---------------------------------------------------------------------------------------------', '', '1', 'C');
                         
@@ -345,7 +345,7 @@ class BoxCutController extends ApiResponseController
         $pdf->Cell(17, $lineHeigth, 'ID', '', 0, 'L');
         $pdf->Cell(20, $lineHeigth, $vBCSel->bocu_pk, '', '1', 'L');
         $pdf->Cell(17, $lineHeigth, 'Nombre de usuario', '', 0, 'L');
-        $pdf->Cell(20, $lineHeigth, $vBCSel->user, '', '1', 'L');
+        $pdf->Cell(20, $lineHeigth, utf8_decode($vBCSel->user), '', '1', 'L');
         $pdf->Cell(17, $lineHeigth, 'Apertura', '', 0, 'L');
         $pdf->Cell(20, $lineHeigth, $vBCSel->bocu_startdate, '', '1', 'L');
         $pdf->Cell(17, $lineHeigth, 'Cierre', '', 0, 'L');
@@ -405,7 +405,7 @@ class BoxCutController extends ApiResponseController
 
         $pdf->Ln(8);
         $pdf->SetFont('Arial', '', 6);
-        $pdf->Cell(57, $lineHeigth, 'CRÉDITO', '', '1', 'C');
+        $pdf->Cell(57, $lineHeigth, utf8_decode('CRÉDITO'), '', '1', 'C');
 
         $pdf->Ln(2);
         $pdf->SetFont('Arial', 'B', 5);
@@ -426,7 +426,7 @@ class BoxCutController extends ApiResponseController
         $pdf->Ln(3);
         $pdf->Cell(60,0,'__________________________________________________','', '1','C');
         $pdf->Ln(2);
-        $pdf->Cell(60,0,'$vCWSel->user','', '1','C');
+        $pdf->Cell(60,0,utf8_decode($vBCSel->user),'', '1','C');
 
 
 
