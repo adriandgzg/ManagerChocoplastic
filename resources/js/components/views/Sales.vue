@@ -1,6 +1,9 @@
 <template>
 <v-app>
     <v-container>
+        <v-alert type="warning" v-model="boxEnabled">
+            Para realizar una venta, primero debe abrir caja.
+        </v-alert>
         <v-dialog v-model="loading" persistent width="300">
             <v-card color="white">
                 <v-card-text>
@@ -48,7 +51,7 @@
                             <v-btn v-if="item.clsa_status != 'Pendiente'" class="mr-2" fab dark small color="orange" :href="'/client/sales/printOrder/'+item.clsa_pk" target="_blank" title="Imprimir ticket">
                                 <v-icon dark>mdi-printer</v-icon>
                             </v-btn>
-                            <v-btn class="mr-2" fab dark small color="cyan" title="Continuar venta" v-if="item.clsa_status == 'Pendiente'" :href="'/detaiorder/'+item.clor_pk">
+                            <v-btn class="mr-2" fab dark small color="cyan" title="Continuar venta" v-if="item.clsa_status == 'Pendiente' && boxEnabled != true" :href="'/detaiorder/'+item.clor_pk">
                                 <v-icon dark>mdi-cash-register</v-icon>
                             </v-btn>
                         </template>
@@ -109,6 +112,7 @@ export default {
             timeout: 2000,
             idUserStore: 0,
             textMsg: "",
+            boxEnabled: false,
             folioRules: [
                 value => !!value || "Requerido.",
                 value => (value && value.length >= 10) || "Min 10 caracter"
@@ -129,9 +133,26 @@ export default {
     },
     created() {
         this.getSales();
+        this.obtenerCaja();
     },
 
     methods: {
+        obtenerCaja() {
+
+            axios
+                .get("/boxcut")
+                .then(response => {
+                    if (response.data.data == null) {
+                        this.boxEnabled = true
+                    } else {
+                        this.boxEnabled = false
+                    }
+                    console.log("boxEnabled -->" + this.boxEnabled)
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+        },
 
         getSales() {
 

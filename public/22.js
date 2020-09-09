@@ -245,6 +245,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -318,20 +320,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       principal: false,
       estado: true,
       estadoGranel: true,
+      estadoGranelVar: true,
       imageUrl: '',
       editadoVar: {
         prod_pk: 0,
         meas_fk_output: 0,
         prod_saleprice: 0,
         prod_listprice: 0,
-        prod_fact_convert: 0
+        prod_fact_convert: 0,
+        prod_bulk: 0
       },
       defaultItemVar: {
         prod_pk: 0,
         meas_fk_output: 0,
         prod_saleprice: 0,
         prod_listprice: 0,
-        prod_fact_convert: 0
+        prod_fact_convert: 0,
+        prod_bulk: 0
       },
       editado: {
         prod_pk: 0,
@@ -618,6 +623,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     guardaAddVar: function guardaAddVar() {
       this.editadoVar.meas_fk_output = this.selectMeas;
+      if (this.estadoGranelVar == true) this.editadoVar.prod_bulk = 1;else this.editadoVar.prod_bulk = 0;
 
       if (this.editedIndexVar > -1) {
         this.editarAddVar();
@@ -661,6 +667,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.editadoVar.prod_saleprice = item.prod_saleprice;
       this.editadoVar.prod_listprice = item.prod_listprice;
       this.editadoVar.prod_fact_convert = item.prod_fact_convert;
+      this.estadoGranelVar = item.prod_bulk;
       this.selectMeas = item.meas_fk_output;
       this.dialogAddVar = true;
     },
@@ -1422,6 +1429,18 @@ var render = function() {
                                 )
                               },
                               expression: "editadoVar.prod_fact_convert"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Venta a Granel")]),
+                          _vm._v(" "),
+                          _c("v-switch", {
+                            model: {
+                              value: _vm.estadoGranelVar,
+                              callback: function($$v) {
+                                _vm.estadoGranelVar = $$v
+                              },
+                              expression: "estadoGranelVar"
                             }
                           })
                         ],

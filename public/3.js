@@ -138,6 +138,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -428,6 +431,25 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-alert",
+            {
+              attrs: { type: "warning" },
+              model: {
+                value: _vm.boxEnabled,
+                callback: function($$v) {
+                  _vm.boxEnabled = $$v
+                },
+                expression: "boxEnabled"
+              }
+            },
+            [
+              _vm._v(
+                "\r\n            Para realizar una venta, primero debe abrir caja.\r\n        "
+              )
+            ]
+          ),
+          _vm._v(" "),
           _c(
             "v-dialog",
             {

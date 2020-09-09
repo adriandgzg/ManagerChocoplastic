@@ -1,6 +1,9 @@
 <template>
 <v-app>
     <v-container>
+        <v-alert type="warning" v-model="boxEnabled">
+            Para realizar una venta, primero debe abrir caja.
+        </v-alert>
         <v-dialog v-model="loading" persistent width="300">
             <v-card color="white">
                 <v-card-text>

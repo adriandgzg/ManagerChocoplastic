@@ -107,19 +107,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -333,7 +320,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n      Para realizar una venta, primero debe abrir caja.\n    "
+                "\r\n            Para realizar una venta, primero debe abrir caja.\r\n        "
               )
             ]
           ),
@@ -358,7 +345,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -447,9 +436,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
               ),
               _c(
                 "v-btn",
@@ -461,7 +448,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\r\n                Cerrar\r\n            ")]
               )
             ],
             1
@@ -637,7 +624,7 @@ var render = function() {
                                   ? _c(
                                       "v-chip",
                                       { attrs: { color: "green", dark: "" } },
-                                      [_vm._v("  Pendiente  ")]
+                                      [_vm._v(" Pendiente ")]
                                     )
                                   : _vm._e(),
                                 _vm._v(" "),
@@ -645,7 +632,7 @@ var render = function() {
                                   ? _c(
                                       "v-chip",
                                       { attrs: { color: "blue", dark: "" } },
-                                      [_vm._v("  Procesado  ")]
+                                      [_vm._v(" Procesado ")]
                                     )
                                   : _vm._e(),
                                 _vm._v(" "),
@@ -653,7 +640,7 @@ var render = function() {
                                   ? _c(
                                       "v-chip",
                                       { attrs: { color: "red", dark: "" } },
-                                      [_vm._v("  Cancelado  ")]
+                                      [_vm._v(" Cancelado ")]
                                     )
                                   : _vm._e()
                               ]

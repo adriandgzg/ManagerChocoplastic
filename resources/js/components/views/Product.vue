@@ -100,6 +100,8 @@
                         <v-text-field v-model="editadoVar.prod_listprice" label="Precio Mayoreo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
                         <v-text-field v-model="editadoVar.prod_saleprice" label="Precio Menudeo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
                         <v-text-field v-model="editadoVar.prod_fact_convert" label="Factor de conversión" prefix="" type="number" :rules="numberRules" required></v-text-field>
+                        <span>Venta a Granel</span>
+                        <v-switch v-model="estadoGranelVar" />
 
                     </v-card-text>
                     <v-card-actions>
@@ -322,20 +324,23 @@ export default {
             principal: false,
             estado: true,
             estadoGranel: true,
+            estadoGranelVar: true,
             imageUrl: '',
             editadoVar: {
                 prod_pk: 0,
                 meas_fk_output: 0,
                 prod_saleprice: 0,
                 prod_listprice: 0,
-                prod_fact_convert: 0
+                prod_fact_convert: 0,
+                prod_bulk: 0,
             },
             defaultItemVar: {
                 prod_pk: 0,
                 meas_fk_output: 0,
                 prod_saleprice: 0,
                 prod_listprice: 0,
-                prod_fact_convert: 0
+                prod_fact_convert: 0,
+                prod_bulk: 0,
             },
             editado: {
                 prod_pk: 0,
@@ -494,7 +499,6 @@ export default {
             this.editedIndex = this.products.indexOf(item)
             this.editado = Object.assign({}, item)
             this.editadoVar.prod_pk = this.editado.prod_pk
-
             this.dialogVar = true
 
             this.loading = true
@@ -634,6 +638,11 @@ export default {
 
             this.editadoVar.meas_fk_output = this.selectMeas;
 
+            if (this.estadoGranelVar == true)
+                this.editadoVar.prod_bulk = 1;
+            else
+                this.editadoVar.prod_bulk = 0;
+
             if (this.editedIndexVar > -1) {
 
                 this.editarAddVar()
@@ -674,6 +683,8 @@ export default {
             this.editadoVar.prod_saleprice = item.prod_saleprice
             this.editadoVar.prod_listprice = item.prod_listprice
             this.editadoVar.prod_fact_convert = item.prod_fact_convert
+
+            this.estadoGranelVar = item.prod_bulk
 
             this.selectMeas = item.meas_fk_output
 

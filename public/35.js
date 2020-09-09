@@ -72,6 +72,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -111,6 +114,7 @@ __webpack_require__.r(__webpack_exports__);
       timeout: 2000,
       idUserStore: 0,
       textMsg: "",
+      boxEnabled: false,
       folioRules: [function (value) {
         return !!value || "Requerido.";
       }, function (value) {
@@ -134,27 +138,43 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.getSales();
+    this.obtenerCaja();
   },
   methods: {
-    getSales: function getSales() {
+    obtenerCaja: function obtenerCaja() {
       var _this = this;
+
+      axios.get("/boxcut").then(function (response) {
+        if (response.data.data == null) {
+          _this.boxEnabled = true;
+        } else {
+          _this.boxEnabled = false;
+        }
+
+        console.log("boxEnabled -->" + _this.boxEnabled);
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    getSales: function getSales() {
+      var _this2 = this;
 
       this.loading = true;
       axios.get("/clientsales").then(function (response) {
         setTimeout(function () {
-          return _this.loading = false;
+          return _this2.loading = false;
         }, 2000);
 
         if (response.data.data != null) {
           console.log(response.data.data);
-          _this.sales = response.data.data;
+          _this2.sales = response.data.data;
         } else {
-          _this.normal('Notificación', response.data.status.message, "error");
+          _this2.normal('Notificación', response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
 
-        _this.normal('Notificación', "Error al cargar los datos", "error");
+        _this2.normal('Notificación', "Error al cargar los datos", "error");
       });
     }
   }
@@ -183,6 +203,25 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-alert",
+            {
+              attrs: { type: "warning" },
+              model: {
+                value: _vm.boxEnabled,
+                callback: function($$v) {
+                  _vm.boxEnabled = $$v
+                },
+                expression: "boxEnabled"
+              }
+            },
+            [
+              _vm._v(
+                "\r\n            Para realizar una venta, primero debe abrir caja.\r\n        "
+              )
+            ]
+          ),
+          _vm._v(" "),
           _c(
             "v-dialog",
             {
@@ -419,7 +458,8 @@ var render = function() {
                                     )
                                   : _vm._e(),
                                 _vm._v(" "),
-                                item.clsa_status == "Pendiente"
+                                item.clsa_status == "Pendiente" &&
+                                _vm.boxEnabled != true
                                   ? _c(
                                       "v-btn",
                                       {
