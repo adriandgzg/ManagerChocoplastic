@@ -48,9 +48,12 @@ class ProviderPurchaseDetailController extends ApiResponseController
             'prov_fk' => 'required|int', // PK Proveedor
             'stor_fk' => 'required|int', // PK Sucursal
             'prod_fk' => 'required|int', // PK Producto
+            'meas_fk' => 'required|int', // PK Unidad Medida
             'prpd_quantity' => 'required|int', //Cantidad
             'prpd_price' => 'required', //Precio
-            'prpd_discountrate' => 'required' //% Descuento
+            'prpd_discountrate' => 'required', //% Descuento
+            'prpd_ieps' => 'required', //IEPS
+            'prpd_iva' => 'required' //IVA
         ]);
 
         if ($vVal->fails()) {
@@ -63,9 +66,12 @@ class ProviderPurchaseDetailController extends ApiResponseController
             $vprov_fk = $vInput['prov_fk'];
             $vstor_fk = $vInput['stor_fk'];
             $vprod_fk = $vInput['prod_fk'];
+            $vmeas_fk = $vInput['meas_fk'];
             $vprpd_quantity = $vInput['prpd_quantity'];
             $vprpd_price = $vInput['prpd_price'];
             $vprpd_discountrate = $vInput['prpd_discountrate'];
+            $vprpd_ieps = $vInput['prpd_ieps'];
+            $vprpd_iva = $vInput['prpd_iva'];
 
             if ($vprpu_pk == 0) {
                 //Inserción de la tabla principal (Compra del Proveedor)
@@ -89,12 +95,12 @@ class ProviderPurchaseDetailController extends ApiResponseController
             $vPPD = new ProviderPurchaseDetail();
             $vPPD->prpu_fk = $vprpu_pk;
             $vPPD->prod_fk = $vprod_fk;
-            $vPPD->meas_fk = $vProd->meas_fk_input;
+            $vPPD->meas_fk = $vmeas_fk;
             $vPPD->prpd_quantity = $vprpd_quantity;
             $vPPD->prpd_price = $vprpd_price;
             $vPPD->prpd_discountrate = $vprpd_discountrate;
-            $vPPD->prpd_ieps = 0;
-            $vPPD->prpd_iva = 0;
+            $vPPD->prpd_ieps = $vprpd_ieps;
+            $vPPD->prpd_iva = $vprpd_iva;
             $vPPD->save();
 
             //Asignación de PK de la Compra Detalle del Proveedor

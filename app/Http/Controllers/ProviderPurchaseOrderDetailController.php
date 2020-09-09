@@ -47,9 +47,12 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
             $vVal = Validator::make($vInput, [
                 'prpo_fk' => 'required|int', //PK Orden Compra
                 'prod_fk' => 'required|int', //PK Producto
+                'meas_fk' => 'required|int', //PK Unidad Medida
                 'ppod_quantity' => 'required|int', //Cantidad
                 'ppod_providerprice' => 'required', //Precio
-                'ppod_discountrate' => 'required' //% Descuento
+                'ppod_discountrate' => 'required', //% Descuento
+                'ppod_ieps' => 'required', //% Descuento
+                'ppod_iva' => 'required' //% Descuento
             ]);
 
             if ($vVal->fails()) {
@@ -59,9 +62,12 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
             //Asignacion de variables
             $vprpo_fk = $vInput['prpo_fk'];
             $vprod_fk = $vInput['prod_fk'];
+            $vmeas_fk = $vInput['meas_fk'];
             $vppod_quantity = $vInput['ppod_quantity'];
             $vppod_providerprice = $vInput['ppod_providerprice'];
             $vppod_discountrate = $vInput['ppod_discountrate'];
+            $vppod_ieps = $vInput['ppod_ieps'];
+            $vppod_iva = $vInput['ppod_iva'];
 
             if ($vprpo_fk == 0) {
                 //Inserción de la tabla principal (Orden de Compra del Proveedor)
@@ -85,13 +91,13 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
             $vPPOD = new ProviderPurchaseOrderDetail();
             $vPPOD->prpo_fk = $vprpo_fk;
             $vPPOD->prod_fk = $vprod_fk;
-            $vPPOD->meas_fk = $vProd->meas_fk_input;
+            $vPPOD->meas_fk = $vmeas_fk;
             $vPPOD->ppod_quantity = $vppod_quantity;
             $vPPOD->ppod_actualprice = $vProd->prod_actualprice;
             $vPPOD->ppod_providerprice = $vppod_providerprice;
             $vPPOD->ppod_discountrate = $vppod_discountrate;
-            $vPPOD->ppod_ieps = 0;
-            $vPPOD->ppod_iva = 0;
+            $vPPOD->ppod_ieps = $vppod_ieps;
+            $vPPOD->ppod_iva = $vppod_iva;
             $vPPOD->save();
 
             //Asignación de PK de la Orden de Compra Detalle
