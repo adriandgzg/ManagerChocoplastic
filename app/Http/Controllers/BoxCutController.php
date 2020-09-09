@@ -262,8 +262,53 @@ class BoxCutController extends ApiResponseController
         //
     }
 
-    public function printCorte(int $cawi_pk)
-    {       
+    public function printCorte(int $bocu_pk)
+    {    
+        
+            //Asignacion de variables
+            $vbocu_pk = $bocu_pk;
+
+            if ($vbocu_pk == '' || $vbocu_pk == 0) {
+                return $this->dbResponse(null, 500, null, 'PK Obligatorio');
+            }
+
+            $vBCSel = DB::table('box_cuts AS BC') 
+                ->join('stores AS S', 'BC.stor_fk', '=', 'S.stor_pk')
+                ->join('admins AS A', 'BC.admi_fk', '=', 'A.id')
+                ->select(
+                    'bocu_pk',
+                    'bocu_startdate',
+                    'bocu_enddate',
+
+                    'bocu_initialamount', //Saldo Inicial
+                    DB::raw("
+                        500 AS totalcharge
+                    "), //Total Cobros
+                    DB::raw("
+                        200 AS totalwithdrawals
+                    "), //Total Retiros
+                    'bocu_endamount', //Saldo Final
+                    DB::raw("
+                        100 AS totalcredit
+                    "), //Total Credito
+                   
+
+                    'bocu_observation',
+                    'bocu_status',
+
+                    'S.stor_pk',
+                    'S.stor_name',
+                    'S.stor_addres',
+
+                    'A.name AS user'
+                    
+
+                    )
+                ->where('BC.bocu_pk', '=', $vbocu_pk)
+                ->first();
+
+            if($vBCSel)
+            {    
 
         $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 120));
         $pdf->SetMargins(1, 1, 1);
@@ -287,9 +332,9 @@ class BoxCutController extends ApiResponseController
 
         $pdf->Cell(60, $lineHeigth+2,'---------------------------------------------------------------------------------------------', '', '1', 'C');                
         $pdf->SetFont('Arial', 'B', 7);
-        $pdf->Cell(57, $lineHeigth, '$vCWSel->stor_name', '', '1', 'C');
+        $pdf->Cell(57, $lineHeigth, $vBCSel->stor_name, '', '1', 'C');
         $pdf->SetFont('Arial', '', 3);
-        $pdf->Cell(57,$lineHeigth+2,'$vCWSel->stor_addres', '', '1', 'C');
+        $pdf->Cell(57,$lineHeigth+2, $vBCSel->stor_addres, '', '1', 'C');
         $pdf->SetFont('Arial', '', 5);
         $pdf->Cell(60, $lineHeigth,'---------------------------------------------------------------------------------------------', '', '1', 'C');
                         
@@ -298,13 +343,13 @@ class BoxCutController extends ApiResponseController
         $pdf->SetFont('Arial', '', 5);
         $pdf->Cell(33, $lineHeigth, 'Corte de Caja', '', '1', 'L');        
         $pdf->Cell(17, $lineHeigth, 'ID', '', 0, 'L');
-        $pdf->Cell(20, $lineHeigth, '$vCWSel->bocu_id', '', '1', 'L');
+        $pdf->Cell(20, $lineHeigth, $vBCSel->bocu_pk, '', '1', 'L');
         $pdf->Cell(17, $lineHeigth, 'Nombre de usuario', '', 0, 'L');
-        $pdf->Cell(20, $lineHeigth, '$vCWSel->user', '', '1', 'L');
+        $pdf->Cell(20, $lineHeigth, $vBCSel->user, '', '1', 'L');
         $pdf->Cell(17, $lineHeigth, 'Apertura', '', 0, 'L');
-        $pdf->Cell(20, $lineHeigth, '$vCWSel->user', '', '1', 'L');
+        $pdf->Cell(20, $lineHeigth, $vBCSel->bocu_startdate, '', '1', 'L');
         $pdf->Cell(17, $lineHeigth, 'Cierre', '', 0, 'L');
-        $pdf->Cell(20, $lineHeigth, '$vCWSel->user', '', '1', 'L');
+        $pdf->Cell(20, $lineHeigth, $vBCSel->bocu_enddate, '', '1', 'L');
 
 
         $pdf->Ln(4);
@@ -315,17 +360,17 @@ class BoxCutController extends ApiResponseController
         $pdf->SetFont('Arial', '', 5);
         $pdf->Cell(10,4,'',0);
         $pdf->Cell(25,4,'SALDO INICIAL',1);
-        $pdf->Cell(15,4,'$5,000.00',1,0,'R');
+        $pdf->Cell(15,4, $vBCSel->bocu_initialamount,1,0,'R');
         $pdf->Cell(10,4,'',0);
         $pdf->Ln();
         $pdf->Cell(10,4,'',0);
         $pdf->Cell(25,4,'+ COBROS',1);
-        $pdf->Cell(15,4,'$10,250.00',1,0,'R');
+        $pdf->Cell(15,4,$vBCSel->totalcharge,1,0,'R');
         $pdf->Cell(10,4,'',0);
         $pdf->Ln();
         $pdf->Cell(10,4,'',0);
         $pdf->Cell(25,4,'- RETIROS',1);
-        $pdf->Cell(15,4,'$10,250.00',1,0,'R');
+        $pdf->Cell(15,4,$vBCSel->totalwithdrawals,1,0,'R');
         $pdf->Cell(10,4,'',0);
         $pdf->Ln();
         $pdf->Cell(10,4,'',0);
@@ -335,7 +380,7 @@ class BoxCutController extends ApiResponseController
         $pdf->SetFont('Arial', 'B', 5);
         $pdf->Cell(10,4,'',0);
         $pdf->Cell(25,4,'TOTAL',1);
-        $pdf->Cell(15,4,'$10,250.00',1,0,'R');
+        $pdf->Cell(15,4,$vBCSel->totalcharge,1,0,'R');
         $pdf->Cell(10,4,'',0);
         $pdf->Ln();
         $pdf->Cell(10,4,'',0);
@@ -345,7 +390,7 @@ class BoxCutController extends ApiResponseController
         $pdf->SetFont('Arial', '', 5);
         $pdf->Cell(10,4,'',0);
         $pdf->Cell(25,4,'SALDO FINAL',1);
-        $pdf->Cell(15,4,'$10,250.00',1,0,'R');
+        $pdf->Cell(15,4,$vBCSel->bocu_endamount,1,0,'R');
         $pdf->Cell(10,4,'',0);
         $pdf->Ln();
         $pdf->Cell(10,4,'',0);
@@ -355,7 +400,7 @@ class BoxCutController extends ApiResponseController
         $pdf->SetFont('Arial', 'B', 5);
         $pdf->Cell(10,4,'',0);
         $pdf->Cell(25,4,'FALTANTE',1);
-        $pdf->Cell(15,4,'$10,250.00',1,0,'R');
+        $pdf->Cell(15,4,$vBCSel->bocu_initialamount,1,0,'R');
         $pdf->Cell(10,4,'',0);
 
         $pdf->Ln(8);
@@ -366,7 +411,7 @@ class BoxCutController extends ApiResponseController
         $pdf->SetFont('Arial', 'B', 5);
         $pdf->Cell(10,4,'',0);
         $pdf->Cell(25,4,'TOTAL',1);
-        $pdf->Cell(15,4,'$5,000.00',1,0,'R');
+        $pdf->Cell(15,4,$vBCSel->bocu_initialamount,1,0,'R');
         $pdf->Cell(10,4,'',0);
 
         
@@ -388,6 +433,6 @@ class BoxCutController extends ApiResponseController
         ob_get_clean();
         $pdf->output('I', 'ticket', 'true');
         //exit;
-
+        }
     }
 }
