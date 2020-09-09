@@ -261,4 +261,133 @@ class BoxCutController extends ApiResponseController
     {
         //
     }
+
+    public function printCorte(int $cawi_pk)
+    {       
+
+        $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 120));
+        $pdf->SetMargins(1, 1, 1);
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
+        $pdf->Image(config('app.url') . '/images/logo_chocoplastic.png', 20, 2, 25);
+        $pdf->SetY(12);
+        $lineHeigth = 2;
+
+        
+        $pdf->SetFont('Arial', 'B', 5);
+        $pdf->Cell(18,$lineHeigth,'',0,'C');
+        $pdf->Cell(6,$lineHeigth,'RFC',0,'R');
+        $pdf->SetFont('Arial', '', 5);
+        $pdf->Cell(20, $lineHeigth, 'XAXX010101000', '', '1', 'L');
+        $pdf->SetFont('Arial', 'B', 5);
+        $pdf->Cell(8,$lineHeigth,'',0,'C');
+        $pdf->Cell(15,$lineHeigth,'Domicilio Fiscal: ',0,'R');
+        $pdf->SetFont('Arial', '', 5);
+        $pdf->Cell(20, $lineHeigth, 'Ubicación de la tienda', '', '1', 'L');
+
+        $pdf->Cell(60, $lineHeigth+2,'---------------------------------------------------------------------------------------------', '', '1', 'C');                
+        $pdf->SetFont('Arial', 'B', 7);
+        $pdf->Cell(57, $lineHeigth, '$vCWSel->stor_name', '', '1', 'C');
+        $pdf->SetFont('Arial', '', 3);
+        $pdf->Cell(57,$lineHeigth+2,'$vCWSel->stor_addres', '', '1', 'C');
+        $pdf->SetFont('Arial', '', 5);
+        $pdf->Cell(60, $lineHeigth,'---------------------------------------------------------------------------------------------', '', '1', 'C');
+                        
+        $pdf->Ln();
+        
+        $pdf->SetFont('Arial', '', 5);
+        $pdf->Cell(33, $lineHeigth, 'Corte de Caja', '', '1', 'L');        
+        $pdf->Cell(17, $lineHeigth, 'ID', '', 0, 'L');
+        $pdf->Cell(20, $lineHeigth, '$vCWSel->bocu_id', '', '1', 'L');
+        $pdf->Cell(17, $lineHeigth, 'Nombre de usuario', '', 0, 'L');
+        $pdf->Cell(20, $lineHeigth, '$vCWSel->user', '', '1', 'L');
+        $pdf->Cell(17, $lineHeigth, 'Apertura', '', 0, 'L');
+        $pdf->Cell(20, $lineHeigth, '$vCWSel->user', '', '1', 'L');
+        $pdf->Cell(17, $lineHeigth, 'Cierre', '', 0, 'L');
+        $pdf->Cell(20, $lineHeigth, '$vCWSel->user', '', '1', 'L');
+
+
+        $pdf->Ln(4);
+        $pdf->SetFont('Arial', '', 6);
+        $pdf->Cell(57, $lineHeigth, 'EFECTIVO', '', '1', 'C');
+
+        $pdf->Ln(2);
+        $pdf->SetFont('Arial', '', 5);
+        $pdf->Cell(10,4,'',0);
+        $pdf->Cell(25,4,'SALDO INICIAL',1);
+        $pdf->Cell(15,4,'$5,000.00',1,0,'R');
+        $pdf->Cell(10,4,'',0);
+        $pdf->Ln();
+        $pdf->Cell(10,4,'',0);
+        $pdf->Cell(25,4,'+ COBROS',1);
+        $pdf->Cell(15,4,'$10,250.00',1,0,'R');
+        $pdf->Cell(10,4,'',0);
+        $pdf->Ln();
+        $pdf->Cell(10,4,'',0);
+        $pdf->Cell(25,4,'- RETIROS',1);
+        $pdf->Cell(15,4,'$10,250.00',1,0,'R');
+        $pdf->Cell(10,4,'',0);
+        $pdf->Ln();
+        $pdf->Cell(10,4,'',0);
+        $pdf->Cell(40,4,'-----------------------------------------------------------------',1);        
+        $pdf->Cell(10,4,'',0);
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 5);
+        $pdf->Cell(10,4,'',0);
+        $pdf->Cell(25,4,'TOTAL',1);
+        $pdf->Cell(15,4,'$10,250.00',1,0,'R');
+        $pdf->Cell(10,4,'',0);
+        $pdf->Ln();
+        $pdf->Cell(10,4,'',0);
+        $pdf->Cell(40,4,'-----------------------------------------------------------------',1);        
+        $pdf->Cell(10,4,'',0);
+        $pdf->Ln();
+        $pdf->SetFont('Arial', '', 5);
+        $pdf->Cell(10,4,'',0);
+        $pdf->Cell(25,4,'SALDO FINAL',1);
+        $pdf->Cell(15,4,'$10,250.00',1,0,'R');
+        $pdf->Cell(10,4,'',0);
+        $pdf->Ln();
+        $pdf->Cell(10,4,'',0);
+        $pdf->Cell(40,4,'-----------------------------------------------------------------',1);        
+        $pdf->Cell(10,4,'',0);
+        $pdf->Ln();
+        $pdf->SetFont('Arial', 'B', 5);
+        $pdf->Cell(10,4,'',0);
+        $pdf->Cell(25,4,'FALTANTE',1);
+        $pdf->Cell(15,4,'$10,250.00',1,0,'R');
+        $pdf->Cell(10,4,'',0);
+
+        $pdf->Ln(8);
+        $pdf->SetFont('Arial', '', 6);
+        $pdf->Cell(57, $lineHeigth, 'CRÉDITO', '', '1', 'C');
+
+        $pdf->Ln(2);
+        $pdf->SetFont('Arial', 'B', 5);
+        $pdf->Cell(10,4,'',0);
+        $pdf->Cell(25,4,'TOTAL',1);
+        $pdf->Cell(15,4,'$5,000.00',1,0,'R');
+        $pdf->Cell(10,4,'',0);
+
+        
+        // Arial italic 8
+        $pdf->SetFont('Arial','I',4);
+        // Número de página
+        $pdf->Cell(0,10,'',0,0,'C');
+            
+        // PIE DE PAGINA
+        $pdf->Ln(20);
+        $pdf->Cell(60,0,'',0,1,'C');
+        $pdf->Ln(3);
+        $pdf->Cell(60,0,'__________________________________________________','', '1','C');
+        $pdf->Ln(2);
+        $pdf->Cell(60,0,'$vCWSel->user','', '1','C');
+
+
+
+        ob_get_clean();
+        $pdf->output('I', 'ticket', 'true');
+        //exit;
+
+    }
 }

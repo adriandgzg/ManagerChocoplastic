@@ -231,6 +231,8 @@ Route::post('/client/payment/amounts/destroy', 'ClientPaymentAmountController@de
 Route::get('/cash/withdrawals/{cawi_pk}', 'CashWithdrawalController@show'); //Consultar Retiro
 Route::post('/cash/withdrawals', 'CashWithdrawalController@store'); //Guardar Retiro
 Route::get('/cash/withdrawals/printRetiro/{cawi_pk}', 'CashWithdrawalController@printRetiro'); //Detalle de Venta (Cliente) 
+Route::get('/cash/cutbox/printCorte/{bocu_pk}', 'BoxCutController@printCorte'); //Ticket corte de caja
+
 
 /****** *************/
 Auth::routes(['register' => false, 'reset' => false]);
