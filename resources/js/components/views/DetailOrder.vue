@@ -1,6 +1,9 @@
 <template>
 <v-app>
     <v-container>
+        <v-alert type="warning" v-model="boxEnabledDetailOrder">
+            Para realizar una venta, primero debe abrir caja.
+        </v-alert>
         <v-dialog v-model="loading" persistent width="300">
             <v-card color="white">
                 <v-card-text>
@@ -76,14 +79,6 @@
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col cols="6">
-                                <v-card-text class="category d-inline-flex font-weight-light">
-                                    <v-label v-if="enabledStore">
-                                        Sucursal: {{users.stor_name}}
-                                    </v-label>
-                                    <v-combobox v-else required v-model="selectStore" :items="stores" :disabled="enabledStore" label="Sucursal" item-text="stor_name" item-value="stor_pk" filled chips placeholder="Seleccionar una sucursal"></v-combobox>
-                                </v-card-text>
-                            </v-col>
 
                             <v-col cols="6">
                                 <v-card-text class="category d-inline-flex font-weight-light">
@@ -415,6 +410,7 @@ export default {
             pagos: [],
             montototal: 0,
             bocu_pk: 0,
+            boxEnabledDetailOrder: false,
         };
     },
     created() {
@@ -433,7 +429,12 @@ export default {
             axios
                 .get("/boxcut")
                 .then(response => {
+                    console.log("/boxcut")
+                    // console.log(response.data.data)
                     if (response.data.data == null) {
+                        this.boxEnabledDetailOrder = true
+                    } else {
+                        this.boxEnabledDetailOrder = false
                         this.bocu_pk = response.data.data.bocu_pk;
                     }
                 })

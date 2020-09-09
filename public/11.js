@@ -342,11 +342,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -427,7 +422,8 @@ __webpack_require__.r(__webpack_exports__);
       messageQuestion: '',
       pagos: [],
       montototal: 0,
-      bocu_pk: 0
+      bocu_pk: 0,
+      boxEnabledDetailOrder: false
     };
   },
   created: function created() {
@@ -444,7 +440,12 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get("/boxcut").then(function (response) {
+        console.log("/boxcut"); // console.log(response.data.data)
+
         if (response.data.data == null) {
+          _this.boxEnabledDetailOrder = true;
+        } else {
+          _this.boxEnabledDetailOrder = false;
           _this.bocu_pk = response.data.data.bocu_pk;
         }
       })["catch"](function (e) {
@@ -821,6 +822,25 @@ var render = function() {
       _c(
         "v-container",
         [
+          _c(
+            "v-alert",
+            {
+              attrs: { type: "warning" },
+              model: {
+                value: _vm.boxEnabledDetailOrder,
+                callback: function($$v) {
+                  _vm.boxEnabledDetailOrder = $$v
+                },
+                expression: "boxEnabledDetailOrder"
+              }
+            },
+            [
+              _vm._v(
+                "\r\n            Para realizar una venta, primero debe abrir caja.\r\n        "
+              )
+            ]
+          ),
+          _vm._v(" "),
           _c(
             "v-dialog",
             {
@@ -1204,53 +1224,6 @@ var render = function() {
                           _c(
                             "v-row",
                             [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "6" } },
-                                [
-                                  _c(
-                                    "v-card-text",
-                                    {
-                                      staticClass:
-                                        "category d-inline-flex font-weight-light"
-                                    },
-                                    [
-                                      _vm.enabledStore
-                                        ? _c("v-label", [
-                                            _vm._v(
-                                              "\r\n                                        Sucursal: " +
-                                                _vm._s(_vm.users.stor_name) +
-                                                "\r\n                                    "
-                                            )
-                                          ])
-                                        : _c("v-combobox", {
-                                            attrs: {
-                                              required: "",
-                                              items: _vm.stores,
-                                              disabled: _vm.enabledStore,
-                                              label: "Sucursal",
-                                              "item-text": "stor_name",
-                                              "item-value": "stor_pk",
-                                              filled: "",
-                                              chips: "",
-                                              placeholder:
-                                                "Seleccionar una sucursal"
-                                            },
-                                            model: {
-                                              value: _vm.selectStore,
-                                              callback: function($$v) {
-                                                _vm.selectStore = $$v
-                                              },
-                                              expression: "selectStore"
-                                            }
-                                          })
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
                               _c(
                                 "v-col",
                                 { attrs: { cols: "6" } },
