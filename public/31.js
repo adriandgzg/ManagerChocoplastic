@@ -245,6 +245,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -335,7 +338,8 @@ __webpack_require__.r(__webpack_exports__);
         prpd_price: 0,
         prpd_discountrate: 0,
         prod_identifier: 0,
-        prod_name: ''
+        prod_name: '',
+        meas_fk: 0
       },
       detailDefault: {
         prpo_fk: 0,
@@ -345,7 +349,8 @@ __webpack_require__.r(__webpack_exports__);
         prpd_price: 0,
         prpd_discountrate: 0,
         prod_identifier: 0,
-        prod_name: ''
+        prod_name: '',
+        meas_fk: 0
       },
       orderHeader: {
         prpu_pk: 0,
@@ -364,6 +369,8 @@ __webpack_require__.r(__webpack_exports__);
       dialogQuestionDelete: false,
       messageQuestion: '',
       dialogAgregar: false,
+      measurements: [],
+      selectmeas: '',
       minNumberRules: [function (value) {
         return !!value || 'Requerido.';
       }, function (value) {
@@ -438,6 +445,15 @@ __webpack_require__.r(__webpack_exports__);
         console.log(e);
       });
     },
+    getMeasurement: function getMeasurement(id) {
+      var _this5 = this;
+
+      axios.get("/product/measurements/" + id).then(function (response) {
+        _this5.measurements = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
     openAgregar: function openAgregar(item) {
       if (this.desserts.length > 0) {
         this.detail.prpu_pk = this.prpo_pk;
@@ -455,11 +471,11 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.enabledStore) this.detail.stor_fk = this.selectStore.stor_pk;else this.detail.stor_fk = this.users.store_id;
       this.detail.prod_identifier = item.prod_identifier;
       this.detail.prod_name = item.prod_name;
-      console.log(this.detail);
+      this.getMeasurement(item.prod_pk);
       this.dialogAgregar = true;
     },
     agregar: function agregar(item) {
-      var _this5 = this;
+      var _this6 = this;
 
       if (!this.directa == 2) if (this.selectProv == '' || this.selectProv == null) {
         this.normal('Notificación', "Debe seleccionar un proveedor", "error");
@@ -475,23 +491,29 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
+      if (this.selectmeas == '' || this.selectmeas == null) {
+        this.normal('Notificación', "Debe seleccionar una unidad de medida", "error");
+        return;
+      }
+
+      this.detail.meas_fk = this.selectmeas.meas_pk;
       axios.post('/provider/purchase/details', this.detail).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this5.textMsg = "¡Actualizado correctamente!";
-          _this5.prpo_pk = response.data.data; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+          _this6.textMsg = "¡Actualizado correctamente!";
+          _this6.prpo_pk = response.data.data; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
 
-          _this5.createCompra();
+          _this6.createCompra();
 
-          _this5.dialogAgregar = false;
+          _this6.dialogAgregar = false;
 
-          _this5.getTotal();
+          _this6.getTotal();
         } else {
-          _this5.normal('Notificación', response.data.message, "error");
+          _this6.normal('Notificación', response.data.message, "error");
         }
       })["catch"](function (e) {
-        _this5.errors.push(e);
+        _this6.errors.push(e);
       });
     },
     borrar: function borrar(item) {
@@ -504,88 +526,88 @@ __webpack_require__.r(__webpack_exports__);
       this.dialogQuestionDelete = false;
     },
     "delete": function _delete() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.post('/provider/purchase/details/destroy', this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this6.textMsg = "¡Eliminado correctamente!";
+          _this7.textMsg = "¡Eliminado correctamente!";
 
-          _this6.normal('Notificación', _this6.textMsg, "success");
+          _this7.normal('Notificación', _this7.textMsg, "success");
 
-          _this6.createCompra();
+          _this7.createCompra();
         } else {
-          _this6.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
+          _this7.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");
         }
       });
     },
     createCompra: function createCompra() {
-      var _this7 = this;
+      var _this8 = this;
 
       this.loading = true;
 
       if (this.directa == 1) {
         axios.post('/provider/purchases?prpo_pk=' + this.prpo_pk + '').then(function (response) {
           setTimeout(function () {
-            return _this7.loading = false;
+            return _this8.loading = false;
           }, 2000);
 
           if (response.data.data != null) {
             console.log(response.data.data);
-            _this7.desserts = response.data.data.ProviderPurchaseDetail;
+            _this8.desserts = response.data.data.ProviderPurchaseDetail;
 
-            _this7.getTotal();
+            _this8.getTotal();
 
-            _this7.prpu_pk = response.data.data.ProviderPurchase.prpu_pk; //response.data.data.ProviderPurchaseDetail//
+            _this8.prpu_pk = response.data.data.ProviderPurchase.prpu_pk; //response.data.data.ProviderPurchaseDetail//
 
-            _this7.editadoHeader = response.data.data.ProviderPurchase;
+            _this8.editadoHeader = response.data.data.ProviderPurchase;
             var i = 0;
 
-            for (i = 0; i < _this7.providers.length; i++) {
-              if (response.data.data.ProviderPurchase.prov_fk == _this7.providers[i].prov_pk) {
-                _this7.selectProv = _this7.providers[i];
+            for (i = 0; i < _this8.providers.length; i++) {
+              if (response.data.data.ProviderPurchase.prov_fk == _this8.providers[i].prov_pk) {
+                _this8.selectProv = _this8.providers[i];
               }
             }
 
-            for (i = 0; i < _this7.stores.length; i++) {
-              if (response.data.data.ProviderPurchase.stor_fk == _this7.stores[i].stor_pk) {
+            for (i = 0; i < _this8.stores.length; i++) {
+              if (response.data.data.ProviderPurchase.stor_fk == _this8.stores[i].stor_pk) {
                 console.log(i);
-                _this7.selectStore = _this7.stores[i];
+                _this8.selectStore = _this8.stores[i];
               }
             }
           } else {
-            if (_this7.prpo_pk > 0) _this7.normal('Notificación', response.data.status.message, "error");
+            if (_this8.prpo_pk > 0) _this8.normal('Notificación', response.data.status.message, "error");
           }
         })["catch"](function (e) {
           //this.errors.push(e)
           console.log(e);
 
-          _this7.normal('Notificación', "Error al cargar los datos11", "error");
+          _this8.normal('Notificación', "Error al cargar los datos11", "error");
         });
       } else {
         axios.get('/provider/purchases/' + this.prpo_pk + '').then(function (response) {
           setTimeout(function () {
-            return _this7.loading = false;
+            return _this8.loading = false;
           }, 2000);
 
           if (response.data.data != null) {
             console.log(response);
-            _this7.desserts = response.data.data.ProviderPurchaseDetail;
+            _this8.desserts = response.data.data.ProviderPurchaseDetail;
 
-            _this7.getTotal();
+            _this8.getTotal();
 
-            _this7.prpu_pk = response.data.data.ProviderPurchase.prpu_pk; //response.data.data.ProviderPurchaseDetail//
+            _this8.prpu_pk = response.data.data.ProviderPurchase.prpu_pk; //response.data.data.ProviderPurchaseDetail//
 
-            _this7.editadoHeader = response.data.data.ProviderPurchase;
+            _this8.editadoHeader = response.data.data.ProviderPurchase;
           } else {
-            if (_this7.prpo_pk > 0) _this7.normal('Notificación', response.data.status.message, "error");
+            if (_this8.prpo_pk > 0) _this8.normal('Notificación', response.data.status.message, "error");
           }
         })["catch"](function (e) {
           //this.errors.push(e)
           console.log(e);
 
-          _this7.normal('Notificación', "Error al cargar los datos22", "error");
+          _this8.normal('Notificación', "Error al cargar los datos22", "error");
         });
       }
     },
@@ -595,22 +617,22 @@ __webpack_require__.r(__webpack_exports__);
       this.editedIndex = -1;
     },
     buscar: function buscar() {
-      var _this8 = this;
+      var _this9 = this;
 
       this.loading = true;
       axios.get('/product/search').then(function (response) {
         setTimeout(function () {
-          return _this8.loading = false;
+          return _this9.loading = false;
         }, 500);
-        _this8.products = response.data.data;
-        _this8.dialog = true;
+        _this9.products = response.data.data;
+        _this9.dialog = true;
         console.log(response.data);
       })["catch"](function (e) {
-        _this8.errors.push(e);
+        _this9.errors.push(e);
       });
     },
     onQuantityChange: function onQuantityChange(item) {
-      var _this9 = this;
+      var _this10 = this;
 
       //this.editado = Object.assign({}, item)
       this.detail.prpd_pk = item.prpd_pk, this.detail.prod_fk = item.prod_pk;
@@ -621,14 +643,14 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this9.textMsg = "¡Actualizado correctamente!"; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+          _this10.textMsg = "¡Actualizado correctamente!"; //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
 
-          _this9.getTotal();
+          _this10.getTotal();
         } else {
-          _this9.normal('Notificación', response.data.status.message, "success");
+          _this10.normal('Notificación', response.data.status.message, "success");
         }
       })["catch"](function (e) {
-        _this9.errors.push(e);
+        _this10.errors.push(e);
       });
     },
     getTotal: function getTotal() {
@@ -665,7 +687,7 @@ __webpack_require__.r(__webpack_exports__);
       this.dialogQuestion = true;
     },
     guardaFinalizar: function guardaFinalizar() {
-      var _this10 = this;
+      var _this11 = this;
 
       this.orderHeader.prpu_pk = this.prpu_pk;
       this.orderHeader.prpo_pk = this.prpo_pk;
@@ -680,20 +702,20 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this10.textMsg = "¡Actualizado correctamente!";
+          _this11.textMsg = "¡Actualizado correctamente!";
 
-          _this10.normal('Notificación', '¡Actualizado correctamente!', "success");
+          _this11.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-          _this10.$router.push('/purchaselist');
+          _this11.$router.push('/purchaselist');
         } else {
-          _this10.normal('Notificación', response.data.status.code.message, "error");
+          _this11.normal('Notificación', response.data.status.code.message, "error");
         }
       })["catch"](function (e) {
-        _this10.errors.push(e);
+        _this11.errors.push(e);
       });
     },
     finalizarVenta: function finalizarVenta() {
-      var _this11 = this;
+      var _this12 = this;
 
       console.log(this.total + '-' + (this.efectivo + this.tarjeta));
       if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
@@ -710,27 +732,27 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.code == 200) {
-            _this11.textMsg = "¡Actualizado correctamente!";
+            _this12.textMsg = "¡Actualizado correctamente!";
 
-            _this11.normal('Notificación', '¡Actualizado correctamente!', "success");
+            _this12.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-            _this11.$router.push('/sales');
+            _this12.$router.push('/sales');
           } else {
-            _this11.normal('Notificación', response.data.message, "error");
+            _this12.normal('Notificación', response.data.message, "error");
           }
         })["catch"](function (e) {
-          _this11.errors.push(e);
+          _this12.errors.push(e);
         });
       }
     },
     actualizar: function actualizar(item) {
-      var _this12 = this;
+      var _this13 = this;
 
       this.editado = Object.assign({}, item);
       axios.post('/client_sale_details/update', this.editado).then(function (response) {
-        _this12.textMsg = "¡Actualizado correctamente!";
+        _this13.textMsg = "¡Actualizado correctamente!";
       })["catch"](function (e) {
-        _this12.errors.push(e);
+        _this13.errors.push(e);
       });
     },
     normal: function normal(Title, Description, Type) {
@@ -961,7 +983,7 @@ var render = function() {
           _c(
             "v-dialog",
             {
-              attrs: { scrollable: "" },
+              attrs: { scrollable: "", "max-width": "600" },
               model: {
                 value: _vm.dialogAgregar,
                 callback: function($$v) {
@@ -972,53 +994,53 @@ var render = function() {
             },
             [
               _c(
-                "v-card",
+                "v-form",
+                {
+                  model: {
+                    value: _vm.validProvider,
+                    callback: function($$v) {
+                      _vm.validProvider = $$v
+                    },
+                    expression: "validProvider"
+                  }
+                },
                 [
                   _c(
-                    "v-toolbar",
-                    { attrs: { dark: "", color: "cyan" } },
+                    "v-card",
                     [
-                      _c("v-toolbar-title", [_vm._v("Agregar producto")]),
-                      _vm._v(" "),
-                      _c("v-spacer"),
-                      _vm._v(" "),
                       _c(
-                        "v-toolbar-items",
+                        "v-toolbar",
+                        { attrs: { dark: "", color: "cyan" } },
                         [
+                          _c("v-toolbar-title", [_vm._v("Agregar producto")]),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
                           _c(
-                            "v-btn",
-                            {
-                              attrs: { icon: "", dark: "" },
-                              on: {
-                                click: function($event) {
-                                  _vm.dialogAgregar = false
-                                }
-                              }
-                            },
-                            [_c("v-icon", [_vm._v("mdi-close")])],
+                            "v-toolbar-items",
+                            [
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { icon: "", dark: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.dialogAgregar = false
+                                    }
+                                  }
+                                },
+                                [_c("v-icon", [_vm._v("mdi-close")])],
+                                1
+                              )
+                            ],
                             1
                           )
                         ],
                         1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c(
-                    "v-form",
-                    {
-                      model: {
-                        value: _vm.validProvider,
-                        callback: function($$v) {
-                          _vm.validProvider = $$v
-                        },
-                        expression: "validProvider"
-                      }
-                    },
-                    [
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
                       _c(
                         "v-card-text",
                         [
@@ -1041,6 +1063,26 @@ var render = function() {
                                 _vm.$set(_vm.detail, "prod_name", $$v)
                               },
                               expression: "detail.prod_name"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-combobox", {
+                            attrs: {
+                              required: "",
+                              items: _vm.measurements,
+                              label: "Unidad de Medida",
+                              "item-text": "meas_name",
+                              "item-value": "meas_pk",
+                              filled: "",
+                              chips: "",
+                              placeholder: "Seleccionar una opción"
+                            },
+                            model: {
+                              value: _vm.selectmeas,
+                              callback: function($$v) {
+                                _vm.selectmeas = $$v
+                              },
+                              expression: "selectmeas"
                             }
                           }),
                           _vm._v(" "),
@@ -1143,7 +1185,7 @@ var render = function() {
           _c(
             "v-dialog",
             {
-              attrs: { "max-width": "800px" },
+              attrs: { "max-width": "800px", scrollable: "" },
               model: {
                 value: _vm.dialog,
                 callback: function($$v) {

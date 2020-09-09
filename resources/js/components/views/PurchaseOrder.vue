@@ -38,22 +38,24 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogAgregar" scrollable>
-            <v-card>
-                <v-toolbar dark color="cyan">
-                    <v-toolbar-title>Agregar producto</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-toolbar-items>
-                        <v-btn icon dark @click="dialogAgregar = false">
-                            <v-icon>mdi-close</v-icon>
-                        </v-btn>
-                    </v-toolbar-items>
-                </v-toolbar>
-                <v-divider></v-divider>
-                <v-form v-model="validProvider">
+        <v-dialog v-model="dialogAgregar" scrollable max-width="600">
+            <v-form v-model="validProvider">
+                <v-card>
+                    <v-toolbar dark color="cyan">
+                        <v-toolbar-title>Agregar producto</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-toolbar-items>
+                            <v-btn icon dark @click="dialogAgregar = false">
+                                <v-icon>mdi-close</v-icon>
+                            </v-btn>
+                        </v-toolbar-items>
+                    </v-toolbar>
+                    <v-divider></v-divider>
                     <v-card-text>
                         <v-text-field v-model="detail.prod_identifier" label="ID" disabled />
                         <v-text-field v-model="detail.prod_name" label="Nombre" disabled />
+                        <v-combobox required v-model="selectmeas" :items="measurements" label="Unidad de Medida" item-text="meas_name" item-value="meas_pk" filled chips placeholder="Seleccionar una opción">
+                        </v-combobox>
                         <v-text-field v-model="detail.ppod_quantity" label="Cantidad" type="number" :rules="minNumberRules" autofocus></v-text-field>
                         <v-text-field v-model="detail.ppod_providerprice" label="Precio" prefix="$" type="number" :rules="minNumberRules" required></v-text-field>
                         <v-text-field v-model="detail.ppod_discountrate" label="Descuento(%)" type="number"></v-text-field>
@@ -63,8 +65,8 @@
                         <v-btn color="blue-grey" class="ma-2 white--text" @click="dialogAgregar=false">Cancelar</v-btn>
                         <v-btn :disabled="!validProvider" color="teal accent-4" class="ma-2 white--text" @click="agregar()">Guardar</v-btn>
                     </v-card-actions>
-                </v-form>
-            </v-card>
+                </v-card>
+            </v-form>
         </v-dialog>
         <!--  Modal del diálogo para Alta y Edicion    -->
         <v-dialog v-model="dialog" scrollable>
@@ -313,7 +315,8 @@ export default {
             dialogQuestionDelete: false,
             messageQuestion: '',
             dialogAgregar: false,
-
+            measurements: [],
+            selectmeas: '',
             minNumberRules: [
                 value => !!value || 'Requerido.',
                 value => value > 0 || 'El número debe ser mayor o igual a cero',
@@ -383,6 +386,17 @@ export default {
                 });
 
         },
+        getMeasurement(id) {
+            axios
+                .get("/product/measurements/" + id)
+                .then(response => {
+                    this.measurements = response.data.data;
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+
+        },
 
         openAgregar(item) {
             if (this.desserts.length > 0) {
@@ -397,20 +411,19 @@ export default {
             this.detail.prod_identifier = item.prod_identifier
             this.detail.prod_name = item.prod_name
 
-            console.log(this.detail)
+            this.getMeasurement(item.prod_pk)
             this.dialogAgregar = true
         },
 
         agregar(item) {
-            /*if (this.desserts.length > 0) {
-                this.detail.prpo_fk = this.prpo_pk;
-            } else {
-                this.detail.prpo_fk = 0;
+
+            if (this.selectmeas == '' || this.selectmeas == null) {
+                this.normal('Notificación', "Debe seleccionar una unidad de medida", "error");
+
+                return;
             }
-            this.detail.prod_fk = item.prod_pk;
-            this.detail.ppod_quantity = 1;
-            this.detail.ppod_providerprice = 0;
-            this.detail.ppod_discountrate = 0;*/
+
+            this.detail.meas_fk = this.selectmeas.meas_pk;
 
             axios.post('/provider/purchase/order/details', this.detail)
                 .then(response => {
