@@ -169,6 +169,8 @@ class ProviderPurchaseOrderController extends ApiResponseController
                     'PPOD.ppod_quantity',
                     'PPOD.ppod_providerprice',
                     'PPOD.ppod_discountrate',
+                    'PPOD.ppod_ieps',
+                    'PPOD.ppod_iva',
 
                     'P.prod_pk',
                     'P.prod_identifier',

@@ -59,6 +59,8 @@
                         <v-text-field v-model="detail.ppod_quantity" label="Cantidad" type="number" :rules="minNumberRules" autofocus></v-text-field>
                         <v-text-field v-model="detail.ppod_providerprice" label="Precio" prefix="$" type="number" :rules="minNumberRules" required></v-text-field>
                         <v-text-field v-model="detail.ppod_discountrate" label="Descuento(%)" type="number"></v-text-field>
+                        <v-text-field v-model="detail.ppod_ieps" label="IEPS(%)" type="number"></v-text-field>
+                        <v-text-field v-model="detail.ppod_iva" label="IVA(%)" type="number"></v-text-field>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -150,8 +152,12 @@
                                     <th class="text-left">Unidad Medida</th>
                                     <th class="text-left">Cantidad</th>
                                     <th class="text-left">Precio</th>
-                                    <th class="text-left">Descuento</th>
+                                    <th class="text-left">Descuento(%)</th>
+                                    <th class="text-left">Descuento($)</th>
+                                    <th class="text-left">IEPS(%)</th>
+                                    <th class="text-left">IVA(%)</th>
                                     <th class="text-left">Importe</th>
+                                    <th class="text-left">Importe Total</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -170,12 +176,22 @@
                                     <td>
                                         <v-text-field v-model="item.ppod_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
                                     </td>
+
+                                    <td>{{ formatMoney((item.ppod_quantity * item.ppod_providerprice)*((item.ppod_discountrate/100))) }}</td>
+                                    <td>{{ item.ppod_ieps }}</td>
+                                    <td>{{ item.ppod_iva }}</td>
+                                    <td>{{ formatMoney((item.ppod_quantity * item.ppod_providerprice)) }}</td>
                                     <td>${{ formatMoney((item.ppod_quantity * item.ppod_providerprice)*(1- (item.ppod_discountrate/100))) }}</td>
                                     <td>
                                         <v-icon @click="borrar(item)" small>mdi-delete</v-icon>
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
                                     <td />
                                     <td />
                                     <td />
@@ -189,13 +205,51 @@
                                     <td />
                                     <td />
                                     <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td>Descuento</td>
+                                    <td>${{formatMoney(descuento)}}</td>
+                                    <td />
+                                </tr>
+                                <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
                                     <td>I.V.A.</td>
                                     <td>${{formatMoney(iva)}}</td>
+                                    <td />
+                                </tr>
+                                <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td>IEPS</td>
+                                    <td>${{formatMoney(ieps)}}</td>
                                     <td />
                                 </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
                                     <td />
                                     <td />
                                     <td />
@@ -256,8 +310,10 @@ export default {
             snackbar: false,
             timeout: 2000,
             subtotal: 0,
+            descuento: 0,
             total: 0,
             iva: 0,
+            ieps: 0,
             textMsg: "",
             editado: {
                 ppod_pk: 0,
@@ -290,6 +346,8 @@ export default {
                 ppod_discountrate: 0,
                 prod_identifier: 0,
                 prod_name: '',
+                ppod_ieps: 0,
+                ppod_iva: 16,
             },
             detailDefault: {
                 prpo_fk: 0,
@@ -300,6 +358,8 @@ export default {
                 ppod_discountrate: 0,
                 prod_identifier: 0,
                 prod_name: '',
+                ppod_ieps: 0,
+                ppod_iva: 16,
             },
             orderHeader: {
                 prpo_pk: 0,
@@ -518,6 +578,9 @@ export default {
             this.detail.ppod_quantity = item.ppod_quantity;
             this.detail.ppod_providerprice = item.ppod_providerprice;
             this.detail.ppod_discountrate = item.ppod_discountrate;
+            this.detail.ppod_ieps = item.ppod_ieps;
+            this.detail.ppod_iva = item.ppod_iva;
+
             axios.post('/provider/purchase/order/details/update', this.detail)
                 .then(response => {
                     console.log(response)
@@ -540,13 +603,22 @@ export default {
         getTotal() {
 
             this.subtotal = 0;
+            this.descuento = 0;
+            this.iva = 0;
+            this.ieps = 0;
             for (var i = 0; i < this.desserts.length; i++) {
+                var importe = this.desserts[i].ppod_providerprice * this.desserts[i].ppod_quantity;
+                var importeDescuento = (importe * (1 - this.desserts[i].ppod_discountrate / 100));
 
-                this.subtotal = this.subtotal + ((this.desserts[i].ppod_providerprice * this.desserts[i].ppod_quantity) * (1 - (this.desserts[i].ppod_discountrate / 100)));
-                console.log(this.subtotal);
+                this.descuento = this.descuento + ((importe) * ((this.desserts[i].ppod_discountrate / 100)));
+
+                this.subtotal = this.subtotal + (importe);
+                this.iva = this.iva + ((importeDescuento) * (this.desserts[i].ppod_iva / 100));
+                this.ieps = this.ieps + ((importeDescuento) * (this.desserts[i].ppod_ieps / 100));
+
             }
 
-            this.total = this.subtotal + this.iva;
+            this.total = this.subtotal + this.iva + this.ieps;
         },
 
         finalizar() {
