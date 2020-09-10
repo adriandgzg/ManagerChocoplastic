@@ -139,10 +139,14 @@
                                 <v-combobox v-if="directa == 2" required v-model="selectProv" :items="providers" label="Proveedor" item-text="prov_name" item-value="prov_pk" filled chips placeholder="Seleccionar una proveedor"></v-combobox>
                             </v-card-text>
                         </v-col>
-                        <v-col cols="4">
+                        <v-col cols="6">
                             <v-card-text class="category d-inline-flex font-weight-light">
-
                                 <v-combobox required v-model="selectpame" :items="payments" label="Método de pago" item-text="pame_name" item-value="pame_pk" filled chips placeholder="Seleccionar una opción"></v-combobox>
+                            </v-card-text>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-card-text class="category d-inline-flex font-weight-light">
+                                <v-text-field v-model="observation" label="Número de Nota/Factura de Recepción de Ingreso" />
                             </v-card-text>
                         </v-col>
                     </v-row>
@@ -330,6 +334,7 @@ export default {
             payments: [],
             selectpame: '',
             search: '',
+            observation: '',
             snackbar: false,
             timeout: 2000,
             subtotal: 0,
@@ -412,6 +417,7 @@ export default {
                 stor_fk: 0,
                 pame_fk: 0,
                 prpu_amount: 0,
+                prpu_observation: '',
             },
             enabledStore: false,
             dialogcredito: false,
@@ -791,7 +797,7 @@ export default {
             //this.orderHeader.stor_fk = this.selectStore.stor_pk
             this.orderHeader.pame_fk = this.selectpame.pame_pk
             this.orderHeader.prpu_amount = this.total
-
+            this.orderHeader.prpu_observation = this.observation
             if (!this.enabledStore)
                 this.orderHeader.stor_fk = this.selectStore.stor_pk;
             else

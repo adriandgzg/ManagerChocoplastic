@@ -301,6 +301,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -336,6 +340,7 @@ __webpack_require__.r(__webpack_exports__);
       payments: [],
       selectpame: '',
       search: '',
+      observation: '',
       snackbar: false,
       timeout: 2000,
       subtotal: 0,
@@ -417,7 +422,8 @@ __webpack_require__.r(__webpack_exports__);
         prov_fk: 0,
         stor_fk: 0,
         pame_fk: 0,
-        prpu_amount: 0
+        prpu_amount: 0,
+        prpu_observation: ''
       },
       enabledStore: false,
       dialogcredito: false,
@@ -764,6 +770,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.orderHeader.pame_fk = this.selectpame.pame_pk;
       this.orderHeader.prpu_amount = this.total;
+      this.orderHeader.prpu_observation = this.observation;
       if (!this.enabledStore) this.orderHeader.stor_fk = this.selectStore.stor_pk;else this.orderHeader.stor_fk = this.users.store_id;
       console.log('this.orderHeader');
       console.log(this.orderHeader);
@@ -1558,7 +1565,7 @@ var render = function() {
                           _vm._v(" "),
                           _c(
                             "v-col",
-                            { attrs: { cols: "4" } },
+                            { attrs: { cols: "6" } },
                             [
                               _c(
                                 "v-card-text",
@@ -1584,6 +1591,37 @@ var render = function() {
                                         _vm.selectpame = $$v
                                       },
                                       expression: "selectpame"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "6" } },
+                            [
+                              _c(
+                                "v-card-text",
+                                {
+                                  staticClass:
+                                    "category d-inline-flex font-weight-light"
+                                },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label:
+                                        "Número de Nota/Factura de Recepción de Ingreso"
+                                    },
+                                    model: {
+                                      value: _vm.observation,
+                                      callback: function($$v) {
+                                        _vm.observation = $$v
+                                      },
+                                      expression: "observation"
                                     }
                                   })
                                 ],
