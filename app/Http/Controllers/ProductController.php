@@ -45,7 +45,6 @@ class ProductController extends ApiResponseController
                     'P.prod_minimumpurchase AS MinimumPurchase',
                     'P.prod_bulk AS Bulk',
                     'PI.prin_stock AS Stock',
-                    //DB::raw("PI.prin_stock * P.prod_packingquantity AS Stock"),
                     'PC.prca_name AS Category',
                     'MO.meas_name AS Measurement',
                     'S.stor_name AS Store'
@@ -165,6 +164,8 @@ class ProductController extends ApiResponseController
                         'P.prod_packingquantity', 
                         'P.prod_status', 
                         'P.prod_bulk',
+                        'P.prod_iva',
+                        'P.prod_ieps',
                         'PC.prca_name', 
                         'MI.meas_name AS meas_fk_input_name',  
                         'MO.meas_name AS meas_fk_output_name'
@@ -188,34 +189,36 @@ class ProductController extends ApiResponseController
     public function ProductSearch()
     {
         $vProducts = DB::table('products AS P')
-                ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
-                ->join('measurements AS MI', 'P.meas_fk_input', '=', 'MI.meas_pk')
-                ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
-                ->select(
-                    'P.prod_pk', 
-                    'P.prca_fk', 
-                    'P.meas_fk_input', 
-                    'P.meas_fk_output', 
-                    'P.prod_identifier', 
-                    'P.prod_name', 
-                    'P.prod_description', 
-                    'P.prod_image', 
-                    'P.prod_actualprice', 
-                    'P.prod_eventualprice', 
-                    'P.prod_preferentialprice', 
-                    'P.prod_saleprice', 
-                    'P.prod_listprice', 
-                    'P.prod_packingquantity', 
-                    'P.prod_status', 
-                    'P.prod_bulk',
-                    'PC.prca_name', 
-                    'MI.meas_name AS meas_fk_input_name',  
-                    'MO.meas_name AS meas_fk_output_name'
-                )
-                ->where('P.prod_status', '=', 1)
-                ->whereNull('P.prod_main_pk')
-                ->orderBy('P.prod_pk')
-                ->get();
+            ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+            ->join('measurements AS MI', 'P.meas_fk_input', '=', 'MI.meas_pk')
+            ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+            ->select(
+                'P.prod_pk', 
+                'P.prca_fk', 
+                'P.meas_fk_input', 
+                'P.meas_fk_output', 
+                'P.prod_identifier', 
+                'P.prod_name', 
+                'P.prod_description', 
+                'P.prod_image', 
+                'P.prod_actualprice', 
+                'P.prod_eventualprice', 
+                'P.prod_preferentialprice', 
+                'P.prod_saleprice', 
+                'P.prod_listprice', 
+                'P.prod_packingquantity', 
+                'P.prod_status', 
+                'P.prod_bulk',
+                'P.prod_iva',
+                'P.prod_ieps',
+                'PC.prca_name', 
+                'MI.meas_name AS meas_fk_input_name',  
+                'MO.meas_name AS meas_fk_output_name'
+            )
+            ->where('P.prod_status', '=', 1)
+            ->whereNull('P.prod_main_pk')
+            ->orderBy('P.prod_pk')
+            ->get();
 
 
         return response()->json([
@@ -231,8 +234,6 @@ class ProductController extends ApiResponseController
         try 
         {
             //Consultar Unidades 
-        
-
             $vProdMeasOutput = 
                 DB::table('products AS P')
                 ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
@@ -277,7 +278,7 @@ class ProductController extends ApiResponseController
             'meas_fk_output' => 'required|int', //PK Unidad Medida Salida
             'prod_saleprice' => 'required', //Precio Venta
             'prod_listprice' => 'required', //Precio Lista
-          //  'prod_bulk' => 'required', //Aplicar a granel
+            'prod_bulk' => 'required', //Aplicar a granel
             'prod_fact_convert' => 'required' //Factor Conversión Unidad Medida
         ]);
 
@@ -287,12 +288,12 @@ class ProductController extends ApiResponseController
 
         try {
             //Asignacion de variables
-           $vprod_pk = $vInput['prod_pk'];
-           $vmeas_fk_output = $vInput['meas_fk_output'];
-           $vprod_saleprice = $vInput['prod_saleprice'];
-           $vprod_listprice = $vInput['prod_listprice'];
-           $vprod_fact_convert = $vInput['prod_fact_convert'];
-        //   $vprod_bulk = $vInput['prod_bulk'];
+            $vprod_pk = $vInput['prod_pk'];
+            $vmeas_fk_output = $vInput['meas_fk_output'];
+            $vprod_saleprice = $vInput['prod_saleprice'];
+            $vprod_listprice = $vInput['prod_listprice'];
+            $vprod_fact_convert = $vInput['prod_fact_convert'];
+            $vprod_bulk = $vInput['prod_bulk'];
 
             $vProduct = Product::where('prod_pk', '=', $vprod_pk)->first();
 
@@ -315,8 +316,10 @@ class ProductController extends ApiResponseController
                             DB::raw("$vprod_saleprice AS prod_saleprice"),
                             DB::raw("$vprod_listprice AS prod_listprice"),
                             'prod_packingquantity',
-                            'prod_bulk',
-                           //DB::raw("$vprod_bulk AS prod_bulk"),
+                            //'prod_bulk',
+                            DB::raw("$vprod_bulk AS prod_bulk"),
+                            'prod_iva',
+                            'prod_ieps',
                             DB::raw("$vprod_pk AS prod_main_pk"),
                             DB::raw("$vprod_fact_convert AS prod_fact_convert"),
                             DB::raw("NOW() AS created_at"),
@@ -341,6 +344,8 @@ class ProductController extends ApiResponseController
                             'prod_listprice', 
                             'prod_packingquantity', 
                             'prod_bulk', 
+                            'prod_iva', 
+                            'prod_ieps', 
                             'prod_main_pk', 
                             'prod_fact_convert', 
                             'created_at', 
@@ -719,45 +724,45 @@ class ProductController extends ApiResponseController
 
     public function add(Request $request)
     {        
-        try {
-
-            
+        try 
+        {
             $stores = new Product();      
-        $imageName = '';
-        $urlImage = '';
-        $ruta =   public_path('/images/products/');
+            $imageName = '';
+            $urlImage = '';
+            $ruta =   public_path('/images/products/');
 
-        if($request->imageUrl != null && $request->is_mod == true){
-            $image = $request->imageUrl;
-            $image = str_replace('data:image/jpeg;base64,', '', $image);
-            $image = str_replace(' ', '+', $image);
-            $imageName = Str::random(32) .'.'.'jpg';            
-            \File::put($ruta . $imageName, base64_decode($image));
-            $urlImage = '/images/products/' . $imageName; 
-            $stores->prod_image =  $urlImage ;
-        }
+            if($request->imageUrl != null && $request->is_mod == true){
+                $image = $request->imageUrl;
+                $image = str_replace('data:image/jpeg;base64,', '', $image);
+                $image = str_replace(' ', '+', $image);
+                $imageName = Str::random(32) .'.'.'jpg';            
+                \File::put($ruta . $imageName, base64_decode($image));
+                $urlImage = '/images/products/' . $imageName; 
+                $stores->prod_image =  $urlImage ;
+            }
       
           
-        $stores->prca_fk =  $request->prca_fk; 
-        $stores->meas_fk_input = $request->meas_fk_input; 
-        $stores->meas_fk_output = $request->meas_fk_output;
-        $stores->prod_identifier = $request->prod_identifier ;
-        $stores->prod_name = $request->prod_name; 
-        $stores->prod_description = $request->prod_description; 
-        
-        $stores->prod_actualprice = $request->prod_actualprice;
-        $stores->prod_eventualprice = $request->prod_eventualprice;
-        $stores->prod_preferentialprice = $request->prod_preferentialprice;
-        $stores->prod_saleprice = $request->prod_saleprice;
-        $stores->prod_listprice = $request->prod_listprice;
-        $stores->prod_packingquantity = $request->prod_packingquantity;
-        $stores->prod_status = $request->prod_status;
-        $stores->prod_bulk = $request->prod_bulk;
+            $stores->prca_fk =  $request->prca_fk; 
+            $stores->meas_fk_input = $request->meas_fk_input; 
+            $stores->meas_fk_output = $request->meas_fk_output;
+            $stores->prod_identifier = $request->prod_identifier ;
+            $stores->prod_name = $request->prod_name; 
+            $stores->prod_description = $request->prod_description; 
+            $stores->prod_actualprice = $request->prod_actualprice;
+            $stores->prod_eventualprice = $request->prod_eventualprice;
+            $stores->prod_preferentialprice = $request->prod_preferentialprice;
+            $stores->prod_saleprice = $request->prod_saleprice;
+            $stores->prod_listprice = $request->prod_listprice;
+            $stores->prod_packingquantity = $request->prod_packingquantity;
+            $stores->prod_status = $request->prod_status;
+            $stores->prod_bulk = $request->prod_bulk;
+            $stores->prod_iva = $request->prod_iva;
+            $stores->prod_ieps = $request->prod_ieps;
+            $stores->save();
 
-        $stores->save();
-
-        return $this->dbResponse("Agregado", 200, null, 'Guardado Correctamente');
-        } catch (Exception $e) {
+            return $this->dbResponse("Agregado", 200, null, 'Guardado Correctamente');
+        } 
+        catch (Exception $e) {
             return $this->dbResponse(null, 500, $e, null);
         }
     }
@@ -783,24 +788,25 @@ class ProductController extends ApiResponseController
         }
         else
             $urlImage = $request->prod_image;
-
         
         
-        
-        \DB::update("update products set"
-        . "   prca_fk = " .  $request->prca_fk 
-        . ", meas_fk_input = " . $request->meas_fk_input 
-        . ", meas_fk_output = " . $request->meas_fk_output
-        . ", prod_identifier = '" . $request->prod_identifier 
-        . "', prod_name = '" . $request->prod_name 
-        . "', prod_description = '" . $request->prod_description
-        . "', prod_image = '" .  $urlImage . "'"
-        . ", prod_actualprice = " . $request->prod_actualprice
-        . ", prod_eventualprice = " . $request->prod_eventualprice
-        . ", prod_preferentialprice = " . $request->prod_preferentialprice
-        . ", prod_packingquantity = " . $request->prod_packingquantity
-        . ", prod_status = " . $request->prod_status
-        . " where prod_pk = ". $request->prod_pk );
+        \DB::update("UPDATE products SET"
+            . "   prca_fk = " .  $request->prca_fk 
+            . ", meas_fk_input = " . $request->meas_fk_input 
+            . ", meas_fk_output = " . $request->meas_fk_output
+            . ", prod_identifier = '" . $request->prod_identifier 
+            . "', prod_name = '" . $request->prod_name 
+            . "', prod_description = '" . $request->prod_description
+            . "', prod_image = '" .  $urlImage . "'"
+            . ", prod_actualprice = " . $request->prod_actualprice
+            . ", prod_eventualprice = " . $request->prod_eventualprice
+            . ", prod_preferentialprice = " . $request->prod_preferentialprice
+            . ", prod_packingquantity = " . $request->prod_packingquantity
+            . ", prod_iva = " . $request->prod_iva
+            . ", prod_ieps = " . $request->prod_ieps
+            . ", prod_status = " . $request->prod_status
+            . " WHERE prod_pk = ". $request->prod_pk 
+        );
 
         return response()->json([
             'code' => 200,

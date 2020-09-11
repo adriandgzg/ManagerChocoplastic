@@ -139,8 +139,12 @@ class ProviderPurchaseOrderController extends ApiResponseController
      */
     public function show($prpo_pk)
     {
-        try {
+        try 
+        {
+            //Consultar Tabla de Configuración
+            $vSys = DB::table('systems AS S')->select('S.syst_iva','S.syst_ieps')->first();
 
+            //Consultar Tabla Principal (Orden de Compra)
             $vPPO = DB::table('provider_purchase_orders AS PPO')
                 ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PPO.prov_fk')
                 ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PPO.stor_fk')
@@ -157,9 +161,9 @@ class ProviderPurchaseOrderController extends ApiResponseController
                     'S.stor_name'
                 )
                 ->where('PPO.prpo_pk', '=', $prpo_pk)
-                ->get();
+                ->first();
 
-
+            //Consultar Tabla Detallada (Orden de Compra || Productos)
             $vPPOD = DB::table('provider_purchase_order_details AS PPOD')
                 ->join('products AS P', 'P.prod_pk', '=', 'PPOD.prod_fk')
                 ->join('measurements AS M', 'M.meas_pk', '=', 'PPOD.meas_fk')
@@ -176,8 +180,14 @@ class ProviderPurchaseOrderController extends ApiResponseController
                     'P.prod_identifier',
                     'P.prod_name',
                     'P.prod_description',
+                    'P.prod_iva',
+                    'P.prod_ieps',
 
-                    'M.meas_name'
+                    'M.meas_name',
+
+                    DB::raw("$vSys->syst_iva AS syst_iva"),
+                    DB::raw("$vSys->syst_ieps AS syst_ieps")
+
                 )
                 ->where('PPOD.prpo_fk', '=', $prpo_pk)
                 ->where('PPOD.ppod_status', '=', 1)

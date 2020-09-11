@@ -26,19 +26,15 @@ class CreateRolesTable extends Migration
             $table->primary(['admin_id', 'role_id']);
         });
 
-        DB::table('roles')->insert(
-            array(
-                'name' => 'admin',
-                'description' => 'Administración'
-            )
-        );
+        DB::table('roles')->insert([
+            ['name' => 'Super Administrador', 'description' => 'Administración'],
+            ['name' => 'Administrador de Bodega', 'description' => 'Administrador de Bodega'],
+            ['name' => 'Encargado de Sucursal', 'description' => 'Encargado de Sucursal'],
+            ['name' => 'Cajero', 'description' => 'Cajero']
+        ]
+    );
 
-        DB::table('roles')->insert(
-            array(
-                'name' => 'user',
-                'description' => 'Usuarios'
-            )
-        );
+
      
     }
 

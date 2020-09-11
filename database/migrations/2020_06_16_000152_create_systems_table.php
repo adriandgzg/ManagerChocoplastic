@@ -21,6 +21,8 @@ class CreateSystemsTable extends Migration
             $table->bigInteger('syst_prov_purchase'); //Folio Proveedor Compra
             $table->boolean('syst_prod_desc_availability'); //Disponibilidad de descripción del producto
             $table->bigInteger('syst_transfer')->default(1); //Folio Traspaso
+            $table->integer('syst_iva'); //IVA 16
+            $table->integer('syst_ieps'); //IEPS 8
             $table->timestamps();
         });
     }

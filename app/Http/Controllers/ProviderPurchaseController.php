@@ -13,7 +13,6 @@ use App\ProviderPurchaseOrder;
 use App\ProviderPurchaseOrderDetail;
 use App\Http\Controllers\api\ApiResponseController;
 use App\ProductInventory;
-use App\ProviderPurchaseDetail;
 
 class ProviderPurchaseController extends ApiResponseController
 {
@@ -111,72 +110,73 @@ class ProviderPurchaseController extends ApiResponseController
 
             $vProvPO = ProviderPurchaseOrder::where('prpo_pk', '=', $vprpo_pk)->where('prpo_status', '=', 2)->first();
 
+            //Consultar Tabla de Configuración
+            $vSys = DB::table('systems AS S')->select('S.syst_iva','S.syst_ieps')->first();
+
+
             if($vProvPO)
             { 
                 //Insertar Encabezado de Compra
                 $vPPO = ProviderPurchaseOrder::where('prpo_pk', '=', $vprpo_pk)->first();
-                   
 
-                    //Inserción Compra
-                    $vPP = new ProviderPurchase();
-                    $vPP->prpo_fk = $vPPO->prpo_pk;
-                    $vPP->prov_fk = $vPPO->prov_fk;
-                    $vPP->stor_fk = $vPPO->stor_fk;
-                    $vPP->prpu_type = 1;
-                    $vPP->prpu_status = 1;
-                    $vPP->save();
+                //Inserción Compra
+                $vPP = new ProviderPurchase();
+                $vPP->prpo_fk = $vPPO->prpo_pk;
+                $vPP->prov_fk = $vPPO->prov_fk;
+                $vPP->stor_fk = $vPPO->stor_fk;
+                $vPP->prpu_type = 1;
+                $vPP->prpu_status = 1;
+                $vPP->save();
 
-                    //Asignación de PK de Compra Proveedor
-                    $vprpu_pk = $vPP->prpu_pk;
+                //Asignación de PK de Compra Proveedor
+                $vprpu_pk = $vPP->prpu_pk;
 
-                    //////////////////  Inserción de Log  //////////////////
-                    $this->getstorelog('provider_purchases', $vprpu_pk, 1);
+                //////////////////  Inserción de Log  //////////////////
+                $this->getstorelog('provider_purchases', $vprpu_pk, 1);
 
-                    
-                    $vProviderPurchase = DB::table('provider_purchases AS PP')
-                        ->leftjoin('provider_purchase_orders AS PPO', 'PPO.prpo_pk', '=', 'PP.prpo_fk')
-                        ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PP.prov_fk')
-                        ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PP.stor_fk')
-                        ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'PP.pame_fk')
-                        ->select(
-                            'PP.prpu_pk',
-                            'PP.prpu_identifier',
-                            DB::raw('
-                                (CASE 
-                                    WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
-                                    WHEN PP.prpu_type = 2 THEN "Compra directa" 
-                                    ELSE "" END
-                                ) AS prpu_type'),
-                            'PP.prpu_status',
-                            DB::raw('
-                                (CASE 
-                                    WHEN PP.prpu_status = 0 THEN "Cancelada" 
-                                    WHEN PP.prpu_status = 1 THEN "Pendiente" 
-                                    WHEN PP.prpu_status = 2 THEN "En Proceso de Pago" 
-                                    WHEN PP.prpu_status = 3 THEN "Pagado" 
-                                    ELSE "" END
-                                ) AS prpu_status_description'),
+                $vProviderPurchase = DB::table('provider_purchases AS PP')
+                    ->leftjoin('provider_purchase_orders AS PPO', 'PPO.prpo_pk', '=', 'PP.prpo_fk')
+                    ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PP.prov_fk')
+                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PP.stor_fk')
+                    ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'PP.pame_fk')
+                    ->select(
+                        'PP.prpu_pk',
+                        'PP.prpu_identifier',
+                        DB::raw('
+                            (CASE 
+                                WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
+                                WHEN PP.prpu_type = 2 THEN "Compra directa" 
+                                ELSE "" END
+                            ) AS prpu_type'),
+                        'PP.prpu_status',
+                        DB::raw('
+                            (CASE 
+                                WHEN PP.prpu_status = 0 THEN "Cancelada" 
+                                WHEN PP.prpu_status = 1 THEN "Pendiente" 
+                                WHEN PP.prpu_status = 2 THEN "En Proceso de Pago" 
+                                WHEN PP.prpu_status = 3 THEN "Pagado" 
+                                ELSE "" END
+                            ) AS prpu_status_description'),
 
-                            'PPO.prpo_pk',
-                            'PPO.prpo_identifier',
+                        'PPO.prpo_pk',
+                        'PPO.prpo_identifier',
 
-                            'PP.prov_fk',
-                            'P.prov_identifier',
-                            'P.prov_name',
-                            'P.prov_rfc',
+                        'PP.prov_fk',
+                        'P.prov_identifier',
+                        'P.prov_name',
+                        'P.prov_rfc',
 
-                            'PP.pame_fk',
-                            'PM.pame_name',
+                        'PP.pame_fk',
+                        'PM.pame_name',
 
-                            'PP.stor_fk',
-                            'S.stor_name'
-                        )
-                        ->where('prpo_fk', '=', $vprpo_pk)
-                        ->first();
+                        'PP.stor_fk',
+                        'S.stor_name'
+                    )
+                    ->where('prpo_fk', '=', $vprpo_pk)
+                    ->first();
 
 
                 //Insertar Detallado de Compra
-
                 $SelectPPOD = 
                     ProviderPurchaseOrderDetail::where('prpo_fk', '=', $vprpo_pk)->where('ppod_status', '=', 1)
                     ->select(
@@ -233,6 +233,8 @@ class ProviderPurchaseController extends ApiResponseController
                         'P.prod_pk',
                         'P.prod_identifier',
                         'P.prod_name',
+                        'P.prod_iva',
+                        'P.prod_ieps',
 
                         'M.meas_pk',
                         'M.meas_name',
@@ -243,7 +245,10 @@ class ProviderPurchaseController extends ApiResponseController
                         'PPD.prpd_discountrate',
                         'PPD.prpd_ieps',
                         'PPD.prpd_iva',
-                        'PPD.prpd_status'
+                        'PPD.prpd_status',
+
+                        DB::raw("$vSys->syst_iva AS syst_iva"),
+                        DB::raw("$vSys->syst_ieps AS syst_ieps")
                     )
                     ->where('PPD.prpu_fk', '=', $vProviderPurchase->prpu_pk)
                     ->where('PPD.prpd_status', '=', 1)
@@ -316,6 +321,8 @@ class ProviderPurchaseController extends ApiResponseController
                             'P.prod_pk',
                             'P.prod_identifier',
                             'P.prod_name',
+                            'P.prod_iva',
+                            'P.prod_ieps',
 
                             'M.meas_pk',
                             'M.meas_name',
@@ -326,7 +333,10 @@ class ProviderPurchaseController extends ApiResponseController
                             'PPD.prpd_discountrate',
                             'PPD.prpd_ieps',
                             'PPD.prpd_iva',
-                            'PPD.prpd_status'
+                            'PPD.prpd_status',
+
+                            DB::raw("$vSys->syst_iva AS syst_iva"),
+                            DB::raw("$vSys->syst_ieps AS syst_ieps")
                         )
                         ->where('PPD.prpu_fk', '=', $vProviderPurchase->prpu_pk)
                         ->where('PPD.prpd_status', '=', 1)
@@ -365,7 +375,10 @@ class ProviderPurchaseController extends ApiResponseController
     public function show($prpu_pk)
     {
 
-        try {
+        try 
+        {
+            //Consultar Tabla de Configuración
+            $vSys = DB::table('systems AS S')->select('S.syst_iva','S.syst_ieps')->first();
 
             $vPP = DB::table('provider_purchases AS PP')
             ->leftjoin('provider_purchase_orders AS PPO', 'PPO.prpo_pk', '=', 'PP.prpo_fk')
@@ -421,6 +434,8 @@ class ProviderPurchaseController extends ApiResponseController
                         'P.prod_pk',
                         'P.prod_identifier',
                         'P.prod_name',
+                        'P.prod_iva',
+                        'P.prod_ieps',
 
                         'M.meas_pk',
                         'M.meas_name',
@@ -431,7 +446,11 @@ class ProviderPurchaseController extends ApiResponseController
                         'PPD.prpd_discountrate',
                         'PPD.prpd_ieps',
                         'PPD.prpd_iva',
-                        'PPD.prpd_status'
+                        'PPD.prpd_status',
+
+                        DB::raw("$vSys->syst_iva AS syst_iva"),
+                        DB::raw("$vSys->syst_ieps AS syst_ieps")
+
                     )
                     ->where('PPD.prpu_fk', '=', $prpu_pk)
                     ->where('PPD.prpd_status', '=', 1)
@@ -505,7 +524,8 @@ class ProviderPurchaseController extends ApiResponseController
             $vpame_fk = $vInput['pame_fk'];
             $vprov_fk = $vInput['prov_fk'];
             $vprpu_amount = $vInput['prpu_amount'];
-
+            $vprpu_observation = $vInput['prpu_observation'];
+            
             //Buscar el folio consecutivo
             $vSystem = System::select('syst_prov_purchase')->first();
             $vsyst_prov_purchase = $vSystem->syst_prov_purchase;
@@ -528,6 +548,7 @@ class ProviderPurchaseController extends ApiResponseController
                 $vPPU->pame_fk = $vpame_fk;
                 $vPPU->prov_fk = $vprov_fk;
                 $vPPU->prpu_identifier = $vprpu_identifier;
+                $vPPU->prpu_observation = $vprpu_observation;
                 $vPPU->prpu_status = $vprpu_status;
                 $vPPU->save();
 
@@ -552,7 +573,7 @@ class ProviderPurchaseController extends ApiResponseController
                 /////////////////////////////////Anexo de Inventario
                 $vPPD = DB::table('provider_purchase_details AS PPD')
                     ->join('products AS P', 'P.prod_pk', '=', 'PPD.prod_fk')
-                    ->select('P.prod_pk','P.meas_fk_output','P.prod_packingquantity', 'PPD.prpd_quantity')
+                    ->select('P.prod_pk','P.meas_fk_output','P.prod_packingquantity', 'PPD.prpd_quantity', 'PPD.meas_fk AS meas_fk_ppd')
                     ->where('PPD.prpu_fk', '=', $vprpu_pk)
                     ->where('PPD.prpd_status', '=', 1)
                     ->get();
@@ -561,10 +582,20 @@ class ProviderPurchaseController extends ApiResponseController
                 {
                     $vprod_pk = $vP->prod_pk; //Llave primaria de producto
                     $vmeas_fk_output = $vP->meas_fk_output; //Llave foranea de la unidad de medida de salida
+                    $vmeas_fk_ppd = $vP->meas_fk_ppd; //Llave foranea de la unidad de la compra
                     $vprod_packingquantity = $vP->prod_packingquantity; //Cantidad Empaque
-                    $vprpd_quantity = $vP->prpd_quantity; //Catidad de la compra
+                    $vprpd_quantity = $vP->prpd_quantity; //Cantidad de la compra
 
-                    $vCantOutput = $vprpd_quantity * $vprod_packingquantity;//Cantidad a antexar al inventario
+                    //Validar en que unidad de medida se hizo la compra
+                    if($vmeas_fk_ppd == $vmeas_fk_output)
+                    {
+                        $vCantOutput = $vprpd_quantity; //No se multiplica por la cantidad de empaque
+                    }
+                    else
+                    {
+                        $vCantOutput = $vprpd_quantity * $vprod_packingquantity; //Cantidad a antexar al inventario
+                    }
+
 
                     //Buscar Producto en el Inventario 
                     $vPI = ProductInventory::where('prod_fk', '=', $vprod_pk)

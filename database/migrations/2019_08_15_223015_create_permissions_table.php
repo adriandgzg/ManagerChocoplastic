@@ -41,7 +41,15 @@ class CreatePermissionsTable extends Migration
                 ['name' => 'clients', 'description' => 'Clientes', 'permission_id' => null],
                 ['name' => 'box', 'description' => 'Cajas', 'permission_id' => null],
                 ['name' => 'inventory', 'description' => 'Inventarios', 'permission_id' => null],
-                ['name' => 'transfer', 'description' => 'Traspasos', 'permission_id' => null]
+                ['name' => 'transfer', 'description' => 'Traspasos', 'permission_id' => null],
+                ['name' => 'orders', 'description' => 'Pedidos', 'permission_id' => 6],
+                ['name' => 'sales', 'description' => 'Ventas', 'permission_id' => 6],
+                ['name' => 'clientdebts', 'description' => 'Cuestas por Cobrar', 'permission_id' => 6],
+                ['name' => 'clientsreturnlist', 'description' => 'Devoluciones', 'permission_id' => 6],
+                ['name' => 'purchaseorderslist', 'description' => 'Órdenes de Compra', 'permission_id' => 5],
+                ['name' => 'purchaselist', 'description' => 'Compras', 'permission_id' => 5],
+                ['name' => 'providerdebts', 'description' => 'Cuentas por Pagar', 'permission_id' => 5],
+                ['name' => 'providersreturnlist', 'description' => 'Devoluciones', 'permission_id' => 5],
             ]
         );
 

@@ -31,6 +31,7 @@ class CreateProviderPurchasesTable extends Migration
 
             $table->string('prpu_identifier', 20)->unique()->nullable(); //Identificador Personalizado
             $table->integer('prpu_type'); //Tipo 1) Por orden de compra y 2) Compra directa
+            $table->string('prpu_observation', 1000)->nullable(); //Observación
             $table->smallInteger('prpu_status')->default(1); //Estatus
             $table->timestamps();
         });
