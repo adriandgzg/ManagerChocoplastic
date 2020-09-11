@@ -59,8 +59,8 @@
                         <v-text-field v-model="detail.ppod_quantity" label="Cantidad" type="number" :rules="minNumberRules" autofocus></v-text-field>
                         <v-text-field v-model="detail.ppod_providerprice" label="Precio" prefix="$" type="number" :rules="minNumberRules" required></v-text-field>
                         <v-text-field v-model="detail.ppod_discountrate" label="Descuento(%)" type="number"></v-text-field>
-                        <v-text-field v-model="detail.ppod_ieps" label="IEPS(%)" type="number"></v-text-field>
-                        <v-text-field v-model="detail.ppod_iva" label="IVA(%)" type="number"></v-text-field>
+                        <!--<v-text-field v-model="detail.ppod_ieps" label="IEPS(%)" type="number"></v-text-field>
+                        <v-text-field v-model="detail.ppod_iva" label="IVA(%)" type="number"></v-text-field>-->
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -152,11 +152,9 @@
                                     <th class="text-left">Unidad Medida</th>
                                     <th class="text-left">Cantidad</th>
                                     <th class="text-left">Precio</th>
+                                    <th class="text-left">Importe</th>
                                     <th class="text-left">Descuento(%)</th>
                                     <th class="text-left">Descuento($)</th>
-                                    <th class="text-left">IEPS(%)</th>
-                                    <th class="text-left">IVA(%)</th>
-                                    <th class="text-left">Importe</th>
                                     <th class="text-left">Importe Total</th>
                                     <th></th>
                                     <th></th>
@@ -173,22 +171,19 @@
                                     <td>
                                         <v-text-field v-model="item.ppod_providerprice" label="" @change="onQuantityChange(item)" required></v-text-field>
                                     </td>
+                                    <td>{{ formatMoney((item.ppod_quantity * item.ppod_providerprice)) }}</td>
                                     <td>
                                         <v-text-field v-model="item.ppod_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
                                     </td>
 
                                     <td>{{ formatMoney((item.ppod_quantity * item.ppod_providerprice)*((item.ppod_discountrate/100))) }}</td>
-                                    <td>{{ item.ppod_ieps }}</td>
-                                    <td>{{ item.ppod_iva }}</td>
-                                    <td>{{ formatMoney((item.ppod_quantity * item.ppod_providerprice)) }}</td>
+
                                     <td>${{ formatMoney((item.ppod_quantity * item.ppod_providerprice)*(1- (item.ppod_discountrate/100))) }}</td>
                                     <td>
                                         <v-icon @click="borrar(item)" small>mdi-delete</v-icon>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td />
-                                    <td />
                                     <td />
                                     <td />
                                     <td />
@@ -208,15 +203,11 @@
                                     <td />
                                     <td />
                                     <td />
-                                    <td />
-                                    <td />
                                     <td>Descuento</td>
                                     <td>${{formatMoney(descuento)}}</td>
                                     <td />
                                 </tr>
                                 <tr>
-                                    <td />
-                                    <td />
                                     <td />
                                     <td />
                                     <td />
@@ -236,8 +227,6 @@
                                     <td />
                                     <td />
                                     <td />
-                                    <td />
-                                    <td />
                                     <td>IEPS</td>
                                     <td>${{formatMoney(ieps)}}</td>
                                     <td />
@@ -245,8 +234,6 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td />
-                                    <td />
                                     <td />
                                     <td />
                                     <td />
@@ -346,8 +333,10 @@ export default {
                 ppod_discountrate: 0,
                 prod_identifier: 0,
                 prod_name: '',
-                ppod_ieps: 0,
-                ppod_iva: 16,
+                prod_ieps: 0,
+                prod_iva: 0,
+                syst_ieps: 0,
+                syst_iva: 0,
             },
             detailDefault: {
                 prpo_fk: 0,
@@ -358,8 +347,10 @@ export default {
                 ppod_discountrate: 0,
                 prod_identifier: 0,
                 prod_name: '',
-                ppod_ieps: 0,
-                ppod_iva: 16,
+                prod_ieps: 0,
+                prod_iva: 0,
+                syst_ieps: 0,
+                syst_iva: 0,
             },
             orderHeader: {
                 prpo_pk: 0,
@@ -612,13 +603,15 @@ export default {
 
                 this.descuento = this.descuento + ((importe) * ((this.desserts[i].ppod_discountrate / 100)));
 
-                this.subtotal = this.subtotal + (importe);
-                this.iva = this.iva + ((importeDescuento) * (this.desserts[i].ppod_iva / 100));
-                this.ieps = this.ieps + ((importeDescuento) * (this.desserts[i].ppod_ieps / 100));
+                this.subtotal = this.subtotal + (importeDescuento);
+                if (this.desserts[i].prod_ieps == 1)
+                    this.iva = this.iva + ((importeDescuento) * (this.desserts[i].syst_iva / 100));
+                if (this.desserts[i].prod_ieps == 1)
+                    this.ieps = this.ieps + ((importeDescuento) * (this.desserts[i].syst_ieps / 100));
 
             }
 
-            this.total = this.subtotal + this.iva + this.ieps;
+            this.total = this.subtotal;
         },
 
         finalizar() {

@@ -62,10 +62,26 @@
                         <v-text-field v-model="editado.prod_saleprice" label="Precio Menudeo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
                         <v-text-field v-model="editado.prod_listprice" label="Precio Mayoreo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
                         <!--<v-text-field v-model="editado.prod_packingquantity" label="Stock" type="number" :rules="numberRules"></v-text-field>-->
-                        <span>Venta a Granel</span>
-                        <v-switch v-model="estadoGranel" />
-                        <span>Activo/Inactivo</span>
-                        <v-switch v-model="estado" />
+                        <v-row>
+                            <v-col cols="6">
+                                <span>Venta a Granel</span>
+                                <v-switch v-model="estadoGranel" />
+                            </v-col>
+                            <v-col cols="6">
+                                <span>Activo/Inactivo</span>
+                                <v-switch v-model="estado" />
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="6">
+                                <span>IVA</span>
+                                <v-switch v-model="estadoIVA" />
+                            </v-col>
+                            <v-col cols="6">
+                                <span>IEPS</span>
+                                <v-switch v-model="estadoIEPS" />
+                            </v-col>
+                        </v-row>
 
                         <v-card-text>
 
@@ -323,6 +339,8 @@ export default {
             selectMeasOut: 0,
             principal: false,
             estado: true,
+            estadoIVA: true,
+            estadoIEPS: true,
             estadoGranel: true,
             estadoGranelVar: true,
             imageUrl: '',
@@ -359,6 +377,8 @@ export default {
                 prod_saleprice: 0,
                 prod_listprice: 0,
                 prod_bulk: 0,
+                prod_iva: 0,
+                prod_ieps: 0,
                 prod_packingquantity: 0,
                 prod_status: 0,
                 is_mod: false,
@@ -383,6 +403,8 @@ export default {
                 prod_saleprice: 0,
                 prod_listprice: 0,
                 prod_bulk: 0,
+                prod_iva: 0,
+                prod_ieps: 0,
                 prod_packingquantity: 0,
                 prod_status: 0,
                 is_mod: false,
@@ -528,6 +550,8 @@ export default {
             this.editado = Object.assign({}, item)
             this.estado = this.editado.prod_status
             this.estadoGranel = this.editado.prod_bulk
+            this.estadoIVA = this.editado.prod_iva
+            this.estadoIEPS = this.editado.prod_ieps
             this.selectCat = this.editado.prca_fk
             this.selectMeasIn = this.editado.meas_fk_input
             this.selectMeasOut = this.editado.meas_fk_output
@@ -545,6 +569,16 @@ export default {
                 this.editado.prod_bulk = 1;
             else
                 this.editado.prod_bulk = 0;
+
+            if (this.estadoIVA == true)
+                this.editado.prod_iva = 1;
+            else
+                this.editado.prod_iva = 0;
+
+            if (this.estadoIEPS == true)
+                this.editado.prod_ieps = 1;
+            else
+                this.editado.prod_ieps = 0;
 
             this.editado.prca_fk = this.selectCat;
             this.editado.meas_fk_input = this.selectMeasIn;

@@ -62,8 +62,8 @@
                         <v-text-field v-model="detail.prpd_quantity" label="Cantidad" type="number" :rules="minNumberRules" autofocus required></v-text-field>
                         <v-text-field v-model="detail.prpd_price" label="Precio" prefix="$" type="number" :rules="minNumberRules" required></v-text-field>
                         <v-text-field v-model="detail.prpd_discountrate" label="Descuento(%)" type="number"></v-text-field>
-                        <v-text-field v-model="detail.prpd_ieps" label="IEPS(%)" type="number"></v-text-field>
-                        <v-text-field v-model="detail.prpd_iva" label="IVA(%)" type="number"></v-text-field>
+                        <!--<v-text-field v-model="detail.prpd_ieps" label="IEPS(%)" type="number"></v-text-field>
+                        <v-text-field v-model="detail.prpd_iva" label="IVA(%)" type="number"></v-text-field>-->
 
                     </v-card-text>
                     <v-card-actions>
@@ -176,11 +176,9 @@
                                     <th class="text-left">Unidad Medida</th>
                                     <th class="text-left">Cantidad</th>
                                     <th class="text-left">Precio</th>
+                                    <th class="text-left">Importe</th>
                                     <th class="text-left">Descuento(%)</th>
                                     <th class="text-left">Descuento($)</th>
-                                    <th class="text-left">IEPS(%)</th>
-                                    <th class="text-left">IVA(%)</th>
-                                    <th class="text-left">Importe</th>
                                     <th class="text-left">Importe Total</th>
                                     <th></th>
                                     <th></th>
@@ -200,18 +198,14 @@
                                     <td>
                                         <v-text-field v-model="item.prpd_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
                                     </td>
-                                    <td>{{ formatMoney((item.prpd_quantity * item.prpd_price)*((item.prpd_discountrate/100))) }}</td>
-                                    <td>{{ item.prpd_ieps }}</td>
-                                    <td>{{ item.prpd_iva }}</td>
                                     <td>{{ formatMoney((item.prpd_quantity * item.prpd_price)) }}</td>
+                                    <td>{{ formatMoney((item.prpd_quantity * item.prpd_price)*((item.prpd_discountrate/100))) }}</td>
                                     <td>${{ formatMoney((item.prpd_quantity * item.prpd_price)*(1- (item.prpd_discountrate/100))) }}</td>
                                     <td>
                                         <v-icon @click="borrar(item)" small>mdi-delete</v-icon>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td />
-                                    <td />
                                     <td />
                                     <td />
                                     <td />
@@ -231,15 +225,11 @@
                                     <td />
                                     <td />
                                     <td />
-                                    <td />
-                                    <td />
                                     <td>Descuento</td>
                                     <td>${{formatMoney(descuento)}}</td>
                                     <td />
                                 </tr>
                                 <tr>
-                                    <td />
-                                    <td />
                                     <td />
                                     <td />
                                     <td />
@@ -259,8 +249,6 @@
                                     <td />
                                     <td />
                                     <td />
-                                    <td />
-                                    <td />
                                     <td>IEPS</td>
                                     <td>${{formatMoney(ieps)}}</td>
                                     <td />
@@ -268,8 +256,6 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td />
-                                    <td />
                                     <td />
                                     <td />
                                     <td />
@@ -394,8 +380,10 @@ export default {
                 prod_identifier: 0,
                 prod_name: '',
                 meas_fk: 0,
-                prpd_ieps: 0,
-                prpd_iva: 16,
+                prod_ieps: 0,
+                prod_iva: 0,
+                syst_ieps: 0,
+                syst_iva: 0,
             },
             detailDefault: {
                 prpo_fk: 0,
@@ -407,8 +395,10 @@ export default {
                 prod_identifier: 0,
                 prod_name: '',
                 meas_fk: 0,
-                prpd_ieps: 0,
-                prpd_iva: 16,
+                prod_ieps: 0,
+                prod_iva: 0,
+                syst_ieps: 0,
+                syst_iva: 0,
             },
             orderHeader: {
                 prpu_pk: 0,
@@ -752,13 +742,15 @@ export default {
 
                 this.descuento = this.descuento + ((importe) * ((this.desserts[i].prpd_discountrate / 100)));
 
-                this.subtotal = this.subtotal + (importe);
-                this.iva = this.iva + ((importeDescuento) * (this.desserts[i].prpd_iva / 100));
-                this.ieps = this.ieps + ((importeDescuento) * (this.desserts[i].prpd_ieps / 100));
+                this.subtotal = this.subtotal + (importeDescuento);
+                if (this.desserts[i].prod_ieps == 1)
+                    this.iva = this.iva + ((importeDescuento) * (this.desserts[i].syst_iva / 100));
+                if (this.desserts[i].prod_ieps == 1)
+                    this.ieps = this.ieps + ((importeDescuento) * (this.desserts[i].syst_ieps / 100));
 
             }
 
-            this.total = this.subtotal + this.iva + this.ieps;
+            this.total = this.subtotal;
             console.log('this.total = ' +
                 this.total)
         },

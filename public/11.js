@@ -342,6 +342,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -388,7 +392,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       editado: {
         clsd_pk: 0,
-        clsd_quantity: 0
+        clsd_quantity: 0,
+        clsd_discountrate: 0
       },
       editadoSale: {
         clsa_pk: 0,
@@ -1336,6 +1341,10 @@ var render = function() {
                                     ]),
                                     _vm._v(" "),
                                     _c("th", { staticClass: "text-left" }, [
+                                      _vm._v("Descuento(%)")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th", { staticClass: "text-left" }, [
                                       _vm._v("Importe")
                                     ]),
                                     _vm._v(" "),
@@ -1401,6 +1410,38 @@ var render = function() {
                                               )
                                           )
                                         ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          [
+                                            _c("v-text-field", {
+                                              attrs: {
+                                                label: "",
+                                                required: ""
+                                              },
+                                              on: {
+                                                change: function($event) {
+                                                  return _vm.onQuantityChange(
+                                                    item
+                                                  )
+                                                }
+                                              },
+                                              model: {
+                                                value: item.clsd_discountrate,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    item,
+                                                    "clsd_discountrate",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "item.clsd_discountrate"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
                                         _vm._v(" "),
                                         _c("td", [
                                           _vm._v(

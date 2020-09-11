@@ -291,20 +291,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -400,8 +386,10 @@ __webpack_require__.r(__webpack_exports__);
         prod_identifier: 0,
         prod_name: '',
         meas_fk: 0,
-        prpd_ieps: 0,
-        prpd_iva: 16
+        prod_ieps: 0,
+        prod_iva: 0,
+        syst_ieps: 0,
+        syst_iva: 0
       },
       detailDefault: {
         prpo_fk: 0,
@@ -413,8 +401,10 @@ __webpack_require__.r(__webpack_exports__);
         prod_identifier: 0,
         prod_name: '',
         meas_fk: 0,
-        prpd_ieps: 0,
-        prpd_iva: 16
+        prod_ieps: 0,
+        prod_iva: 0,
+        syst_ieps: 0,
+        syst_iva: 0
       },
       orderHeader: {
         prpu_pk: 0,
@@ -730,12 +720,12 @@ __webpack_require__.r(__webpack_exports__);
         var importe = this.desserts[i].prpd_price * this.desserts[i].prpd_quantity;
         var importeDescuento = importe * (1 - this.desserts[i].prpd_discountrate / 100);
         this.descuento = this.descuento + importe * (this.desserts[i].prpd_discountrate / 100);
-        this.subtotal = this.subtotal + importe;
-        this.iva = this.iva + importeDescuento * (this.desserts[i].prpd_iva / 100);
-        this.ieps = this.ieps + importeDescuento * (this.desserts[i].prpd_ieps / 100);
+        this.subtotal = this.subtotal + importeDescuento;
+        if (this.desserts[i].prod_ieps == 1) this.iva = this.iva + importeDescuento * (this.desserts[i].syst_iva / 100);
+        if (this.desserts[i].prod_ieps == 1) this.ieps = this.ieps + importeDescuento * (this.desserts[i].syst_ieps / 100);
       }
 
-      this.total = this.subtotal + this.iva + this.ieps;
+      this.total = this.subtotal;
       console.log('this.total = ' + this.total);
     },
     finalizar: function finalizar() {
@@ -1204,28 +1194,6 @@ var render = function() {
                                 _vm.$set(_vm.detail, "prpd_discountrate", $$v)
                               },
                               expression: "detail.prpd_discountrate"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("v-text-field", {
-                            attrs: { label: "IEPS(%)", type: "number" },
-                            model: {
-                              value: _vm.detail.prpd_ieps,
-                              callback: function($$v) {
-                                _vm.$set(_vm.detail, "prpd_ieps", $$v)
-                              },
-                              expression: "detail.prpd_ieps"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("v-text-field", {
-                            attrs: { label: "IVA(%)", type: "number" },
-                            model: {
-                              value: _vm.detail.prpd_iva,
-                              callback: function($$v) {
-                                _vm.$set(_vm.detail, "prpd_iva", $$v)
-                              },
-                              expression: "detail.prpd_iva"
                             }
                           })
                         ],
@@ -1736,23 +1704,15 @@ var render = function() {
                                     ]),
                                     _vm._v(" "),
                                     _c("th", { staticClass: "text-left" }, [
+                                      _vm._v("Importe")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th", { staticClass: "text-left" }, [
                                       _vm._v("Descuento(%)")
                                     ]),
                                     _vm._v(" "),
                                     _c("th", { staticClass: "text-left" }, [
                                       _vm._v("Descuento($)")
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("th", { staticClass: "text-left" }, [
-                                      _vm._v("IEPS(%)")
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("th", { staticClass: "text-left" }, [
-                                      _vm._v("IVA(%)")
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("th", { staticClass: "text-left" }, [
-                                      _vm._v("Importe")
                                     ]),
                                     _vm._v(" "),
                                     _c("th", { staticClass: "text-left" }, [
@@ -1881,19 +1841,10 @@ var render = function() {
                                             _vm._s(
                                               _vm.formatMoney(
                                                 item.prpd_quantity *
-                                                  item.prpd_price *
-                                                  (item.prpd_discountrate / 100)
+                                                  item.prpd_price
                                               )
                                             )
                                           )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(_vm._s(item.prpd_ieps))
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(_vm._s(item.prpd_iva))
                                         ]),
                                         _vm._v(" "),
                                         _c("td", [
@@ -1901,7 +1852,8 @@ var render = function() {
                                             _vm._s(
                                               _vm.formatMoney(
                                                 item.prpd_quantity *
-                                                  item.prpd_price
+                                                  item.prpd_price *
+                                                  (item.prpd_discountrate / 100)
                                               )
                                             )
                                           )
@@ -1958,10 +1910,6 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td"),
                                       _vm._v(" "),
-                                      _c("td"),
-                                      _vm._v(" "),
-                                      _c("td"),
-                                      _vm._v(" "),
                                       _c("td", [_vm._v("Subtotal")]),
                                       _vm._v(" "),
                                       _c("td", [
@@ -1977,10 +1925,6 @@ var render = function() {
                                     ]),
                                     _vm._v(" "),
                                     _c("tr", [
-                                      _c("td"),
-                                      _vm._v(" "),
-                                      _c("td"),
-                                      _vm._v(" "),
                                       _c("td"),
                                       _vm._v(" "),
                                       _c("td"),
@@ -2024,10 +1968,6 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td"),
                                       _vm._v(" "),
-                                      _c("td"),
-                                      _vm._v(" "),
-                                      _c("td"),
-                                      _vm._v(" "),
                                       _c("td", [_vm._v("I.V.A.")]),
                                       _vm._v(" "),
                                       _c("td", [
@@ -2040,10 +1980,6 @@ var render = function() {
                                     ]),
                                     _vm._v(" "),
                                     _c("tr", [
-                                      _c("td"),
-                                      _vm._v(" "),
-                                      _c("td"),
-                                      _vm._v(" "),
                                       _c("td"),
                                       _vm._v(" "),
                                       _c("td"),
@@ -2075,10 +2011,6 @@ var render = function() {
                                 _vm._v(" "),
                                 _c("tfoot", [
                                   _c("tr", [
-                                    _c("td"),
-                                    _vm._v(" "),
-                                    _c("td"),
-                                    _vm._v(" "),
                                     _c("td"),
                                     _vm._v(" "),
                                     _c("td"),

@@ -105,6 +105,7 @@
                                     <th class="text-left">Unidad Medida</th>
                                     <th class="text-left">Cantidad</th>
                                     <th class="text-left">Precio</th>
+                                    <th class="text-left">Descuento(%)</th>
                                     <th class="text-left">Importe</th>
                                     <th></th>
                                     <th></th>
@@ -119,6 +120,9 @@
                                         <v-text-field v-model="item.clsd_quantity" label="" @change="onQuantityChange(item)" required></v-text-field>
                                     </td>
                                     <td>${{ formatMoney(item.clsd_price) }}</td>
+                                    <td>
+                                        <v-text-field v-model="item.clsd_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
+                                    </td>
                                     <td>${{ formatMoney(item.clsd_quantity * item.clsd_price) }}</td>
                                     <td>
                                         <v-icon @click="borrar(item)" small>mdi-delete</v-icon>
@@ -377,6 +381,7 @@ export default {
             editado: {
                 clsd_pk: 0,
                 clsd_quantity: 0,
+                clsd_discountrate: 0,
             },
             editadoSale: {
                 clsa_pk: 0,

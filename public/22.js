@@ -247,6 +247,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -319,6 +335,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       selectMeasOut: 0,
       principal: false,
       estado: true,
+      estadoIVA: true,
+      estadoIEPS: true,
       estadoGranel: true,
       estadoGranelVar: true,
       imageUrl: '',
@@ -355,6 +373,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         prod_saleprice: 0,
         prod_listprice: 0,
         prod_bulk: 0,
+        prod_iva: 0,
+        prod_ieps: 0,
         prod_packingquantity: 0,
         prod_status: 0,
         is_mod: false,
@@ -372,7 +392,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         meas_fk_output_name: '',
         prod_identifier: '',
         prod_name: ''
-      }, _defineProperty(_defaultItem, "prod_name", ''), _defineProperty(_defaultItem, "prod_actualprice", 0), _defineProperty(_defaultItem, "prod_eventualprice", 0), _defineProperty(_defaultItem, "prod_preferentialprice", 0), _defineProperty(_defaultItem, "prod_saleprice", 0), _defineProperty(_defaultItem, "prod_listprice", 0), _defineProperty(_defaultItem, "prod_bulk", 0), _defineProperty(_defaultItem, "prod_packingquantity", 0), _defineProperty(_defaultItem, "prod_status", 0), _defineProperty(_defaultItem, "is_mod", false), _defineProperty(_defaultItem, "imageUrl", this.imageUrl), _defaultItem),
+      }, _defineProperty(_defaultItem, "prod_name", ''), _defineProperty(_defaultItem, "prod_actualprice", 0), _defineProperty(_defaultItem, "prod_eventualprice", 0), _defineProperty(_defaultItem, "prod_preferentialprice", 0), _defineProperty(_defaultItem, "prod_saleprice", 0), _defineProperty(_defaultItem, "prod_listprice", 0), _defineProperty(_defaultItem, "prod_bulk", 0), _defineProperty(_defaultItem, "prod_iva", 0), _defineProperty(_defaultItem, "prod_ieps", 0), _defineProperty(_defaultItem, "prod_packingquantity", 0), _defineProperty(_defaultItem, "prod_status", 0), _defineProperty(_defaultItem, "is_mod", false), _defineProperty(_defaultItem, "imageUrl", this.imageUrl), _defaultItem),
       editedIndex: -1,
       products: [],
       categories: [],
@@ -515,6 +535,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.editado = Object.assign({}, item);
       this.estado = this.editado.prod_status;
       this.estadoGranel = this.editado.prod_bulk;
+      this.estadoIVA = this.editado.prod_iva;
+      this.estadoIEPS = this.editado.prod_ieps;
       this.selectCat = this.editado.prca_fk;
       this.selectMeasIn = this.editado.meas_fk_input;
       this.selectMeasOut = this.editado.meas_fk_output;
@@ -524,6 +546,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     guardar: function guardar() {
       if (this.estado == true) this.editado.prod_status = 1;else this.editado.prod_status = 0;
       if (this.estadoGranel == true) this.editado.prod_bulk = 1;else this.editado.prod_bulk = 0;
+      if (this.estadoIVA == true) this.editado.prod_iva = 1;else this.editado.prod_iva = 0;
+      if (this.estadoIEPS == true) this.editado.prod_ieps = 1;else this.editado.prod_ieps = 0;
       this.editado.prca_fk = this.selectCat;
       this.editado.meas_fk_input = this.selectMeasIn;
       this.editado.meas_fk_output = this.selectMeasOut;
@@ -1218,29 +1242,93 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
-                          _c("span", [_vm._v("Venta a Granel")]),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c("span", [_vm._v("Venta a Granel")]),
+                                  _vm._v(" "),
+                                  _c("v-switch", {
+                                    model: {
+                                      value: _vm.estadoGranel,
+                                      callback: function($$v) {
+                                        _vm.estadoGranel = $$v
+                                      },
+                                      expression: "estadoGranel"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c("span", [_vm._v("Activo/Inactivo")]),
+                                  _vm._v(" "),
+                                  _c("v-switch", {
+                                    model: {
+                                      value: _vm.estado,
+                                      callback: function($$v) {
+                                        _vm.estado = $$v
+                                      },
+                                      expression: "estado"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
                           _vm._v(" "),
-                          _c("v-switch", {
-                            model: {
-                              value: _vm.estadoGranel,
-                              callback: function($$v) {
-                                _vm.estadoGranel = $$v
-                              },
-                              expression: "estadoGranel"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("span", [_vm._v("Activo/Inactivo")]),
-                          _vm._v(" "),
-                          _c("v-switch", {
-                            model: {
-                              value: _vm.estado,
-                              callback: function($$v) {
-                                _vm.estado = $$v
-                              },
-                              expression: "estado"
-                            }
-                          }),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c("span", [_vm._v("IVA")]),
+                                  _vm._v(" "),
+                                  _c("v-switch", {
+                                    model: {
+                                      value: _vm.estadoIVA,
+                                      callback: function($$v) {
+                                        _vm.estadoIVA = $$v
+                                      },
+                                      expression: "estadoIVA"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "6" } },
+                                [
+                                  _c("span", [_vm._v("IEPS")]),
+                                  _vm._v(" "),
+                                  _c("v-switch", {
+                                    model: {
+                                      value: _vm.estadoIEPS,
+                                      callback: function($$v) {
+                                        _vm.estadoIEPS = $$v
+                                      },
+                                      expression: "estadoIEPS"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
                           _vm._v(" "),
                           _c(
                             "v-card-text",
