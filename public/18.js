@@ -408,7 +408,7 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response.data);
           _this6.desserts = response.data.data.provider_purchase_order_details;
           _this6.prpu_pk = response.data.data.provider_purchase_orders.prpu_pk;
-          _this6.editadoHeader = response.data.data.provider_purchase_orders[0];
+          _this6.editadoHeader = response.data.data.provider_purchase_orders;
 
           _this6.getTotal();
         } else {

@@ -410,7 +410,7 @@ export default {
                         this.desserts = response.data.data.provider_purchase_order_details;
 
                         this.prpu_pk = response.data.data.provider_purchase_orders.prpu_pk;
-                        this.editadoHeader = response.data.data.provider_purchase_orders[0];
+                        this.editadoHeader = response.data.data.provider_purchase_orders;
                         this.getTotal();
                     } else {
                         this.normal('Notificación', response.data.status.message, "error");
