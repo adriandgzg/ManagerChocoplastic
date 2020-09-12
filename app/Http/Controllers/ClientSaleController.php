@@ -133,6 +133,7 @@ class ClientSaleController extends ApiResponseController
                 //Consultar Venta Clente
                 $vClientSale = DB::table('client_sales AS CS')
                     ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
+                    ->join('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
                     ->select(
                         'CS.clsa_pk',
                         'CS.clie_fk',
@@ -142,6 +143,10 @@ class ClientSaleController extends ApiResponseController
                         'CS.clsa_identifier',
                         'CS.clsa_status',
                         'CS.created_at',
+
+                        'S.stor_pk',
+                        'S.stor_name',
+
                         DB::raw('(SELECT CONCAT(U.phone_number, "-", U.name) AS user FROM logs AS L INNER JOIN users AS U ON L.user_fk = U.id WHERE L.table = "client_orders" AND L.pk_register = CO.clor_pk AND L.operation = 1 LIMIT 1) AS user') //Vededor
                     )
                     ->where('clsa_pk', '=', $vclsa_pk)
@@ -234,6 +239,7 @@ class ClientSaleController extends ApiResponseController
             {
                 $vClientSale = DB::table('client_sales AS CS')
                     ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
+                    ->join('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
                     ->select(
                         'CS.clsa_pk',
                         'CS.clie_fk',
@@ -243,6 +249,10 @@ class ClientSaleController extends ApiResponseController
                         'CS.clsa_identifier',
                         'CS.clsa_status',
                         'CS.created_at',
+
+                        'S.stor_pk',
+                        'S.stor_name',
+
                         DB::raw('(SELECT CONCAT(U.phone_number, "-", U.name) AS user FROM logs AS L INNER JOIN users AS U ON L.user_fk = U.id WHERE L.table = "client_orders" AND L.pk_register = CO.clor_pk AND L.operation = 1 LIMIT 1) AS user') //Vededor
                     )
                     ->where('clor_fk', '=', $vclor_pk)
@@ -589,7 +599,7 @@ class ClientSaleController extends ApiResponseController
                                     'updated_at'
                                 ]
                             , $vCPASel);
-/*
+                    /*
                         //Efectivo
                         if($vclpa_amount_cash > 0)
                         {
