@@ -162,6 +162,61 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -198,8 +253,10 @@ __webpack_require__.r(__webpack_exports__);
       snackbar: false,
       timeout: 2000,
       subtotal: 0,
+      descuento: 0,
       total: 0,
       iva: 0,
+      ieps: 0,
       textMsg: "",
       editadoHeader: {
         created_at: '',
@@ -466,13 +523,20 @@ __webpack_require__.r(__webpack_exports__);
     },
     getTotal: function getTotal() {
       this.subtotal = 0;
+      this.descuento = 0;
+      this.iva = 0;
+      this.ieps = 0;
 
       for (var i = 0; i < this.desserts.length; i++) {
-        this.subtotal = this.subtotal + this.desserts[i].ppod_providerprice * this.desserts[i].ppod_quantity * (1 - this.desserts[i].ppod_discountrate / 100);
-        console.log(this.subtotal);
+        var importe = this.desserts[i].ppod_providerprice * this.desserts[i].ppod_quantity;
+        var importeDescuento = importe * (1 - this.desserts[i].ppod_discountrate / 100);
+        this.descuento = this.descuento + importe * (this.desserts[i].ppod_discountrate / 100);
+        this.subtotal = this.subtotal + importeDescuento;
+        if (this.desserts[i].prod_iva == 1) this.iva = this.iva + importeDescuento / (1 + this.desserts[i].syst_iva / 100) * (this.desserts[i].syst_iva / 100);
+        if (this.desserts[i].prod_ieps == 1) this.ieps = this.ieps + importeDescuento * (this.desserts[i].syst_ieps / 100);
       }
 
-      this.total = this.subtotal + this.iva;
+      this.total = this.subtotal + this.ieps;
     },
     finalizar: function finalizar() {
       var _this9 = this;
@@ -887,7 +951,67 @@ var render = function() {
                         [
                           _c(
                             "v-col",
-                            { attrs: { cols: "4" } },
+                            { attrs: { cols: "6" } },
+                            [
+                              _c(
+                                "v-card-text",
+                                {
+                                  staticClass:
+                                    "category d-inline-flex font-weight-light"
+                                },
+                                [
+                                  _c("v-label", [
+                                    _c("h3", [_vm._v("Identificador:")]),
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(
+                                          _vm.editadoHeader.prpo_identifier
+                                        ) +
+                                        "\r\n                                "
+                                    )
+                                  ])
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "6" } },
+                            [
+                              _c(
+                                "v-card-text",
+                                {
+                                  staticClass:
+                                    "category d-inline-flex font-weight-light"
+                                },
+                                [
+                                  _c("v-label", [
+                                    _c("h3", [_vm._v("Fecha:")]),
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(_vm.editadoHeader.created_at) +
+                                        "\r\n                                "
+                                    )
+                                  ])
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "6" } },
                             [
                               _c(
                                 "v-card-text",
@@ -913,7 +1037,7 @@ var render = function() {
                           _vm._v(" "),
                           _c(
                             "v-col",
-                            { attrs: { cols: "4" } },
+                            { attrs: { cols: "6" } },
                             [
                               _c(
                                 "v-card-text",
@@ -987,12 +1111,22 @@ var render = function() {
                                     ]),
                                     _vm._v(" "),
                                     _c("th", { staticClass: "text-left" }, [
-                                      _vm._v("Descuento")
+                                      _vm._v("Importe")
                                     ]),
                                     _vm._v(" "),
                                     _c("th", { staticClass: "text-left" }, [
-                                      _vm._v("Importe")
+                                      _vm._v("Descuento(%)")
                                     ]),
+                                    _vm._v(" "),
+                                    _c("th", { staticClass: "text-left" }, [
+                                      _vm._v("Descuento($)")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th", { staticClass: "text-left" }, [
+                                      _vm._v("Importe Total")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th"),
                                     _vm._v(" "),
                                     _c("th")
                                   ])
@@ -1026,7 +1160,30 @@ var render = function() {
                                         ]),
                                         _vm._v(" "),
                                         _c("td", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.formatMoney(
+                                                item.ppod_quantity *
+                                                  item.ppod_providerprice
+                                              )
+                                            )
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
                                           _vm._v(_vm._s(item.ppod_discountrate))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.formatMoney(
+                                                item.ppod_quantity *
+                                                  item.ppod_providerprice *
+                                                  (item.ppod_discountrate / 100)
+                                              )
+                                            )
+                                          )
                                         ]),
                                         _vm._v(" "),
                                         _c("td", [
@@ -1057,6 +1214,10 @@ var render = function() {
                                       _vm._v(" "),
                                       _c("td"),
                                       _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
                                       _c("td", [_vm._v("Subtotal")]),
                                       _vm._v(" "),
                                       _c("td", [
@@ -1066,10 +1227,45 @@ var render = function() {
                                               _vm.formatMoney(_vm.subtotal)
                                             )
                                         )
-                                      ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td")
                                     ]),
                                     _vm._v(" "),
                                     _c("tr", [
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v("Descuento")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "$" +
+                                            _vm._s(
+                                              _vm.formatMoney(_vm.descuento)
+                                            )
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
                                       _c("td"),
                                       _vm._v(" "),
                                       _c("td"),
@@ -1086,7 +1282,36 @@ var render = function() {
                                         _vm._v(
                                           "$" + _vm._s(_vm.formatMoney(_vm.iva))
                                         )
-                                      ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v("IEPS")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "$" +
+                                            _vm._s(_vm.formatMoney(_vm.ieps))
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td")
                                     ])
                                   ],
                                   2
@@ -1104,13 +1329,19 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("td"),
                                     _vm._v(" "),
+                                    _c("td"),
+                                    _vm._v(" "),
+                                    _c("td"),
+                                    _vm._v(" "),
                                     _c("td", [_vm._v("Total")]),
                                     _vm._v(" "),
                                     _c("td", [
                                       _vm._v(
                                         "$" + _vm._s(_vm.formatMoney(_vm.total))
                                       )
-                                    ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td")
                                   ])
                                 ])
                               ]

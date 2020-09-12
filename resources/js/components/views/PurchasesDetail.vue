@@ -87,9 +87,12 @@
                                     <th class="text-left">Producto</th>
                                     <th class="text-left">Unidad Medida</th>
                                     <th class="text-left">Cantidad</th>
-                                    <th class="text-left">Precio</th>
-                                    <th class="text-left">Descuento</th>
+                                    <th class="text-left">Precio($)</th>
                                     <th class="text-left">Importe</th>
+                                    <th class="text-left">Descuento(%)</th>
+                                    <th class="text-left">Descuento($)</th>
+                                    <th class="text-left">Importe Total</th>
+                                    <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -100,7 +103,9 @@
                                     <td>{{ item.meas_name }}</td>
                                     <td>{{ item.prpd_quantity }}</td>
                                     <td>{{ item.prpd_price }}</td>
+                                    <td>{{ formatMoney((item.prpd_quantity * item.prpd_price)) }}</td>
                                     <td>{{ item.prpd_discountrate }}</td>
+                                    <td>{{ formatMoney((item.prpd_quantity * item.prpd_price)*((item.prpd_discountrate/100))) }}</td>
                                     <td>${{ formatMoney((item.prpd_quantity * item.prpd_price)*(1- (item.prpd_discountrate/100))) }}</td>
 
                                 </tr>
@@ -110,8 +115,11 @@
                                     <td />
                                     <td />
                                     <td />
+                                    <td />
+                                    <td />
                                     <td>Subtotal</td>
                                     <td>${{formatMoney(subtotal)}}</td>
+                                    <td />
                                 </tr>
                                 <tr>
                                     <td />
@@ -119,8 +127,35 @@
                                     <td />
                                     <td />
                                     <td />
+                                    <td />
+                                    <td />
+                                    <td>Descuento</td>
+                                    <td>${{formatMoney(descuento)}}</td>
+                                    <td />
+                                </tr>
+                                <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
                                     <td>I.V.A.</td>
                                     <td>${{formatMoney(iva)}}</td>
+                                    <td />
+                                </tr>
+                                <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td>IEPS</td>
+                                    <td>${{formatMoney(ieps)}}</td>
+                                    <td />
                                 </tr>
                             </tbody>
                             <tfoot>
@@ -130,8 +165,11 @@
                                     <td />
                                     <td />
                                     <td />
+                                    <td />
+                                    <td />
                                     <td>Total</td>
                                     <td>${{formatMoney(total)}}</td>
+                                    <td />
                                 </tr>
                             </tfoot>
                         </template>
@@ -187,8 +225,10 @@ export default {
             snackbar: false,
             timeout: 2000,
             subtotal: 0,
+            descuento: 0,
             total: 0,
             iva: 0,
+            ieps: 0,
             textMsg: "",
             editadoHeader: {
                 prpu_pk: 0,
@@ -447,15 +487,26 @@ export default {
         },
 
         getTotal() {
-
             this.subtotal = 0;
+            this.descuento = 0;
+            this.iva = 0;
+            this.ieps = 0;
             for (var i = 0; i < this.desserts.length; i++) {
+                var importe = this.desserts[i].prpd_price * this.desserts[i].prpd_quantity;
+                var importeDescuento = (importe * (1 - this.desserts[i].prpd_discountrate / 100));
 
-                this.subtotal = this.subtotal + ((this.desserts[i].prpd_price * this.desserts[i].prpd_quantity) * (1 - (this.desserts[i].prpd_discountrate / 100)));
-                console.log(this.subtotal);
+                this.descuento = this.descuento + ((importe) * ((this.desserts[i].prpd_discountrate / 100)));
+
+                this.subtotal = this.subtotal + (importeDescuento);
+                if (this.desserts[i].prod_iva == 1)
+                    this.iva = this.iva + ((importeDescuento / (1 + (this.desserts[i].syst_iva / 100))) * (this.desserts[i].syst_iva / 100));
+                if (this.desserts[i].prod_ieps == 1)
+                    this.ieps = this.ieps + ((importeDescuento) * (this.desserts[i].syst_ieps / 100));
+
             }
 
-            this.total = this.subtotal + this.iva;
+            this.total = this.subtotal + this.ieps;
+            console.log('this.total = ' + this.total)
         },
 
         finalizar() {

@@ -61,7 +61,24 @@
             <v-col>
                 <v-card>
                     <v-row>
-                        <v-col cols="4">
+                        <v-col cols="6">
+                            <v-card-text class="category d-inline-flex font-weight-light">
+                                <v-label>
+                                    <h3>Identificador:</h3> {{editadoHeader.prpo_identifier}}
+                                </v-label>
+                            </v-card-text>
+                        </v-col>
+
+                        <v-col cols="6">
+                            <v-card-text class="category d-inline-flex font-weight-light">
+                                <v-label>
+                                    <h3>Fecha:</h3> {{editadoHeader.created_at}}
+                                </v-label>
+                            </v-card-text>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="6">
                             <v-card-text class="category d-inline-flex font-weight-light">
                                 <v-label>
                                     <h3>Proveedor:</h3> {{editadoHeader.prov_name}}
@@ -69,7 +86,7 @@
                             </v-card-text>
                         </v-col>
 
-                        <v-col cols="4">
+                        <v-col cols="6">
                             <v-card-text class="category d-inline-flex font-weight-light">
                                 <v-label>
                                     <h3>Sucursal:</h3> {{editadoHeader.stor_name}}
@@ -93,8 +110,11 @@
                                     <th class="text-left">Unidad Medida</th>
                                     <th class="text-left">Cantidad</th>
                                     <th class="text-left">Precio</th>
-                                    <th class="text-left">Descuento</th>
                                     <th class="text-left">Importe</th>
+                                    <th class="text-left">Descuento(%)</th>
+                                    <th class="text-left">Descuento($)</th>
+                                    <th class="text-left">Importe Total</th>
+                                    <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -105,7 +125,9 @@
                                     <td>{{ item.meas_name }}</td>
                                     <td>{{ item.ppod_quantity }}</td>
                                     <td>{{ item.ppod_providerprice }}</td>
+                                    <td>{{ formatMoney((item.ppod_quantity * item.ppod_providerprice)) }}</td>
                                     <td>{{ item.ppod_discountrate }}</td>
+                                    <td>{{ formatMoney((item.ppod_quantity * item.ppod_providerprice)*((item.ppod_discountrate/100))) }}</td>
                                     <td>${{ formatMoney((item.ppod_quantity * item.ppod_providerprice)*(1- (item.ppod_discountrate/100))) }}</td>
 
                                 </tr>
@@ -115,8 +137,11 @@
                                     <td />
                                     <td />
                                     <td />
+                                    <td />
+                                    <td />
                                     <td>Subtotal</td>
                                     <td>${{formatMoney(subtotal)}}</td>
+                                    <td />
                                 </tr>
                                 <tr>
                                     <td />
@@ -124,8 +149,35 @@
                                     <td />
                                     <td />
                                     <td />
+                                    <td />
+                                    <td />
+                                    <td>Descuento</td>
+                                    <td>${{formatMoney(descuento)}}</td>
+                                    <td />
+                                </tr>
+                                <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
                                     <td>I.V.A.</td>
                                     <td>${{formatMoney(iva)}}</td>
+                                    <td />
+                                </tr>
+                                <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td>IEPS</td>
+                                    <td>${{formatMoney(ieps)}}</td>
+                                    <td />
                                 </tr>
                             </tbody>
                             <tfoot>
@@ -135,8 +187,11 @@
                                     <td />
                                     <td />
                                     <td />
+                                    <td />
+                                    <td />
                                     <td>Total</td>
                                     <td>${{formatMoney(total)}}</td>
+                                    <td />
                                 </tr>
                             </tfoot>
                         </template>
@@ -192,8 +247,10 @@ export default {
             snackbar: false,
             timeout: 2000,
             subtotal: 0,
+            descuento: 0,
             total: 0,
             iva: 0,
+            ieps: 0,
             textMsg: "",
             editadoHeader: {
                 created_at: '',
@@ -473,13 +530,24 @@ export default {
         getTotal() {
 
             this.subtotal = 0;
+            this.descuento = 0;
+            this.iva = 0;
+            this.ieps = 0;
             for (var i = 0; i < this.desserts.length; i++) {
+                var importe = this.desserts[i].ppod_providerprice * this.desserts[i].ppod_quantity;
+                var importeDescuento = (importe * (1 - this.desserts[i].ppod_discountrate / 100));
 
-                this.subtotal = this.subtotal + ((this.desserts[i].ppod_providerprice * this.desserts[i].ppod_quantity) * (1 - (this.desserts[i].ppod_discountrate / 100)));
-                console.log(this.subtotal);
+                this.descuento = this.descuento + ((importe) * ((this.desserts[i].ppod_discountrate / 100)));
+
+                this.subtotal = this.subtotal + (importeDescuento);
+                if (this.desserts[i].prod_iva == 1)
+                    this.iva = this.iva + ((importeDescuento / (1 + (this.desserts[i].syst_iva / 100))) * (this.desserts[i].syst_iva / 100));
+                if (this.desserts[i].prod_ieps == 1)
+                    this.ieps = this.ieps + ((importeDescuento) * (this.desserts[i].syst_ieps / 100));
+
             }
 
-            this.total = this.subtotal + this.iva;
+            this.total = this.subtotal + this.ieps;
         },
 
         finalizar() {

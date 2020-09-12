@@ -175,7 +175,7 @@
                                     <th class="text-left">Producto</th>
                                     <th class="text-left">Unidad Medida</th>
                                     <th class="text-left">Cantidad</th>
-                                    <th class="text-left">Precio</th>
+                                    <th class="text-left">Precio($)</th>
                                     <th class="text-left">Importe</th>
                                     <th class="text-left">Descuento(%)</th>
                                     <th class="text-left">Descuento($)</th>
@@ -195,10 +195,10 @@
                                     <td>
                                         <v-text-field v-model="item.prpd_price" label="" @change="onQuantityChange(item)" required></v-text-field>
                                     </td>
+                                    <td>{{ formatMoney((item.prpd_quantity * item.prpd_price)) }}</td>
                                     <td>
                                         <v-text-field v-model="item.prpd_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
                                     </td>
-                                    <td>{{ formatMoney((item.prpd_quantity * item.prpd_price)) }}</td>
                                     <td>{{ formatMoney((item.prpd_quantity * item.prpd_price)*((item.prpd_discountrate/100))) }}</td>
                                     <td>${{ formatMoney((item.prpd_quantity * item.prpd_price)*(1- (item.prpd_discountrate/100))) }}</td>
                                     <td>
@@ -409,6 +409,7 @@ export default {
                 prpu_amount: 0,
                 prpu_observation: '',
             },
+            users: '',
             enabledStore: false,
             dialogcredito: false,
             dialogcontado: false,

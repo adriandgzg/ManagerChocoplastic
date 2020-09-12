@@ -237,7 +237,7 @@ export default {
                 if (response.data.status.code == 200) {
 
                     this.textMsg = "¡Eliminado correctamente!";
-                    this.normal('Notificación', textMsg, "success");
+                    this.normal('Notificación', this.textMsg, "success");
                     this.getCategories();
                 } else {
                     this.normal('Notificación', "Ocurrio un error al eliminar el producto", "error");

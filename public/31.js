@@ -415,6 +415,7 @@ __webpack_require__.r(__webpack_exports__);
         prpu_amount: 0,
         prpu_observation: ''
       },
+      users: '',
       enabledStore: false,
       dialogcredito: false,
       dialogcontado: false,
@@ -1700,7 +1701,7 @@ var render = function() {
                                     ]),
                                     _vm._v(" "),
                                     _c("th", { staticClass: "text-left" }, [
-                                      _vm._v("Precio")
+                                      _vm._v("Precio($)")
                                     ]),
                                     _vm._v(" "),
                                     _c("th", { staticClass: "text-left" }, [
@@ -1804,6 +1805,17 @@ var render = function() {
                                           1
                                         ),
                                         _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.formatMoney(
+                                                item.prpd_quantity *
+                                                  item.prpd_price
+                                              )
+                                            )
+                                          )
+                                        ]),
+                                        _vm._v(" "),
                                         _c(
                                           "td",
                                           [
@@ -1835,17 +1847,6 @@ var render = function() {
                                           ],
                                           1
                                         ),
-                                        _vm._v(" "),
-                                        _c("td", [
-                                          _vm._v(
-                                            _vm._s(
-                                              _vm.formatMoney(
-                                                item.prpd_quantity *
-                                                  item.prpd_price
-                                              )
-                                            )
-                                          )
-                                        ]),
                                         _vm._v(" "),
                                         _c("td", [
                                           _vm._v(
