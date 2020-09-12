@@ -9,17 +9,7 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogQuestion" persistent max-width="290">
-            <v-card>
-                <v-card-title class="headline">Información</v-card-title>
-                <v-card-text>{{messageQuestion}}.</v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="dialogQuestion = false">Cancelar</v-btn>
-                    <v-btn color="green darken-1" text @click="guardaFinalizar">Continuar</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+
         <v-dialog v-model="dialogQuestionDelete" persistent max-width="290">
             <v-card>
                 <v-card-title class="headline">Alerta</v-card-title>

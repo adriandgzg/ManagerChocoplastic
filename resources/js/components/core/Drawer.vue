@@ -31,7 +31,7 @@
                 <v-list-item-title v-text="link.text" />
             </v-list-item>
 
-            <v-list-group :prepend-icon="link.icon" no-action v-for="(link, i) in linksCatalogos" :key="i" :to="link.to" :active-class="color" v-if="can(link.access)">
+            <v-list-group :prepend-icon="link.icon" no-action v-for="(link, i) in linksCatalogos" :key="i+200" :to="link.to" :active-class="color" v-if="can(link.access)">
                 <template v-slot:activator>
                     <v-list-item-title>{{link.text}}</v-list-item-title>
                 </template>
@@ -236,8 +236,8 @@ export default {
         ],
 
         responsive: false,
-        user: "",
-        admin: ""
+        userDrawer: "",
+        adminDrawer: ""
     }),
     computed: {
         ...mapState("app", ["image", "color"]),
@@ -272,9 +272,9 @@ export default {
             axios
                 .get("/listUser")
                 .then(response => {
-                    this.user = response.data.data;
-                    console.log(this.user);
-                    this.getRol(this.user.id);
+                    this.userDrawer = response.data.data;
+                    console.log(this.userDrawer);
+                    this.getRol(this.userDrawer.id);
                 })
                 .catch(e => {
                     console.log(e);
@@ -284,7 +284,7 @@ export default {
             axios
                 .get("/rolUser/" + id)
                 .then(response => {
-                    this.admin = response.data.data;
+                    this.adminDrawer = response.data.data;
                     //console.log('kkkk-> ' +  this.admin.permission_id)
                 })
                 .catch(e => {
