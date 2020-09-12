@@ -155,13 +155,12 @@ export default {
                     value: 'created_at'
                 },
             ],
-            headers: [{
+                headers: [{
                     text: 'ID',
-                    value: 'clde_pk',
-                    width: '10%'
+                    value: 'clde_pk'
                 },
                 {
-                    text: 'No. Venta',
+                    text: 'Venta',
                     value: 'clsa_identifier'
                 },
                 {
@@ -190,8 +189,7 @@ export default {
                 },
                 {
                     text: '',
-                    value: 'action',
-                    width: '20%'
+                    value: 'action'
                 },
 
             ],
@@ -207,6 +205,7 @@ export default {
                 clde_amount: 0,
                 clde_amount_paid: 0,
                 clde_amount_outstanding: 0,
+                clpa_reference : ''
             },
             defaultItem: {
                 clde_fk: 0, //PK Cliente Deuda
@@ -274,8 +273,10 @@ export default {
                         this.boxEnabled = true
                     } else {
                         this.boxEnabled = false
+                        this.bocu_pk = response.data.data.bocu_pk;
                     }
                     console.log("boxEnabled -->" + this.boxEnabled)
+                    console.log("bocu_pk -->" + this.bocu_pk)
                 })
                 .catch(e => {
                     console.log(e);
@@ -330,6 +331,7 @@ export default {
             this.editado.pash_fk = 0
             this.editado.clpa_amount = 0
             this.editado.clde_amount = item.clde_amount
+            //this.editado.clpa_reference = item.clpa_reference
             this.editado.clde_amount_paid = item.clde_amount_paid
             this.editado.clde_amount_outstanding = item.clde_amount_outstanding
         },
@@ -345,6 +347,7 @@ export default {
         },
         guardar() {
             this.editado.pash_fk = this.selectpame.pash_pk;
+            this.editado.bocu_fk = this.bocu_pk;
 
             if (this.selectpame == '' || this.selectpame == null) {
 
@@ -354,15 +357,14 @@ export default {
 
             axios.post('/client/payments', this.editado)
                 .then(response => {
-                    console.log(response)
+                    console.log(this.editado);
+                    console.log(response);
                     if (response.data.code == 200) {
-
-                        this.textMsg = "¡Actualizado correctamente!";
-                        this.normal('Notificación', '¡Actualizado correctamente!', "success");
+                        this.normal('Notificación',response.data.message, "success");
                         this.getClientesPago();
                         this.cancelar()
                     } else {
-                        this.normal('Notificación', response.data.message, "success");
+                        this.normal('Notificación', response.data.message, "error"); 
                     }
 
                 })

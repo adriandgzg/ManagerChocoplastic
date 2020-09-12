@@ -99,13 +99,9 @@ import CripNotice from "crip-vue-notice";
 export default {
     data() {
         return {
-            headers: [+{
-                    text: 'ID',
-                    value: 'clor_pk',
-                    width: '10%'
-                },
+            headers: [
                 {
-                    text: 'No. Orden',
+                    text: 'Pedido',
                     value: 'clor_identifier'
                 },
                 {

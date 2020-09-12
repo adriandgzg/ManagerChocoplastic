@@ -487,8 +487,8 @@ export default {
             this.editado = Object.assign({}, item)
             axios.post('/client_sale_details/update', this.editado)
                 .then(response => {
-                    this.textMsg = "¡Actualizado correctamente!";
-                    console.log("¡Actualizado correctamente!")
+                    console.log(this.editado);
+                    console.log(response);
                     this.getTotal();
                 })
                 .catch(e => {

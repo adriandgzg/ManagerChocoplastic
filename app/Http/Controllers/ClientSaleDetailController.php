@@ -88,10 +88,10 @@ class ClientSaleDetailController extends ApiResponseController
                 'success' => false,
                 'message' => $validator->errors()
             ], 200);
-
         }
 
-        try {
+        try 
+        {
             //Asignacion de variables
             $vclsd_pk = $vInput['clsd_pk'];
             $vclsd_quantity = $vInput['clsd_quantity'];

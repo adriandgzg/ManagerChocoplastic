@@ -8,8 +8,9 @@ use Validator;
 use DB;
 use App\ClientPayment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\api\ApiResponseController;
 
-class ClientPaymentController extends Controller
+class ClientPaymentController extends ApiResponseController
 {
     /**
      * Display a listing of the resource.
@@ -45,14 +46,15 @@ class ClientPaymentController extends Controller
             'clde_fk' => 'required', //PK Cliente Deuda
             'clie_fk' => 'required', //PK Cliente
             'pash_fk' => 'required', //PK Forma de Pago
+            'bocu_fk' => 'required', //PK Caja
             'clpa_amount' => 'required', //Monto
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'code' => 500,
+                'code' => 404,
                 'success' => false,
-                'message' => $validator->errors()
+                'message' => "Detalle de Validación"
             ], 200);
         }
 
@@ -61,6 +63,7 @@ class ClientPaymentController extends Controller
            $vclde_fk = $vInput['clde_fk'];
            $vclie_fk = $vInput['clie_fk'];
            $vpash_fk = $vInput['pash_fk'];
+           $vbocu_fk = $vInput['bocu_fk'];
            $vclpa_amount = $vInput['clpa_amount'];
            $vclpa_reference = $vInput['clpa_reference'];
 
@@ -82,6 +85,7 @@ class ClientPaymentController extends Controller
                     $vCPC->clie_fk = $vclie_fk;
                     $vCPC->clde_fk = $vclde_fk;
                     $vCPC->pash_fk = $vpash_fk;
+                    $vCPC->bocu_fk = $vbocu_fk;
                     $vCPC->clpa_amount = $vclpa_amount;
                     $vCPC->clpa_reference = $vclpa_reference;
                     $vCPC->save();
@@ -143,10 +147,11 @@ class ClientPaymentController extends Controller
             }
 
         } catch (Exception $e) {
+            return $e;
             return response()->json([
                 'code' => 500,
                 'success' => false,
-                'message' => $e
+                'message' => "Detalle Interno, informar al Administrador del Sistema."
             ], 200);
         }
     }

@@ -16,7 +16,8 @@ class ClientDebtController extends Controller
      */
     public function index()
     {
-        try {
+        try 
+        {
             $vClientSales = DB::table('client_debts AS CD')
                 ->join('clients AS C', 'C.clie_pk', '=', 'CD.clie_fk')
                 ->join('client_sales AS CS', 'CS.clsa_pk', '=', 'CD.clsa_fk')
@@ -39,6 +40,7 @@ class ClientDebtController extends Controller
                     
                 )
                 ->where('CD.clde_status', '<>', 0)
+                ->orderByDesc('CD.created_at')
                 ->get();
 
             return response()->json([
