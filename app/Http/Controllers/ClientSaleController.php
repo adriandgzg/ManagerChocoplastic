@@ -11,7 +11,6 @@ use App\Product;
 use App\ClientDebt;
 use App\ClientSale;
 use App\ClientOrder;
-use App\ClientPayment;
 use App\ClientSaleDetail;
 use App\ProductInventory;
 use App\ClientOrderDetail;
@@ -33,6 +32,7 @@ class ClientSaleController extends ApiResponseController
         try {
             $vClientSales = DB::table('client_sales AS CS')
                 ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
+                ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
                 ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
                 ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
                 ->select(
@@ -45,12 +45,17 @@ class ClientSaleController extends ApiResponseController
                         WHEN CS.clsa_status = 3 THEN "Pagado" 
                         ELSE "" END) AS clsa_status'),
                     'CS.created_at',
+
+                    'CO.clor_identifier',
+
                     'C.clie_pk',
                     'C.clie_identifier',
                     'C.clie_name',
                     'C.clie_rfc',
+
                     'PM.pame_pk',
                     'PM.pame_name',
+
                     'S.stor_pk',
                     'S.stor_name',
                 )
@@ -329,12 +334,15 @@ class ClientSaleController extends ApiResponseController
                     'CS.clsa_pk',
                     'CS.clsa_identifier',
                     'CS.clor_fk AS clor_pk',
+
                     DB::raw('(CASE 
                         WHEN CS.clsa_status = 0 THEN "Pendiente" 
                         WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
                         WHEN CS.clsa_status = 3 THEN "Pagado" 
                         ELSE "" END) AS clsa_status'),
                     'CS.created_at',
+
+                    'CO.clor_identifier',
 
                     'C.clie_pk',
                     'C.clie_identifier',
@@ -424,10 +432,9 @@ class ClientSaleController extends ApiResponseController
             'clsa_pk' => 'required', //PK Venta
             'clie_fk' => 'required', //PK Cliente
             'pame_fk' => 'required', //PK Metodo Pago
-            'stor_fk' => 'required', //PK Sucursal
+            //'stor_fk' => 'required', //PK Sucursal
+            'bocu_fk' => 'required', //PK Caja
             'clde_amount' => 'required', //Monto Total
-            //'clpa_amount_cash' => 'required', //Monto Efectivo
-            //'clpa_amount_transfer' => 'required', //Monto Transferencia
         ]);
 
 
@@ -446,10 +453,9 @@ class ClientSaleController extends ApiResponseController
             $vclsa_pk = $vInput['clsa_pk'];
             $vclie_fk = $vInput['clie_fk'];
             $vpame_fk = $vInput['pame_fk'];
-            $vstor_fk = $vInput['stor_fk'];
+            //$vstor_fk = $vInput['stor_fk'];
+            $vbocu_fk = $vInput['bocu_fk'];
             $vclde_amount = $vInput['clde_amount'];
-            //$vclpa_amount_cash = $vInput['clpa_amount_cash'];
-            //$vclpa_amount_transfer = $vInput['clpa_amount_transfer'];
 
             //Consultar Venta Cliente
             $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)->where('clsa_status', '=', 0)->first();
@@ -529,7 +535,7 @@ class ClientSaleController extends ApiResponseController
                     $vclsa_identifier =  "Ven_" . $vsyst_clie_sale;
 
                     //Modificar Venta (Finalizar)
-                    DB::table('client_sales')
+                    /*DB::table('client_sales')
                     ->where('clsa_pk', '=', $vclsa_pk)
                     ->update([
                         'clsa_status' =>  $vclsa_status, 
@@ -537,11 +543,17 @@ class ClientSaleController extends ApiResponseController
                         'pame_fk' =>  $vpame_fk, 
                         'stor_fk' => $vstor_fk, 
                         'clsa_identifier' => $vclsa_identifier
-                    ]);
+                    ]);*/
+                    //Modificar Venta Detalle
+                    $vCSU = ClientSale::find($vclsa_pk);
+                    $vCSU->clsa_status = $vclsa_status;
+                    $vCSU->clie_fk = $vclie_fk;
+                    $vCSU->pame_fk = $vpame_fk;
+                    $vCSU->clsa_identifier = $vclsa_identifier;
+                    $vCSU->save();
 
                     //////////////////  Inserción de Log  //////////////////
                     $this->getstorelog('client_sales', $vclsa_pk, 2);
-
 
                     if ($vpame_fk == 1) 
                     {
@@ -555,6 +567,7 @@ class ClientSaleController extends ApiResponseController
                         $vCD = new ClientDebt();        
                         $vCD->clie_fk = $vclie_fk;
                         $vCD->clsa_fk = $vclsa_pk;
+                        $vCD->bocu_fk = $vbocu_fk;
                         $vCD->clde_amount = $vclde_amount;
                         $vCD->save();
 

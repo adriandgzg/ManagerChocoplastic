@@ -69,8 +69,13 @@ export default {
     data() {
         return {
             headers: [{
-                    text: 'ID',
+                    text: 'Venta',
                     value: 'clsa_identifier',
+                    width: '10%'
+                },
+                {
+                    text: 'Pedido',
+                    value: 'clor_identifier',
                     width: '10%'
                 },
                 {

@@ -23,6 +23,9 @@ class CreateClientDebtsTable extends Migration
             $table->bigInteger('clsa_fk')->unsigned(); //Llave Foranea Venta 
             $table->foreign('clsa_fk')->references('clsa_pk')->on('client_sales')->onUpdate('cascade');
 
+            $table->bigInteger('bocu_fk')->unsigned(); //Llave Foranea Caja
+            //$table->foreign('bocu_fk')->references('bocu_pk')->on('box_cuts')->onUpdate('cascade');
+
             $table->decimal('clde_amount', 12, 2); //Monto
             $table->smallInteger('clde_status')->default(1); //Estatus
             $table->timestamps();

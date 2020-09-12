@@ -51,8 +51,8 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
                 'ppod_quantity' => 'required|int', //Cantidad
                 'ppod_providerprice' => 'required', //Precio
                 'ppod_discountrate' => 'required', //% Descuento
-                'ppod_ieps' => 'required', //% Descuento
-                'ppod_iva' => 'required' //% Descuento
+                //'ppod_ieps' => 'required', //% Descuento
+                //'ppod_iva' => 'required' //% Descuento
             ]);
 
             if ($vVal->fails()) {
@@ -66,8 +66,8 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
             $vppod_quantity = $vInput['ppod_quantity'];
             $vppod_providerprice = $vInput['ppod_providerprice'];
             $vppod_discountrate = $vInput['ppod_discountrate'];
-            $vppod_ieps = $vInput['ppod_ieps'];
-            $vppod_iva = $vInput['ppod_iva'];
+            //$vppod_ieps = $vInput['ppod_ieps'];
+            //$vppod_iva = $vInput['ppod_iva'];
 
             if ($vprpo_fk == 0) {
                 //Inserción de la tabla principal (Orden de Compra del Proveedor)
@@ -96,8 +96,8 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
             $vPPOD->ppod_actualprice = $vProd->prod_actualprice;
             $vPPOD->ppod_providerprice = $vppod_providerprice;
             $vPPOD->ppod_discountrate = $vppod_discountrate;
-            $vPPOD->ppod_ieps = $vppod_ieps;
-            $vPPOD->ppod_iva = $vppod_iva;
+            $vPPOD->ppod_ieps = 0;//$vppod_ieps;
+            $vPPOD->ppod_iva = 0;//$vppod_iva;
             $vPPOD->save();
 
             //Asignación de PK de la Orden de Compra Detalle

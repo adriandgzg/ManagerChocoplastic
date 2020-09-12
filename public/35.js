@@ -79,8 +79,12 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       headers: [{
-        text: 'ID',
+        text: 'Venta',
         value: 'clsa_identifier',
+        width: '10%'
+      }, {
+        text: 'Pedido',
+        value: 'clor_identifier',
         width: '10%'
       }, {
         text: 'Cliente',

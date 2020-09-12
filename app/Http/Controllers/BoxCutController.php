@@ -272,29 +272,30 @@ class BoxCutController extends ApiResponseController
                 return $this->dbResponse(null, 500, null, 'PK Obligatorio');
             }
 
+            //
             $vBCSel = DB::table('box_cuts AS BC') 
                 ->join('stores AS S', 'BC.stor_fk', '=', 'S.stor_pk')
                 ->join('admins AS A', 'BC.admi_fk', '=', 'A.id')
                 ->select(
-                    'bocu_pk',
-                    'bocu_startdate',
-                    'bocu_enddate',
+                    'BC.bocu_pk',
+                    'BC.bocu_startdate',
+                    'BC.bocu_enddate',
 
-                    'bocu_initialamount', //Saldo Inicial
+                    'BC.bocu_initialamount', //Saldo Inicial
                     DB::raw("
-                        500 AS totalcharge
+                        (SELECT SUM(CPA.cpam_amount) AS totalcharge FROM client_payment_amounts AS CPA WHERE CPA.cpam_status = 1 AND CPA.bocu_fk = BC.bocu_pk AND CPA.pash_fk = 1) AS totalcharge
                     "), //Total Cobros
                     DB::raw("
-                        200 AS totalwithdrawals
+                        (SELECT SUM(CW.cawi_amount) AS totalwithdrawals FROM cash_withdrawals AS CW WHERE CW.cawi_status = 1 AND CW.bocu_fk = BC.bocu_pk) AS totalwithdrawals
                     "), //Total Retiros
-                    'bocu_endamount', //Saldo Final
+                    'BC.bocu_endamount', //Saldo Final
                     DB::raw("
                         100 AS totalcredit
                     "), //Total Credito
                    
 
-                    'bocu_observation',
-                    'bocu_status',
+                    'BC.bocu_observation',
+                    'BC.bocu_status',
 
                     'S.stor_pk',
                     'S.stor_name',
@@ -310,128 +311,130 @@ class BoxCutController extends ApiResponseController
             if($vBCSel)
             {    
 
-        $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 140));
-        $pdf->SetMargins(1, 1, 1);
-        $pdf->AddPage();
-        $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
-        $pdf->Image(config('app.url') . '/images/logo_chocoplastic.png', 20, 2, 25);
-        $pdf->SetY(12);
-        $lineHeigth = 2;
+                $vTotal = ($vBCSel->bocu_initialamount + $vBCSel->totalcharge) - $vBCSel->totalwithdrawals;
+
+                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 140));
+                $pdf->SetMargins(1, 1, 1);
+                $pdf->AddPage();
+                $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
+                $pdf->Image(config('app.url') . '/images/logo_chocoplastic.png', 20, 2, 25);
+                $pdf->SetY(12);
+                $lineHeigth = 2;
 
         
-        $pdf->SetFont('Arial', 'B', 5);
-        $pdf->Cell(18,$lineHeigth,'',0,'C');
-        $pdf->Cell(6,$lineHeigth,'RFC',0,'R');
-        $pdf->SetFont('Arial', '', 5);
-        $pdf->Cell(20, $lineHeigth, 'XAXX010101000', '', '1', 'L');
-        $pdf->SetFont('Arial', 'B', 5);
-        $pdf->Cell(8,$lineHeigth,'',0,'C');
-        $pdf->Cell(15,$lineHeigth,'Domicilio Fiscal: ',0,'R');
-        $pdf->SetFont('Arial', '', 5);
-        $pdf->Cell(20, $lineHeigth, utf8_decode('Ubicación de la tienda'), '', '1', 'L');
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(18,$lineHeigth,'',0,'C');
+                $pdf->Cell(6,$lineHeigth,'RFC',0,'R');
+                $pdf->SetFont('Arial', '', 5);
+                $pdf->Cell(20, $lineHeigth, 'XAXX010101000', '', '1', 'L');
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(8,$lineHeigth,'',0,'C');
+                $pdf->Cell(15,$lineHeigth,'Domicilio Fiscal: ',0,'R');
+                $pdf->SetFont('Arial', '', 5);
+                $pdf->Cell(20, $lineHeigth, utf8_decode('Ubicación de la tienda'), '', '1', 'L');
 
-        $pdf->Cell(60, $lineHeigth+2,'---------------------------------------------------------------------------------------------', '', '1', 'C');                
-        $pdf->SetFont('Arial', 'B', 7);
-        $pdf->Cell(57, $lineHeigth, utf8_decode($vBCSel->stor_name), '', '1', 'C');
-        $pdf->SetFont('Arial', '', 3);
-        $pdf->Cell(57,$lineHeigth+2, utf8_decode($vBCSel->stor_addres), '', '1', 'C');
-        $pdf->SetFont('Arial', '', 5);
-        $pdf->Cell(60, $lineHeigth,'---------------------------------------------------------------------------------------------', '', '1', 'C');
-                        
-        $pdf->Ln();
-        
-        $pdf->SetFont('Arial', '', 5);
-        $pdf->Cell(33, $lineHeigth, 'Corte de Caja', '', '1', 'L');        
-        $pdf->Cell(17, $lineHeigth, 'ID', '', 0, 'L');
-        $pdf->Cell(20, $lineHeigth, $vBCSel->bocu_pk, '', '1', 'L');
-        $pdf->Cell(17, $lineHeigth, 'Nombre de usuario', '', 0, 'L');
-        $pdf->Cell(20, $lineHeigth, utf8_decode($vBCSel->user), '', '1', 'L');
-        $pdf->Cell(17, $lineHeigth, 'Apertura', '', 0, 'L');
-        $pdf->Cell(20, $lineHeigth, $vBCSel->bocu_startdate, '', '1', 'L');
-        $pdf->Cell(17, $lineHeigth, 'Cierre', '', 0, 'L');
-        $pdf->Cell(20, $lineHeigth, $vBCSel->bocu_enddate, '', '1', 'L');
-
-
-        $pdf->Ln(4);
-        $pdf->SetFont('Arial', '', 6);
-        $pdf->Cell(57, $lineHeigth, 'EFECTIVO', '', '1', 'C');
-
-        $pdf->Ln(2);
-        $pdf->SetFont('Arial', '', 5);
-        $pdf->Cell(10,4,'',0);
-        $pdf->Cell(25,4,'SALDO INICIAL',1);
-        $pdf->Cell(15,4, $vBCSel->bocu_initialamount,1,0,'R');
-        $pdf->Cell(10,4,'',0);
-        $pdf->Ln();
-        $pdf->Cell(10,4,'',0);
-        $pdf->Cell(25,4,'+ COBROS',1);
-        $pdf->Cell(15,4,$vBCSel->totalcharge,1,0,'R');
-        $pdf->Cell(10,4,'',0);
-        $pdf->Ln();
-        $pdf->Cell(10,4,'',0);
-        $pdf->Cell(25,4,'- RETIROS',1);
-        $pdf->Cell(15,4,$vBCSel->totalwithdrawals,1,0,'R');
-        $pdf->Cell(10,4,'',0);
-        $pdf->Ln();
-        $pdf->Cell(10,4,'',0);
-        $pdf->Cell(40,4,'-----------------------------------------------------------------',1);        
-        $pdf->Cell(10,4,'',0);
-        $pdf->Ln();
-        $pdf->SetFont('Arial', 'B', 5);
-        $pdf->Cell(10,4,'',0);
-        $pdf->Cell(25,4,'TOTAL',1);
-        $pdf->Cell(15,4,$vBCSel->totalcharge,1,0,'R');
-        $pdf->Cell(10,4,'',0);
-        $pdf->Ln();
-        $pdf->Cell(10,4,'',0);
-        $pdf->Cell(40,4,'-----------------------------------------------------------------',1);        
-        $pdf->Cell(10,4,'',0);
-        $pdf->Ln();
-        $pdf->SetFont('Arial', '', 5);
-        $pdf->Cell(10,4,'',0);
-        $pdf->Cell(25,4,'SALDO FINAL',1);
-        $pdf->Cell(15,4,$vBCSel->bocu_endamount,1,0,'R');
-        $pdf->Cell(10,4,'',0);
-        $pdf->Ln();
-        $pdf->Cell(10,4,'',0);
-        $pdf->Cell(40,4,'-----------------------------------------------------------------',1);        
-        $pdf->Cell(10,4,'',0);
-        $pdf->Ln();
-        $pdf->SetFont('Arial', 'B', 5);
-        $pdf->Cell(10,4,'',0);
-        $pdf->Cell(25,4,'FALTANTE',1);
-        $pdf->Cell(15,4,$vBCSel->bocu_initialamount,1,0,'R');
-        $pdf->Cell(10,4,'',0);
-
-        $pdf->Ln(8);
-        $pdf->SetFont('Arial', '', 6);
-        $pdf->Cell(57, $lineHeigth, utf8_decode('CRÉDITO'), '', '1', 'C');
-
-        $pdf->Ln(2);
-        $pdf->SetFont('Arial', 'B', 5);
-        $pdf->Cell(10,4,'',0);
-        $pdf->Cell(25,4,'TOTAL',1);
-        $pdf->Cell(15,4,$vBCSel->bocu_initialamount,1,0,'R');
-        $pdf->Cell(10,4,'',0);
-
-        
-        // Arial italic 8
-        $pdf->SetFont('Arial','I',4);
-        // Número de página
-        $pdf->Cell(0,10,'',0,0,'C');
-            
-        // PIE DE PAGINA
-        $pdf->Ln(20);
-        $pdf->Cell(60,0,'',0,1,'C');
-        $pdf->Ln(3);
-        $pdf->Cell(60,0,'__________________________________________________','', '1','C');
-        $pdf->Ln(2);
-        $pdf->Cell(60,0,utf8_decode($vBCSel->user),'', '1','C');
+                $pdf->Cell(60, $lineHeigth+2,'---------------------------------------------------------------------------------------------', '', '1', 'C');                
+                $pdf->SetFont('Arial', 'B', 7);
+                $pdf->Cell(57, $lineHeigth, utf8_decode($vBCSel->stor_name), '', '1', 'C');
+                $pdf->SetFont('Arial', '', 3);
+                $pdf->Cell(57,$lineHeigth+2, utf8_decode($vBCSel->stor_addres), '', '1', 'C');
+                $pdf->SetFont('Arial', '', 5);
+                $pdf->Cell(60, $lineHeigth,'---------------------------------------------------------------------------------------------', '', '1', 'C');
+                                
+                $pdf->Ln();
+                
+                $pdf->SetFont('Arial', '', 5);
+                $pdf->Cell(33, $lineHeigth, 'Corte de Caja', '', '1', 'L');        
+                $pdf->Cell(17, $lineHeigth, 'ID', '', 0, 'L');
+                $pdf->Cell(20, $lineHeigth, $vBCSel->bocu_pk, '', '1', 'L');
+                $pdf->Cell(17, $lineHeigth, 'Nombre de usuario', '', 0, 'L');
+                $pdf->Cell(20, $lineHeigth, utf8_decode($vBCSel->user), '', '1', 'L');
+                $pdf->Cell(17, $lineHeigth, 'Apertura', '', 0, 'L');
+                $pdf->Cell(20, $lineHeigth, $vBCSel->bocu_startdate, '', '1', 'L');
+                $pdf->Cell(17, $lineHeigth, 'Cierre', '', 0, 'L');
+                $pdf->Cell(20, $lineHeigth, $vBCSel->bocu_enddate, '', '1', 'L');
 
 
+                $pdf->Ln(4);
+                $pdf->SetFont('Arial', '', 6);
+                $pdf->Cell(57, $lineHeigth, 'EFECTIVO', '', '1', 'C');
 
-        ob_get_clean();
-        $pdf->output('I', 'ticket', 'true');
+                $pdf->Ln(2);
+                $pdf->SetFont('Arial', '', 5);
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(25,4,'SALDO INICIAL',1);
+                $pdf->Cell(15,4, '$' . number_format($vBCSel->bocu_initialamount, 2) ,1,0,'R');
+                $pdf->Cell(10,4,'',0);
+                $pdf->Ln();
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(25,4,'+ COBROS',1);
+                $pdf->Cell(15,4, '$' . number_format($vBCSel->totalcharge, 2) ,1,0,'R');
+                $pdf->Cell(10,4,'',0);
+                $pdf->Ln();
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(25,4,'- RETIROS',1);
+                $pdf->Cell(15,4, '$' . number_format($vBCSel->totalwithdrawals, 2) ,1,0,'R');
+                $pdf->Cell(10,4,'',0);
+                $pdf->Ln();
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(40,4,'-----------------------------------------------------------------',1);        
+                $pdf->Cell(10,4,'',0);
+                $pdf->Ln();
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(25,4,'TOTAL',1);
+                $pdf->Cell(15,4, '$' . number_format($vTotal, 2) ,1,0,'R');
+                $pdf->Cell(10,4,'',0);
+                $pdf->Ln();
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(40,4,'-----------------------------------------------------------------',1);        
+                $pdf->Cell(10,4,'',0);
+                $pdf->Ln();
+                $pdf->SetFont('Arial', '', 5);
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(25,4,'SALDO FINAL',1);
+                $pdf->Cell(15,4, '$' . number_format($vBCSel->bocu_endamount , 2) ,1,0,'R');
+                $pdf->Cell(10,4,'',0);
+                $pdf->Ln();
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(40,4,'-----------------------------------------------------------------',1);        
+                $pdf->Cell(10,4,'',0);
+                $pdf->Ln();
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(25,4,'FALTANTE',1);
+                $pdf->Cell(15,4, '$' . number_format($vTotal - $vBCSel->bocu_endamount, 2) ,1,0,'R');
+                $pdf->Cell(10,4,'',0);
+
+                $pdf->Ln(8);
+                $pdf->SetFont('Arial', '', 6);
+                $pdf->Cell(57, $lineHeigth, utf8_decode('CRÉDITO'), '', '1', 'C');
+
+                $pdf->Ln(2);
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(25,4,'TOTAL',1);
+                $pdf->Cell(15,4, '$' . number_format($vBCSel->bocu_initialamount, 2) ,1,0,'R');
+                $pdf->Cell(10,4,'',0);
+
+                
+                // Arial italic 8
+                $pdf->SetFont('Arial','I',4);
+                // Número de página
+                $pdf->Cell(0,10,'',0,0,'C');
+                    
+                // PIE DE PAGINA
+                $pdf->Ln(20);
+                $pdf->Cell(60,0,'',0,1,'C');
+                $pdf->Ln(3);
+                $pdf->Cell(60,0,'__________________________________________________','', '1','C');
+                $pdf->Ln(2);
+                $pdf->Cell(60,0,utf8_decode($vBCSel->user),'', '1','C');
+
+
+
+                ob_get_clean();
+                $pdf->output('I', 'ticket', 'true');
         //exit;
         }
     }

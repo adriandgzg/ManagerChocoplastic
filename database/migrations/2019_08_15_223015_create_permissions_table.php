@@ -63,7 +63,15 @@ class CreatePermissionsTable extends Migration
                 ['admin_id' => 1, 'permission_id' => 6],
                 ['admin_id' => 1, 'permission_id' => 7],
                 ['admin_id' => 1, 'permission_id' => 8],
-                ['admin_id' => 1, 'permission_id' => 9]
+                ['admin_id' => 1, 'permission_id' => 9],
+                ['admin_id' => 1, 'permission_id' => 10],
+                ['admin_id' => 1, 'permission_id' => 11],
+                ['admin_id' => 1, 'permission_id' => 12],
+                ['admin_id' => 1, 'permission_id' => 13],
+                ['admin_id' => 1, 'permission_id' => 14],
+                ['admin_id' => 1, 'permission_id' => 15],
+                ['admin_id' => 1, 'permission_id' => 16],
+                ['admin_id' => 1, 'permission_id' => 17]
             ]
         );
 

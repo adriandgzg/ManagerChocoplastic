@@ -559,9 +559,10 @@ __webpack_require__.r(__webpack_exports__);
     guardaFinalizar: function guardaFinalizar() {
       var _this4 = this;
 
-      this.editadoSale.clde_amount = this.total;
-      this.editadoSale.clpa_amount_cash = this.efectivo;
-      this.editadoSale.clpa_amount_transfer = this.tarjeta;
+      this.editadoSale.clde_amount = this.total; //this.editadoSale.clpa_amount_cash = this.efectivo
+      //this.editadoSale.clpa_amount_transfer = this.tarjeta
+
+      this.editadoSale.bocu_fk = this.bocu_pk;
       axios.post('/clientsales/update', this.editadoSale).then(function (response) {
         if (response.data.code == 200) {
           _this4.textMsg = "¡Actualizado correctamente!";
