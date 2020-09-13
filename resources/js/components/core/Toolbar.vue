@@ -427,6 +427,11 @@ export default {
                         this.normal('Notificación', '¡Actualizado correctamente!', "success");
                         this.editadoBox = this.editadoBoxDefault;
                         this.obtenerCaja();
+                        let route = this.$router.resolve({
+                            path: '/cash/cutbox/printCorte/' + this.editadoBox.bocu_pk
+                        });
+
+                        window.open(route.href, '_blank');
                         this.$router.go();
                     } else {
                         this.normal('Notificación', response.data.message, "error");
