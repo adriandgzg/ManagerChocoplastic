@@ -19,9 +19,36 @@ class ClientController extends Controller
     }
 
     public function ClientsList(){
-        $client = DB::table('clients AS P')
-        ->join('federal_entities AS FE', 'P.feen_fk', '=', 'FE.feen_pk')
-        ->orderBy('FE.created_at', 'DESC')
+        $client = DB::table('clients AS C')
+        ->join('federal_entities AS FE', 'C.feen_fk', '=', 'FE.feen_pk')
+        ->select(
+            'C.clie_pk',
+            'C.feen_fk',
+            'C.clie_identifier',
+            'C.clie_name',
+            'C.clie_rfc',
+            'C.clie_phone',
+            'C.clie_email',
+            'C.clie_addres',
+            'C.clie_cp',
+            'C.clie_city',
+            'C.clie_status',
+            'FE.feen_pk',
+            'FE.feen_name',
+            DB::raw('
+                (
+                    SELECT 
+                        IFNULL(SUM(CD.clde_amount), 0) 
+                        -
+                        (SELECT IFNULL(SUM(CP.clpa_amount), 0)  AS payments FROM client_payments AS CP WHERE CP.clpa_status = 1 AND CP.clde_fk = CD.clde_pk)
+                        AS clde_amount_outstanding 
+                    FROM client_debts AS CD  
+                    WHERE CD.clde_status = 1 AND CD.clie_fk = C.clie_pk
+                ) AS clde_amount_outstanding
+            ') //Monto Pendiente por pagar
+
+        )
+        ->orderBy('C.created_at')
         ->get();
         
         

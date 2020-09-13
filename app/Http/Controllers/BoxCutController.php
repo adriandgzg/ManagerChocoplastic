@@ -152,40 +152,67 @@ class BoxCutController extends ApiResponseController
                 return $this->dbResponse(null, 500, null, 'PK Obligatorio');
             }
 
+            //Suma de deudas
+            $vTotalCredit = DB::table('client_debts AS CD')
+                ->where('CD.clde_status','=',1)
+                ->where('CD.bocu_fk','=',$vbocu_pk )
+                ->sum('CD.clde_amount');
+
+            //Suma de Cobros de las deudas de la caja
+            $vCobrosCreditBox = DB::table('client_payments AS CP')
+            ->join('client_debts AS CD', 'CD.clde_pk', '=', 'CP.clde_fk')
+            ->where('CP.clpa_status','=',1)
+            ->where('CD.clde_status','<>',0)
+            ->where('CP.bocu_fk','=',$vbocu_pk)
+            ->where('CD.bocu_fk','=',$vbocu_pk)
+            ->sum('CP.clpa_amount');
+
+            //Suma de Cobros
+            $vCobrosCredit = DB::table('client_payments AS CP')
+                ->where('CP.clpa_status','=',1)
+                ->where('CP.bocu_fk','=',$vbocu_pk)
+                ->sum('CP.clpa_amount');
+
+            //Consultar Caja
             $vBCSel = DB::table('box_cuts AS BC') 
                 ->join('stores AS S', 'BC.stor_fk', '=', 'S.stor_pk')
                 ->join('admins AS A', 'BC.admi_fk', '=', 'A.id')
                 ->select(
-                    'bocu_pk',
-                    'bocu_startdate',
-                    'bocu_enddate',
+                    'BC.bocu_pk',
+                    'BC.bocu_startdate',
+                    'BC.bocu_enddate',
 
-                    'bocu_initialamount', //Saldo Inicial
+                    'BC.bocu_initialamount', //Saldo Inicial
                     DB::raw("
-                        500 AS totalcharge
+                        $vCobrosCredit + 
+                            (
+                                SELECT SUM(CPA.cpam_amount) AS totalcharge 
+                                FROM client_payment_amounts AS CPA 
+                                INNER JOIN client_sales AS CS ON CS.clsa_pk = CPA.clsa_fk
+                                WHERE CPA.cpam_status = 1 AND CPA.bocu_fk = BC.bocu_pk AND CPA.pash_fk = 1 AND CS.pame_fk = 1
+                            ) AS totalcharge
                     "), //Total Cobros
                     DB::raw("
-                        200 AS totalwithdrawals
+                        (
+                            SELECT SUM(CW.cawi_amount) AS totalwithdrawals 
+                            FROM cash_withdrawals AS CW 
+                            WHERE CW.cawi_status = 1 AND CW.bocu_fk = BC.bocu_pk
+                        ) AS totalwithdrawals
                     "), //Total Retiros
-                    'bocu_endamount', //Saldo Final
-                    DB::raw("
-                        100 AS totalcredit
-                    "), //Total Credito
-                   
+                    'BC.bocu_endamount', //Saldo Final
+                    DB::raw("($vTotalCredit - $vCobrosCreditBox) AS totalcredit"), //Total Credito
 
-                    'bocu_observation',
-                    'bocu_status',
+                    'BC.bocu_observation',
+                    'BC.bocu_status',
 
                     'S.stor_pk',
                     'S.stor_name',
                     'S.stor_addres',
 
                     'A.name AS user'
-                    
-
                     )
                 ->where('BC.bocu_pk', '=', $vbocu_pk)
-                ->first();
+                ->first();;
 
             if($vBCSel)
             { 
