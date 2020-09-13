@@ -420,18 +420,21 @@ export default {
 
             axios.post('/box/update', this.editadoBox)
                 .then(response => {
+                    console.log('response')
                     console.log(response)
                     if (response.data.code == 200) {
                         this.dialogCerrarCaja = false
                         this.textMsg = "¡Actualizado correctamente!";
                         this.normal('Notificación', '¡Actualizado correctamente!', "success");
-                        this.editadoBox = this.editadoBoxDefault;
+
                         this.obtenerCaja();
                         let route = this.$router.resolve({
                             path: '/cash/cutbox/printCorte/' + this.editadoBox.bocu_pk
                         });
 
                         window.open(route.href, '_blank');
+
+                        this.editadoBox = this.editadoBoxDefault;
                         this.$router.go();
                     } else {
                         this.normal('Notificación', response.data.message, "error");
