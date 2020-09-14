@@ -140,74 +140,120 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      headers: [{
-        text: 'ID',
-        value: 'clie_pk',
-        width: '10%'
+      headers: [
+      /*{
+                      text: 'ID',
+                      value: 'clie_pk',
+                      width: '10%'
+                  },*/
+      {
+        text: "Inden",
+        value: "clie_identifier",
+        width: "10%"
       }, {
-        text: 'Id Proveedor',
-        value: 'clie_identifier'
+        text: "Nombre",
+        value: "clie_name"
       }, {
-        text: 'Nombre',
-        value: 'clie_name'
+        text: "Monto Deuda",
+        value: "clde_amount_outstanding"
       }, {
-        text: 'RFC',
-        value: 'clie_rfc'
+        text: "RFC",
+        value: "clie_rfc"
       }, {
-        text: 'Teléfono',
-        value: 'clie_phone'
+        text: "Teléfono",
+        value: "clie_phone"
       }, {
-        text: 'Email',
-        value: 'clie_email'
+        text: "Email",
+        value: "clie_email"
       }, {
-        text: 'Dirección',
-        value: 'clie_addres'
+        text: "Dirección",
+        value: "clie_addres"
       }, {
-        text: 'CP',
-        value: 'clie_cp'
+        text: "CP",
+        value: "clie_cp"
       }, {
-        text: 'Ciudad',
-        value: 'clie_city'
+        text: "Ciudad",
+        value: "clie_city"
       }, {
-        text: 'Estado',
-        value: 'feen_name'
+        text: "Estado",
+        value: "feen_name"
       }, {
-        text: 'Estatus',
-        value: 'status'
+        text: "Estatus",
+        value: "status"
       }, {
-        text: '',
-        value: 'action',
-        width: '20%'
+        text: "",
+        value: "action"
       }],
       select: 0,
       editado: {
         clie_pk: 0,
         feen_fk: 0,
-        clie_identifier: '',
-        clie_name: '',
-        clie_rfc: '',
-        clie_phone: '',
-        clie_email: '',
-        clie_addres: '',
-        clie_cp: '',
-        clie_city: '',
+        clie_identifier: "",
+        clie_name: "",
+        clie_rfc: "",
+        clie_phone: "",
+        clie_email: "",
+        clie_addres: "",
+        clie_cp: "",
+        clie_city: "",
         clie_status: 0
       },
       defaultItem: {
         clie_pk: 0,
         feen_fk: 0,
-        clie_identifier: '',
-        clie_name: '',
-        clie_rfc: '',
-        clie_phone: '',
-        clie_email: '',
-        clie_addres: '',
-        clie_cp: '',
-        clie_city: '',
+        clie_identifier: "",
+        clie_name: "",
+        clie_rfc: "",
+        clie_phone: "",
+        clie_email: "",
+        clie_addres: "",
+        clie_cp: "",
+        clie_city: "",
         clie_status: 0
       },
       editedIndex: -1,
@@ -227,19 +273,19 @@ __webpack_require__.r(__webpack_exports__);
         return value && value.length >= 10 || "Min 10 caracter";
       }],
       nameRules: [function (value) {
-        return !!value || 'Requerido.';
+        return !!value || "Requerido.";
       }, function (value) {
-        return value && value.length >= 3 || 'Min 3 caracteres';
+        return value && value.length >= 3 || "Min 3 caracteres";
       }],
       phoneRules: [function (value) {
-        return !!value || 'Requerido.';
+        return !!value || "Requerido.";
       }, function (value) {
-        return value && value.length == 10 || 'Requiere 10 caracteres';
+        return value && value.length == 10 || "Requiere 10 caracteres";
       }],
       loading: false,
       dialogQuestion: false,
       dialogQuestionDelete: false,
-      messageQuestion: ''
+      messageQuestion: ""
     };
   },
   created: function created() {
@@ -259,7 +305,7 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (e) {
         console.log(e);
 
-        _this.normal('Notificación', "Error al cargar los datos", "error");
+        _this.normal("Notificación", "Error al cargar los datos", "error");
       });
     },
     getEntities: function getEntities() {
@@ -299,9 +345,9 @@ __webpack_require__.r(__webpack_exports__);
     alta: function alta() {
       var _this3 = this;
 
-      axios.post('/clients/add', this.editado).then(function (response) {
+      axios.post("/clients/add", this.editado).then(function (response) {
         _this3.snackbar = true;
-        _this3.textMsg = '¡Alta exitosa!';
+        _this3.textMsg = "¡Alta exitosa!";
 
         _this3.getClients();
       });
@@ -309,9 +355,9 @@ __webpack_require__.r(__webpack_exports__);
     editar: function editar() {
       var _this4 = this;
 
-      axios.put('/clients/update', this.editado).then(function (response) {
+      axios.put("/clients/update", this.editado).then(function (response) {
         _this4.snackbar = true;
-        _this4.textMsg = '¡Actualización Exitosa!';
+        _this4.textMsg = "¡Actualización Exitosa!";
 
         _this4.getClients();
       });
@@ -328,10 +374,10 @@ __webpack_require__.r(__webpack_exports__);
     "delete": function _delete() {
       var _this5 = this;
 
-      axios.put('/clients/delete', this.editado).then(function (response) {
+      axios.put("/clients/delete", this.editado).then(function (response) {
         _this5.textMsg = "¡Eliminado correctamente!";
 
-        _this5.normal('Notificación', _this5.textMsg, "error");
+        _this5.normal("Notificación", _this5.textMsg, "error");
 
         _this5.getClients();
       });
@@ -349,7 +395,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     formTitle: function formTitle() {
-      return this.editedIndex === -1 ? 'Nuevo Registro' : 'Editar Registro';
+      return this.editedIndex === -1 ? "Nuevo Registro" : "Editar Registro";
     }
   }
 });
@@ -485,11 +531,7 @@ var render = function() {
               }
             },
             [
-              _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
-              ),
+              _vm._v("\n      " + _vm._s(_vm.textMsg) + "\n      "),
               _c(
                 "v-btn",
                 {
@@ -500,7 +542,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("Cerrar")]
               )
             ],
             1
@@ -854,7 +896,7 @@ var render = function() {
                                   ? _c(
                                       "v-chip",
                                       { attrs: { color: "green", dark: "" } },
-                                      [_vm._v("  Activo  ")]
+                                      [_vm._v("Activo")]
                                     )
                                   : _c(
                                       "v-chip",

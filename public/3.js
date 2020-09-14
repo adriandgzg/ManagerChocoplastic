@@ -141,54 +141,105 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       headersdetail: [{
-        text: 'ID',
-        value: 'clpa_pk',
-        width: '10%'
+        text: "ID",
+        value: "clpa_pk",
+        width: "10%"
       }, {
-        text: 'Forma de Pago',
-        value: 'pash_name'
+        text: "Forma de Pago",
+        value: "pash_name"
       }, {
-        text: 'Monto pagado',
-        value: 'clpa_amount'
+        text: "Monto pagado",
+        value: "clpa_amount"
       }, {
-        text: 'Referencia',
-        value: 'clpa_reference'
+        text: "Referencia",
+        value: "clpa_reference"
       }, {
-        text: 'Fecha pago',
-        value: 'created_at'
+        text: "Fecha pago",
+        value: "created_at"
       }],
       headers: [{
-        text: 'ID',
-        value: 'clde_pk'
+        text: "ID",
+        value: "clde_pk"
       }, {
-        text: 'Venta',
-        value: 'clsa_identifier'
+        text: "Venta",
+        value: "clsa_identifier"
       }, {
-        text: 'Cliente',
-        value: 'clie_name'
+        text: "Cliente",
+        value: "clie_name"
       }, {
-        text: 'Monto Deuda',
-        value: 'clde_amount'
+        text: "Monto Deuda",
+        value: "clde_amount"
       }, {
-        text: 'Monto Pagado',
-        value: 'clde_amount_paid'
+        text: "Monto Pagado",
+        value: "clde_amount_paid"
       }, {
-        text: 'Monto Pendiente',
-        value: 'clde_amount_outstanding'
+        text: "Monto Pendiente",
+        value: "clde_amount_outstanding"
       }, {
-        text: 'Fecha',
-        value: 'created_at'
+        text: "Fecha",
+        value: "created_at"
       }, {
-        text: 'Estatus',
-        value: 'clde_status_description'
+        text: "Estatus",
+        value: "clde_status_description"
       }, {
-        text: '',
-        value: 'action'
+        text: "",
+        value: "action"
       }],
       select: 0,
       principal: false,
@@ -196,7 +247,7 @@ __webpack_require__.r(__webpack_exports__);
       editado: {
         clde_fk: 0,
         //PK Cliente Deuda
-        clsa_identifier: '',
+        clsa_identifier: "",
         clie_fk: 0,
         //PK Cliente
         pash_fk: 0,
@@ -206,12 +257,12 @@ __webpack_require__.r(__webpack_exports__);
         clde_amount: 0,
         clde_amount_paid: 0,
         clde_amount_outstanding: 0,
-        clpa_reference: ''
+        clpa_reference: ""
       },
       defaultItem: {
         clde_fk: 0,
         //PK Cliente Deuda
-        clsa_identifier: '',
+        clsa_identifier: "",
         clie_fk: 0,
         //PK Cliente
         pash_fk: 0,
@@ -236,31 +287,31 @@ __webpack_require__.r(__webpack_exports__);
       valid: false,
       validProvider: false,
       payments: [],
-      selectpame: '',
+      selectpame: "",
       folioRules: [function (value) {
         return !!value || "Requerido.";
       }, function (value) {
         return value && value.length >= 10 || "Min 10 caracter";
       }],
       nameRules: [function (value) {
-        return !!value || 'Requerido.';
+        return !!value || "Requerido.";
       }, function (value) {
-        return value && value.length >= 3 || 'Min 3 caracteres';
+        return value && value.length >= 3 || "Min 3 caracteres";
       }],
       phoneRules: [function (value) {
-        return !!value || 'Requerido.';
+        return !!value || "Requerido.";
       }, function (value) {
-        return value && value.length == 10 || 'Requiere 10 caracteres';
+        return value && value.length == 10 || "Requiere 10 caracteres";
       }],
       numberRules: [function (value) {
-        return !!value || 'Requerido.';
+        return !!value || "Requerido.";
       }, function (value) {
-        return value > 0 || 'El número debe ser mayor o igual a cero';
+        return value > 0 || "El número debe ser mayor o igual a cero";
       }],
       loading: false,
       dialogQuestion: false,
       dialogQuestionDelete: false,
-      messageQuestion: '',
+      messageQuestion: "",
       boxEnabled: false
     };
   },
@@ -298,7 +349,7 @@ __webpack_require__.r(__webpack_exports__);
         var negativeSign = amount < 0 ? "-" : "";
         var i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
         var j = i.length > 3 ? i.length % 3 : 0;
-        return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+        return negativeSign + (j ? i.substr(0, j) + thousands : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
       } catch (e) {
         console.log(e);
       }
@@ -316,12 +367,12 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response.data);
           _this2.clientsdebts = response.data.data;
         } else {
-          _this2.normal('Notificación', response.data.status.message, "error");
+          _this2.normal("Notificación", response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
 
-        _this2.normal('Notificación', "Error al cargar los datos", "error");
+        _this2.normal("Notificación", "Error al cargar los datos", "error");
       });
     },
     cancelar: function cancelar() {
@@ -356,23 +407,23 @@ __webpack_require__.r(__webpack_exports__);
       this.editado.pash_fk = this.selectpame.pash_pk;
       this.editado.bocu_fk = this.bocu_pk;
 
-      if (this.selectpame == '' || this.selectpame == null) {
-        this.normal('Notificación', "Debe seleccionar un Forma de Pago", "success");
+      if (this.selectpame == "" || this.selectpame == null) {
+        this.normal("Notificación", "Debe seleccionar un Forma de Pago", "success");
         return;
       }
 
-      axios.post('/client/payments', this.editado).then(function (response) {
+      axios.post("/client/payments", this.editado).then(function (response) {
         console.log(_this4.editado);
         console.log(response);
 
         if (response.data.code == 200) {
-          _this4.normal('Notificación', response.data.message, "success");
+          _this4.normal("Notificación", response.data.message, "success");
 
           _this4.getClientesPago();
 
           _this4.cancelar();
         } else {
-          _this4.normal('Notificación', response.data.message, "error");
+          _this4.normal("Notificación", response.data.message, "error");
         }
       })["catch"](function (e) {
         _this4.errors.push(e);
@@ -405,7 +456,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     formTitle: function formTitle() {
-      return this.editedIndex === -1 ? 'Nuevo Registro' : 'Editar Registro';
+      return this.editedIndex === -1 ? "Nuevo Registro" : "Editar Registro";
     }
   }
 });
@@ -445,11 +496,7 @@ var render = function() {
                 expression: "boxEnabled"
               }
             },
-            [
-              _vm._v(
-                "\r\n            Para realizar una venta, primero debe abrir caja.\r\n        "
-              )
-            ]
+            [_vm._v("Para realizar una venta, primero debe abrir caja.")]
           ),
           _vm._v(" "),
           _c(
@@ -472,9 +519,7 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v(
-                        "\r\n                    Cargando\r\n                    "
-                      ),
+                      _vm._v("\n          Cargando\n          "),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -607,22 +652,22 @@ var render = function() {
                             "v-row",
                             [
                               _c("v-col", { attrs: { cols: "6" } }, [
-                                _c("h4", [_vm._v(" No. Venta:")]),
+                                _c("h4", [_vm._v("No. Venta:")]),
                                 _vm._v(
-                                  " " +
+                                  "\n                " +
                                     _vm._s(_vm.editado.clsa_identifier) +
-                                    "\r\n                            "
+                                    "\n              "
                                 )
                               ]),
                               _vm._v(" "),
                               _c("v-col", { attrs: { cols: "6" } }, [
-                                _c("h4", [_vm._v(" Monto total:")]),
+                                _c("h4", [_vm._v("Monto total:")]),
                                 _vm._v(
-                                  " $" +
+                                  "\n                $" +
                                     _vm._s(
                                       _vm.formatMoney(_vm.editado.clde_amount)
                                     ) +
-                                    "\r\n                            "
+                                    "\n              "
                                 )
                               ])
                             ],
@@ -633,28 +678,28 @@ var render = function() {
                             "v-row",
                             [
                               _c("v-col", { attrs: { cols: "6" } }, [
-                                _c("h4", [_vm._v(" Monto pagado:")]),
+                                _c("h4", [_vm._v("Monto pagado:")]),
                                 _vm._v(
-                                  " $" +
+                                  "\n                $" +
                                     _vm._s(
                                       _vm.formatMoney(
                                         _vm.editado.clde_amount_paid
                                       )
                                     ) +
-                                    "\r\n                            "
+                                    "\n              "
                                 )
                               ]),
                               _vm._v(" "),
                               _c("v-col", { attrs: { cols: "6" } }, [
-                                _c("h4", [_vm._v(" Monto pendiente:")]),
+                                _c("h4", [_vm._v("Monto pendiente:")]),
                                 _vm._v(
-                                  " $" +
+                                  "\n                $" +
                                     _vm._s(
                                       _vm.formatMoney(
                                         _vm.editado.clde_amount_outstanding
                                       )
                                     ) +
-                                    "\r\n                            "
+                                    "\n              "
                                 )
                               ])
                             ],

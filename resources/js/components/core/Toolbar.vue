@@ -40,7 +40,7 @@
                         </v-row>
                         <v-row>
                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
-                                <v-text-field v-model="editadoBox.bocu_startdate" label="Inicio de Caja" prepend-icon="event" disabled></v-text-field>
+                                <v-text-field v-model="saldosCaja.bocu_startdate" label="Inicio de Caja" prepend-icon="event" disabled></v-text-field>
                             </v-col>
                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
                                 <v-text-field v-model="dateFormatted" label="Cierre de Caja" prepend-icon="event" disabled></v-text-field>
@@ -48,10 +48,10 @@
                         </v-row>
                         <v-row>
                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
-                                <v-text-field v-model="editadoBox.bocu_initialamount" label="Monto de Apertura" prepend-icon="mdi-square-inc-cash" disabled prefix="" type="number" v-on:keydown="isNumberValid" :rules="numberRules" required></v-text-field>
+                                <v-text-field v-model="saldosCaja.bocu_initialamount" label="Monto de Apertura" prepend-icon="mdi-square-inc-cash" disabled prefix="" type="number" v-on:keydown="isNumberValid" :rules="numberRules" required></v-text-field>
                             </v-col>
                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
-                                <v-text-field v-model="editadoBox.bocu_endamount" label="Monto de Cierre" prepend-icon="mdi-square-inc-cash" prefix="" type="number" v-on:keydown="isNumberValid" :rules="numberRules" required></v-text-field>
+                                <v-text-field v-model="saldosCaja.bocu_endamount" label="Monto de Cierre" prepend-icon="mdi-square-inc-cash" prefix="" type="number" v-on:keydown="isNumberValid" :rules="numberRules" required></v-text-field>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -67,88 +67,53 @@
                                         <v-row>
                                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
                                                 <p class="text-lg-h5 font-weight-bold  green--text" style="padding-bottom: 0px; margin:0px;">
-                                                    Total de Venta
+                                                    COBROS
                                                 </p>
                                             </v-col>
                                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
                                                 <p class="text-lg-right text-lg-h5  green--text" style="padding-bottom: 0px; margin:0px;">
-                                                    $150,000.00
+                                                    $ {{formatMoney(saldosCaja.totalcharge)}}
                                                 </p>
                                             </v-col>
                                         </v-row>
                                         <v-row>
                                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
                                                 <p class="text-lg-h6 grey--text" style="padding-bottom: 0px; margin:0px;">
-                                                    Efectivo
+                                                    RETIROS
                                                 </p>
                                             </v-col>
                                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
                                                 <p class="text-lg-right text-lg-h6  grey--text" style="padding-bottom: 0px; margin:0px;">
-                                                    $30,000.00
+                                                    $ {{formatMoney(saldosCaja.totalwithdrawals)}}
                                                 </p>
                                             </v-col>
                                         </v-row>
                                         <v-row>
                                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
                                                 <p class="text-lg-h6 grey--text" style="padding-bottom: 0px; margin:0px;">
-                                                    Tarjeta
+                                                    TOTAL
                                                 </p>
                                             </v-col>
                                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
                                                 <p class="text-lg-right text-lg-h6  grey--text" style="padding-bottom: 0px; margin:0px;">
-                                                    $70,000.00
+                                                    $ {{formatMoney((parseFloat(saldosCaja.bocu_initialamount) + parseFloat(saldosCaja.totalcharge)) - parseFloat(saldosCaja.totalwithdrawals)) }}
                                                 </p>
                                             </v-col>
                                         </v-row>
                                         <v-row>
                                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
                                                 <p class="text-lg-h6 grey--text" style="padding-bottom: 0px; margin:0px;">
-                                                    Crédito
+                                                    SALDO FINAL
                                                 </p>
                                             </v-col>
                                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
                                                 <p class="text-lg-right text-lg-h6  grey--text" style="padding-bottom: 0px; margin:0px;">
-                                                    $50,000.00
+                                                    ${{formatMoney(saldosCaja.bocu_endamount)}}
                                                 </p>
                                             </v-col>
                                         </v-row>
                                         <v-divider style="margin: 10px 10px 10px"></v-divider>
-                                        <v-row>
-                                            <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
-                                                <p class="text-lg-h5 font-weight-bold  blue--text" style="padding-bottom: 0px; margin:0px;">
-                                                    Total en Caja
-                                                </p>
-                                            </v-col>
-                                            <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
-                                                <p class="text-lg-right text-lg-h5  blue--text" style="padding-bottom: 0px; margin:0px;">
-                                                    $10,000.00
-                                                </p>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
-                                                <p class="text-lg-h6 grey--text" style="padding-bottom: 0px; margin:0px;">
-                                                    Cobrado
-                                                </p>
-                                            </v-col>
-                                            <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
-                                                <p class="text-lg-right text-lg-h6  green--text" style="padding-bottom: 0px; margin:0px;">
-                                                    $30,000.00
-                                                </p>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
-                                                <p class="text-lg-h6 grey--text" style="padding-bottom: 0px; margin:0px;">
-                                                    Retiros
-                                                </p>
-                                            </v-col>
-                                            <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
-                                                <p class="text-lg-right text-lg-h6  red--text" style="padding-bottom: 0px; margin:0px;">
-                                                    $20,000.00
-                                                </p>
-                                            </v-col>
-                                        </v-row>
+
                                     </v-container>
                                 </v-card>
                             </v-col>
@@ -276,6 +241,7 @@ export default {
             cawi_amount: 0,
         },
         caja: [],
+        saldosCaja: '',
         user: '',
         montoApertura: 0,
         numberRules: [
@@ -311,6 +277,21 @@ export default {
     },
 
     methods: {
+        formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
+            try {
+                decimalCount = Math.abs(decimalCount);
+                decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+                const negativeSign = amount < 0 ? "-" : "";
+
+                let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+                let j = (i.length > 3) ? i.length % 3 : 0;
+
+                return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+            } catch (e) {
+                console.log(e)
+            }
+        },
         isNumberValid: function (evt) {
             console.log('key ' + evt.key + ' (' + evt.keyCode + ')');
             evt = (evt) ? evt : window.event;
@@ -374,6 +355,16 @@ export default {
             this.dialogCerrarCaja = true
             this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' +
                 this.formatHour(new Date().toISOString().substr(11, 15));
+
+            axios
+                .get("/box/cuts/" + this.editadoBox.bocu_pk)
+                .then(response => {
+                    this.saldosCaja = response.data.data;
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+
         },
         retirarCaja() {
             this.dialogDrawals = true

@@ -3038,41 +3038,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3124,7 +3089,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }, _defineProperty(_ref, "editadoBoxDefault", {
       bocu_fk: 0,
       cawi_amount: 0
-    }), _defineProperty(_ref, "caja", []), _defineProperty(_ref, "user", ''), _defineProperty(_ref, "montoApertura", 0), _defineProperty(_ref, "numberRules", [function (value) {
+    }), _defineProperty(_ref, "caja", []), _defineProperty(_ref, "saldosCaja", ''), _defineProperty(_ref, "user", ''), _defineProperty(_ref, "montoApertura", 0), _defineProperty(_ref, "numberRules", [function (value) {
       return !!value || 'Requerido.';
     }, function (value) {
       return value > 0 || 'El número debe ser mayor a cero';
@@ -3153,6 +3118,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     window.removeEventListener('resize', this.onResponsiveInverted);
   },
   methods: _objectSpread({
+    formatMoney: function formatMoney(amount) {
+      var decimalCount = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+      var decimal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ".";
+      var thousands = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : ",";
+
+      try {
+        decimalCount = Math.abs(decimalCount);
+        decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+        var negativeSign = amount < 0 ? "-" : "";
+        var i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+        var j = i.length > 3 ? i.length % 3 : 0;
+        return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+      } catch (e) {
+        console.log(e);
+      }
+    },
     isNumberValid: function isNumberValid(evt) {
       console.log('key ' + evt.key + ' (' + evt.keyCode + ')');
       evt = evt ? evt : window.event;
@@ -3219,8 +3200,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' + this.formatHour(new Date().toISOString().substr(11, 15));
     },
     cerrarCaja: function cerrarCaja() {
+      var _this3 = this;
+
       this.dialogCerrarCaja = true;
       this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' + this.formatHour(new Date().toISOString().substr(11, 15));
+      axios.get("/box/cuts/" + this.editadoBox.bocu_pk).then(function (response) {
+        _this3.saldosCaja = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
     },
     retirarCaja: function retirarCaja() {
       this.dialogDrawals = true;
@@ -3237,7 +3225,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.dialogDrawals = false;
     },
     guardar: function guardar() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.editadoBox.bocu_startdate = this.dateFormatted;
       this.editadoBox.bocu_initialamount = this.montoApertura;
@@ -3245,46 +3233,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(response);
 
         if (response.data.code == 200) {
-          _this3.dialogCaja = false;
-          _this3.textMsg = "¡Actualizado correctamente!";
-
-          _this3.normal('Notificación', '¡Actualizado correctamente!', "success");
-
-          _this3.editadoBox = _this3.editadoBoxDefault;
-
-          _this3.obtenerCaja();
-
-          _this3.$router.go();
-        } else {
-          _this3.normal('Notificación', response.data.message, "error");
-        }
-      })["catch"](function (e) {
-        //this.errors.push(e)
-        console.log(e);
-      });
-    },
-    guardarCierre: function guardarCierre() {
-      var _this4 = this;
-
-      this.editadoBox.bocu_enddate = this.dateFormatted;
-      axios.post('/box/update', this.editadoBox).then(function (response) {
-        console.log('response');
-        console.log(response);
-
-        if (response.data.code == 200) {
-          _this4.dialogCerrarCaja = false;
+          _this4.dialogCaja = false;
           _this4.textMsg = "¡Actualizado correctamente!";
 
           _this4.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-          _this4.obtenerCaja();
-
-          var route = _this4.$router.resolve({
-            path: '/cash/cutbox/printCorte/' + _this4.editadoBox.bocu_pk
-          });
-
-          window.open(route.href, '_blank');
           _this4.editadoBox = _this4.editadoBoxDefault;
+
+          _this4.obtenerCaja();
 
           _this4.$router.go();
         } else {
@@ -3295,29 +3251,61 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(e);
       });
     },
-    guardarRetiro: function guardarRetiro() {
+    guardarCierre: function guardarCierre() {
       var _this5 = this;
+
+      this.editadoBox.bocu_enddate = this.dateFormatted;
+      axios.post('/box/update', this.editadoBox).then(function (response) {
+        console.log('response');
+        console.log(response);
+
+        if (response.data.code == 200) {
+          _this5.dialogCerrarCaja = false;
+          _this5.textMsg = "¡Actualizado correctamente!";
+
+          _this5.normal('Notificación', '¡Actualizado correctamente!', "success");
+
+          _this5.obtenerCaja();
+
+          var route = _this5.$router.resolve({
+            path: '/cash/cutbox/printCorte/' + _this5.editadoBox.bocu_pk
+          });
+
+          window.open(route.href, '_blank');
+          _this5.editadoBox = _this5.editadoBoxDefault;
+
+          _this5.$router.go();
+        } else {
+          _this5.normal('Notificación', response.data.message, "error");
+        }
+      })["catch"](function (e) {
+        //this.errors.push(e)
+        console.log(e);
+      });
+    },
+    guardarRetiro: function guardarRetiro() {
+      var _this6 = this;
 
       axios.post('/cash/withdrawals', this.editadoDrawals).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this5.dialogDrawals = false;
-          _this5.textMsg = "¡Actualizado correctamente!";
+          _this6.dialogDrawals = false;
+          _this6.textMsg = "¡Actualizado correctamente!";
 
-          _this5.normal('Notificación', '¡Actualizado correctamente!', "success");
+          _this6.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-          _this5.editadoDrawals = _this5.editadoDrawalsDefault;
+          _this6.editadoDrawals = _this6.editadoDrawalsDefault;
 
-          var route = _this5.$router.resolve({
+          var route = _this6.$router.resolve({
             path: '/cash/withdrawals/printRetiro/' + response.data.data
           });
 
           window.open(route.href, '_blank');
 
-          _this5.$router.go();
+          _this6.$router.go();
         } else {
-          _this5.normal('Notificación', response.data.message, "error");
+          _this6.normal('Notificación', response.data.message, "error");
         }
       })["catch"](function (e) {
         //this.errors.push(e)
@@ -30793,15 +30781,15 @@ var render = function() {
                                       disabled: ""
                                     },
                                     model: {
-                                      value: _vm.editadoBox.bocu_startdate,
+                                      value: _vm.saldosCaja.bocu_startdate,
                                       callback: function($$v) {
                                         _vm.$set(
-                                          _vm.editadoBox,
+                                          _vm.saldosCaja,
                                           "bocu_startdate",
                                           $$v
                                         )
                                       },
-                                      expression: "editadoBox.bocu_startdate"
+                                      expression: "saldosCaja.bocu_startdate"
                                     }
                                   })
                                 ],
@@ -30858,16 +30846,16 @@ var render = function() {
                                     },
                                     on: { keydown: _vm.isNumberValid },
                                     model: {
-                                      value: _vm.editadoBox.bocu_initialamount,
+                                      value: _vm.saldosCaja.bocu_initialamount,
                                       callback: function($$v) {
                                         _vm.$set(
-                                          _vm.editadoBox,
+                                          _vm.saldosCaja,
                                           "bocu_initialamount",
                                           $$v
                                         )
                                       },
                                       expression:
-                                        "editadoBox.bocu_initialamount"
+                                        "saldosCaja.bocu_initialamount"
                                     }
                                   })
                                 ],
@@ -30892,15 +30880,15 @@ var render = function() {
                                     },
                                     on: { keydown: _vm.isNumberValid },
                                     model: {
-                                      value: _vm.editadoBox.bocu_endamount,
+                                      value: _vm.saldosCaja.bocu_endamount,
                                       callback: function($$v) {
                                         _vm.$set(
-                                          _vm.editadoBox,
+                                          _vm.saldosCaja,
                                           "bocu_endamount",
                                           $$v
                                         )
                                       },
-                                      expression: "editadoBox.bocu_endamount"
+                                      expression: "saldosCaja.bocu_endamount"
                                     }
                                   })
                                 ],
@@ -30972,7 +30960,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\r\n                                                    Total de Venta\r\n                                                "
+                                                        "\r\n                                                    COBROS\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31000,7 +30988,14 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\r\n                                                    $150,000.00\r\n                                                "
+                                                        "\r\n                                                    $ " +
+                                                          _vm._s(
+                                                            _vm.formatMoney(
+                                                              _vm.saldosCaja
+                                                                .totalcharge
+                                                            )
+                                                          ) +
+                                                          "\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31034,7 +31029,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\r\n                                                    Efectivo\r\n                                                "
+                                                        "\r\n                                                    RETIROS\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31062,7 +31057,14 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\r\n                                                    $30,000.00\r\n                                                "
+                                                        "\r\n                                                    $ " +
+                                                          _vm._s(
+                                                            _vm.formatMoney(
+                                                              _vm.saldosCaja
+                                                                .totalwithdrawals
+                                                            )
+                                                          ) +
+                                                          "\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31096,7 +31098,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\r\n                                                    Tarjeta\r\n                                                "
+                                                        "\r\n                                                    TOTAL\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31124,7 +31126,24 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\r\n                                                    $70,000.00\r\n                                                "
+                                                        "\r\n                                                    $ " +
+                                                          _vm._s(
+                                                            _vm.formatMoney(
+                                                              parseFloat(
+                                                                _vm.saldosCaja
+                                                                  .bocu_initialamount
+                                                              ) +
+                                                                parseFloat(
+                                                                  _vm.saldosCaja
+                                                                    .totalcharge
+                                                                ) -
+                                                                parseFloat(
+                                                                  _vm.saldosCaja
+                                                                    .totalwithdrawals
+                                                                )
+                                                            )
+                                                          ) +
+                                                          "\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31158,7 +31177,7 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\r\n                                                    Crédito\r\n                                                "
+                                                        "\r\n                                                    SALDO FINAL\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31186,7 +31205,14 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\r\n                                                    $50,000.00\r\n                                                "
+                                                        "\r\n                                                    $" +
+                                                          _vm._s(
+                                                            _vm.formatMoney(
+                                                              _vm.saldosCaja
+                                                                .bocu_endamount
+                                                            )
+                                                          ) +
+                                                          "\r\n                                                "
                                                       )
                                                     ]
                                                   )
@@ -31200,193 +31226,7 @@ var render = function() {
                                             staticStyle: {
                                               margin: "10px 10px 10px"
                                             }
-                                          }),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-row",
-                                            [
-                                              _c(
-                                                "v-col",
-                                                {
-                                                  staticStyle: {
-                                                    padding: "0px 12px 0px 12px"
-                                                  },
-                                                  attrs: { cols: "12", md: "6" }
-                                                },
-                                                [
-                                                  _c(
-                                                    "p",
-                                                    {
-                                                      staticClass:
-                                                        "text-lg-h5 font-weight-bold  blue--text",
-                                                      staticStyle: {
-                                                        "padding-bottom": "0px",
-                                                        margin: "0px"
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\r\n                                                    Total en Caja\r\n                                                "
-                                                      )
-                                                    ]
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "v-col",
-                                                {
-                                                  staticStyle: {
-                                                    padding: "0px 12px 0px 12px"
-                                                  },
-                                                  attrs: { cols: "12", md: "6" }
-                                                },
-                                                [
-                                                  _c(
-                                                    "p",
-                                                    {
-                                                      staticClass:
-                                                        "text-lg-right text-lg-h5  blue--text",
-                                                      staticStyle: {
-                                                        "padding-bottom": "0px",
-                                                        margin: "0px"
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\r\n                                                    $10,000.00\r\n                                                "
-                                                      )
-                                                    ]
-                                                  )
-                                                ]
-                                              )
-                                            ],
-                                            1
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-row",
-                                            [
-                                              _c(
-                                                "v-col",
-                                                {
-                                                  staticStyle: {
-                                                    padding: "0px 12px 0px 12px"
-                                                  },
-                                                  attrs: { cols: "12", md: "6" }
-                                                },
-                                                [
-                                                  _c(
-                                                    "p",
-                                                    {
-                                                      staticClass:
-                                                        "text-lg-h6 grey--text",
-                                                      staticStyle: {
-                                                        "padding-bottom": "0px",
-                                                        margin: "0px"
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\r\n                                                    Cobrado\r\n                                                "
-                                                      )
-                                                    ]
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "v-col",
-                                                {
-                                                  staticStyle: {
-                                                    padding: "0px 12px 0px 12px"
-                                                  },
-                                                  attrs: { cols: "12", md: "6" }
-                                                },
-                                                [
-                                                  _c(
-                                                    "p",
-                                                    {
-                                                      staticClass:
-                                                        "text-lg-right text-lg-h6  green--text",
-                                                      staticStyle: {
-                                                        "padding-bottom": "0px",
-                                                        margin: "0px"
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\r\n                                                    $30,000.00\r\n                                                "
-                                                      )
-                                                    ]
-                                                  )
-                                                ]
-                                              )
-                                            ],
-                                            1
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-row",
-                                            [
-                                              _c(
-                                                "v-col",
-                                                {
-                                                  staticStyle: {
-                                                    padding: "0px 12px 0px 12px"
-                                                  },
-                                                  attrs: { cols: "12", md: "6" }
-                                                },
-                                                [
-                                                  _c(
-                                                    "p",
-                                                    {
-                                                      staticClass:
-                                                        "text-lg-h6 grey--text",
-                                                      staticStyle: {
-                                                        "padding-bottom": "0px",
-                                                        margin: "0px"
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\r\n                                                    Retiros\r\n                                                "
-                                                      )
-                                                    ]
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "v-col",
-                                                {
-                                                  staticStyle: {
-                                                    padding: "0px 12px 0px 12px"
-                                                  },
-                                                  attrs: { cols: "12", md: "6" }
-                                                },
-                                                [
-                                                  _c(
-                                                    "p",
-                                                    {
-                                                      staticClass:
-                                                        "text-lg-right text-lg-h6  red--text",
-                                                      staticStyle: {
-                                                        "padding-bottom": "0px",
-                                                        margin: "0px"
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        "\r\n                                                    $20,000.00\r\n                                                "
-                                                      )
-                                                    ]
-                                                  )
-                                                ]
-                                              )
-                                            ],
-                                            1
-                                          )
+                                          })
                                         ],
                                         1
                                       )
