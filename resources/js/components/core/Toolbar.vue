@@ -51,7 +51,7 @@
                                 <v-text-field v-model="saldosCaja.bocu_initialamount" label="Monto de Apertura" prepend-icon="mdi-square-inc-cash" disabled prefix="" type="number" v-on:keydown="isNumberValid" :rules="numberRules" required></v-text-field>
                             </v-col>
                             <v-col cols="12" md="6" style="padding: 0px 12px 0px 12px;">
-                                <v-text-field v-model="saldosCaja.bocu_endamount" label="Monto de Cierre" prepend-icon="mdi-square-inc-cash" prefix="" type="number" v-on:keydown="isNumberValid" :rules="numberRules" required></v-text-field>
+                                <v-text-field v-model="editadoBox.bocu_endamount" label="Monto de Cierre" prepend-icon="mdi-square-inc-cash" prefix="" type="number" v-on:keydown="isNumberValid" :rules="numberRules" required></v-text-field>
                             </v-col>
                         </v-row>
                         <v-row>

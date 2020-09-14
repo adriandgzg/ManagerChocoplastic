@@ -30880,15 +30880,15 @@ var render = function() {
                                     },
                                     on: { keydown: _vm.isNumberValid },
                                     model: {
-                                      value: _vm.saldosCaja.bocu_endamount,
+                                      value: _vm.editadoBox.bocu_endamount,
                                       callback: function($$v) {
                                         _vm.$set(
-                                          _vm.saldosCaja,
+                                          _vm.editadoBox,
                                           "bocu_endamount",
                                           $$v
                                         )
                                       },
-                                      expression: "saldosCaja.bocu_endamount"
+                                      expression: "editadoBox.bocu_endamount"
                                     }
                                   })
                                 ],
