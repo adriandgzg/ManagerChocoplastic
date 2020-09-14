@@ -149,6 +149,9 @@
                   ></v-text-field>
                 </v-col>
               </template>
+              <template v-slot:item.clde_amount_outstanding="{ item }">
+                <v-label>${{formatMoney(item.clde_amount_outstanding)}}</v-label>
+              </template>
               <template v-slot:item.status="{ item }">
                 <v-chip v-if="item.clie_status == 1" color="green" dark>Activo</v-chip>
                 <v-chip v-else color="red" dark>Inactivo</v-chip>
@@ -182,7 +185,7 @@ export default {
         {
           text: "Inden",
           value: "clie_identifier",
-          width: "10%",
+          width: "10%"
         },
         {
           text: "Nombre",
@@ -297,7 +300,7 @@ export default {
       axios
         .get("/clientlist")
         .then((response) => {
-          setTimeout(() => (this.loading = false), 2000); 
+          setTimeout(() => (this.loading = false), 2000);
           this.clientes = response.data.data;
         })
         .catch((e) => {
@@ -374,6 +377,33 @@ export default {
         this.normal("Notificación", this.textMsg, "error");
         this.getClients();
       });
+    },
+    formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
+      try {
+        decimalCount = Math.abs(decimalCount);
+        decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+        const negativeSign = amount < 0 ? "-" : "";
+
+        let i = parseInt(
+          (amount = Math.abs(Number(amount) || 0).toFixed(decimalCount))
+        ).toString();
+        let j = i.length > 3 ? i.length % 3 : 0;
+
+        return (
+          negativeSign +
+          (j ? i.substr(0, j) + thousands : "") +
+          i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) +
+          (decimalCount
+            ? decimal +
+              Math.abs(amount - i)
+                .toFixed(decimalCount)
+                .slice(2)
+            : "")
+        );
+      } catch (e) {
+        console.log(e);
+      }
     },
     normal(Title, Description, Type) {
       this.notice = new CripNotice({

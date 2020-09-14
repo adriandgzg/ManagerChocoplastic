@@ -23,7 +23,30 @@ class ProviderController extends Controller
     public function ProvidersList(){
         $provider = DB::table('providers AS P')
         ->join('federal_entities AS FE', 'P.feen_fk', '=', 'FE.feen_pk')
-        ->orderBy('FE.created_at', 'DESC')
+        ->select(
+            'P.prov_pk',
+            'P.feen_fk',
+            'P.prov_identifier',
+            'P.prov_name',
+            'P.prov_rfc',
+            'P.prov_phone',
+            'P.prov_email',
+            'P.prov_addres',
+            'P.prov_cp',
+            'P.prov_city',
+            'P.prov_status',
+            'P.created_at',
+            'FE.feen_pk',
+            'FE.feen_name',
+            DB::raw('
+                (
+                    (SELECT IFNULL(SUM(PD.prde_amount), 0) FROM provider_debts AS PD WHERE PD.prde_status <> 0 AND PD.prov_fk = P.prov_pk)
+                    -
+                    (SELECT IFNULL(SUM(PP.prpa_amount), 0) FROM provider_payments AS PP WHERE PP.prpa_status <> 0 AND PP.prov_fk = P.prov_pk)
+                ) AS prde_amount_outstanding
+            ') //Monto Pendiente por pagar
+        )
+        ->orderBy('P.created_at')
         ->get();
         
         

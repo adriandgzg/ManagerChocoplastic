@@ -37,13 +37,9 @@ class ClientController extends Controller
             'FE.feen_name',
             DB::raw('
                 (
-                    SELECT 
-                        IFNULL(SUM(CD.clde_amount), 0) 
-                        -
-                        (SELECT IFNULL(SUM(CP.clpa_amount), 0)  AS payments FROM client_payments AS CP WHERE CP.clpa_status = 1 AND CP.clde_fk = CD.clde_pk)
-                        AS clde_amount_outstanding 
-                    FROM client_debts AS CD  
-                    WHERE CD.clde_status = 1 AND CD.clie_fk = C.clie_pk
+                    (SELECT IFNULL(SUM(CD.clde_amount), 0) FROM client_debts AS CD WHERE CD.clde_status <> 0 AND CD.clie_fk = C.clie_pk)
+                    -
+                    (SELECT IFNULL(SUM(CP.clpa_amount), 0) FROM client_payments AS CP WHERE CP.clpa_status <> 0 AND CP.clie_fk = C.clie_pk)
                 ) AS clde_amount_outstanding
             ') //Monto Pendiente por pagar
 

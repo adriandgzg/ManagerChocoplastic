@@ -33,10 +33,10 @@
                             </v-col>
                         </template>
                         <template v-slot:item.bocu_initialamount="{ item }">
-                            <v-label>$ {{formatMoney(item.bocu_initialamount)}}</v-label>
+                            <v-label>${{formatMoney(item.bocu_initialamount)}}</v-label>
                         </template>
                         <template v-slot:item.bocu_endamount="{ item }">
-                            <v-label>$ {{formatMoney(item.bocu_endamount)}}</v-label>
+                            <v-label>${{formatMoney(item.bocu_endamount)}}</v-label>
                         </template>
                         <template v-slot:item.status="{ item }">
                             <v-chip v-if="item.bocu_status == 'Abierta'" color="gray" dark> {{item.bocu_status}} </v-chip>
