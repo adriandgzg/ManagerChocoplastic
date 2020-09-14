@@ -38,14 +38,18 @@
                         </template>
                         <template v-slot:item.status="{ item }">
                             <v-chip v-if="item.prtr_status_description == 'Pendiente'" color="gray" dark> {{item.prtr_status_description}} </v-chip>
-                            <v-chip v-else color="green" dark>{{item.prtr_status_description}}</v-chip>
+                            <v-chip v-if="item.prtr_status_description == 'Solicitado'" color="orange" dark> {{item.prtr_status_description}} </v-chip>
+                            <v-chip v-if="item.prtr_status_description == 'Finalizado'" color="green" dark> {{item.prtr_status_description}} </v-chip>
                         </template>
 
                         <template v-slot:item.action="{ item }">
                             <v-btn class="mr-2" fab dark small color="pink" v-if="item.prtr_status_description == 'Pendiente'" :href="'/transferdetail/'+item.prtr_pk" title="Continuar">
                                 <v-icon dark>mdi-swap-horizontal</v-icon>
                             </v-btn>
-                            <v-btn class="mr-2" fab dark small color="purple" title="Detalle de venta" :href="'/transferdetailview/'+item.prtr_pk">
+                            <v-btn class="mr-2" fab dark small color="pink" v-if="item.prtr_status_description == 'Solicitado'" :href="'/transferdetail/'+item.prtr_pk" title="Continuar">
+                                <v-icon dark>mdi-swap-horizontal</v-icon>
+                            </v-btn>
+                            <v-btn class="mr-2" fab dark small color="purple" title="Detalle de Traspaso" :href="'/transferdetailview/'+item.prtr_pk">
                                 <v-icon dark>mdi-eye</v-icon>
                             </v-btn>
                             <!--<v-btn class="mr-2" fab dark small color="cyan"  title="Continuar venta" v-if="item.prtr_status == 'Pendiente'"

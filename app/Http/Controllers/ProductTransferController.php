@@ -42,7 +42,8 @@ class ProductTransferController extends ApiResponseController
                     (CASE 
                         WHEN PT.prtr_status = 0 THEN "Cancelada" 
                         WHEN PT.prtr_status = 1 THEN "Pendiente" 
-                        WHEN PT.prtr_status = 2 THEN "Finalizado" 
+                        WHEN PT.prtr_status = 2 THEN "Solicitado" 
+                        WHEN PT.prtr_status = 3 THEN "Finalizado" 
                         ELSE "" END
                     ) AS prtr_status_description'),
 
@@ -110,7 +111,8 @@ class ProductTransferController extends ApiResponseController
                     (CASE 
                         WHEN PT.prtr_status = 0 THEN "Cancelada" 
                         WHEN PT.prtr_status = 1 THEN "Pendiente" 
-                        WHEN PT.prtr_status = 2 THEN "Finalizado" 
+                        WHEN PT.prtr_status = 2 THEN "Solicitado"  
+                        WHEN PT.prtr_status = 3 THEN "Finalizado"  
                         ELSE "" END
                     ) AS prtr_status_description'),
 
@@ -194,7 +196,7 @@ class ProductTransferController extends ApiResponseController
 
             $vVal = Validator::make($vInput, [
                 'prtr_pk' => 'required|int', //PK Traspaso 
-                'stor_fk_input' => 'required|int', //PK Sucursal Entrada
+                'stor_fk_input' => 'required|int', //PK Sucursal Entrada 
                 'prtr_observation' => 'required', //Observacion
             ]);
 
@@ -219,13 +221,70 @@ class ProductTransferController extends ApiResponseController
             $vPTSel = ProductTransfer::where('prtr_pk', '=', $vprtr_pk)->where('prtr_status', '=', 1)->first();
             if ($vPTSel) 
             {
+                //Modificar Traspaso
+                $vPTU = ProductTransfer::find($vprtr_pk);
+                $vPTU->stor_fk_input = $vstor_fk_input;
+                $vPTU->prtr_identifier = $vprtr_identifier;
+                $vPTU->prtr_observation = $vprtr_observation;
+                $vPTU->prtr_status = 2;
+                $vPTU->save();
+
+                //////////////////  Insertar Log  //////////////////
+                $this->getstorelog('product_transfers', $vprtr_pk, 2);
+
+                //Modificar Folio del Traspaso
+                DB::table('systems')
+                ->update(['syst_transfer' =>  $vsyst_transfer + 1]);
+
+                return $this->dbResponse($vprtr_pk, 200, null, 'Traspaso Guardado Correctamente');
+            }
+            else
+            {
+                return $this->dbResponse(null, 404, null, 'Traspaso NO Encontrada');
+            }
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\ProductTransfer  $productTransfer
+     * @return \Illuminate\Http\Response
+     */
+    public function updatefinalize(Request $r)
+    {
+        try 
+        {
+            $vInput = $r->all();
+
+            $vVal = Validator::make($vInput, [
+                'prtr_pk' => 'required|int' //PK Traspaso 
+            ]);
+
+            if ($vVal->fails()) {
+                return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+            }
+
+            //Asignacion de variables
+            $vprtr_pk = $vInput['prtr_pk'];
+
+
+            //Validar Si Existe el Traspaso
+            $vPTSel = ProductTransfer::where('prtr_pk', '=', $vprtr_pk)->where('prtr_status', '=', 2)->first();
+            if ($vPTSel) 
+            {
                 $vstor_fk_output = $vPTSel->stor_fk_output;
-                //Validar Inventario
+                $vstor_fk_input = $vPTSel->stor_fk_input;
+
+                ///////////////Validar Inventario
 
                 //Consultar Traspaso Detallado
-                $vPTDSel = ProductTransferDetail::where('prtr_fk', '=', $vprtr_pk)
-                    ->where('prtd_status', '=', 1)
-                    ->get();
+                $vPTDSel = ProductTransferDetail::where('prtr_fk', '=', $vprtr_pk)->where('prtd_status', '=', 1)->get();
 
                 //Recorrer Traspaso Detallado
                 foreach($vPTDSel as $vP)
@@ -248,6 +307,7 @@ class ProductTransferController extends ApiResponseController
                     {
                         //Datos del producto en el Inventario
                         $vprin_stock = $vPISel->prin_stock; //Stock actual
+                        $vprod_identifier = $vPISel->prod_identifier; //Identificador Producto
                         $vprod_name = $vPISel->prod_name; //Descripcion Producto
                         
                         //Validar la cantidad del producto
@@ -260,7 +320,7 @@ class ProductTransferController extends ApiResponseController
                         {
                             //Producto Insuficiente para Transpaso
                             $vVal_Dev = false;
-                            $vMsj = $vprod_name . '. Insuficiente para Traspaso. Inventario actual: ' . $vprin_stock;
+                            $vMsj = $vprod_identifier . ' ' . $vprod_name . ' insuficiente para Traspaso. Inventario actual: ' . $vprin_stock;
                             break;
                         }
                     } 
@@ -268,7 +328,13 @@ class ProductTransferController extends ApiResponseController
                     {
                         //Producto NO Encontrado, NO se puede Transpasar
                         $vVal_Dev = false;
-                        $vMsj = 'Producto NO Encontrado. Revisar inventario actual';
+
+                        $vProdSel = Product::where('prod_fk', '=', $vprod_fk)->first();
+
+                        $vprod_identifier = $vProdSel->prod_identifier; //Identificador Producto
+                        $vprod_name = $vProdSel->prod_name; //Descripcion Producto
+
+                        $vMsj = $vprod_identifier . ' ' . $vprod_name . ' NO Encontrado. Revisar inventario actual';
                         break;
                     }
                 }
@@ -278,20 +344,11 @@ class ProductTransferController extends ApiResponseController
                 {
                     //Modificar Traspaso
                     $vPTU = ProductTransfer::find($vprtr_pk);
-                    //$vPTU->stor_fk_output = $vstor_fk_output;
-                    $vPTU->stor_fk_input = $vstor_fk_input;
-                    $vPTU->prtr_identifier = $vprtr_identifier;
-                    $vPTU->prtr_observation = $vprtr_observation;
-                    $vPTU->prtr_status = 2;
+                    $vPTU->prtr_status = 3;
                     $vPTU->save();
 
                     //////////////////  Insertar Log  //////////////////
-                    $this->getstorelog('product_transfers', $vprtr_pk, 2);
-
-                    //Modificar Folio del Traspaso
-                    DB::table('systems')
-                    ->update(['syst_transfer' =>  $vsyst_transfer + 1]);
-
+                    $this->getstorelog('product_transfers', $vprtr_pk, 4);
 
                     //Aplicar Modificaciones de Inventario 
                     //Recorrer Traspaso Detallado
@@ -375,10 +432,10 @@ class ProductTransferController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $vTh;
             return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -193,7 +193,8 @@ Route::get('product/inventories', 'ProductInventoryController@index');  //Invent
 Route::get('product/transfers', 'ProductTransferController@index');   
 Route::get('product/transfers/{prtr_pk}', 'ProductTransferController@show');  
 Route::post('product/transfers', 'ProductTransferController@store'); 
-Route::post('product/transfers/update', 'ProductTransferController@update'); 
+Route::post('product/transfers/update', 'ProductTransferController@update'); //Estatus Solicitado
+Route::post('product/transfers/update/finalize', 'ProductTransferController@updatefinalize'); //Estatus Finalizado || Modificar Inventario
 Route::post('product/transfers/destroy', 'ProductTransferController@destroy'); 
 
 Route::post('product/transfer/details', 'ProductTransferDetailController@store');  
