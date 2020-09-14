@@ -454,7 +454,8 @@ var render = function() {
                                           small: "",
                                           color: "pink",
                                           href:
-                                            "/transferdetail/" + item.prtr_pk,
+                                            "/transferdetailfin/" +
+                                            item.prtr_pk,
                                           title: "Continuar"
                                         }
                                       },

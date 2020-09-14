@@ -46,7 +46,7 @@
                             <v-btn class="mr-2" fab dark small color="pink" v-if="item.prtr_status_description == 'Pendiente'" :href="'/transferdetail/'+item.prtr_pk" title="Continuar">
                                 <v-icon dark>mdi-swap-horizontal</v-icon>
                             </v-btn>
-                            <v-btn class="mr-2" fab dark small color="pink" v-if="item.prtr_status_description == 'Solicitado'" :href="'/transferdetail/'+item.prtr_pk" title="Continuar">
+                            <v-btn class="mr-2" fab dark small color="pink" v-if="item.prtr_status_description == 'Solicitado'" :href="'/transferdetailfin/'+item.prtr_pk" title="Continuar">
                                 <v-icon dark>mdi-swap-horizontal</v-icon>
                             </v-btn>
                             <v-btn class="mr-2" fab dark small color="purple" title="Detalle de Traspaso" :href="'/transferdetailview/'+item.prtr_pk">

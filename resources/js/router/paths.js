@@ -201,6 +201,11 @@ export default [{
         view: 'TransferDetail'
     },
     {
+        path: '/transferdetailfin/:id',
+        name: 'Detalle de Traspaso', 
+        view: 'TransferDetailFin'
+    },
+    {
         path: '/transferdetailview/:id',
         name: 'Detalle Traspaso.', 
         view: 'TransferDetailView'
