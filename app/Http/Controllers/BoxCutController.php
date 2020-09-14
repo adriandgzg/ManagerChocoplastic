@@ -184,20 +184,24 @@ class BoxCutController extends ApiResponseController
 
                     'BC.bocu_initialamount', //Saldo Inicial
                     DB::raw("
-                        $vCobrosCredit + 
+                        IFNULL(
+                            $vCobrosCredit 
+                            + 
                             (
                                 SELECT SUM(CPA.cpam_amount) AS totalcharge 
                                 FROM client_payment_amounts AS CPA 
                                 INNER JOIN client_sales AS CS ON CS.clsa_pk = CPA.clsa_fk
                                 WHERE CPA.cpam_status = 1 AND CPA.bocu_fk = BC.bocu_pk AND CPA.pash_fk = 1 AND CS.pame_fk = 1
-                            ) AS totalcharge
+                            )
+                        , 0) AS totalcharge
                     "), //Total Cobros
                     DB::raw("
                         (
-                            SELECT SUM(CW.cawi_amount) AS totalwithdrawals 
+                            SELECT IFNULL(SUM(CW.cawi_amount), 0) AS totalwithdrawals 
                             FROM cash_withdrawals AS CW 
                             WHERE CW.cawi_status = 1 AND CW.bocu_fk = BC.bocu_pk
-                        ) AS totalwithdrawals
+                        ) 
+                        AS totalwithdrawals
                     "), //Total Retiros
                     'BC.bocu_endamount', //Saldo Final
                     DB::raw("($vTotalCredit - $vCobrosCreditBox) AS totalcredit"), //Total Credito
