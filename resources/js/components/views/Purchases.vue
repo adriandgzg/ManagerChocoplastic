@@ -662,8 +662,9 @@ export default {
             } else {
                 axios.get('/provider/purchases/' + this.prpo_pk + '')
                     .then(response => {
-                        setTimeout(() => (this.loading = false), 2000)
+                        setTimeout(() => (this.loading = false), 500)
                         if (response.data.data != null) {
+                            console.log('response')
                             console.log(response)
                             this.desserts = response.data.data.ProviderPurchaseDetail;
                             this.getTotal();

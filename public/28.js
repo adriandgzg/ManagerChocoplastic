@@ -93,6 +93,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -635,6 +639,33 @@ var render = function() {
                                           href:
                                             "/purchases/" +
                                             item.prpo_pk +
+                                            "/" +
+                                            item.prpu_type,
+                                          title: "Continuar compra"
+                                        }
+                                      },
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-cloud-check")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                item.prpu_status == 1 && item.prpu_type == 2
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        staticClass: "mr-2",
+                                        attrs: {
+                                          fab: "",
+                                          dark: "",
+                                          small: "",
+                                          color: "orange",
+                                          href:
+                                            "/purchases/" +
+                                            item.prpu_pk +
                                             "/" +
                                             item.prpu_type,
                                           title: "Continuar compra"

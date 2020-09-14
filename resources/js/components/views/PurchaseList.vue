@@ -58,7 +58,11 @@
                         </template>
                         <template v-slot:item.action="{ item }">
 
+                            <!--<v-btn class="mr-2" fab dark small color="orange" :href="'/purchases/'+item.prpo_pk+'/'+item.prpu_type" v-if="item.prpu_status == 1 && item.prpu_type==1" title="Continuar compra">-->
                             <v-btn class="mr-2" fab dark small color="orange" :href="'/purchases/'+item.prpo_pk+'/'+item.prpu_type" v-if="item.prpu_status == 1 && item.prpu_type==1" title="Continuar compra">
+                                <v-icon dark>mdi-cloud-check</v-icon>
+                            </v-btn>
+                            <v-btn class="mr-2" fab dark small color="orange" :href="'/purchases/'+item.prpu_pk+'/'+item.prpu_type" v-if="item.prpu_status == 1 && item.prpu_type==2" title="Continuar compra">
                                 <v-icon dark>mdi-cloud-check</v-icon>
                             </v-btn>
                             <v-btn class="mr-2" fab dark small color="pink" v-if="item.prpu_status_description != 'Pendiente' && item.prpu_status_description != 'Cancelada'" :href="'/providersreturn/'+item.prpu_pk" title="Devolución">
