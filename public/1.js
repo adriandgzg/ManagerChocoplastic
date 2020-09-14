@@ -105,6 +105,9 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'Estatus',
         value: 'status'
+      }, {
+        text: '',
+        value: 'action'
       }],
       select: 0,
       principal: false,
@@ -358,7 +361,7 @@ var render = function() {
                               return [
                                 _c("v-label", [
                                   _vm._v(
-                                    "$" +
+                                    "$ " +
                                       _vm._s(
                                         _vm.formatMoney(item.bocu_initialamount)
                                       )
@@ -368,14 +371,16 @@ var render = function() {
                             }
                           },
                           {
-                            key: "item.endamount",
+                            key: "item.bocu_endamount",
                             fn: function(ref) {
                               var item = ref.item
                               return [
                                 _c("v-label", [
                                   _vm._v(
-                                    "$" +
-                                      _vm._s(_vm.formatMoney(item.endamount))
+                                    "$ " +
+                                      _vm._s(
+                                        _vm.formatMoney(item.bocu_endamount)
+                                      )
                                   )
                                 ])
                               ]
@@ -401,6 +406,36 @@ var render = function() {
                                       { attrs: { color: "green", dark: "" } },
                                       [_vm._v(_vm._s(item.bocu_status))]
                                     )
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.action",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                item.bocu_status == "Cerrada"
+                                  ? _c(
+                                      "v-btn",
+                                      {
+                                        staticClass: "mr-2",
+                                        attrs: {
+                                          fab: "",
+                                          dark: "",
+                                          small: "",
+                                          color: "orange",
+                                          href: "/box/cuts/" + item.bocu_pk,
+                                          title: "Imprimir"
+                                        }
+                                      },
+                                      [
+                                        _c("v-icon", { attrs: { dark: "" } }, [
+                                          _vm._v("mdi-printer")
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e()
                               ]
                             }
                           }

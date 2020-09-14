@@ -33,21 +33,21 @@
                             </v-col>
                         </template>
                         <template v-slot:item.bocu_initialamount="{ item }">
-                            <v-label>${{formatMoney(item.bocu_initialamount)}}</v-label>
+                            <v-label>$ {{formatMoney(item.bocu_initialamount)}}</v-label>
                         </template>
-                        <template v-slot:item.endamount="{ item }">
-                            <v-label>${{formatMoney(item.endamount)}}</v-label>
+                        <template v-slot:item.bocu_endamount="{ item }">
+                            <v-label>$ {{formatMoney(item.bocu_endamount)}}</v-label>
                         </template>
                         <template v-slot:item.status="{ item }">
                             <v-chip v-if="item.bocu_status == 'Abierta'" color="gray" dark> {{item.bocu_status}} </v-chip>
                             <v-chip v-else color="green" dark>{{item.bocu_status}}</v-chip>
                         </template>
 
-                        <!--<template v-slot:item.action="{ item }">   
-                        <v-btn class="mr-2" fab dark small color="pink" v-if="item.clsa_status != 'Pendiente'" 
-                               :href="'/clientsreturn/'+item.clsa_pk" title="Devolución">
-                            <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
-                        </v-btn>            
+                        <template v-slot:item.action="{ item }">
+                            <v-btn class="mr-2" fab dark small color="orange" v-if="item.bocu_status == 'Cerrada'" :href="'/box/cuts/'+item.bocu_pk" title="Imprimir">
+                                <v-icon dark>mdi-printer</v-icon>
+                            </v-btn>
+                            <!--        
                         <v-btn class="mr-2" fab dark small color="purple"  title="Detalle de venta"
                                :href="'/salesdetail/'+item.clsa_pk">
                             <v-icon dark>mdi-eye</v-icon>
@@ -55,8 +55,8 @@
                         <v-btn class="mr-2" fab dark small color="cyan"  title="Continuar venta" v-if="item.clsa_status == 'Pendiente'"
                                :href="'/detaiorder/'+item.clor_pk">
                             <v-icon dark>mdi-cash-register</v-icon>
-                        </v-btn>
-                    </template>-->
+                        </v-btn>-->
+                        </template>
                     </v-data-table>
                 </v-card>
             </v-col>
@@ -99,6 +99,10 @@ export default {
                 {
                     text: 'Estatus',
                     value: 'status'
+                },
+                {
+                    text: '',
+                    value: 'action'
                 },
 
             ],
