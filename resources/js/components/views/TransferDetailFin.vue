@@ -40,7 +40,7 @@
         <v-dialog v-model="dialog" max-width="800px">
             <v-card>
                 <v-card-title class="cyan white--text">
-                    <span class="headline">Buscar producto</span>
+                    <span class="headline">Buscar producto || Inventario</span>
                 </v-card-title>
 
                 <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3">
@@ -163,12 +163,20 @@ export default {
                     value: "prod_identifier",
                 },
                 {
-                    text: "Nombre",
+                    text: "Nombre Producto",
                     value: "prod_name",
                 },
                 {
-                    text: "Unidad",
-                    value: "meas_fk_input_name",
+                    text: "Unidad Salida",
+                    value: "meas_name",
+                },
+                {
+                    text: "Stock Real",
+                    value: "prin_stock",
+                },
+                {
+                    text: "Stock App",
+                    value: "stock_app",
                 },
                 {
                     text: "Tipo",
@@ -413,10 +421,58 @@ export default {
             this.dialogQuestionDelete = true;
         },
 
+        <<
+        << << < HEAD
+        createCompra() {
+            this.loading = true;
+            axios
+                .get("/product/transfers/" + this.prtr_pk + "")
+                .then((response) => {
+                    setTimeout(() => (this.loading = false), 500);
+                    if (response.data.data != null) {
+                        console.log(response);
+                        this.desserts = response.data.data.ProductTransferDetails;
+                        this.prtr_pk = response.data.data.ProductTransfers.prtr_pk;
+                        this.editadoHeader = response.data.data.ProductTransfers;
+                    } else {
+                        if (this.prtr_pk > 0)
+                            this.normal(
+                                "Notificación",
+                                response.data.status.message,
+                                "error"
+                            );
+                    }
+                })
+                .catch((e) => {
+                    console.log(e);
+                    this.normal("Notificación", "Error al cargar los datos", "error");
+                });
+        },
+        cancelar() {
+            this.dialog = false;
+            this.editado = Object.assign({}, this.defaultItem);
+            this.editedIndex = -1;
+        },
+        buscar() {
+            axios
+                .get("/product/inventories")
+                .then((response) => {
+                    this.products = response.data.data;
+                    this.dialog = true;
+                    console.log(response.data);
+                })
+                .catch((e) => {
+                    this.errors.push(e);
+                });
+        },
+        ===
+        === =
         guardaBorrar() {
             this.delete();
             this.dialogQuestionDelete = false;
         },
+        >>>
+        >>> > 850599 c8e7f0ac60be06e4ace93d5f57bf22dcd6
 
         delete: function () {
             axios
@@ -442,7 +498,7 @@ export default {
             axios
                 .get("/product/transfers/" + this.prtr_pk + "")
                 .then((response) => {
-                    setTimeout(() => (this.loading = false), 500);
+                    setTimeout(() => (this.loading = false), 2000);
                     if (response.data.data != null) {
                         console.log(response);
                         this.desserts = response.data.data.ProductTransferDetails;
@@ -520,7 +576,6 @@ export default {
         },
 
         finalizar() {
-
             this.messageQuestion = "¿Está seguro de finalizar el traspaso?";
 
             this.dialogQuestion = true;

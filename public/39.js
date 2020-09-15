@@ -197,11 +197,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Ident",
         value: "prod_identifier"
       }, {
-        text: "Nombre",
+        text: "Nombre Producto",
         value: "prod_name"
       }, {
-        text: "Unidad",
-        value: "meas_fk_input_name"
+        text: "Unidad Salida",
+        value: "meas_name"
+      }, {
+        text: "Stock Real",
+        value: "prin_stock"
+      }, {
+        text: "Stock App",
+        value: "stock_app"
       }, {
         text: "Tipo",
         value: "bulk"
@@ -817,7 +823,7 @@ var render = function() {
                 [
                   _c("v-card-title", { staticClass: "cyan white--text" }, [
                     _c("span", { staticClass: "headline" }, [
-                      _vm._v("Buscar producto")
+                      _vm._v("Buscar producto || Inventario")
                     ])
                   ]),
                   _vm._v(" "),

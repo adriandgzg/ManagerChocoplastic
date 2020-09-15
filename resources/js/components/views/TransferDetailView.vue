@@ -42,7 +42,7 @@
         <v-dialog v-model="dialog" scrollable max-width="800px">
             <v-card>
                 <v-card-title class="cyan white--text">
-                    <span class="headline">Buscar producto</span>
+                    <span class="headline">Buscar producto || Inventario</span>
                 </v-card-title>
 
                 <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3">
@@ -92,7 +92,7 @@
                         <v-col cols="3">
                             <v-card-text class="category d-inline-flex font-weight-light">
                                 <v-label>
-                                    <h4>Sucursal Salida:</h4>
+                                    <h4>Sucursal Entrada:</h4>
                                     {{editadoHeader.stor_name_input}}
                                 </v-label>
                             </v-card-text>

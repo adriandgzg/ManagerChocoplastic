@@ -96,6 +96,7 @@ Route::post('/client/orders/destroy', 'ClientOrderController@destroy'); //Cancel
 
 Route::get('/clientsales', 'ClientSaleController@index'); ////Lista de Ventas (Cliente)
 Route::get('/client/sales/{clsa_pk}', 'ClientSaleController@show'); //Detalle de Venta (Cliente)   
+Route::get('/client/sales/report/{clsa_pk}', 'ClientSaleController@showreport'); //Detalle de Venta (Cliente)   Reporte
 Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente) 
 Route::post('/clientsales/update', 'ClientSaleController@update'); //Finalizar Venta (Cliente)
 Route::get('/client/sales/printOrder/{clsa_pk}', 'ClientSaleController@printOrder'); //Detalle de Venta (Cliente) 
