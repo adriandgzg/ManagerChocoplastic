@@ -588,6 +588,11 @@ export default {
                     if (response.data.status.code == 200) {
                         //this.textMsg = "¡Actualizado correctamente!";
                         this.normal("Notificación", vMessage, "success");
+                        let route = this.$router.resolve({
+                            path: '/client/sales/printTraspaso/' + response.data.data
+                        });
+
+                        window.open(route.href, '_blank');
                         this.$router.push("/transferlist");
                     } else {
                         this.normal("Notificación", vMessage, "error");

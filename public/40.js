@@ -546,6 +546,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         //this.textMsg = "¡Actualizado correctamente!";
         _this12.normal("Notificación", vMessage, "success");
 
+        var route = _this12.$router.resolve({
+          path: '/client/sales/printTraspaso/' + response.data.data
+        });
+
+        window.open(route.href, '_blank');
+
         _this12.$router.push("/transferlist");
       } else {
         _this12.normal("Notificación", vMessage, "error");
