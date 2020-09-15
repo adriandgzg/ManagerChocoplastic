@@ -17,8 +17,8 @@ class StoreSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         Store::create([
-            'stor_identifier' => "bodega",
-            'stor_rfc' => "",
+            'stor_identifier' => "BODEGA",
+            'stor_rfc' => "XAXX010101000",
             'stor_businessname' => "GABRIELA OCOTL GARCIA",
             'stor_name' => "LA BODEGA DE CHOCOPLASTIC",
             'stor_phone' => "993 350 4907",
@@ -28,8 +28,8 @@ class StoreSeeder extends Seeder
         ]);
 
         Store::create([
-            'stor_identifier' => "pinosuarez1",
-            'stor_rfc' => "",
+            'stor_identifier' => "PINOSUAREZ 1",
+            'stor_rfc' => "XAXX010101000",
             'stor_businessname' => "GABRIELA OCOTL GARCIA",
             'stor_name' => "LA TIENDITA DE CHOCOPLASTIC",
             'stor_phone' => "993 131 1432",
@@ -39,8 +39,8 @@ class StoreSeeder extends Seeder
         ]);
 
         Store::create([
-            'stor_identifier' => "pinosuarez 2",
-            'stor_rfc' => "",
+            'stor_identifier' => "PINOSAUREZ 2",
+            'stor_rfc' => "XAXX010101000",
             'stor_businessname' => "HIPOLITO ROMERO OCELOTL",
             'stor_name' => "LA TIENDITA DE CHOCOPLASTIC",
             'stor_phone' => "993 151 5277",
@@ -50,8 +50,8 @@ class StoreSeeder extends Seeder
         ]);
 
         Store::create([
-            'stor_identifier' => "pinosuarez 3",
-            'stor_rfc' => "",
+            'stor_identifier' => "PINOSUAREZ 3",
+            'stor_rfc' => "XAXX010101000",
             'stor_businessname' => "OSCAR GENARO ROMERO OCELOTL",
             'stor_name' => "LA TIENDITA DE CHOCOPLASTIC",
             'stor_phone' => "993 313 7981",
@@ -61,8 +61,8 @@ class StoreSeeder extends Seeder
         ]);
 
         Store::create([
-            'stor_identifier' => "ximenita",
-            'stor_rfc' => "",
+            'stor_identifier' => "XIMENITA",
+            'stor_rfc' => "XAXX010101000",
             'stor_businessname' => "JENNY GUADALUPE SILVAN MORENO",
             'stor_name' => "MATERIAS PRIMAS XIMENITA",
             'stor_phone' => "993 161 7446",
@@ -72,8 +72,8 @@ class StoreSeeder extends Seeder
         ]);
 
         Store::create([
-            'stor_identifier' => "central de abastos",
-            'stor_rfc' => "",
+            'stor_identifier' => "CENTRAL DE ABASTO",
+            'stor_rfc' => "XAXX010101000",
             'stor_businessname' => "OSCAR GENARO ROMERO OCELOTL",
             'stor_name' => "LA TIENDITA DEL ESQUINA",
             'stor_phone' => "",
@@ -84,7 +84,7 @@ class StoreSeeder extends Seeder
 
         Store::create([
             'stor_identifier' => "TAMULTE",
-            'stor_rfc' => "",
+            'stor_rfc' => "XAXX010101000",
             'stor_businessname' => "HIPOLITO ROMERO OCELOTL",
             'stor_name' => "EL COLORADO",
             'stor_phone' => "993 413 6923",

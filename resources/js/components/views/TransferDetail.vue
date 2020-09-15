@@ -40,7 +40,7 @@
       <v-dialog v-model="dialog" max-width="800px">
         <v-card>
           <v-card-title class="cyan white--text">
-            <span class="headline">Buscar producto</span>
+            <span class="headline">Buscar producto || Inventario</span>
           </v-card-title>
 
           <v-data-table
@@ -183,12 +183,20 @@ export default {
           value: "prod_identifier",
         },
         {
-          text: "Nombre",
+          text: "Nombre Producto",
           value: "prod_name",
         },
         {
-          text: "Unidad",
-          value: "meas_fk_input_name",
+          text: "Unidad Salida",
+          value: "meas_name",
+        },
+        {
+          text: "Stock Real",
+          value: "prin_stock",
+        },
+        {
+          text: "Stock App",
+          value: "stock_app",
         },
         {
           text: "Tipo",
@@ -199,7 +207,7 @@ export default {
           text: "",
           value: "action",
           width: "20%",
-        },
+        }
       ],
       prtr_pk: this.$route.params.id,
       directa: this.$route.params.directa,
