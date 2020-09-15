@@ -300,7 +300,7 @@ export default {
       axios
         .get("/clientlist")
         .then((response) => {
-          setTimeout(() => (this.loading = false), 2000);
+          setTimeout(() => (this.loading = false), 500);
           this.clientes = response.data.data;
         })
         .catch((e) => {

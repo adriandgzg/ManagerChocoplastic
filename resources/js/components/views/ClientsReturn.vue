@@ -447,7 +447,7 @@ export default {
         this.loading = true
             axios.post('/client/returns?clsa_pk=' + this.clsa_pk + '')
                 .then(response => {
-                  setTimeout(() => (this.loading = false), 2000)
+                  setTimeout(() => (this.loading = false), 500)
                     if(response.data.data != null){
                             this.sales = response.data.data;
                             this.saleHeader = response.data.data.ClientReturns;

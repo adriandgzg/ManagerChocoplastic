@@ -365,7 +365,7 @@ export default {
       axios
         .get("/client/debts")
         .then((response) => {
-          setTimeout(() => (this.loading = false), 2000);
+          setTimeout(() => (this.loading = false), 500);
           if (response.data.data != null) {
             console.log(response.data);
             this.clientsdebts = response.data.data;

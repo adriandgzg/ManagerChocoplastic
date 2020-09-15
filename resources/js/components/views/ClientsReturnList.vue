@@ -145,7 +145,7 @@ export default {
         .get("/client/returns")           
         .then(response => {
             
-        setTimeout(() => (this.loading = false), 2000)
+        setTimeout(() => (this.loading = false), 500)
             if(response.data.data != null){
                 console.log(response.data)
             this.sales = response.data.data;          

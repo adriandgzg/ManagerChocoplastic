@@ -99,6 +99,7 @@ Route::get('/client/sales/{clsa_pk}', 'ClientSaleController@show'); //Detalle de
 Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente) 
 Route::post('/clientsales/update', 'ClientSaleController@update'); //Finalizar Venta (Cliente)
 Route::get('/client/sales/printOrder/{clsa_pk}', 'ClientSaleController@printOrder'); //Detalle de Venta (Cliente) 
+Route::get('/client/sales/printCredit/{clsa_pk}', 'ClientSaleController@printCredit'); //Detalle de Venta (Cliente) 
 
 Route::post('/client_sale_details/update', 'ClientSaleDetailController@update'); //Venta Producto Modificar (Cliente)
 Route::post('/client_sale_details/destroy', 'ClientSaleDetailController@destroy'); //Venta Producto Eliminar (Cliente)

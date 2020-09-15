@@ -461,7 +461,7 @@ export default {
             this.loading = true
             axios.get('/provider/purchase/orders/' + this.prpo_pk + '')
                 .then(response => {
-                    setTimeout(() => (this.loading = false), 2000)
+                    setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
                         console.log(response.data)
                         this.desserts = response.data.data.provider_purchase_order_details;

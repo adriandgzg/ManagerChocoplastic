@@ -186,7 +186,7 @@ export default {
       axios
         .get("/paymentshapesList")
         .then(response => {
-             setTimeout(() => (this.loading = false), 2000)
+             setTimeout(() => (this.loading = false), 500)
             console.log(response.data)
           this.payments = response.data.data;          
         })

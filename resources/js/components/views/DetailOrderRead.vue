@@ -359,7 +359,7 @@ export default {
             this.loading = true
             axios.get('/client/orders/' + this.clor_pk + '')
                 .then(response => {
-                    setTimeout(() => (this.loading = false), 2000)
+                    setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
                         console.log(response.data)
                         this.sales = response.data.data;

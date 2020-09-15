@@ -442,7 +442,7 @@ export default {
             axios
                 .get("/product/transfers/" + this.prtr_pk + "")
                 .then((response) => {
-                    setTimeout(() => (this.loading = false), 2000);
+                    setTimeout(() => (this.loading = false), 500);
                     if (response.data.data != null) {
                         console.log(response);
                         this.desserts = response.data.data.ProductTransferDetails;

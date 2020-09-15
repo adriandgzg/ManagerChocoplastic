@@ -625,7 +625,7 @@ export default {
             if (this.directa == 1) {
                 axios.post('/provider/purchases?prpo_pk=' + this.prpo_pk + '')
                     .then(response => {
-                        setTimeout(() => (this.loading = false), 2000)
+                        setTimeout(() => (this.loading = false), 500)
                         if (response.data.data != null) {
                             console.log(response.data.data)
                             this.desserts = response.data.data.ProviderPurchaseDetail;

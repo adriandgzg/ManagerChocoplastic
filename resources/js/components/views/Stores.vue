@@ -212,7 +212,7 @@ export default {
       axios
         .get("/storelist")
         .then(response => {
-            setTimeout(() => (this.loading = false), 2000)
+            setTimeout(() => (this.loading = false), 500)
             console.log(response.data)
           this.stores = response.data.data;          
         })

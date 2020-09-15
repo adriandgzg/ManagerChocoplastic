@@ -482,7 +482,7 @@ export default {
             axios
                 .get("/productList")
                 .then(response => {
-                    setTimeout(() => (this.loading = false), 2000)
+                    setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
                         this.products = response.data.data;
                     } else {

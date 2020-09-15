@@ -193,7 +193,7 @@ export default {
         .get("/measurementsList")
         .then(response => {            
           this.measurements = response.data.data;          
-          setTimeout(() => (this.loading = false), 2000)
+          setTimeout(() => (this.loading = false), 500)
         })
         .catch(e => {
           console.log(e);

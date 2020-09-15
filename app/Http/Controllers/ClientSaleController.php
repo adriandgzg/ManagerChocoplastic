@@ -912,5 +912,228 @@ $pdf->Cell(60,0,utf8_decode('Favor de revisar su mercancía. No se aceptan cambi
             
     }
 
+    public function printCredit($clsa_pk)
+    {
+        $total = 0;
+        
+        //Asignacion de variables
+        $vclsa_pk = $clsa_pk;
+
+
+        if ($vclsa_pk == '' || $vclsa_pk == 0) {
+            return $this->dbResponse(null, 500, null, 'PK Obligatorio');
+        }
+
+        $vCS = DB::table('client_sales AS CS')
+            ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
+            ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
+            ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
+            ->select(
+                'CS.clsa_pk',
+                'CS.clsa_identifier',
+                'CS.clor_fk AS clor_pk',
+                DB::raw('(CASE 
+                    WHEN CS.clsa_status = 0 THEN "Pendiente" 
+                    WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
+                    WHEN CS.clsa_status = 3 THEN "Pagado" 
+                    ELSE "" END) AS clsa_status'),
+                'CS.created_at',
+
+                'C.clie_pk',
+                'C.clie_identifier',
+                'C.clie_name',
+                'C.clie_rfc',
+
+                'PM.pame_pk',
+                'PM.pame_name',
+
+                'S.stor_pk',
+                'S.stor_name',
+            )
+            ->where('CS.clsa_pk', '=', $vclsa_pk)
+            ->first();
+
+        if($vCS)
+        {
+            $vCSD = DB::table('client_sale_details AS CSD')
+                ->join('products AS P', 'P.prod_pk', '=', 'CSD.prod_fk')
+                ->join('measurements AS M', 'M.meas_pk', '=', 'CSD.meas_fk')
+                ->select(
+                    'CSD.clsd_pk',
+
+                    //'CSD.clsa_fk',
+
+                    'P.prod_pk',
+                    'P.prod_identifier',
+                    'P.prod_name',
+
+                    'M.meas_pk',
+                    'M.meas_name',
+                    'M.meas_abbreviation',
+
+                    'CSD.clsd_quantity',
+                    'CSD.clsd_price',
+                    'CSD.clsd_discountrate'
+                    //'CSD.clsd_ieps',
+                    //'CSD.clsd_iva'
+                )
+                ->where('CSD.clsa_fk', '=', $vclsa_pk)
+                ->where('clsd_status', '=', 1)
+                ->get();
+
+                $status =Auth::user();
+
+    
+        $admin = collect(\DB::select("SELECT a.*, CONCAT(s.stor_identifier, ' - ', s.stor_name) as stor_name, s.stor_addres FROM admins a left join stores s 
+        on a.store_id = s.stor_pk where a.store_id = " . $status->id . "
+        "))->first();
+
+                
+               
+
+                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', 'Letter');
+               //$pdf->SetMargins(10, 2, 2,0);
+                $pdf->SetMargins(10, 20);
+                $pdf->AddPage();
+                $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
+                $pdf->Image(config('app.url') . '/images/bg.png', 3, 2, 210);
+                $pdf->Image(config('app.url') . '/images/logo_chocoplastic.png', 15, 10, 60);
+                
+                //$pdf->setY(35);
+                
+                $lineHeigth = 2;                
+                $pdf->Ln(20);
+                // Número de página
+                
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(15, $lineHeigth, 'RFC:', '', '1', 'L');
+                $pdf->SetFont('Arial', '', 10);                
+                $pdf->Cell(100, $lineHeigth-4, $vCS->clie_rfc, '', '1', 'L');
+                
+                $pdf->Ln(3);
+                
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(30, $lineHeigth, 'Domicilio Fiscal:', '', '0', 'L');
+                
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(50, $lineHeigth, utf8_decode('Dirección'), '', '0', 'L');
+                
+                $pdf->Ln(6);
+                
+                $pdf->SetFont('Arial', 'B', 12);
+                $pdf->Cell(210, $lineHeigth, utf8_decode($admin->stor_name), '', '1', 'C');
+                
+                $pdf->Ln(6);
+
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(43, $lineHeigth, 'No. Pedido: ' . $vCS->clor_pk, '', '1');
+                $pdf->Ln(3);
+                $pdf->Cell(43, $lineHeigth, '' . $vCS->created_at, '', '1');
+                $pdf->Ln(3);
+                $pdf->Cell(43, $lineHeigth, 'Tipo de Pago: ' . utf8_decode($vCS->pame_name), '', '1');
+                $pdf->Ln(3);
+                $pdf->Cell(43, $lineHeigth, 'Cliente: ' . utf8_decode($vCS->clie_identifier), '', '1');
+                $pdf->Ln(6);
+
+                
+                $pdf->SetFont('Arial', '', 10);
+                 $header = array('CLAVE', 'CANT.', 'UNIDAD', 'COSTO','IMPORTE');
+                 foreach($header as $col)
+                 {
+                        $pdf->Cell(40,7,$col, '','0','C');
+                    
+                 }
+
+
+                $pdf->Ln(10);
+                $disprice = 0;
+                $total = 0;
+                foreach ($vCSD as $product) {
+                    $pdf->SetFont('Arial', 'B', 10);
+                    $pdf->Cell(25, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 30), '', '0');
+                        $pdf->Ln(5);
+                    $price = $product->clsd_quantity * $product->clsd_price;  
+                    $disprice = $disprice + $product->clsd_discountrate;
+                    $pdf->SetFont('Arial', '', 10);
+                        $total = $total + $price;
+                        
+                        $pdf->Cell(40, $lineHeigth, $product->prod_identifier, '', '0','C');
+                        $pdf->Cell(40, $lineHeigth, $product->clsd_quantity, '', '0','C');
+                        $pdf->Cell(40, $lineHeigth, $product->meas_abbreviation, '', '0','C');
+                        $pdf->Cell(40, $lineHeigth, "$" . number_format($product->clsd_price, 2), '', '0','C');
+                        $pdf->Cell(40, $lineHeigth, "$" . number_format($product->clsd_price, 2, ".", ","), 0, 1,'C');
+                        $pdf->Ln(3);
+                }
+                $total1 = $total - $disprice;
+                
+                //$pdf->SetY(-90);
+
+                $pdf->Ln(20);
+                $pdf->Cell(120, $lineHeigth, '', '', '0','L');
+                $pdf->Cell(30, $lineHeigth, 'SUBTOTAL', '', '0','L');
+                $pdf->Cell(30, $lineHeigth, "$" . number_format($total, 2), '', '0','R');
+                $pdf->Ln(5);
+
+                $pdf->Cell(120, $lineHeigth, '', '', '0','L');
+                $pdf->Cell(30, $lineHeigth, 'DESCUENTO', '', '0','L');
+                $pdf->Cell(30, $lineHeigth, "$" . number_format($disprice, 2), '', '0','R');
+                $pdf->Ln(5);
+
+                $pdf->Cell(120, $lineHeigth, '', '', '0','L');
+                $pdf->Cell(30, $lineHeigth, 'TOTAL', '', '0','L');
+                $pdf->Cell(30, $lineHeigth, "$" . number_format($total1, 2), '', '0','R');
+
+                $pdf->Ln(15);
+                $pdf->SetFont('Arial','B',10);
+                
+                $pdf->Cell(180, $lineHeigth, utf8_decode(('PAGARÉ')), '', '1', 'C');
+
+                $pdf->Ln(10);
+                $pdf->SetDrawColor(0,80,180);
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(25, $lineHeigth, utf8_decode((' ')), '', '0', 'L');
+                $pdf->Cell(40, $lineHeigth, utf8_decode(('Mediante este Pagaré, yo ' )), '', '0', 'L');                
+                $pdf->SetFont('Arial', 'BU', 10);
+                $pdf->Cell(75, $lineHeigth, utf8_decode(($vCS->clie_name)), '', '0', 'C');                
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(25, $lineHeigth, utf8_decode((', prometo ' )), '', '0', 'L');                
+                $pdf->Cell(25, $lineHeigth, utf8_decode((' ')), '', '0', 'L');
+                $pdf->Ln(5);
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(25, $lineHeigth, utf8_decode((' ')), '0', '0', 'L');
+                $pdf->Cell(90, $lineHeigth, utf8_decode(('incondicionalmente pagar a Chocoplastic la cantidad de  ' )), '', '0', 'L');                
+                $pdf->SetFont('Arial', 'BU', 10);
+                $pdf->Cell(20, $lineHeigth, '$120,000.00', '', '0', 'L');                
+                $pdf->SetFont('Arial', '', 10);
+                $pdf->Cell(25, $lineHeigth, utf8_decode((', por ' )), '', '0', 'L');                
+                $pdf->Cell(25, $lineHeigth, utf8_decode((' ')), '', '0', 'L');  
+                $pdf->Ln(5);
+                
+                $pdf->Cell(25, $lineHeigth, utf8_decode((' ')), '0', '0', 'L');
+                $pdf->Cell(90, $lineHeigth, utf8_decode(('concepto de compra de productos a través de Crédito.' )), '0', '0', 'L');                
+
+                $pdf->Ln(20);                
+                $pdf->Cell(180, $lineHeigth, utf8_decode(('_____________________________________________' )), '0', '0', 'C');  
+                $pdf->Ln(5);
+                $pdf->Cell(180, $lineHeigth, utf8_decode(('Nombre y firma del cliente' )), '0', '0', 'C');                
+      
+$pdf->SetAutoPageBreak(false);
+$pdf->SetY(-15);
+$pdf->SetX(7);
+$pdf->SetDrawColor(0,80,180);   
+$pdf->SetFillColor(250,70,51);
+                $pdf->Cell(200,1,utf8_decode(' '),0,1,'C', true);
+                $pdf->SetX(7);
+                $pdf->SetFillColor(255,219,216);
+                $pdf->Cell(200,8,utf8_decode('Dirección de' . $admin->stor_name),0,1,'C', true);
+                ob_get_clean();
+        $pdf->output('I', 'ticket', 'true');
+        
+        
+
+            }
+            
+    }
+
     
 }

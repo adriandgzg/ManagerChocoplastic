@@ -266,7 +266,7 @@ export default {
             this.loading = true
             axios.get('/listUsers')
                 .then(response => {
-                    setTimeout(() => (this.loading = false), 2000)
+                    setTimeout(() => (this.loading = false), 500)
                     this.usuarios = response.data.data
                 })
                 .catch(e => {

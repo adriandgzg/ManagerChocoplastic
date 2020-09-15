@@ -200,7 +200,7 @@ export default {
             axios
                 .get("/provider/purchases")
                 .then(response => {
-                    setTimeout(() => (this.loading = false), 2000)
+                    setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
                         this.ordenescompra = response.data.data;
                     } else {
@@ -238,7 +238,7 @@ export default {
             this.loading = true
             axios.get('/provider/purchases/' + prpu_pk + '')
                 .then(response => {
-                    setTimeout(() => (this.loading = false), 2000)
+                    setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
                         this.saleDetail = response.data.data.ProviderPurchaseDetail;
                         this.editadoHeader = response.data.data.ProviderPurchase;

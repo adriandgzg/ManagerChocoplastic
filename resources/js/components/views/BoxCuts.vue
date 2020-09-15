@@ -148,7 +148,7 @@ export default {
             axios
                 .get("/boxcuts")
                 .then(response => {
-                    setTimeout(() => (this.loading = false), 2000)
+                    setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
                         this.sales = response.data.data;
                     } else {

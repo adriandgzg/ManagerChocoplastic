@@ -338,7 +338,7 @@ export default {
       axios
         .get("/providerlist")
         .then((response) => {
-          setTimeout(() => (this.loading = false), 2000);
+          setTimeout(() => (this.loading = false), 500);
           if (response.data.data != null) {
             this.proveedores = response.data.data;
           } else {

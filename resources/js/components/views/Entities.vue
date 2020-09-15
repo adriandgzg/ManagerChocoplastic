@@ -185,7 +185,7 @@ export default {
       axios
         .get("/entitiesList")
         .then(response => {
-          setTimeout(() => (this.loading = false), 2000)
+          setTimeout(() => (this.loading = false), 500)
           this.entities = response.data.data;          
         })
         .catch(e => {

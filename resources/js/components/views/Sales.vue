@@ -165,7 +165,7 @@ export default {
             axios
                 .get("/clientsales")
                 .then(response => {
-                    setTimeout(() => (this.loading = false), 2000)
+                    setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
                         console.log(response.data.data)
                         this.sales = response.data.data;
