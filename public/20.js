@@ -193,7 +193,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/paymentshapesList").then(function (response) {
         setTimeout(function () {
           return _this.loading = false;
-        }, 2000);
+        }, 500);
         console.log(response.data);
         _this.payments = response.data.data;
       })["catch"](function (e) {

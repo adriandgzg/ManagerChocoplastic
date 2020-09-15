@@ -470,7 +470,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios.get("/productList").then(function (response) {
         setTimeout(function () {
           return _this.loading = false;
-        }, 2000);
+        }, 500);
 
         if (response.data.data != null) {
           _this.products = response.data.data;

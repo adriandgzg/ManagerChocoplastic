@@ -216,7 +216,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/storelist").then(function (response) {
         setTimeout(function () {
           return _this.loading = false;
-        }, 2000);
+        }, 500);
         console.log(response.data);
         _this.stores = response.data.data;
       })["catch"](function (e) {

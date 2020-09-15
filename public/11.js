@@ -586,7 +586,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/clientsales?clor_pk=' + this.clor_pk + '').then(function (response) {
         setTimeout(function () {
           return _this5.loading = false;
-        }, 2000);
+        }, 500);
 
         if (response.data.data != null) {
           _this5.sales = response.data.data;

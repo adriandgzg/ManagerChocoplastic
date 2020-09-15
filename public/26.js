@@ -364,7 +364,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/provider/returns/' + this.prpu_pk + '').then(function (response) {
         setTimeout(function () {
           return _this5.loading = false;
-        }, 2000);
+        }, 500);
 
         if (response.data.data != null) {
           console.log(response.data);

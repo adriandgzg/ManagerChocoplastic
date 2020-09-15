@@ -114,25 +114,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -206,7 +187,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/categorieslist").then(function (response) {
         setTimeout(function () {
           return _this.loading = false;
-        }, 2000);
+        }, 500);
 
         if (response.data.data != null) {
           console.log(response.data);
@@ -326,9 +307,7 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                " +
-                  _vm._s(_vm.textMsg) +
-                  "\n                "
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
               ),
               _c(
                 "v-btn",
@@ -340,7 +319,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Cerrar\n                ")]
+                [_vm._v("\r\n                Cerrar\r\n            ")]
               )
             ],
             1
@@ -367,7 +346,7 @@ var render = function() {
                     "v-card-text",
                     [
                       _vm._v(
-                        "\n                    Cargando\n                    "
+                        "\r\n                    Cargando\r\n                    "
                       ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
@@ -724,7 +703,7 @@ var render = function() {
                                   ? _c(
                                       "v-chip",
                                       { attrs: { color: "green", dark: "" } },
-                                      [_vm._v("  Activo  ")]
+                                      [_vm._v(" Activo ")]
                                     )
                                   : _c(
                                       "v-chip",

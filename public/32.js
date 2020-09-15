@@ -423,7 +423,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/provider/purchases/' + this.prpo_pk + '').then(function (response) {
         setTimeout(function () {
           return _this6.loading = false;
-        }, 2000);
+        }, 500);
 
         if (response.data.data != null) {
           _this6.desserts = response.data.data.ProviderPurchaseDetail;

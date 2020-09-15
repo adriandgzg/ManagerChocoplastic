@@ -607,7 +607,7 @@ __webpack_require__.r(__webpack_exports__);
         axios.post('/provider/purchases?prpo_pk=' + this.prpo_pk + '').then(function (response) {
           setTimeout(function () {
             return _this8.loading = false;
-          }, 2000);
+          }, 500);
 
           if (response.data.data != null) {
             console.log(response.data.data);

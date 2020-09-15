@@ -167,7 +167,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/clientsales").then(function (response) {
         setTimeout(function () {
           return _this2.loading = false;
-        }, 2000);
+        }, 500);
 
         if (response.data.data != null) {
           console.log(response.data.data);

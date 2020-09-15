@@ -182,7 +182,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/provider/purchase/orders").then(function (response) {
         setTimeout(function () {
           return _this.loading = false;
-        }, 2000);
+        }, 500);
 
         if (response.data.data != null) {
           _this.ordenescompra = response.data.data;

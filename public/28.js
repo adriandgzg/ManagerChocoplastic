@@ -202,7 +202,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/provider/purchases").then(function (response) {
         setTimeout(function () {
           return _this.loading = false;
-        }, 2000);
+        }, 500);
 
         if (response.data.data != null) {
           _this.ordenescompra = response.data.data;
@@ -242,7 +242,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/provider/purchases/' + prpu_pk + '').then(function (response) {
         setTimeout(function () {
           return _this3.loading = false;
-        }, 2000);
+        }, 500);
 
         if (response.data.data != null) {
           _this3.saleDetail = response.data.data.ProviderPurchaseDetail;

@@ -11,33 +11,10 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! crip-vue-notice */ "./node_modules/crip-vue-notice/lib/crip-vue-notice.js");
 /* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(crip_vue_notice__WEBPACK_IMPORTED_MODULE_0__);
+var _methods;
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -330,7 +307,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.createCompra(); //this.getPayment();
     //this.getUsers();
   },
-  methods: {
+  methods: (_methods = {
     getUsers: function getUsers() {
       var _this = this;
 
@@ -428,48 +405,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.editado = Object.assign({}, item);
       this.dialogQuestionDelete = true;
     },
-    guardaBorrar: function guardaBorrar() {
-      this["delete"]();
-      this.dialogQuestionDelete = false;
-    },
-    "delete": function _delete() {
-      var _this6 = this;
-
-      axios.post("/product/transfer/details/destroy", this.editado).then(function (response) {
-        console.log(response);
-
-        if (response.data.status.code == 200) {
-          _this6.textMsg = "¡Eliminado correctamente!";
-
-          _this6.normal("Notificación", _this6.textMsg, "success");
-
-          _this6.createCompra();
-        } else {
-          _this6.normal("Notificación", "Ocurrio un error al eliminar el producto", "error");
-        }
-      });
-    },
     createCompra: function createCompra() {
-      var _this7 = this;
+      var _this6 = this;
 
       this.loading = true;
       axios.get("/product/transfers/" + this.prtr_pk + "").then(function (response) {
         setTimeout(function () {
-          return _this7.loading = false;
-        }, 2000);
+          return _this6.loading = false;
+        }, 500);
 
         if (response.data.data != null) {
           console.log(response);
-          _this7.desserts = response.data.data.ProductTransferDetails;
-          _this7.prtr_pk = response.data.data.ProductTransfers.prtr_pk;
-          _this7.editadoHeader = response.data.data.ProductTransfers;
+          _this6.desserts = response.data.data.ProductTransferDetails;
+          _this6.prtr_pk = response.data.data.ProductTransfers.prtr_pk;
+          _this6.editadoHeader = response.data.data.ProductTransfers;
         } else {
-          if (_this7.prtr_pk > 0) _this7.normal("Notificación", response.data.status.message, "error");
+          if (_this6.prtr_pk > 0) _this6.normal("Notificación", response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log(e);
 
-        _this7.normal("Notificación", "Error al cargar los datos", "error");
+        _this6.normal("Notificación", "Error al cargar los datos", "error");
       });
     },
     cancelar: function cancelar() {
@@ -478,124 +434,174 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.editedIndex = -1;
     },
     buscar: function buscar() {
-      var _this8 = this;
+      var _this7 = this;
 
       axios.get("/product/inventories").then(function (response) {
-        _this8.products = response.data.data;
-        _this8.dialog = true;
+        _this7.products = response.data.data;
+        _this7.dialog = true;
         console.log(response.data);
       })["catch"](function (e) {
-        _this8.errors.push(e);
+        _this7.errors.push(e);
       });
     },
-    onQuantityChange: function onQuantityChange(item) {
-      var _this9 = this;
+    guardaBorrar: function guardaBorrar() {
+      this["delete"]();
+      this.dialogQuestionDelete = false;
+    },
+    "delete": function _delete() {
+      var _this8 = this;
 
-      this.detail.prtd_pk = item.prtd_pk, this.detail.prod_fk = item.prod_pk;
-      this.detail.prtd_quantity = item.prtd_quantity;
-      this.detail.prtd_price = item.prtd_price;
-      this.detail.prtd_discountrate = item.prtd_discountrate;
-      axios.post("/product/transfer/details/update", this.detail).then(function (response) {
+      axios.post("/product/transfer/details/destroy", this.editado).then(function (response) {
         console.log(response);
 
         if (response.data.status.code == 200) {
-          _this9.textMsg = "¡Actualizado correctamente!";
+          _this8.textMsg = "¡Eliminado correctamente!";
+
+          _this8.normal("Notificación", _this8.textMsg, "success");
+
+          _this8.createCompra();
         } else {
-          _this9.normal("Notificación", response.data.status.message, "success");
+          _this8.normal("Notificación", "Ocurrio un error al eliminar el producto", "error");
         }
-      })["catch"](function (e) {
-        _this9.errors.push(e);
-      });
-    },
-    getTotal: function getTotal() {
-      this.subtotal = 0;
-
-      for (var i = 0; i < this.desserts.length; i++) {
-        this.subtotal = this.subtotal + this.desserts[i].prtd_price * this.desserts[i].prtd_quantity * (1 - this.desserts[i].prtd_discountrate / 100);
-        console.log(this.subtotal);
-      }
-
-      this.total = this.subtotal + this.iva;
-    },
-    finalizar: function finalizar() {
-      this.messageQuestion = "¿Está seguro de finalizar el traspaso?";
-      this.dialogQuestion = true;
-    },
-    guardaFinalizar: function guardaFinalizar() {
-      var _this10 = this;
-
-      this.orderHeader.prtr_pk = this.prtr_pk;
-      this.orderHeader.stor_fk_input = this.selectStore.stor_pk;
-      this.orderHeader.prtr_observation = this.prtr_observation;
-      console.log(this.orderHeader);
-      axios.post("/product/transfers/update/finalize", this.orderHeader).then(function (response) {
-        console.log(response);
-        var vMessage = response.data.status.message;
-
-        if (response.data.status.code == 200) {
-          //this.textMsg = "¡Actualizado correctamente!";
-          _this10.normal("Notificación", vMessage, "success");
-
-          _this10.$router.push("/transferlist");
-        } else {
-          _this10.normal("Notificación", vMessage, "error");
-        }
-      })["catch"](function (e) {
-        _this10.errors.push(e);
-      });
-    },
-    finalizarVenta: function finalizarVenta() {
-      var _this11 = this;
-
-      console.log(this.total + "-" + (this.efectivo + this.tarjeta));
-      if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
-        this.normal("Notificación", "Los montos de pago deben ser igual al total", "error");
-        return;
-      }
-      var r = confirm("¿Está seguro de finalizar la compra?");
-
-      if (r == true) {
-        this.editadoSale.clde_amount = this.total;
-        this.editadoSale.clpa_amount_cash = this.efectivo;
-        this.editadoSale.clpa_amount_transfer = this.tarjeta;
-        axios.post("/clientsales/update", this.editadoSale).then(function (response) {
-          console.log(response);
-
-          if (response.data.code == 200) {
-            _this11.textMsg = "¡Actualizado correctamente!";
-
-            _this11.normal("Notificación", "¡Actualizado correctamente!", "success");
-
-            _this11.$router.push("/sales");
-          } else {
-            _this11.normal("Notificación", response.data.message, "error");
-          }
-        })["catch"](function (e) {
-          _this11.errors.push(e);
-        });
-      }
-    },
-    actualizar: function actualizar(item) {
-      var _this12 = this;
-
-      this.editado = Object.assign({}, item);
-      axios.post("/client_sale_details/update", this.editado).then(function (response) {
-        _this12.textMsg = "¡Actualizado correctamente!";
-      })["catch"](function (e) {
-        _this12.errors.push(e);
-      });
-    },
-    normal: function normal(Title, Description, Type) {
-      this.notice = new crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default.a({
-        title: Title,
-        description: Description,
-        className: "open-normal",
-        closable: true,
-        duration: 3,
-        type: Type
       });
     }
-  }
+  }, _defineProperty(_methods, "createCompra", function createCompra() {
+    var _this9 = this;
+
+    this.loading = true;
+    axios.get("/product/transfers/" + this.prtr_pk + "").then(function (response) {
+      setTimeout(function () {
+        return _this9.loading = false;
+      }, 2000);
+
+      if (response.data.data != null) {
+        console.log(response);
+        _this9.desserts = response.data.data.ProductTransferDetails;
+        _this9.prtr_pk = response.data.data.ProductTransfers.prtr_pk;
+        _this9.editadoHeader = response.data.data.ProductTransfers;
+      } else {
+        if (_this9.prtr_pk > 0) _this9.normal("Notificación", response.data.status.message, "error");
+      }
+    })["catch"](function (e) {
+      console.log(e);
+
+      _this9.normal("Notificación", "Error al cargar los datos", "error");
+    });
+  }), _defineProperty(_methods, "cancelar", function cancelar() {
+    this.dialog = false;
+    this.editado = Object.assign({}, this.defaultItem);
+    this.editedIndex = -1;
+  }), _defineProperty(_methods, "buscar", function buscar() {
+    var _this10 = this;
+
+    axios.get("/product/inventories").then(function (response) {
+      _this10.products = response.data.data;
+      _this10.dialog = true;
+      console.log(response.data);
+    })["catch"](function (e) {
+      _this10.errors.push(e);
+    });
+  }), _defineProperty(_methods, "onQuantityChange", function onQuantityChange(item) {
+    var _this11 = this;
+
+    this.detail.prtd_pk = item.prtd_pk, this.detail.prod_fk = item.prod_pk;
+    this.detail.prtd_quantity = item.prtd_quantity;
+    this.detail.prtd_price = item.prtd_price;
+    this.detail.prtd_discountrate = item.prtd_discountrate;
+    axios.post("/product/transfer/details/update", this.detail).then(function (response) {
+      console.log(response);
+
+      if (response.data.status.code == 200) {
+        _this11.textMsg = "¡Actualizado correctamente!";
+      } else {
+        _this11.normal("Notificación", response.data.status.message, "success");
+      }
+    })["catch"](function (e) {
+      _this11.errors.push(e);
+    });
+  }), _defineProperty(_methods, "getTotal", function getTotal() {
+    this.subtotal = 0;
+
+    for (var i = 0; i < this.desserts.length; i++) {
+      this.subtotal = this.subtotal + this.desserts[i].prtd_price * this.desserts[i].prtd_quantity * (1 - this.desserts[i].prtd_discountrate / 100);
+      console.log(this.subtotal);
+    }
+
+    this.total = this.subtotal + this.iva;
+  }), _defineProperty(_methods, "finalizar", function finalizar() {
+    this.messageQuestion = "¿Está seguro de finalizar el traspaso?";
+    this.dialogQuestion = true;
+  }), _defineProperty(_methods, "guardaFinalizar", function guardaFinalizar() {
+    var _this12 = this;
+
+    this.orderHeader.prtr_pk = this.prtr_pk;
+    this.orderHeader.stor_fk_input = this.selectStore.stor_pk;
+    this.orderHeader.prtr_observation = this.prtr_observation;
+    console.log(this.orderHeader);
+    axios.post("/product/transfers/update/finalize", this.orderHeader).then(function (response) {
+      console.log(response);
+      var vMessage = response.data.status.message;
+
+      if (response.data.status.code == 200) {
+        //this.textMsg = "¡Actualizado correctamente!";
+        _this12.normal("Notificación", vMessage, "success");
+
+        _this12.$router.push("/transferlist");
+      } else {
+        _this12.normal("Notificación", vMessage, "error");
+      }
+    })["catch"](function (e) {
+      _this12.errors.push(e);
+    });
+  }), _defineProperty(_methods, "finalizarVenta", function finalizarVenta() {
+    var _this13 = this;
+
+    console.log(this.total + "-" + (this.efectivo + this.tarjeta));
+    if (this.editadoSale.pame_fk == 1) if (this.total - this.efectivo - this.tarjeta == 0) {} else {
+      this.normal("Notificación", "Los montos de pago deben ser igual al total", "error");
+      return;
+    }
+    var r = confirm("¿Está seguro de finalizar la compra?");
+
+    if (r == true) {
+      this.editadoSale.clde_amount = this.total;
+      this.editadoSale.clpa_amount_cash = this.efectivo;
+      this.editadoSale.clpa_amount_transfer = this.tarjeta;
+      axios.post("/clientsales/update", this.editadoSale).then(function (response) {
+        console.log(response);
+
+        if (response.data.code == 200) {
+          _this13.textMsg = "¡Actualizado correctamente!";
+
+          _this13.normal("Notificación", "¡Actualizado correctamente!", "success");
+
+          _this13.$router.push("/sales");
+        } else {
+          _this13.normal("Notificación", response.data.message, "error");
+        }
+      })["catch"](function (e) {
+        _this13.errors.push(e);
+      });
+    }
+  }), _defineProperty(_methods, "actualizar", function actualizar(item) {
+    var _this14 = this;
+
+    this.editado = Object.assign({}, item);
+    axios.post("/client_sale_details/update", this.editado).then(function (response) {
+      _this14.textMsg = "¡Actualizado correctamente!";
+    })["catch"](function (e) {
+      _this14.errors.push(e);
+    });
+  }), _defineProperty(_methods, "normal", function normal(Title, Description, Type) {
+    this.notice = new crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default.a({
+      title: Title,
+      description: Description,
+      className: "open-normal",
+      closable: true,
+      duration: 3,
+      type: Type
+    });
+  }), _methods)
 });
 
 /***/ }),
@@ -634,7 +640,9 @@ var render = function() {
               }
             },
             [
-              _vm._v("\n      " + _vm._s(_vm.textMsg) + "\n      "),
+              _vm._v(
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
+              ),
               _c(
                 "v-btn",
                 {
@@ -671,7 +679,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -1117,7 +1127,9 @@ var render = function() {
                                   _c("v-icon", { attrs: { left: "" } }, [
                                     _vm._v("mdi-file-find")
                                   ]),
-                                  _vm._v("Buscar Producto\n              ")
+                                  _vm._v(
+                                    "Buscar Producto\r\n                            "
+                                  )
                                 ],
                                 1
                               ),
@@ -1136,7 +1148,9 @@ var render = function() {
                                   _c("v-icon", { attrs: { left: "" } }, [
                                     _vm._v("mdi-checkbox-marked-circle")
                                   ]),
-                                  _vm._v("Finalizar\n              ")
+                                  _vm._v(
+                                    "Finalizar\r\n                            "
+                                  )
                                 ],
                                 1
                               )
@@ -1297,14 +1311,15 @@ render._withStripped = true
 /*!*************************************************************!*\
   !*** ./resources/js/components/views/TransferDetailFin.vue ***!
   \*************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TransferDetailFin_vue_vue_type_template_id_cbcb855a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TransferDetailFin.vue?vue&type=template&id=cbcb855a& */ "./resources/js/components/views/TransferDetailFin.vue?vue&type=template&id=cbcb855a&");
 /* harmony import */ var _TransferDetailFin_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TransferDetailFin.vue?vue&type=script&lang=js& */ "./resources/js/components/views/TransferDetailFin.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _TransferDetailFin_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _TransferDetailFin_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -1334,7 +1349,7 @@ component.options.__file = "resources/js/components/views/TransferDetailFin.vue"
 /*!**************************************************************************************!*\
   !*** ./resources/js/components/views/TransferDetailFin.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

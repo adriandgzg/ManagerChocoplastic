@@ -421,8 +421,6 @@ export default {
             this.dialogQuestionDelete = true;
         },
 
-        <<
-        << << < HEAD
         createCompra() {
             this.loading = true;
             axios
@@ -465,15 +463,10 @@ export default {
                     this.errors.push(e);
                 });
         },
-        ===
-        === =
         guardaBorrar() {
             this.delete();
             this.dialogQuestionDelete = false;
         },
-        >>>
-        >>> > 850599 c8e7f0ac60be06e4ace93d5f57bf22dcd6
-
         delete: function () {
             axios
                 .post("/product/transfer/details/destroy", this.editado)

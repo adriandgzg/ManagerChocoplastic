@@ -152,7 +152,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/product/transfers").then(function (response) {
         setTimeout(function () {
           return _this.loading = false;
-        }, 2000);
+        }, 500);
 
         if (response.data.data != null) {
           _this.sales = response.data.data;

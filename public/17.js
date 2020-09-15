@@ -199,7 +199,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.measurements = response.data.data;
         setTimeout(function () {
           return _this.loading = false;
-        }, 2000);
+        }, 500);
       })["catch"](function (e) {
         console.log(e);
 

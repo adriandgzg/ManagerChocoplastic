@@ -192,7 +192,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/entitiesList").then(function (response) {
         setTimeout(function () {
           return _this.loading = false;
-        }, 2000);
+        }, 500);
         _this.entities = response.data.data;
       })["catch"](function (e) {
         console.log(e);

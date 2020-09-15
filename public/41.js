@@ -418,7 +418,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       axios.get('/product/transfers/' + this.prtr_pk + '').then(function (response) {
         setTimeout(function () {
           return _this6.loading = false;
-        }, 2000);
+        }, 500);
 
         if (response.data.data != null) {
           console.log(response);
