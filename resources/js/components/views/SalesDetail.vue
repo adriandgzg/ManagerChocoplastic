@@ -338,11 +338,29 @@ export default {
                         console.log(response)
                         if (response.data.code == 200) {
 
+
+                            if(this.editadoSale.pame_fk == 1)
+                            {
+                                //De Contado Ticket
+                                this.$router.push('/client/sales/printOrder/' + item.clsa_pk);
+                                this.$router.push('/sales');
+
+                            }
+
+                            if(this.editadoSale.pame_fk == 2)
+                            {
+                                //A Credito Reporte
+                                let route = this.$router.resolve({
+                                path: '/client/sales/printCredit/' + this.item.clsa_pk
+                                });
+
+                                window.open(route.href, '_blank');
+                            }
                             this.normal('Notificación', '¡Actualizado correctamente!', "success");
 
-                            //this.$router.push('/client/sales/printOrder/' + item.clsa_pk);
+                            
+                            
 
-                            // this.$router.push('/sales');
                         } else {
                             this.normal('Notificación', response.data.message, "error");
                         }

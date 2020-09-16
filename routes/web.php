@@ -101,7 +101,6 @@ Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a 
 Route::post('/clientsales/update', 'ClientSaleController@update'); //Finalizar Venta (Cliente)
 Route::get('/client/sales/printOrder/{clsa_pk}', 'ClientSaleController@printOrder'); //Detalle de Venta (Cliente) 
 Route::get('/client/sales/printCredit/{clsa_pk}', 'ClientSaleController@printCredit'); //Detalle de Venta (Cliente) 
-Route::get('/client/sales/printTraspaso/{clsa_pk}', 'ProductTransferController@printTraspaso');
 
 Route::post('/client_sale_details/update', 'ClientSaleDetailController@update'); //Venta Producto Modificar (Cliente)
 Route::post('/client_sale_details/destroy', 'ClientSaleDetailController@destroy'); //Venta Producto Eliminar (Cliente)
@@ -199,6 +198,7 @@ Route::post('product/transfers', 'ProductTransferController@store');
 Route::post('product/transfers/update', 'ProductTransferController@update'); //Estatus Solicitado
 Route::post('product/transfers/update/finalize', 'ProductTransferController@updatefinalize'); //Estatus Finalizado || Modificar Inventario
 Route::post('product/transfers/destroy', 'ProductTransferController@destroy'); 
+Route::get('/product/transfers/printTraspaso/{prtr_pk}', 'ProductTransferController@printTraspaso'); //Reporte Traspaso
 
 Route::post('product/transfer/details', 'ProductTransferDetailController@store');  
 Route::post('product/transfer/details/update', 'ProductTransferDetailController@update'); 
@@ -208,7 +208,7 @@ Route::post('product/transfer/details/destroy', 'ProductTransferDetailController
 
 
 
-
+ 
 
 
 

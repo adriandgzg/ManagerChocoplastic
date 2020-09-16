@@ -346,6 +346,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -358,13 +406,13 @@ __webpack_require__.r(__webpack_exports__);
       payments: [],
       paymentsShapes: [],
       paymentsOriginal: [],
-      saleHeader: '',
+      saleHeader: "",
       saleDetail: [],
       desserts: [],
-      selectClient: '',
-      selectStore: '',
-      selectpame: '',
-      selectpash: '',
+      selectClient: "",
+      selectStore: "",
+      selectpame: "",
+      selectpash: "",
       snackbar: false,
       timeout: 2000,
       subtotal: 0,
@@ -374,21 +422,21 @@ __webpack_require__.r(__webpack_exports__);
       efectivo: 0,
       tarjeta: 0,
       monto: 0,
-      referencia: '',
+      referencia: "",
       textMsg: "",
       editadoPago: {
         clsa_fk: 0,
         pash_fk: 0,
         bocu_fk: 0,
         cpam_amount: 0,
-        cpam_reference: ''
+        cpam_reference: ""
       },
       editadoPagoDefault: {
         clsa_fk: 0,
         pash_fk: 0,
         bocu_fk: 0,
         cpam_amount: 0,
-        cpam_reference: ''
+        cpam_reference: ""
       },
       editado: {
         clsd_pk: 0,
@@ -414,17 +462,17 @@ __webpack_require__.r(__webpack_exports__);
       dialogcredito: false,
       dialogcontado: false,
       dialogPago: false,
-      storeUser: '',
+      storeUser: "",
       minNumberRules: [function (value) {
-        return !!value || 'Requerido.';
+        return !!value || "Requerido.";
       }, function (value) {
-        return value > 0 || 'El número debe ser mayor o igual a cero';
+        return value > 0 || "El número debe ser mayor o igual a cero";
       }],
       loading: false,
       dialogQuestion: false,
       dialogQuestionDelete: false,
       dialogQuestionDeletePago: false,
-      messageQuestion: '',
+      messageQuestion: "",
       pagos: [],
       montototal: 0,
       bocu_pk: 0,
@@ -460,7 +508,7 @@ __webpack_require__.r(__webpack_exports__);
     getUsers: function getUsers() {
       var _this2 = this;
 
-      axios.get('/listUser').then(function (response) {
+      axios.get("/listUser").then(function (response) {
         _this2.users = response.data.data;
 
         if (_this2.users.store_id > 0) {
@@ -484,20 +532,20 @@ __webpack_require__.r(__webpack_exports__);
         var negativeSign = amount < 0 ? "-" : "";
         var i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
         var j = i.length > 3 ? i.length % 3 : 0;
-        return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+        return negativeSign + (j ? i.substr(0, j) + thousands : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
       } catch (e) {
         console.log(e);
       }
     },
     formatPrice: function formatPrice(value) {
-      var val = (value / 1).toFixed(2).replace(',', '.');
+      var val = (value / 1).toFixed(2).replace(",", ".");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
     onQuantityChange: function onQuantityChange(item) {
       var _this3 = this;
 
       this.editado = Object.assign({}, item);
-      axios.post('/client_sale_details/update', this.editado).then(function (response) {
+      axios.post("/client_sale_details/update", this.editado).then(function (response) {
         console.log(_this3.editado);
         console.log(response);
 
@@ -518,18 +566,18 @@ __webpack_require__.r(__webpack_exports__);
       this.tarjeta = 0;
       this.getPagos();
 
-      if (this.selectClient == '' || this.selectClient == null) {
-        this.normal('Alerta', 'Debe seleccionar un cliente', "error");
+      if (this.selectClient == "" || this.selectClient == null) {
+        this.normal("Alerta", "Debe seleccionar un cliente", "error");
         return;
       }
 
-      if (this.selectpame == '' || this.selectpame == null) {
-        this.normal('Alerta', 'Debe seleccionar un método de pago', "error");
+      if (this.selectpame == "" || this.selectpame == null) {
+        this.normal("Alerta", "Debe seleccionar un método de pago", "error");
         return;
       }
 
-      if (!this.enabledStore) if (this.selectStore == '' || this.selectStore == null) {
-        this.normal('Alerta', 'Debe seleccionar una sucursal', "error");
+      if (!this.enabledStore) if (this.selectStore == "" || this.selectStore == null) {
+        this.normal("Alerta", "Debe seleccionar una sucursal", "error");
         return;
       }
       this.editadoSale.clsa_pk = this.saleHeader.clsa_pk;
@@ -548,12 +596,12 @@ __webpack_require__.r(__webpack_exports__);
         var operacion = parseFloat(this.total) - parseFloat(this.montototal);
 
         if (operacion <= 0) {} else {
-          this.normal('Notificación', 'Los montos de pago deben ser igual al total', "success");
+          this.normal("Notificación", "Los montos de pago deben ser igual al total", "success");
           return;
         }
       }
 
-      this.messageQuestion = '¿Desea finalizar la Venta?';
+      this.messageQuestion = "¿Desea finalizar la Venta?";
       this.dialogQuestion = true;
     },
     guardaFinalizar: function guardaFinalizar() {
@@ -563,17 +611,31 @@ __webpack_require__.r(__webpack_exports__);
       //this.editadoSale.clpa_amount_transfer = this.tarjeta
 
       this.editadoSale.bocu_fk = this.bocu_pk;
-      axios.post('/clientsales/update', this.editadoSale).then(function (response) {
+      axios.post("/clientsales/update", this.editadoSale).then(function (response) {
         if (response.data.code == 200) {
-          _this4.textMsg = "¡Actualizado correctamente!";
+          if (_this4.editadoSale.pame_fk == 1) {
+            //De Contado Ticket
+            var route = _this4.$router.resolve({
+              path: "/client/sales/printOrder/" + response.data.data
+            });
 
-          _this4.normal('Notificación', '¡Actualizado correctamente!', "success");
+            window.open(route.href, "_blank");
+          }
 
-          _this4.$router.push('/client/sales/printOrder/' + response.data.data);
+          if (_this4.editadoSale.pame_fk == 2) {
+            //A Credito Reporte
+            var _route = _this4.$router.resolve({
+              path: "/client/sales/printCredit/" + response.data.data
+            });
 
-          _this4.$router.push('/sales');
+            window.open(_route.href, "_blank");
+          }
+
+          _this4.$router.push("/sales");
+
+          _this4.normal("Notificación", response.data.message, "success");
         } else {
-          _this4.normal('Notificación', response.data.message, "error");
+          _this4.normal("Notificación", response.data.message, "error");
         }
       })["catch"](function (e) {
         _this4.errors.push(e);
@@ -583,7 +645,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       this.loading = true;
-      axios.post('/clientsales?clor_pk=' + this.clor_pk + '').then(function (response) {
+      axios.post("/clientsales?clor_pk=" + this.clor_pk + "").then(function (response) {
         setTimeout(function () {
           return _this5.loading = false;
         }, 500);
@@ -597,13 +659,13 @@ __webpack_require__.r(__webpack_exports__);
 
           _this5.getTotal();
         } else {
-          _this5.normal('Notificación', response.data.message, "error");
+          _this5.normal("Notificación", response.data.message, "error");
         }
       })["catch"](function (e) {
         //this.errors.push(e)
         console.log(e);
 
-        _this5.normal('Notificación', "Error al cargar los datos", "error");
+        _this5.normal("Notificación", "Error al cargar los datos", "error");
       });
     },
     abrirPago: function abrirPago() {
@@ -616,15 +678,15 @@ __webpack_require__.r(__webpack_exports__);
       this.loading = true;
       this.editadoPago.clsa_fk = this.saleHeader.clsa_pk;
 
-      if (this.selectpash == '' || this.selectpash == null) {
-        this.normal('Alerta', 'Debe seleccionar una forma de pago', "error");
+      if (this.selectpash == "" || this.selectpash == null) {
+        this.normal("Alerta", "Debe seleccionar una forma de pago", "error");
         return;
       }
 
       this.editadoPago.pash_fk = this.selectpash.pash_pk;
       this.editadoPago.bocu_fk = this.bocu_pk;
       console.log(this.editadoPago);
-      axios.post('/client/payment/amounts', this.editadoPago).then(function (response) {
+      axios.post("/client/payment/amounts", this.editadoPago).then(function (response) {
         setTimeout(function () {
           return _this6.loading = false;
         }, 500);
@@ -633,19 +695,19 @@ __webpack_require__.r(__webpack_exports__);
         if (response.data.data != null) {
           _this6.textMsg = "¡Actualizado correctamente!";
 
-          _this6.normal('Notificación', '¡Actualizado correctamente!', "success");
+          _this6.normal("Notificación", "¡Actualizado correctamente!", "success");
 
           _this6.dialogPago = false;
 
           _this6.getPagos();
         } else {
-          _this6.normal('Notificación', response.data.status.message, "error");
+          _this6.normal("Notificación", response.data.status.message, "error");
         }
       })["catch"](function (e) {
         //this.errors.push(e)
         console.log(e);
 
-        _this6.normal('Notificación', "Error al cargar los datos", "error");
+        _this6.normal("Notificación", "Error al cargar los datos", "error");
       });
     },
     getPagos: function getPagos() {
@@ -662,13 +724,13 @@ __webpack_require__.r(__webpack_exports__);
 
           _this7.getEfectivo();
         } else {
-          _this7.normal('Notificación', response.data.status.message, "error");
+          _this7.normal("Notificación", response.data.status.message, "error");
         }
       })["catch"](function (e) {
         console.log("Error al cargar los datos");
         console.log(e);
 
-        _this7.normal('Notificación', "Error al cargar los datos", "error");
+        _this7.normal("Notificación", "Error al cargar los datos", "error");
       });
     },
     getcambio: function getcambio() {
@@ -690,7 +752,7 @@ __webpack_require__.r(__webpack_exports__);
       for (var i = 0; i < this.pagos.length; i++) {
         console.log(this.pagos[i]);
 
-        if (this.pagos[i].pash_name == 'Efectivo') {
+        if (this.pagos[i].pash_name == "Efectivo") {
           this.efectivo = parseFloat(this.efectivo) + parseFloat(this.pagos[i].cpam_amount);
         }
 
@@ -763,10 +825,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this13 = this;
 
       this.dialogQuestionDeletePago = false;
-      axios.post('/client/payment/amounts/destroy', this.editadoPago).then(function (response) {
+      axios.post("/client/payment/amounts/destroy", this.editadoPago).then(function (response) {
         _this13.textMsg = "¡Eliminado correctamente!";
 
-        _this13.normal('Notificación', _this13.textMsg, "success");
+        _this13.normal("Notificación", _this13.textMsg, "success");
 
         _this13.getPagos();
       });
@@ -774,10 +836,10 @@ __webpack_require__.r(__webpack_exports__);
     "delete": function _delete() {
       var _this14 = this;
 
-      axios.post('/client_sale_details/destroy', this.editado).then(function (response) {
+      axios.post("/client_sale_details/destroy", this.editado).then(function (response) {
         _this14.textMsg = "¡Eliminado correctamente!";
 
-        _this14.normal('Notificación', _this14.textMsg, "success");
+        _this14.normal("Notificación", _this14.textMsg, "success");
 
         _this14.createsale();
       });
@@ -786,10 +848,10 @@ __webpack_require__.r(__webpack_exports__);
       var _this15 = this;
 
       this.editado = Object.assign({}, item);
-      axios.post('/client_sale_details/update', this.editado).then(function (response) {
+      axios.post("/client_sale_details/update", this.editado).then(function (response) {
         _this15.textMsg = "¡Actualizado correctamente!";
 
-        _this15.normal('Notificación', _this15.textMsg, "success");
+        _this15.normal("Notificación", _this15.textMsg, "success");
       })["catch"](function (e) {
         _this15.errors.push(e);
       });
@@ -842,11 +904,7 @@ var render = function() {
                 expression: "boxEnabledDetailOrder"
               }
             },
-            [
-              _vm._v(
-                "\r\n            Para realizar una venta, primero debe abrir caja.\r\n        "
-              )
-            ]
+            [_vm._v("Para realizar una venta, primero debe abrir caja.")]
           ),
           _vm._v(" "),
           _c(
@@ -869,9 +927,7 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v(
-                        "\r\n                    Cargando\r\n                    "
-                      ),
+                      _vm._v("\n          Cargando\n          "),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -1079,9 +1135,7 @@ var render = function() {
               }
             },
             [
-              _vm._v(
-                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
-              ),
+              _vm._v("\n      " + _vm._s(_vm.textMsg) + "\n      "),
               _c(
                 "v-btn",
                 {
@@ -1092,7 +1146,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\r\n                Cerrar\r\n            ")]
+                [_vm._v("Cerrar")]
               )
             ],
             1
@@ -1189,8 +1243,9 @@ var render = function() {
                                       _c("v-label", [
                                         _c("h4", [_vm._v("Vendedor:")]),
                                         _vm._v(
-                                          _vm._s(_vm.saleHeader.user) +
-                                            "\r\n                                    "
+                                          "\n                    " +
+                                            _vm._s(_vm.saleHeader.user) +
+                                            "\n                  "
                                         )
                                       ])
                                     ],
@@ -1214,9 +1269,9 @@ var render = function() {
                                       _c("v-label", [
                                         _c("h4", [_vm._v("Sucursal:")]),
                                         _vm._v(
-                                          " " +
+                                          "\n                    " +
                                             _vm._s(_vm.saleHeader.stor_name) +
-                                            "\r\n                                    "
+                                            "\n                  "
                                         )
                                       ])
                                     ],
@@ -1736,7 +1791,7 @@ var render = function() {
                         _c("td", [_vm._v("Subtotal")]),
                         _vm._v(" "),
                         _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.subtotal)))
+                          _vm._v("$" + _vm._s(_vm.formatMoney(_vm.subtotal)))
                         ]),
                         _vm._v(" "),
                         _c("td")
@@ -1746,7 +1801,7 @@ var render = function() {
                         _c("td", [_vm._v("Total I.V.A.")]),
                         _vm._v(" "),
                         _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.iva)))
+                          _vm._v("$" + _vm._s(_vm.formatMoney(_vm.iva)))
                         ]),
                         _vm._v(" "),
                         _c("td")
@@ -1756,7 +1811,7 @@ var render = function() {
                         _c("td", [_vm._v("Total")]),
                         _vm._v(" "),
                         _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.total)))
+                          _vm._v("$" + _vm._s(_vm.formatMoney(_vm.total)))
                         ])
                       ]),
                       _vm._v(" "),
@@ -1765,7 +1820,7 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [
                           _vm._v(
-                            " $" +
+                            "$" +
                               _vm._s(
                                 _vm.formatMoney(
                                   _vm.total - _vm.efectivo - _vm.tarjeta
@@ -1982,9 +2037,7 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [
                           _c("span", [
-                            _vm._v(
-                              "$" + _vm._s(_vm.formatMoney(_vm.cambio)) + " "
-                            )
+                            _vm._v("$" + _vm._s(_vm.formatMoney(_vm.cambio)))
                           ])
                         ]),
                         _vm._v(" "),
@@ -1995,7 +2048,7 @@ var render = function() {
                         _c("td", [_vm._v("Subtotal")]),
                         _vm._v(" "),
                         _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.subtotal)))
+                          _vm._v("$" + _vm._s(_vm.formatMoney(_vm.subtotal)))
                         ]),
                         _vm._v(" "),
                         _c("td")
@@ -2005,7 +2058,7 @@ var render = function() {
                         _c("td", [_vm._v("Total I.V.A.")]),
                         _vm._v(" "),
                         _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.iva)))
+                          _vm._v("$" + _vm._s(_vm.formatMoney(_vm.iva)))
                         ]),
                         _vm._v(" "),
                         _c("td")
@@ -2015,7 +2068,7 @@ var render = function() {
                         _c("td", [_vm._v("Total")]),
                         _vm._v(" "),
                         _c("td", [
-                          _vm._v(" $" + _vm._s(_vm.formatMoney(_vm.total)))
+                          _vm._v("$" + _vm._s(_vm.formatMoney(_vm.total)))
                         ])
                       ]),
                       _vm._v(" "),
@@ -2189,11 +2242,7 @@ var render = function() {
                               attrs: { color: "primary", disabled: !_vm.valid },
                               on: { click: _vm.agregarPago }
                             },
-                            [
-                              _vm._v(
-                                "\r\n                            Agregar\r\n                        "
-                              )
-                            ]
+                            [_vm._v("Agregar")]
                           )
                         ],
                         1

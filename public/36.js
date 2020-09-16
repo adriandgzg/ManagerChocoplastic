@@ -339,9 +339,23 @@ __webpack_require__.r(__webpack_exports__);
           console.log(response);
 
           if (response.data.code == 200) {
-            _this2.normal('Notificación', '¡Actualizado correctamente!', "success"); //this.$router.push('/client/sales/printOrder/' + item.clsa_pk);
-            // this.$router.push('/sales');
+            if (_this2.editadoSale.pame_fk == 1) {
+              //De Contado Ticket
+              _this2.$router.push('/client/sales/printOrder/' + item.clsa_pk);
 
+              _this2.$router.push('/sales');
+            }
+
+            if (_this2.editadoSale.pame_fk == 2) {
+              //A Credito Reporte
+              var route = _this2.$router.resolve({
+                path: '/client/sales/printCredit/' + _this2.item.clsa_pk
+              });
+
+              window.open(route.href, '_blank');
+            }
+
+            _this2.normal('Notificación', '¡Actualizado correctamente!', "success");
           } else {
             _this2.normal('Notificación', response.data.message, "error");
           }
