@@ -589,7 +589,7 @@ export default {
                         //this.textMsg = "¡Actualizado correctamente!";
                         this.normal("Notificación", vMessage, "success");
                         let route = this.$router.resolve({
-                            path: '/client/sales/printTraspaso/' + response.data.data
+                            path: '/product/transfers/printTraspaso/' + response.data.data 
                         });
 
                         window.open(route.href, '_blank');
@@ -597,54 +597,6 @@ export default {
                     } else {
                         this.normal("Notificación", vMessage, "error");
                     }
-                })
-                .catch((e) => {
-                    this.errors.push(e);
-                });
-        },
-        finalizarVenta() {
-            console.log(this.total + "-" + (this.efectivo + this.tarjeta));
-            if (this.editadoSale.pame_fk == 1)
-                if (this.total - this.efectivo - this.tarjeta == 0) {} else {
-                    this.normal(
-                        "Notificación",
-                        "Los montos de pago deben ser igual al total",
-                        "error"
-                    );
-                    return;
-                }
-            var r = confirm("¿Está seguro de finalizar la compra?");
-            if (r == true) {
-                this.editadoSale.clde_amount = this.total;
-                this.editadoSale.clpa_amount_cash = this.efectivo;
-                this.editadoSale.clpa_amount_transfer = this.tarjeta;
-                axios
-                    .post("/clientsales/update", this.editadoSale)
-                    .then((response) => {
-                        console.log(response);
-                        if (response.data.code == 200) {
-                            this.textMsg = "¡Actualizado correctamente!";
-                            this.normal(
-                                "Notificación",
-                                "¡Actualizado correctamente!",
-                                "success"
-                            );
-                            this.$router.push("/sales");
-                        } else {
-                            this.normal("Notificación", response.data.message, "error");
-                        }
-                    })
-                    .catch((e) => {
-                        this.errors.push(e);
-                    });
-            }
-        },
-        actualizar(item) {
-            this.editado = Object.assign({}, item);
-            axios
-                .post("/client_sale_details/update", this.editado)
-                .then((response) => {
-                    this.textMsg = "¡Actualizado correctamente!";
                 })
                 .catch((e) => {
                     this.errors.push(e);

@@ -448,84 +448,78 @@ class ProductTransferController extends ApiResponseController
         //
     }
 
-    public function printTraspaso($clsa_pk)
+    public function printTraspaso($prtr_pk)
     {
         $total = 0;
         
         //Asignacion de variables
-        $vclsa_pk = $clsa_pk;
+        $vprtr_pk = $prtr_pk;
 
 
-        if ($vclsa_pk == '' || $vclsa_pk == 0) {
+        if ($vprtr_pk == '' || $vprtr_pk == 0) {
             return $this->dbResponse(null, 500, null, 'PK Obligatorio');
         }
 
-        $vCS = DB::table('client_sales AS CS')
-            ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
-            ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
-            ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
-            ->select(
-                'CS.clsa_pk',
-                'CS.clsa_identifier',
-                'CS.clor_fk AS clor_pk',
-                DB::raw('(CASE 
-                    WHEN CS.clsa_status = 0 THEN "Pendiente" 
-                    WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
-                    WHEN CS.clsa_status = 3 THEN "Pagado" 
-                    ELSE "" END) AS clsa_status'),
-                'CS.created_at',
-
-                'C.clie_pk',
-                'C.clie_identifier',
-                'C.clie_name',
-                'C.clie_rfc',
-
-                'PM.pame_pk',
-                'PM.pame_name',
-
-                'S.stor_pk',
-                'S.stor_name',
-            )
-            ->where('CS.clsa_pk', '=', $vclsa_pk)
-            ->first();
-
-        if($vCS)
-        {
-            $vCSD = DB::table('client_sale_details AS CSD')
-                ->join('products AS P', 'P.prod_pk', '=', 'CSD.prod_fk')
-                ->join('measurements AS M', 'M.meas_pk', '=', 'CSD.meas_fk')
+        $vPT = DB::table('product_transfers AS PT')
+                //->leftjoin('stores AS SO', 'SO.stor_pk', '=', 'PT.stor_fk_output')
+                ->join('stores AS SI', 'SI.stor_pk', '=', 'PT.stor_fk_input')
                 ->select(
-                    'CSD.clsd_pk',
+                    'PT.prtr_pk',
+                    'PT.prtr_identifier',
+                    'PT.prtr_observation',
+                    'PT.created_at',
+                    'PT.prtr_status',
+                    DB::raw('
+                    (CASE 
+                        WHEN PT.prtr_status = 0 THEN "Cancelada" 
+                        WHEN PT.prtr_status = 1 THEN "Pendiente" 
+                        WHEN PT.prtr_status = 2 THEN "Solicitado"  
+                        WHEN PT.prtr_status = 3 THEN "Finalizado"   
+                        ELSE "" END
+                    ) AS prtr_status_description'),
 
-                    //'CSD.clsa_fk',
+                    //'PT.stor_fk_output',
+                    //'SO.stor_name AS stor_name_output',
 
-                    'P.prod_pk',
-                    'P.prod_identifier',
-                    'P.prod_name',
+                    //'PT.stor_fk_input',
+                    //'SI.stor_name AS stor_name_input',
 
-                    'M.meas_pk',
-                    'M.meas_name',
-                    'M.meas_abbreviation',
-
-                    'CSD.clsd_quantity',
-                    'CSD.clsd_price',
-                    'CSD.clsd_discountrate'
-                    //'CSD.clsd_ieps',
-                    //'CSD.clsd_iva'
+                    'SI.stor_pk',
+                    'SI.stor_name',
+                    'SI.stor_rfc',
+                    'SI.stor_addres',
+                    'SI.stor_phone'
                 )
-                ->where('CSD.clsa_fk', '=', $vclsa_pk)
-                ->where('clsd_status', '=', 1)
-                ->get();
+                ->where('PT.prtr_pk', '=', $vprtr_pk)
+                ->first();
 
-                $status =Auth::user();
 
-    
-        $admin = collect(\DB::select("SELECT a.*, CONCAT(s.stor_identifier, ' - ', s.stor_name) as stor_name, s.stor_addres FROM admins a left join stores s 
-        on a.store_id = s.stor_pk where a.store_id = " . $status->id . "
-        "))->first();
+            if($vPT)
+            { 
+                $vPTD = DB::table('product_transfer_details AS PTD')
+                    ->join('products AS P', 'P.prod_pk', '=', 'PTD.prod_fk')
+                    ->join('measurements AS M', 'P.meas_fk_output', '=', 'M.meas_pk')
+                    ->select(
+                        'PTD.prtd_pk',
+                        'PTD.prtr_fk',
+                        'PTD.prtd_quantity',
+                        'PTD.created_at',
 
-                
-               
+                        'P.prod_pk',
+                        'P.prod_identifier',
+                        'P.prod_name',
+                        'P.prod_description',
+                        'P.prod_image',
+                        'P.prod_bulk',
+
+                        'M.meas_pk',
+                        'M.meas_name',
+                        'M.meas_abbreviation'
+                    )
+                    ->where('PTD.prtd_status', '=', 1)
+                    ->where('PTD.prtr_fk', '=', $vprtr_pk)
+                    ->get();
+                               
 
                 $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', 'Letter');
                //$pdf->SetMargins(10, 2, 2,0);
@@ -542,74 +536,67 @@ class ProductTransferController extends ApiResponseController
                 // Número de página
                 
                 $pdf->SetFont('Arial', 'B', 10);
-                $pdf->Cell(15, $lineHeigth, 'RFC:', '', '1', 'L');
-                $pdf->SetFont('Arial', '', 10);                
-                $pdf->Cell(100, $lineHeigth-4, $vCS->clie_rfc, '', '1', 'L');
+                $pdf->Cell(10, $lineHeigth, 'RFC:', '', '0', 'L');
                 
-                $pdf->Ln(3);
+                $pdf->SetFont('Arial', '', 10);                
+                $pdf->Cell(5, $lineHeigth, utf8_decode($vPT->stor_rfc), '', '0', 'L');
+                
+                $pdf->Ln(4);
                 
                 $pdf->SetFont('Arial', 'B', 10);
                 $pdf->Cell(30, $lineHeigth, 'Domicilio Fiscal:', '', '0', 'L');
                 
-                $pdf->SetFont('Arial', '', 10);
-                $pdf->Cell(50, $lineHeigth, utf8_decode('Dirección'), '', '0', 'L');
+                $pdf->SetFont('Arial', '', 8);
+                $pdf->Cell(5, $lineHeigth, utf8_decode($vPT->stor_addres), '', '0', 'L');
                 
                 $pdf->Ln(6);
                 
                 $pdf->SetFont('Arial', 'B', 12);
-                $pdf->Cell(210, $lineHeigth, utf8_decode($admin->stor_name), '', '1', 'C');
+                $pdf->Cell(210, $lineHeigth, utf8_decode($vPT->stor_name), '', '1', 'C');
                 $pdf->Ln(6);
                 $pdf->Cell(210, $lineHeigth, 'TRASPASO', '', '1', 'C');
 
                 $pdf->Ln(6);
 
                 $pdf->SetFont('Arial', '', 10);
-                $pdf->Cell(43, $lineHeigth, 'No. Traspaso: ' . $vCS->clor_pk, '', '1');
+                $pdf->Cell(43, $lineHeigth, 'No. Traspaso: ' . $vPT->prtr_identifier, '', '1');
                 $pdf->Ln(3);
-                $pdf->Cell(43, $lineHeigth, 'Fecha Solicitud' . $vCS->created_at, '', '1');
-                $pdf->Ln(3);
-                $pdf->Cell(43, $lineHeigth, 'Fecha Entrega' . $vCS->created_at, '', '1');
+                $pdf->Cell(43, $lineHeigth, 'Fecha Solicitud: ' . $vPT->created_at, '', '1');
                 
                 $pdf->Ln(6);
 
                 
-                $pdf->SetFont('Arial', '', 10);
-                 $header = array('CLAVE', 'UNIDAD', 'CANT.');
-                 foreach($header as $col)
-                 {
-                        $pdf->Cell(65,7,$col, '','0','C');
-                    
-                 }
-
+                $pdf->SetFont('Arial', 'B', 10);
+                $header = array('CLAVE', 'CANT.', 'UNIDAD');
+                foreach($header as $col)
+                {
+                $pdf->Cell(65,7,$col, '','0','C');
+                }
 
                 $pdf->Ln(10);
-                $disprice = 0;
-                $total = 0;
-                foreach ($vCSD as $product) {
+                foreach ($vPTD as $product) 
+                {
                     $pdf->SetFont('Arial', 'B', 10);
                     $pdf->Cell(25, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 30), '', '0');
-                        $pdf->Ln(5);
-                    $price = $product->clsd_quantity * $product->clsd_price;  
-                    $disprice = $disprice + $product->clsd_discountrate;
+                    $pdf->Ln(5);
                     $pdf->SetFont('Arial', '', 10);
-                        $total = $total + $price;
-                        
-                        $pdf->Cell(65, $lineHeigth, $product->prod_identifier, '', '0','C');
-                        $pdf->Cell(65, $lineHeigth, $product->meas_abbreviation, '', '0','C');
-                        $pdf->Cell(65, $lineHeigth, $product->clsd_quantity, '', '0','C');                        
-                        $pdf->Ln(3);
+                    $pdf->Cell(65, $lineHeigth, $product->prod_identifier, '', '0','C');
+                    $pdf->Cell(65, $lineHeigth, $product->prtd_quantity, '', '0','C');         
+                    $pdf->Cell(65, $lineHeigth, $product->meas_abbreviation, '', '0','C');
+                    $pdf->Ln(3);
                 }
                 
                 $pdf->SetY(-80);
                 $pdf->Ln(20);                
+                $pdf->SetFont('Arial', 'B', 10);
                 $pdf->Cell(100, $lineHeigth, utf8_decode(('Entrega de Bodega' )), '0', '0', 'C');       
                 $pdf->Cell(100, $lineHeigth, utf8_decode(('Recibe en Sucursal' )), '0', '0', 'C');                
                 $pdf->Ln(10);
                 $pdf->Cell(100, $lineHeigth, utf8_decode(('_____________________________________________' )), '0', '0', 'C');  
                 $pdf->Cell(100, $lineHeigth, utf8_decode(('_____________________________________________' )), '0', '0', 'C');  
                 $pdf->Ln(5);
-                $pdf->Cell(100, $lineHeigth, utf8_decode(('Nombre y Firma' )), '0', '0', 'C');                
-                $pdf->Cell(100, $lineHeigth, utf8_decode(('Nombre y Firma' )), '0', '0', 'C');                
+                $pdf->Cell(100, $lineHeigth, utf8_decode(('Nombre, Firma y Fecha' )), '0', '0', 'C');                
+                $pdf->Cell(100, $lineHeigth, utf8_decode(('Nombre, Firma y Fecha' )), '0', '0', 'C');                
       
                 $pdf->SetAutoPageBreak(false);
                 $pdf->SetY(-20);
@@ -619,12 +606,9 @@ class ProductTransferController extends ApiResponseController
                 $pdf->Cell(200,1,utf8_decode(' '),0,1,'C', true);
                 $pdf->SetX(7);
                 $pdf->SetFillColor(255,219,216);
-                $pdf->Cell(200,8,utf8_decode('Dirección de' . $admin->stor_name),0,1,'C', true);
+                $pdf->Cell(200,8,utf8_decode($vPT->stor_name . ' TEL.' . $vPT->stor_phone), 0, 1, 'C', true);
                 ob_get_clean();
-        $pdf->output('I', 'ticket', 'true');
-        
-        
-
+                $pdf->output('I', 'ticket', 'true');
             }
             
     }

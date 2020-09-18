@@ -357,6 +357,7 @@ class BoxCutController extends ApiResponseController
                     'BC.bocu_status',
 
                     'S.stor_pk',
+                    'S.stor_rfc',
                     'S.stor_name',
                     'S.stor_addres',
 
@@ -379,7 +380,7 @@ class BoxCutController extends ApiResponseController
                 $lineHeigth = 2;
 
         
-                $pdf->SetFont('Arial', 'B', 5);
+                /*$pdf->SetFont('Arial', 'B', 5);
                 $pdf->Cell(18,$lineHeigth,'',0,'C');
                 $pdf->Cell(6,$lineHeigth,'RFC',0,'R');
                 $pdf->SetFont('Arial', '', 5);
@@ -388,13 +389,25 @@ class BoxCutController extends ApiResponseController
                 $pdf->Cell(8,$lineHeigth,'',0,'C');
                 $pdf->Cell(15,$lineHeigth,'Domicilio Fiscal: ',0,'R');
                 $pdf->SetFont('Arial', '', 5);
-                $pdf->Cell(20, $lineHeigth, utf8_decode('Ubicación de la tienda'), '', '1', 'L');
+                $pdf->Cell(20, $lineHeigth, utf8_decode('Ubicación de la tienda'), '', '1', 'L');*/
 
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(5, $lineHeigth, 'RFC:', '', '0', 'L');
+                $pdf->SetFont('Arial', '', 5);
+                $pdf->Cell(5, $lineHeigth, $vBCSel->stor_rfc, '', '0', 'L');
+                
+                $pdf->SetY(15);
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(8, $lineHeigth, 'Domicilio Fiscal:', '', '0', 'L');
+                $pdf->Ln();
+                $pdf->SetFont('Arial', '', 3);
+                $pdf->Cell(50, $lineHeigth, utf8_decode($vBCSel->stor_addres), '', '1', 'L');
+
+
+                $pdf->SetFont('Arial', '', 5);
                 $pdf->Cell(60, $lineHeigth+2,'---------------------------------------------------------------------------------------------', '', '1', 'C');                
                 $pdf->SetFont('Arial', 'B', 7);
                 $pdf->Cell(57, $lineHeigth, utf8_decode($vBCSel->stor_name), '', '1', 'C');
-                $pdf->SetFont('Arial', '', 3);
-                $pdf->Cell(57,$lineHeigth+2, utf8_decode($vBCSel->stor_addres), '', '1', 'C');
                 $pdf->SetFont('Arial', '', 5);
                 $pdf->Cell(60, $lineHeigth,'---------------------------------------------------------------------------------------------', '', '1', 'C');
                                 
