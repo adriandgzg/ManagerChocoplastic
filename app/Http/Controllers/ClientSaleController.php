@@ -953,7 +953,8 @@ class ClientSaleController extends ApiResponseController
                 foreach ($vCSD as $product) {
                     $pdf->SetFont('Arial', 'B', 5);
                     $price = $product->clsd_quantity * $product->clsd_price;  
-                    $disprice = $disprice + $product->clsd_discountrate;
+                    $vImporte = ($product->clsd_quantity * $product->clsd_price)  * (1 - ($product->clsd_discountrate / 100));
+                    $disprice = $disprice + $vImporte;
                     $pdf->SetFont('Arial', 'B', 5);
                     $total = $total + $price;
                     $pdf->Cell(25, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 30), '', '0');
@@ -963,7 +964,7 @@ class ClientSaleController extends ApiResponseController
                     $pdf->Cell(12, $lineHeigth, $product->clsd_quantity, '', '0');
                     $pdf->Cell(12, $lineHeigth, $product->meas_abbreviation, '', '0');
                     $pdf->Cell(8, $lineHeigth, "$" . number_format($product->clsd_price, 2), '', '0','R');
-                    $pdf->Cell(13, $lineHeigth, "$" . number_format($product->clsd_price, 2, ".", ","), 0, 1,'R');
+                    $pdf->Cell(13, $lineHeigth, "$" . number_format($vImporte, 2, ".", ","), 0, 1,'R');
                     $pdf->Ln();
                 }
                 $total1 = $total - $disprice;
@@ -1149,15 +1150,15 @@ class ClientSaleController extends ApiResponseController
                     $pdf->Cell(25, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 30), '', '0');
                         $pdf->Ln(5);
                     $price = $product->clsd_quantity * $product->clsd_price;  
-                    $disprice = $disprice + $product->clsd_discountrate;
                     $pdf->SetFont('Arial', '', 10);
                         $total = $total + $price;
-                        
+                        $vImporte = ($product->clsd_quantity * $product->clsd_price)  * (1 - ($product->clsd_discountrate / 100));
+                        $disprice = $disprice + $vImporte;
                         $pdf->Cell(40, $lineHeigth, $product->prod_identifier, '', '0','C');
                         $pdf->Cell(40, $lineHeigth, $product->clsd_quantity, '', '0','C');
                         $pdf->Cell(40, $lineHeigth, $product->meas_abbreviation, '', '0','C');
                         $pdf->Cell(40, $lineHeigth, "$" . number_format($product->clsd_price, 2), '', '0','C');
-                        $pdf->Cell(40, $lineHeigth, "$" . number_format($product->clsd_price, 2, ".", ","), 0, 1,'C');
+                        $pdf->Cell(40, $lineHeigth, "$" . number_format($vImporte, 2, ".", ","), 0, 1,'C');
                         $pdf->Ln(3);
                 }
                 $total1 = $total - $disprice;
@@ -1213,7 +1214,7 @@ class ClientSaleController extends ApiResponseController
                 $pdf->Ln(5);
                 $pdf->SetFont('Arial', '', 10);
                 $pdf->Cell(25, $lineHeigth, utf8_decode((' ')), '0', '0', 'L');
-                $pdf->Cell(105, $lineHeigth, utf8_decode((', prometo incondicionalmente pagar a Chocoplastic la cantidad de  ' )), '', '0', 'L');                
+                $pdf->Cell(105, $lineHeigth, utf8_decode((' prometo incondicionalmente pagar a Chocoplastic la cantidad de  ' )), '', '0', 'L');                
                 $pdf->SetFont('Arial', 'BU', 10);
                 $pdf->Cell(90, $lineHeigth, '$'. number_format($total1, 2), '', '0', 'L');                
                 $pdf->SetFont('Arial', '', 10);
@@ -1222,7 +1223,7 @@ class ClientSaleController extends ApiResponseController
                 $pdf->Ln(5);
                 
                 $pdf->Cell(25, $lineHeigth, utf8_decode((' ')), '0', '0', 'L');
-                $pdf->Cell(90, $lineHeigth, utf8_decode((', por concepto de compra de productos a través de Crédito.' )), '0', '0', 'L');                
+                $pdf->Cell(90, $lineHeigth, utf8_decode((' por concepto de compra de productos a través de Crédito.' )), '0', '0', 'L');                
 
                 $pdf->Ln(20);                
                 $pdf->Cell(180, $lineHeigth, utf8_decode(('_____________________________________________' )), '0', '0', 'C');  

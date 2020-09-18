@@ -544,9 +544,21 @@ export default {
             axios.post('/clientsales/update', this.editadoSale)
                 .then(response => {
                     if (response.data.code == 200) {
-                        this.textMsg = "¡Actualizado correctamente!";
+                        if (this.editadoSale.pame_fk == 1) {
+                            //De Contado Ticket
+                            let route = this.$router.resolve({
+                                path: "/client/sales/printOrder/" + response.data.data,
+                            });
+                            window.open(route.href, "_blank");
+                        }
+                        if (this.editadoSale.pame_fk == 2) {
+                            //A Credito Reporte
+                            let route = this.$router.resolve({
+                                path: "/client/sales/printCredit/" + response.data.data,
+                            });
+                            window.open(route.href, "_blank");
+                        }
                         this.normal('Notificación', '¡Actualizado correctamente!', "success");
-                        this.$router.push('/client/sales/printOrder/' + response.data.data);
                         this.$router.push('/sales');
                     } else {
                         this.normal('Notificación', response.data.message, "error");
