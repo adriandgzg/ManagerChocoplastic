@@ -61,6 +61,7 @@
                                     <th class="text-left">Unidad Medida</th>
                                     <th class="text-left">Cantidad</th>
                                     <th class="text-left">Precio</th>
+                                    <th class="text-left">Descuento(%)</th>
                                     <th class="text-left">Importe</th>
                                     <th></th>
                                     <th></th>
@@ -72,9 +73,9 @@
                                     <td>{{ item.prod_name }}</td>
                                     <td>{{ item.meas_name }}</td>
                                     <td>{{ item.clsd_quantity }}</td>
-
                                     <td>${{ formatMoney(item.clsd_price) }}</td>
-                                    <td>${{ formatMoney(item.clsd_quantity * item.clsd_price) }}</td>
+                                    <td>{{ item.clsd_discountrate }}</td>
+                                    <td>${{ formatMoney((item.clsd_quantity * item.clsd_price)*(1- (item.clsd_discountrate/100))) }}</td>
                                     <td>
 
                                     </td>
@@ -86,6 +87,15 @@
                                     <td />
                                     <td>Subtotal</td>
                                     <td>${{formatMoney(subtotal)}}</td>
+                                    <td />
+                                </tr>
+                                <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td>Descuento</td>
+                                    <td>${{formatMoney(descuento)}}</td>
                                     <td />
                                 </tr>
                                 <tr>
@@ -338,28 +348,22 @@ export default {
                         console.log(response)
                         if (response.data.code == 200) {
 
-
-                            if(this.editadoSale.pame_fk == 1)
-                            {
+                            if (this.editadoSale.pame_fk == 1) {
                                 //De Contado Ticket
                                 this.$router.push('/client/sales/printOrder/' + item.clsa_pk);
                                 this.$router.push('/sales');
 
                             }
 
-                            if(this.editadoSale.pame_fk == 2)
-                            {
+                            if (this.editadoSale.pame_fk == 2) {
                                 //A Credito Reporte
                                 let route = this.$router.resolve({
-                                path: '/client/sales/printCredit/' + this.item.clsa_pk
+                                    path: '/client/sales/printCredit/' + this.item.clsa_pk
                                 });
 
                                 window.open(route.href, '_blank');
                             }
                             this.normal('Notificación', '¡Actualizado correctamente!', "success");
-
-                            
-                            
 
                         } else {
                             this.normal('Notificación', response.data.message, "error");
@@ -395,8 +399,15 @@ export default {
         },
         getTotal() {
 
+            this.subtotal = 0;
+            this.descuento = 0;
             for (var i = 0; i < this.desserts.length; i++) {
-                this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity);
+                //this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity);
+
+                var importe = this.desserts[i].clsd_price * this.desserts[i].clsd_quantity;
+                var importeDescuento = (importe * (1 - this.desserts[i].clsd_discountrate / 100));
+                this.descuento = this.descuento + (importe * (this.desserts[i].clsd_discountrate / 100));
+                this.subtotal = this.subtotal + importeDescuento;
             }
             //this.iva =  this.subtotal * 0.16;
 

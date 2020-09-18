@@ -199,6 +199,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -392,8 +401,15 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getTotal: function getTotal() {
+      this.subtotal = 0;
+      this.descuento = 0;
+
       for (var i = 0; i < this.desserts.length; i++) {
-        this.subtotal = this.subtotal + this.desserts[i].clsd_price * this.desserts[i].clsd_quantity;
+        //this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity);
+        var importe = this.desserts[i].clsd_price * this.desserts[i].clsd_quantity;
+        var importeDescuento = importe * (1 - this.desserts[i].clsd_discountrate / 100);
+        this.descuento = this.descuento + importe * (this.desserts[i].clsd_discountrate / 100);
+        this.subtotal = this.subtotal + importeDescuento;
       } //this.iva =  this.subtotal * 0.16;
 
 
@@ -822,6 +838,29 @@ var render = function() {
                                           "$" +
                                             _vm._s(
                                               _vm.formatMoney(_vm.subtotal)
+                                            )
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("tr", [
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td"),
+                                      _vm._v(" "),
+                                      _c("td", [_vm._v("Descuento")]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "$" +
+                                            _vm._s(
+                                              _vm.formatMoney(_vm.descuento)
                                             )
                                         )
                                       ]),
