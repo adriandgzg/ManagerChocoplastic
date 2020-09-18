@@ -676,9 +676,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     getTotal: function getTotal() {
       this.subtotal = 0;
+      this.subtotal = 0;
+      this.descuento = 0;
 
       for (var i = 0; i < this.desserts.length; i++) {
-        this.subtotal = this.subtotal + this.desserts[i].clsd_price * this.desserts[i].clsd_quantity;
+        //this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity);
+        var importe = this.desserts[i].clsd_price * this.desserts[i].clsd_quantity;
+        var importeDescuento = importe * (1 - this.desserts[i].clsd_discountrate / 100);
+        this.subtotal = this.subtotal + importeDescuento;
       }
 
       this.total = this.subtotal + this.iva;
@@ -1450,7 +1455,10 @@ var render = function() {
                                               _vm._s(
                                                 _vm.formatMoney(
                                                   item.clsd_quantity *
-                                                    item.clsd_price
+                                                    item.clsd_price *
+                                                    (1 -
+                                                      item.clsd_discountrate /
+                                                        100)
                                                 )
                                               )
                                           )
