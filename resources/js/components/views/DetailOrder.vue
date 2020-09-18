@@ -123,7 +123,7 @@
                                     <td>
                                         <v-text-field v-model="item.clsd_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
                                     </td>
-                                    <td>${{ formatMoney((item.clsd_quantity * item.clsd_price)*(1- (item.clsd_discountrate/100))) }}</td>
+                                    <td>${{ formatMoney(item.clsd_quantity * item.clsd_price) }}</td>
                                     <td>
                                         <v-icon @click="borrar(item)" small>mdi-delete</v-icon>
                                     </td>
@@ -668,13 +668,9 @@ export default {
                 this.cambio = 0
         },
         getTotal() {
-            this.subtotal = 0;
-            this.descuento = 0;
+            this.subtotal = 0
             for (var i = 0; i < this.desserts.length; i++) {
-
-                var importe = this.desserts[i].clsd_price * this.desserts[i].clsd_quantity;
-                var importeDescuento = (importe * (1 - this.desserts[i].clsd_discountrate / 100));
-                this.subtotal = this.subtotal + importeDescuento;
+                this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity);
             }
 
             this.total = this.subtotal + this.iva;
