@@ -419,7 +419,6 @@ export default {
         };
     },
     created() {
-
         this.createsale();
         this.getClients();
         this.getPaymentShow();
@@ -428,7 +427,6 @@ export default {
         this.getPaymentShapes();
         this.obtenerCaja();
     },
-
     methods: {
         obtenerCaja() {
             axios
@@ -451,13 +449,11 @@ export default {
             axios.get('/listUser')
                 .then(response => {
                     this.users = response.data.data
-
                     if (this.users.store_id > 0) {
                         this.enabledStore = true
                         this.selectStore = this.stores.find(item => item.stor_pk == this.users.store_id)
                     } else
                         this.enabledStore = false
-
                 })
                 .catch(e => {
                     this.errors.push(e)
@@ -467,18 +463,14 @@ export default {
             try {
                 decimalCount = Math.abs(decimalCount);
                 decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
-
                 const negativeSign = amount < 0 ? "-" : "";
-
                 let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
                 let j = (i.length > 3) ? i.length % 3 : 0;
-
                 return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
             } catch (e) {
                 console.log(e)
             }
         },
-
         formatPrice(value) {
             let val = (value / 1).toFixed(2).replace(',', '.')
             return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
@@ -494,7 +486,6 @@ export default {
                 .catch(e => {
                     this.errors.push(e)
                 })
-
         },
         onChangeClient() {
             if (this.selectClient.clie_pk == 1) {
@@ -506,25 +497,20 @@ export default {
         finalizar() {
             this.efectivo = 0;
             this.tarjeta = 0;
-
             this.getPagos();
-
             if (this.selectClient == '' || this.selectClient == null) {
                 this.normal('Alerta', 'Debe seleccionar un cliente', "error");
                 return;
             }
-
             if (this.selectpame == '' || this.selectpame == null) {
                 this.normal('Alerta', 'Debe seleccionar un método de pago', "error");
                 return;
             }
-
             if (!this.enabledStore)
                 if (this.selectStore == '' || this.selectStore == null) {
                     this.normal('Alerta', 'Debe seleccionar una sucursal', "error");
                     return;
                 }
-
             this.editadoSale.clsa_pk = this.saleHeader.clsa_pk;
             this.editadoSale.clie_fk = this.selectClient.clie_pk;
             this.editadoSale.pame_fk = this.selectpame.pame_pk;
@@ -532,32 +518,25 @@ export default {
                 this.editadoSale.stor_fk = this.selectStore.stor_pk;
             else
                 this.editadoSale.stor_fk = this.users.store_id;
-
             if (this.editadoSale.pame_fk == 1) {
                 this.dialogcontado = true;
                 this.getcambio();
             } else
                 this.dialogcredito = true;
-
         },
         finalizarVenta() {
             if (this.editadoSale.pame_fk == 1) {
                 //var montototal = parseFloat(this.efectivo) + parseFloat(this.tarjeta);
                 var operacion = parseFloat(this.total) - parseFloat(this.montototal);
-                if (operacion <= 0) {
-
-                } else {
+                if (operacion <= 0) {} else {
                     this.normal('Notificación', 'Los montos de pago deben ser igual al total', "success");
                     return;
                 }
             }
             this.messageQuestion = '¿Desea finalizar la Venta?';
-
             this.dialogQuestion = true
-
         },
         guardaFinalizar() {
-
             this.editadoSale.clde_amount = this.total
             //this.editadoSale.clpa_amount_cash = this.efectivo
             //this.editadoSale.clpa_amount_transfer = this.tarjeta
@@ -565,17 +544,13 @@ export default {
             axios.post('/clientsales/update', this.editadoSale)
                 .then(response => {
                     if (response.data.code == 200) {
-
                         this.textMsg = "¡Actualizado correctamente!";
                         this.normal('Notificación', '¡Actualizado correctamente!', "success");
-
                         this.$router.push('/client/sales/printOrder/' + response.data.data);
-
                         this.$router.push('/sales');
                     } else {
                         this.normal('Notificación', response.data.message, "error");
                     }
-
                 })
                 .catch(e => {
                     this.errors.push(e)
@@ -586,13 +561,10 @@ export default {
             axios.post('/clientsales?clor_pk=' + this.clor_pk + '')
                 .then(response => {
                     setTimeout(() => (this.loading = false), 500)
-
                     if (response.data.data != null) {
-
                         this.sales = response.data.data;
                         this.saleHeader = response.data.data.sale;
                         this.desserts = this.sales.sale_details;
-
                         console.log("this.saleHeader");
                         console.log(response.data);
                         this.getTotal();
@@ -617,11 +589,9 @@ export default {
                 this.normal('Alerta', 'Debe seleccionar una forma de pago', "error");
                 return;
             }
-
             this.editadoPago.pash_fk = this.selectpash.pash_pk;
             this.editadoPago.bocu_fk = this.bocu_pk
             console.log(this.editadoPago);
-
             axios.post('/client/payment/amounts', this.editadoPago)
                 .then(response => {
                     setTimeout(() => (this.loading = false), 500)
@@ -640,7 +610,6 @@ export default {
                     console.log(e)
                     this.normal('Notificación', "Error al cargar los datos", "error");
                 })
-
         },
         getPagos() {
             this.loading = true
@@ -672,7 +641,6 @@ export default {
             for (var i = 0; i < this.desserts.length; i++) {
                 this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity);
             }
-
             this.total = this.subtotal + this.iva;
         },
         getEfectivo() {
@@ -692,12 +660,10 @@ export default {
                 .then(response => {
                     this.clients = response.data.data;
                     this.selectClient = this.clients[0];
-
                 })
                 .catch(e => {
                     console.log(e);
                 });
-
         },
         getPaymentShapes() {
             axios
@@ -713,9 +679,7 @@ export default {
             axios
                 .get("/paymentmethodsget")
                 .then(response => {
-
                     this.payments = response.data.data;
-
                 })
                 .catch(e => {
                     console.log(e);
@@ -741,26 +705,19 @@ export default {
                 .catch(e => {
                     console.log(e);
                 });
-
         },
-
         borrar(item) {
-
             this.editado = Object.assign({}, item)
             this.dialogQuestionDelete = true
         },
-
         guardaBorrar() {
             this.delete()
             this.dialogQuestionDelete = false
         },
-
         borrarPago(item) {
-
             this.editadoPago = Object.assign({}, item)
             this.dialogQuestionDeletePago = true
         },
-
         guardaBorrarPago() {
             this.dialogQuestionDeletePago = false
             axios.post('/client/payment/amounts/destroy', this.editadoPago).then(response => {
@@ -769,18 +726,14 @@ export default {
                 this.getPagos();
             });
         },
-
         delete: function () {
-
             axios.post('/client_sale_details/destroy', this.editado).then(response => {
                 this.textMsg = "¡Eliminado correctamente!";
                 this.normal('Notificación', this.textMsg, "success");
                 this.createsale();
             });
         },
-
         actualizar(item) {
-
             this.editado = Object.assign({}, item)
             axios.post('/client_sale_details/update', this.editado)
                 .then(response => {

@@ -198,6 +198,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -739,6 +740,10 @@ var render = function() {
                                     ]),
                                     _vm._v(" "),
                                     _c("th", { staticClass: "text-left" }, [
+                                      _vm._v("Descuento(%)")
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("th", { staticClass: "text-left" }, [
                                       _vm._v("Importe")
                                     ]),
                                     _vm._v(" "),
@@ -779,12 +784,19 @@ var render = function() {
                                         ]),
                                         _vm._v(" "),
                                         _c("td", [
+                                          _vm._v(_vm._s(item.clsd_discountrate))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
                                           _vm._v(
                                             "$" +
                                               _vm._s(
                                                 _vm.formatMoney(
                                                   item.clsd_quantity *
-                                                    item.clsd_price
+                                                    item.clsd_price *
+                                                    (1 -
+                                                      item.clsd_discountrate /
+                                                        100)
                                                 )
                                               )
                                           )
