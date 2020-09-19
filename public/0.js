@@ -393,11 +393,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.textMsg = '¡Actualización Exitosa!';
         this.snackbar = true;
         this.editarAdmin();
+        this.cancelar();
       } else {
         //Guarda el registro en caso de Alta            
         this.textMsg = '¡Alta exitosa!';
         this.snackbar = true;
         this.addAdmin();
+        this.cancelar();
       }
 
       this.cancelar();
@@ -449,7 +451,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     editarBusAdmin: function editarBusAdmin() {
       var _this13 = this;
 
-      if (this.editadoBusiness.checkB) this.editadoBusiness.idBusiness = this.selectStore.stor_pk;else this.editadoBusiness.idBusiness = null;
+      if (this.editadoBusiness.checkB) this.editadoBusiness.idBusiness = this.selectStore.stor_pk;else this.editadoBusiness.idBusiness = 0;
       console.log(this.editadoBusiness);
       axios.put('/admin/updateBusiness', this.editadoBusiness).then(function (response) {
         _this13.normal('Notificación', '¡Actualizado correctamente!', "success");
@@ -655,34 +657,6 @@ var render = function() {
                             }
                           },
                           [_c("v-icon", [_vm._v("mdi-account-key")])],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-btn",
-                          {
-                            attrs: {
-                              small: "",
-                              icon: "",
-                              fab: "",
-                              color: "warning",
-                              title: "Editar permisos de usuario"
-                            },
-                            on: {
-                              click: function($event) {
-                                _vm.selectedModel = item
-                                _vm.selectedPermissions = item.permissions.map(
-                                  function(a) {
-                                    return a.id
-                                  }
-                                )
-                                _vm.editingText = item.name
-                                _vm.action = _vm.saveUserPermissions
-                                _vm.editingMode = true
-                              }
-                            }
-                          },
-                          [_c("v-icon", [_vm._v(" mdi-pencil-lock")])],
                           1
                         ),
                         _vm._v(" "),

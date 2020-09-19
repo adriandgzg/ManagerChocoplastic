@@ -230,8 +230,7 @@ class AdminController extends Controller
 
         $admin->store_id = $request->idBusiness;
 
-        $admin->save();                     
-        dd($admin) ;
+        $admin->save();      
 
         
         /*

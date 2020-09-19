@@ -45,6 +45,8 @@ class LoginController extends Controller
 
     public function adminLogin(Request $request)
     {
+
+        
         $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required|min:8'

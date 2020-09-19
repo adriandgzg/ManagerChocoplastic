@@ -34,7 +34,7 @@
             " title="Asignar rol">
                         <v-icon>mdi-account-key</v-icon>
                     </v-btn>
-                    <v-btn small icon fab color="warning" @click="
+                    <!--<v-btn small icon fab color="warning" @click="
             selectedModel=item;
             selectedPermissions=item.permissions.map(a => a.id);
             editingText=item.name;
@@ -42,7 +42,7 @@
             editingMode=true;
             " title="Editar permisos de usuario">
                         <v-icon> mdi-pencil-lock</v-icon>
-                    </v-btn>
+                    </v-btn>-->
                     <v-btn small icon fab color="error" title="Desactivar usuario">
                         <v-icon>mdi-account-off</v-icon>
                     </v-btn>
@@ -378,12 +378,13 @@ export default {
                 this.textMsg = '¡Actualización Exitosa!'
                 this.snackbar = true
                 this.editarAdmin()
+                this.cancelar()
             } else {
                 //Guarda el registro en caso de Alta            
                 this.textMsg = '¡Alta exitosa!'
                 this.snackbar = true
                 this.addAdmin()
-
+                this.cancelar()
             }
             this.cancelar()
         },
@@ -435,7 +436,7 @@ export default {
             if (this.editadoBusiness.checkB)
                 this.editadoBusiness.idBusiness = this.selectStore.stor_pk
             else
-                this.editadoBusiness.idBusiness = null
+                this.editadoBusiness.idBusiness = 0
 
             console.log(this.editadoBusiness)
             axios.put('/admin/updateBusiness', this.editadoBusiness).then(response => {
