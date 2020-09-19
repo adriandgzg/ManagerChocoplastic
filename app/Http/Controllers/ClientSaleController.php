@@ -1152,8 +1152,9 @@ class ClientSaleController extends ApiResponseController
                     $price = $product->clsd_quantity * $product->clsd_price;  
                     $pdf->SetFont('Arial', '', 10);
                         $total = $total + $price;
-                        $vImporte = ($product->clsd_quantity * $product->clsd_price)  * (($product->clsd_discountrate / 100));
-                        $disprice = $disprice + $vImporte;
+                        $vImporte = ($product->clsd_quantity * $product->clsd_price)  * (1 - ($product->clsd_discountrate / 100));
+                        $vDescuento = ($product->clsd_quantity * $product->clsd_price)  * (($product->clsd_discountrate / 100));
+                        $disprice = $disprice + $vDescuento;
                         $pdf->Cell(40, $lineHeigth, $product->prod_identifier, '', '0','C');
                         $pdf->Cell(40, $lineHeigth, $product->clsd_quantity, '', '0','C');
                         $pdf->Cell(40, $lineHeigth, $product->meas_abbreviation, '', '0','C');
