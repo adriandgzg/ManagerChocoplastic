@@ -173,7 +173,8 @@
                                     </td>
                                     <td>{{ formatMoney((item.ppod_quantity * item.ppod_providerprice)) }}</td>
                                     <td>
-                                        <v-text-field v-model="item.ppod_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
+                                        <v-text-field v-if="can('discount')" v-model="item.ppod_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
+                                        <span v-else>0</span>
                                     </td>
 
                                     <td>{{ formatMoney((item.ppod_quantity * item.ppod_providerprice)*((item.ppod_discountrate/100))) }}</td>

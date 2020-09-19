@@ -291,6 +291,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -1820,31 +1821,34 @@ var render = function() {
                                         _c(
                                           "td",
                                           [
-                                            _c("v-text-field", {
-                                              attrs: {
-                                                label: "",
-                                                required: ""
-                                              },
-                                              on: {
-                                                change: function($event) {
-                                                  return _vm.onQuantityChange(
-                                                    item
-                                                  )
-                                                }
-                                              },
-                                              model: {
-                                                value: item.prpd_discountrate,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    item,
-                                                    "prpd_discountrate",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression:
-                                                  "item.prpd_discountrate"
-                                              }
-                                            })
+                                            _vm.can("discount")
+                                              ? _c("v-text-field", {
+                                                  attrs: {
+                                                    label: "",
+                                                    required: ""
+                                                  },
+                                                  on: {
+                                                    change: function($event) {
+                                                      return _vm.onQuantityChange(
+                                                        item
+                                                      )
+                                                    }
+                                                  },
+                                                  model: {
+                                                    value:
+                                                      item.prpd_discountrate,
+                                                    callback: function($$v) {
+                                                      _vm.$set(
+                                                        item,
+                                                        "prpd_discountrate",
+                                                        $$v
+                                                      )
+                                                    },
+                                                    expression:
+                                                      "item.prpd_discountrate"
+                                                  }
+                                                })
+                                              : _c("span", [_vm._v("0")])
                                           ],
                                           1
                                         ),

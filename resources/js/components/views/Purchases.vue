@@ -197,7 +197,8 @@
                                     </td>
                                     <td>{{ formatMoney((item.prpd_quantity * item.prpd_price)) }}</td>
                                     <td>
-                                        <v-text-field v-model="item.prpd_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
+                                        <v-text-field v-if="can('discount')" v-model="item.prpd_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
+                                        <span v-else>0</span>
                                     </td>
                                     <td>{{ formatMoney((item.prpd_quantity * item.prpd_price)*((item.prpd_discountrate/100))) }}</td>
                                     <td>${{ formatMoney((item.prpd_quantity * item.prpd_price)*(1- (item.prpd_discountrate/100))) }}</td>

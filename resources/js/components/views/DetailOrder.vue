@@ -121,7 +121,8 @@
                                     </td>
                                     <td>${{ formatMoney(item.clsd_price) }}</td>
                                     <td>
-                                        <v-text-field v-model="item.clsd_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
+                                        <v-text-field v-if="can('discount')" v-model="item.clsd_discountrate" label="" @change="onQuantityChange(item)" required></v-text-field>
+                                        <span v-else>0</span>
                                     </td>
                                     <td>${{ formatMoney((item.clsd_quantity * item.clsd_price)*(1- (item.clsd_discountrate/100))) }}</td>
                                     <td>
