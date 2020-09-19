@@ -280,6 +280,9 @@
 </template>
 
 <script>
+import {
+    mapGetters
+} from "vuex";
 import CripNotice from "crip-vue-notice";
 export default {
     data() {
@@ -875,6 +878,9 @@ export default {
             })
         },
 
-    }
+    },
+    computed: {
+        ...mapGetters('auth', ['can'])
+    },
 }
 </script>
