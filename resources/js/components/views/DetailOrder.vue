@@ -395,6 +395,7 @@ export default {
                 clde_amount: 0,
                 clpa_amount_cash: 0,
                 clpa_amount_transfer: 0,
+                clpa_amount_change: 0,
             },
             editadoPash: {
                 clsa_fk: 0,
@@ -542,8 +543,11 @@ export default {
         },
         guardaFinalizar() {
             this.editadoSale.clde_amount = this.total
+            this.editadoSale.clpa_amount_change = this.cambio
             //this.editadoSale.clpa_amount_cash = this.efectivo
             //this.editadoSale.clpa_amount_transfer = this.tarjeta
+
+            this.clpa_amount_change
             this.editadoSale.bocu_fk = this.bocu_pk
             axios.post('/clientsales/update', this.editadoSale)
                 .then(response => {

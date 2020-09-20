@@ -411,7 +411,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         stor_fk: 0,
         clde_amount: 0,
         clpa_amount_cash: 0,
-        clpa_amount_transfer: 0
+        clpa_amount_transfer: 0,
+        clpa_amount_change: 0
       },
       editadoPash: {
         clsa_fk: 0,
@@ -568,9 +569,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     guardaFinalizar: function guardaFinalizar() {
       var _this4 = this;
 
-      this.editadoSale.clde_amount = this.total; //this.editadoSale.clpa_amount_cash = this.efectivo
+      this.editadoSale.clde_amount = this.total;
+      this.editadoSale.clpa_amount_change = this.cambio; //this.editadoSale.clpa_amount_cash = this.efectivo
       //this.editadoSale.clpa_amount_transfer = this.tarjeta
 
+      this.clpa_amount_change;
       this.editadoSale.bocu_fk = this.bocu_pk;
       axios.post('/clientsales/update', this.editadoSale).then(function (response) {
         if (response.data.code == 200) {
