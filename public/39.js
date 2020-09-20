@@ -145,48 +145,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -202,12 +160,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         text: "Unidad Salida",
         value: "meas_name"
-      }, {
-        text: "Stock Real",
-        value: "prin_stock"
-      }, {
-        text: "Stock App",
-        value: "stock_app"
       }, {
         text: "Tipo",
         value: "bulk"
@@ -633,7 +585,9 @@ var render = function() {
               }
             },
             [
-              _vm._v("\n      " + _vm._s(_vm.textMsg) + "\n      "),
+              _vm._v(
+                "\r\n            " + _vm._s(_vm.textMsg) + "\r\n            "
+              ),
               _c(
                 "v-btn",
                 {
@@ -670,7 +624,9 @@ var render = function() {
                   _c(
                     "v-card-text",
                     [
-                      _vm._v("\n          Cargando\n          "),
+                      _vm._v(
+                        "\r\n                    Cargando\r\n                    "
+                      ),
                       _c("v-progress-linear", {
                         staticClass: "mb-0",
                         attrs: { indeterminate: "", color: "green" }
@@ -1048,7 +1004,9 @@ var render = function() {
                                   _c("v-icon", { attrs: { left: "" } }, [
                                     _vm._v("mdi-file-find")
                                   ]),
-                                  _vm._v("Buscar Producto\n              ")
+                                  _vm._v(
+                                    "Buscar Producto\r\n                            "
+                                  )
                                 ],
                                 1
                               ),
@@ -1067,7 +1025,9 @@ var render = function() {
                                   _c("v-icon", { attrs: { left: "" } }, [
                                     _vm._v("mdi-checkbox-marked-circle")
                                   ]),
-                                  _vm._v("Finalizar\n              ")
+                                  _vm._v(
+                                    "Finalizar\r\n                            "
+                                  )
                                 ],
                                 1
                               )

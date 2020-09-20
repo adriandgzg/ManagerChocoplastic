@@ -186,12 +186,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: "Unidad Salida",
         value: "meas_name"
       }, {
-        text: "Stock Real",
-        value: "prin_stock"
-      }, {
-        text: "Stock App",
-        value: "stock_app"
-      }, {
         text: "Tipo",
         value: "bulk"
       }, {

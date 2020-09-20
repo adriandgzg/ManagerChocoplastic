@@ -171,14 +171,6 @@ export default {
                     value: "meas_name",
                 },
                 {
-                    text: "Stock Real",
-                    value: "prin_stock",
-                },
-                {
-                    text: "Stock App",
-                    value: "stock_app",
-                },
-                {
                     text: "Tipo",
                     value: "bulk",
                 },
@@ -589,7 +581,7 @@ export default {
                         //this.textMsg = "¡Actualizado correctamente!";
                         this.normal("Notificación", vMessage, "success");
                         let route = this.$router.resolve({
-                            path: '/product/transfers/printTraspaso/' + response.data.data 
+                            path: '/product/transfers/printTraspaso/' + response.data.data
                         });
 
                         window.open(route.href, '_blank');

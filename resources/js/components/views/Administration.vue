@@ -240,7 +240,7 @@ export default {
     },
     methods: {
         abrirdialog() {
-            this.editado = this.editadoTemp;
+            //this.editado = this.editadoTemp;
             this.dialog = true;
             this.editado.email = '';
             console.log(this.editado)
@@ -314,6 +314,7 @@ export default {
                     this.assignRole = false;
                     this.selectedUser = null;
                     this.selectedRole = false;
+                    this.normal('Notificación', '¡Actualizado correctamente!', "success");
                 })
                 .catch(e => {
                     this.errors.push(e)
@@ -323,6 +324,7 @@ export default {
             axios.post('/admins/' + this.selectedModel.id + '/permissions', this.selectedPermissions)
                 .then(response => {
                     this.users.splice(this.users.indexOf(this.users.find(item => item.id === this.selectedModel.id)), 1, response.data.data)
+                    this.normal('Notificación', '¡Actualizado correctamente!', "success");
                 })
                 .catch(e => {
                     this.errors.push(e)
@@ -333,6 +335,7 @@ export default {
             axios.post('/roles/' + this.selectedModel.id + '/permissions', this.selectedPermissions)
                 .then(response => {
                     this.roles.splice(this.users.indexOf(this.users.find(item => item.id === this.selectedModel.id)), 1, response.data.data)
+                    this.normal('Notificación', '¡Actualizado correctamente!', "success");
                 })
                 .catch(e => {
                     this.errors.push(e)
@@ -369,7 +372,7 @@ export default {
         },
         cancelar() {
             this.dialog = false
-            this.editado = Object.assign({}, this.defaultItem)
+            this.editado = Object.assign({}, this.editadoDefault)
             this.editedIndex = -1
         },
         guardar() {
@@ -413,7 +416,7 @@ export default {
         },
         cancelarNegocio() {
             this.dialogNegocio = false
-            this.editado = Object.assign({}, this.defaultItem)
+            this.editado = Object.assign({}, this.editadoDefault)
             this.editedIndex = -1
         },
         guardarNegocio() {
@@ -423,12 +426,14 @@ export default {
         //Procedimiento Alta de moviles.
         addAdmin: function () {
             axios.post('/admin/add', this.editado).then(response => {
+                this.normal('Notificación', '¡Actualizado correctamente!', "success");
                 this.getUsers();
             });
         },
         editarAdmin: function () {
             console.log(this.editado)
             axios.put('/admin/update', this.editado).then(response => {
+                this.normal('Notificación', '¡Actualizado correctamente!', "success");
                 this.getUsers();
             });
         },

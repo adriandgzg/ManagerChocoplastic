@@ -257,7 +257,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     abrirdialog: function abrirdialog() {
-      this.editado = this.editadoTemp;
+      //this.editado = this.editadoTemp;
       this.dialog = true;
       this.editado.email = '';
       console.log(this.editado);
@@ -327,6 +327,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this5.assignRole = false;
         _this5.selectedUser = null;
         _this5.selectedRole = false;
+
+        _this5.normal('Notificación', '¡Actualizado correctamente!', "success");
       })["catch"](function (e) {
         _this5.errors.push(e);
       });
@@ -338,6 +340,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this6.users.splice(_this6.users.indexOf(_this6.users.find(function (item) {
           return item.id === _this6.selectedModel.id;
         })), 1, response.data.data);
+
+        _this6.normal('Notificación', '¡Actualizado correctamente!', "success");
       })["catch"](function (e) {
         _this6.errors.push(e);
       });
@@ -350,6 +354,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this7.roles.splice(_this7.users.indexOf(_this7.users.find(function (item) {
           return item.id === _this7.selectedModel.id;
         })), 1, response.data.data);
+
+        _this7.normal('Notificación', '¡Actualizado correctamente!', "success");
       })["catch"](function (e) {
         _this7.errors.push(e);
       });
@@ -384,7 +390,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     cancelar: function cancelar() {
       this.dialog = false;
-      this.editado = Object.assign({}, this.defaultItem);
+      this.editado = Object.assign({}, this.editadoDefault);
       this.editedIndex = -1;
     },
     guardar: function guardar() {
@@ -425,7 +431,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     cancelarNegocio: function cancelarNegocio() {
       this.dialogNegocio = false;
-      this.editado = Object.assign({}, this.defaultItem);
+      this.editado = Object.assign({}, this.editadoDefault);
       this.editedIndex = -1;
     },
     guardarNegocio: function guardarNegocio() {
@@ -437,6 +443,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this11 = this;
 
       axios.post('/admin/add', this.editado).then(function (response) {
+        _this11.normal('Notificación', '¡Actualizado correctamente!', "success");
+
         _this11.getUsers();
       });
     },
@@ -445,6 +453,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       console.log(this.editado);
       axios.put('/admin/update', this.editado).then(function (response) {
+        _this12.normal('Notificación', '¡Actualizado correctamente!', "success");
+
         _this12.getUsers();
       });
     },
