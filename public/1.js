@@ -424,7 +424,9 @@ var render = function() {
                                           dark: "",
                                           small: "",
                                           color: "orange",
-                                          href: "/box/cuts/" + item.bocu_pk,
+                                          href:
+                                            "/cash/cutbox/printCorte/" +
+                                            item.bocu_pk,
                                           title: "Imprimir"
                                         }
                                       },

@@ -44,7 +44,7 @@
                         </template>
 
                         <template v-slot:item.action="{ item }">
-                            <v-btn class="mr-2" fab dark small color="orange" v-if="item.bocu_status == 'Cerrada'" :href="'/box/cuts/'+item.bocu_pk" title="Imprimir">
+                            <v-btn class="mr-2" fab dark small color="orange" v-if="item.bocu_status == 'Cerrada'" :href="'/cash/cutbox/printCorte/'+item.bocu_pk" title="Imprimir">
                                 <v-icon dark>mdi-printer</v-icon>
                             </v-btn>
                             <!--        
