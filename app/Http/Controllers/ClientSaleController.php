@@ -58,6 +58,8 @@ class ClientSaleController extends ApiResponseController
 
                     'S.stor_pk',
                     'S.stor_name',
+                    DB::raw('(SELECT COUNT(*) AS Cant FROM client_returns WHERE clre_status <> 0 AND clsa_fk = CS.clsa_pk) AS cantreturn') //Cantidad de Devoluciones
+
                 )
                 ->get();
 
