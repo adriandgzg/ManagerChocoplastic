@@ -41,7 +41,7 @@
                         </template>
 
                         <template v-slot:item.action="{ item }">
-                            <v-btn class="mr-2" fab dark small color="pink" v-if="item.clsa_status != 'Pendiente'" :href="'/clientsreturn/'+item.clsa_pk" title="Devolución">
+                            <v-btn class="mr-2" fab dark small color="pink" v-if="item.clsa_status != 'Pendiente' && can('clientreturn')" :href="'/clientsreturn/'+item.clsa_pk" title="Devolución">
                                 <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
                             </v-btn>
                             <v-btn class="mr-2" fab dark small color="purple" title="Detalle de venta" :href="'/salesdetail/'+item.clsa_pk">
@@ -65,6 +65,9 @@
 </template>
 
 <script>
+import {
+    mapGetters
+} from "vuex";
 export default {
     data() {
         return {
@@ -179,6 +182,9 @@ export default {
                     this.normal('Notificación', "Error al cargar los datos", "error");
                 });
         },
-    }
+    },
+    computed: {
+        ...mapGetters('auth', ['can'])
+    },
 }
 </script>
