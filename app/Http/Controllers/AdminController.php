@@ -25,12 +25,13 @@ class AdminController extends Controller
     public function listUser()
     {
         //$status =Auth::user();
-        $idUsuario = Auth::store_id();
+        $vIdUser = Auth::id();
 
    
-        $admin = collect(\DB::select("SELECT a.*, CONCAT(s.stor_identifier, ' - ', s.stor_name) as stor_name FROM admins a left join stores s 
-        on a.store_id = s.stor_pk where a.id = " . $idUsuario . "
-        "))->first();
+        $admin = collect(\DB::select("
+            SELECT a.*, CONCAT(s.stor_identifier, ' - ', s.stor_name) as stor_name FROM admins a left join stores s 
+            on a.store_id = s.stor_pk where a.id = " . $vIdUser 
+        ))->first();
     
 
         return response()->json([
