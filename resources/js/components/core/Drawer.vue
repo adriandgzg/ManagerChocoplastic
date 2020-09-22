@@ -31,6 +31,19 @@
                 <v-list-item-title v-text="link.text" />
             </v-list-item>
 
+            <v-list-group :prepend-icon="link.icon" no-action v-for="(link, i) in linksTraspasos" :key="i+1000" :to="link.to" :active-class="color" v-if="can(link.access)">
+                <template v-slot:activator>
+                    <v-list-item-title>{{link.text}}</v-list-item-title>
+                </template>
+
+                <v-list-item v-for="(linkMenu, j) in link.submenu" :key="j" :to="linkMenu.to" :active-class="color" v-if="can(linkMenu.access) " class="v-list-item">
+                    <v-list-item-action>
+                        <v-icon>{{ linkMenu.icon }}</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-title v-text="linkMenu.text" />
+                </v-list-item>
+            </v-list-group>
+
             <v-list-group :prepend-icon="link.icon" no-action v-for="(link, i) in linksCatalogos" :key="i+200" :to="link.to" :active-class="color" v-if="can(link.access)">
                 <template v-slot:activator>
                     <v-list-item-title>{{link.text}}</v-list-item-title>
@@ -147,6 +160,23 @@ export default {
                 access: 'transfer',
             },
         ],
+
+        linksTraspasos: [{
+            icon: 'mdi-cart',
+            text: 'Traspasos',
+            access: 'transfer',
+            submenu: [{
+                to: '/transferlist',
+                icon: 'mdi-cart',
+                text: 'Traspasos',
+                access: 'transferlist',
+            }, {
+                to: '/transferdetail/0',
+                icon: 'mdi-cart',
+                text: 'Solicitar Traspaso',
+                access: 'transferdetail',
+            }, ]
+        }],
 
         linksCatalogos: [{
                 icon: 'account_circle',

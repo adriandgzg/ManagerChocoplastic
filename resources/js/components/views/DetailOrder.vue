@@ -695,6 +695,7 @@ export default {
                 .get("/paymentshapesget")
                 .then(response => {
                     this.paymentsShapes = response.data.data;
+                    this.selectpash = this.paymentsShapes[0];
                 })
                 .catch(e => {
                     console.log(e);
