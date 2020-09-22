@@ -298,7 +298,7 @@ export default {
             var charCode = (evt.which) ? evt.which : evt.keyCode;
             console.log(charCode + '-->ñprim')
             //if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-            if ((charCode > 47 && charCode < 58) || (charCode > 95 && charCode < 106) || charCode == 8 || charCode == 190) {
+            if ((charCode > 47 && charCode < 58) || (charCode > 95 && charCode < 106) || charCode == 8 || charCode == 190 || charCode == 110) {
                 // console.log(charCode + '--> true');
                 return true;
             } else {
