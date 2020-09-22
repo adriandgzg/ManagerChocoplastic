@@ -19,6 +19,10 @@
 
                     </v-toolbar>
                 </template>
+                <template v-slot:item.estado="{ item }">
+                    <v-chip v-if="item.verified == 1" color="red" dark>Desactivado</v-chip>
+                    <v-chip v-else color="green" dark>Activado</v-chip>
+                </template>
                 <template v-slot:item.action="{ item }">
                     <v-btn small icon fab color="blue" @click="editar(item)" title="Editar usuario">
                         <v-icon>mdi-account-edit</v-icon>
@@ -43,7 +47,10 @@
             " title="Editar permisos de usuario">
                         <v-icon> mdi-pencil-lock</v-icon>
                     </v-btn>-->
-                    <v-btn small icon fab color="error" title="Desactivar usuario">
+                    <v-btn v-if="item.verified == 0" small icon fab color="error" title="Desactivar usuario" @click="desactivarUsuario(item)">
+                        <v-icon>mdi-account-off</v-icon>
+                    </v-btn>
+                    <v-btn v-if="item.verified == 1" small icon fab color="green" title="Activar usuario" @click="desactivarUsuario(item)">
                         <v-icon>mdi-account-off</v-icon>
                     </v-btn>
                 </template>
@@ -175,6 +182,9 @@ export default {
             }, {
                 text: 'Perfil',
                 value: 'role.name'
+            }, {
+                text: '',
+                value: 'estado'
             }, {
                 text: '',
                 value: 'action'
@@ -447,6 +457,25 @@ export default {
             axios.put('/admin/updateBusiness', this.editadoBusiness).then(response => {
                 this.normal('Notificación', '¡Actualizado correctamente!', "success");
             });
+        },
+        desactivarUsuario(item) {
+            this.editado = Object.assign({}, item)
+            if (this.editado.verified == 0)
+                this.editado.verified = 1;
+            else
+                this.editado.verified = 0;
+            axios.put('/admin/update', this.editado)
+                .then(response => {
+                    if (response.status == 200) {
+                        this.normal('Notificación', '¡Actualizado correctamente!', "success");
+                        this.getUsers();
+                    } else {
+                        this.normal('Notificación', response.data.message, "error");
+                    }
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                })
         },
         normal(Title, Description, Type) {
             this.notice = new CripNotice({

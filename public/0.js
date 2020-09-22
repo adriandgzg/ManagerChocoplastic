@@ -175,6 +175,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -192,6 +199,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         text: 'Perfil',
         value: 'role.name'
+      }, {
+        text: '',
+        value: 'estado'
       }, {
         text: '',
         value: 'action'
@@ -467,6 +477,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this13.normal('Notificación', '¡Actualizado correctamente!', "success");
       });
     },
+    desactivarUsuario: function desactivarUsuario(item) {
+      var _this14 = this;
+
+      this.editado = Object.assign({}, item);
+      if (this.editado.verified == 0) this.editado.verified = 1;else this.editado.verified = 0;
+      axios.put('/admin/update', this.editado).then(function (response) {
+        if (response.status == 200) {
+          _this14.normal('Notificación', '¡Actualizado correctamente!', "success");
+
+          _this14.getUsers();
+        } else {
+          _this14.normal('Notificación', response.data.message, "error");
+        }
+      })["catch"](function (e) {
+        _this14.errors.push(e);
+      });
+    },
     normal: function normal(Title, Description, Type) {
       this.notice = new crip_vue_notice__WEBPACK_IMPORTED_MODULE_1___default.a({
         title: Title,
@@ -603,6 +630,25 @@ var render = function() {
                     proxy: true
                   },
                   {
+                    key: "item.estado",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        item.verified == 1
+                          ? _c(
+                              "v-chip",
+                              { attrs: { color: "red", dark: "" } },
+                              [_vm._v("Desactivado")]
+                            )
+                          : _c(
+                              "v-chip",
+                              { attrs: { color: "green", dark: "" } },
+                              [_vm._v("Activado")]
+                            )
+                      ]
+                    }
+                  },
+                  {
                     key: "item.action",
                     fn: function(ref) {
                       var item = ref.item
@@ -670,20 +716,49 @@ var render = function() {
                           1
                         ),
                         _vm._v(" "),
-                        _c(
-                          "v-btn",
-                          {
-                            attrs: {
-                              small: "",
-                              icon: "",
-                              fab: "",
-                              color: "error",
-                              title: "Desactivar usuario"
-                            }
-                          },
-                          [_c("v-icon", [_vm._v("mdi-account-off")])],
-                          1
-                        )
+                        item.verified == 0
+                          ? _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  small: "",
+                                  icon: "",
+                                  fab: "",
+                                  color: "error",
+                                  title: "Desactivar usuario"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.desactivarUsuario(item)
+                                  }
+                                }
+                              },
+                              [_c("v-icon", [_vm._v("mdi-account-off")])],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        item.verified == 1
+                          ? _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  small: "",
+                                  icon: "",
+                                  fab: "",
+                                  color: "green",
+                                  title: "Activar usuario"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.desactivarUsuario(item)
+                                  }
+                                }
+                              },
+                              [_c("v-icon", [_vm._v("mdi-account-off")])],
+                              1
+                            )
+                          : _vm._e()
                       ]
                     }
                   }

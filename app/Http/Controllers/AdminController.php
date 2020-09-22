@@ -221,6 +221,7 @@ class AdminController extends Controller
         $admin = Admin::findOrFail($request->id);         
         $admin->name = $request->name;
         $admin->email = $request->email;
+        $admin->verified = $request->verified;
         if($request->password != '' )
             $admin->password = Hash::make($request->password);  
 
