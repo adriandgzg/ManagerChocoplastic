@@ -296,13 +296,13 @@ export default {
             console.log('key ' + evt.key + ' (' + evt.keyCode + ')');
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
-
+            console.log(charCode + '-->ñprim')
             //if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-            if ((charCode > 47 && charCode < 58) || (charCode > 95 && charCode < 106) || charCode == 8) {
-                console.log(charCode + '--> true');
+            if ((charCode > 47 && charCode < 58) || (charCode > 95 && charCode < 106) || charCode == 8 || charCode == 190) {
+                // console.log(charCode + '--> true');
                 return true;
             } else {
-                console.log(charCode + '-->');
+                // console.log(charCode + '-->000');
                 evt.preventDefault();
 
             }
