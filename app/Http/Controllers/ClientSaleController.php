@@ -903,8 +903,8 @@ class ClientSaleController extends ApiResponseController
                 ->get();
 
 
-                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 120));
-                $pdf->SetMargins(1, 1, 1);
+                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(80, 120));
+                $pdf->SetMargins(1, 1, 1,1);
                 $pdf->AddPage();
                 $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
                 $pdf->Image(config('app.url') . '/images/logo_chocoplastic.png', 20, 2, 25);

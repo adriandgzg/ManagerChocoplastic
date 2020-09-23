@@ -419,6 +419,7 @@ export default {
             messageQuestion: '',
             pagos: [],
             montototal: 0,
+            othercash: 0,
             bocu_pk: 0,
             boxEnabledDetailOrder: false,
         };
@@ -620,7 +621,9 @@ export default {
                         this.textMsg = "¡Actualizado correctamente!";
                         this.normal('Notificación', '¡Actualizado correctamente!', "success");
                         this.dialogPago = false
+
                         this.getPagos();
+
                     } else {
                         this.normal('Notificación', response.data.status.message, "error");
                     }
@@ -651,10 +654,15 @@ export default {
                 });
         },
         getcambio() {
-            if ((this.efectivo - this.total) > 0)
-                this.cambio = this.efectivo - this.total;
+
+            this.cambio = this.efectivo - (this.total - this.othercash)
+
+            if ((this.cambio) > 0)
+                this.cambio = this.efectivo - (this.total - this.othercash);
             else
                 this.cambio = 0
+
+            console.log('Efectivo: ' + this.efectivo + ' Total: ' + this.total + ' Cambio: ' + this.cambio)
         },
         getTotal() {
             this.subtotal = 0
@@ -671,13 +679,17 @@ export default {
         getEfectivo() {
             this.efectivo = 0;
             this.montototal = 0;
+            this.othercash = 0;
             for (var i = 0; i < this.pagos.length; i++) {
                 console.log(this.pagos[i])
                 if (this.pagos[i].pash_name == 'Efectivo') {
                     this.efectivo = parseFloat(this.efectivo) + parseFloat(this.pagos[i].cpam_amount)
+                } else {
+                    this.othercash = this.othercash + parseFloat(this.pagos[i].cpam_amount)
                 }
                 this.montototal = parseFloat(this.montototal) + parseFloat(this.pagos[i].cpam_amount)
             }
+            console.log('Efectivo: ' + this.efectivo + ' Total: ' + this.montototal)
             this.getcambio()
         },
         getClients() {
