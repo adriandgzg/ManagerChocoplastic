@@ -801,11 +801,15 @@ class ProductController extends ApiResponseController
             . ", prod_actualprice = " . $request->prod_actualprice
             . ", prod_eventualprice = " . $request->prod_eventualprice
             . ", prod_preferentialprice = " . $request->prod_preferentialprice
+            . ", prod_saleprice = " . $request->prod_saleprice
+            . ", prod_listprice = " . $request->prod_listprice
             . ", prod_packingquantity = " . $request->prod_packingquantity
             . ", prod_iva = " . $request->prod_iva
             . ", prod_ieps = " . $request->prod_ieps
             . ", prod_status = " . $request->prod_status
+            . ", prod_bulk = " . $request->prod_bulk
             . " WHERE prod_pk = ". $request->prod_pk 
+            
         );
 
         return response()->json([
