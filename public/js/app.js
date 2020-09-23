@@ -90956,7 +90956,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     return route(path.path, path.view, path.name);
   }).concat([{
     path: '*',
-    redirect: '/dashboard'
+    redirect: '/sales'
   }, {
     path: '/login'
   }, {
