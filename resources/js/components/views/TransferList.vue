@@ -22,7 +22,7 @@
                     <v-data-table :headers="headers" :items="sales" :search="search" sort-by="id" class="elevation-3">
                         <template v-slot:top>
                             <v-system-bar color="indigo darken-2" dark></v-system-bar>
-                            <v-toolbar flat color="indigo">
+                            <v-toolbar flat color="indigo" v-if="can('transferdetail')">
                                 <template v-slot:extension>
                                     <v-btn fab color="cyan accent-2" bottom left absolute :href="'/transferdetail/0'">
                                         <v-icon>mdi-plus</v-icon>
@@ -67,6 +67,9 @@
 </template>
 
 <script>
+import {
+    mapGetters
+} from "vuex";
 export default {
     data() {
         return {
@@ -161,6 +164,9 @@ export default {
                     this.normal('Notificación', "Error al cargar los datos", "error");
                 });
         },
-    }
+    },
+    computed: {
+        ...mapGetters('auth', ['can'])
+    },
 }
 </script>

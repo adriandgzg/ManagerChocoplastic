@@ -153,12 +153,6 @@ export default {
                 text: 'Inventarios',
                 access: 'inventory',
             },
-            {
-                to: '/transferlist',
-                icon: 'mdi-cart',
-                text: 'Traspasos',
-                access: 'transfer',
-            },
         ],
 
         linksTraspasos: [{

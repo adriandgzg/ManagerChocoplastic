@@ -2648,11 +2648,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         icon: 'mdi-cart',
         text: 'Inventarios',
         access: 'inventory'
-      }, {
-        to: '/transferlist',
-        icon: 'mdi-cart',
-        text: 'Traspasos',
-        access: 'transfer'
       }],
       linksTraspasos: [{
         icon: 'mdi-cart',
