@@ -361,6 +361,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       clor_pk: this.$route.params.id,
       valid: false,
+      validPago: false,
       sales: [],
       stores: [],
       clients: [],
@@ -2120,11 +2121,11 @@ var render = function() {
                         "v-form",
                         {
                           model: {
-                            value: _vm.valid,
+                            value: _vm.validPago,
                             callback: function($$v) {
-                              _vm.valid = $$v
+                              _vm.validPago = $$v
                             },
-                            expression: "valid"
+                            expression: "validPago"
                           }
                         },
                         [
@@ -2232,7 +2233,10 @@ var render = function() {
                           _c(
                             "v-btn",
                             {
-                              attrs: { color: "primary", disabled: !_vm.valid },
+                              attrs: {
+                                color: "primary",
+                                disabled: !_vm.validPago
+                              },
                               on: { click: _vm.agregarPago }
                             },
                             [

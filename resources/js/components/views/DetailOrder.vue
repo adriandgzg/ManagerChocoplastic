@@ -309,7 +309,7 @@
                 <v-card-title>Agregar pago</v-card-title>
 
                 <v-card-text>
-                    <v-form v-model="valid">
+                    <v-form v-model="validPago">
                         <v-row>
                             <v-combobox required v-model="selectpash" :items="paymentsShapes" label="Forma de pago" item-text="pash_name" item-value="pash_pk" filled chips placeholder="Seleccionar una opción"></v-combobox>
                         </v-row>
@@ -323,7 +323,7 @@
                         </v-row>
                         <v-divider></v-divider>
                         <v-btn @click="dialogPago = !dialogPago">Cancelar</v-btn>
-                        <v-btn color="primary" :disabled="!valid" @click="agregarPago">
+                        <v-btn color="primary" :disabled="!validPago" @click="agregarPago">
                             Agregar
                         </v-btn>
                     </v-form>
@@ -344,6 +344,7 @@ export default {
         return {
             clor_pk: this.$route.params.id,
             valid: false,
+            validPago: false,
             sales: [],
             stores: [],
             clients: [],
