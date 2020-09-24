@@ -554,12 +554,12 @@ export default {
                     this.normal('Notificación', "Debe seleccionar un proveedor", "error");
                     return;
                 }
-            if (!this.enabledStore)
-                if (this.selectStore == '' || this.selectStore == null) {
-                    this.normal('Notificación', "Debe seleccionar una sucursal", "error");
+            // if (!this.enabledStore)
+            //     if (this.selectStore == '' || this.selectStore == null) {
+            //         this.normal('Notificación', "Debe seleccionar una sucursal", "error");
 
-                    return;
-                }
+            //         return;
+            //     }
 
             if (this.selectpame == '' || this.selectpame == null) {
                 this.normal('Notificación', "Debe seleccionar una forma de pago", "error");

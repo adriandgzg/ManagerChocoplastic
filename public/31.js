@@ -545,11 +545,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (!this.directa == 2) if (this.selectProv == '' || this.selectProv == null) {
         this.normal('Notificación', "Debe seleccionar un proveedor", "error");
         return;
-      }
-      if (!this.enabledStore) if (this.selectStore == '' || this.selectStore == null) {
-        this.normal('Notificación', "Debe seleccionar una sucursal", "error");
-        return;
-      }
+      } // if (!this.enabledStore)
+      //     if (this.selectStore == '' || this.selectStore == null) {
+      //         this.normal('Notificación', "Debe seleccionar una sucursal", "error");
+      //         return;
+      //     }
 
       if (this.selectpame == '' || this.selectpame == null) {
         this.normal('Notificación', "Debe seleccionar una forma de pago", "error");
