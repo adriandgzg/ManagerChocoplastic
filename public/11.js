@@ -699,6 +699,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this7.normal('Notificación', "Error al cargar los datos", "error");
       });
     },
+    cambioFP: function cambioFP() {
+      this.$refs.foobar_x.focus();
+      this.$refs.foobar_x.$refs.input.select();
+    },
     getcambio: function getcambio() {
       this.cambio = this.efectivo - (this.total - this.othercash);
       if (this.cambio > 0) this.cambio = this.efectivo - (this.total - this.othercash);else this.cambio = 0;
@@ -2143,6 +2147,11 @@ var render = function() {
                                   chips: "",
                                   placeholder: "Seleccionar una opción"
                                 },
+                                on: {
+                                  change: function($event) {
+                                    return _vm.cambioFP()
+                                  }
+                                },
                                 model: {
                                   value: _vm.selectpash,
                                   callback: function($$v) {
@@ -2163,7 +2172,10 @@ var render = function() {
                                 { attrs: { cols: "6" } },
                                 [
                                   _c("v-text-field", {
+                                    ref: "foobar_x",
                                     attrs: {
+                                      autofocus: "",
+                                      id: "montoPago",
                                       required: "",
                                       label: "Monto: ",
                                       rules: _vm.minNumberRules,

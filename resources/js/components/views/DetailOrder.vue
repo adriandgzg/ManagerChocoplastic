@@ -311,11 +311,11 @@
                 <v-card-text>
                     <v-form v-model="validPago">
                         <v-row>
-                            <v-combobox required v-model="selectpash" :items="paymentsShapes" label="Forma de pago" item-text="pash_name" item-value="pash_pk" filled chips placeholder="Seleccionar una opción"></v-combobox>
+                            <v-combobox required v-model="selectpash" :items="paymentsShapes" label="Forma de pago" item-text="pash_name" item-value="pash_pk" @change="cambioFP()" filled chips placeholder="Seleccionar una opción"></v-combobox>
                         </v-row>
                         <v-row>
                             <v-col cols="6">
-                                <v-text-field required label="Monto: " v-model="editadoPago.cpam_amount" :rules="minNumberRules" prefix="$" type="number" @change="getcambio()"></v-text-field>
+                                <v-text-field autofocus id="montoPago" ref="foobar_x" required label="Monto: " v-model="editadoPago.cpam_amount" :rules="minNumberRules" prefix="$" type="number" @change="getcambio()"></v-text-field>
                             </v-col>
                             <v-col cols="6">
                                 <v-text-field label="Referencia: " v-model="editadoPago.cpam_reference"></v-text-field>
@@ -603,6 +603,7 @@ export default {
         abrirPago() {
             this.editadoPago.cpam_amount = 0;
             this.dialogPago = true
+
         },
         agregarPago() {
             this.loading = true
@@ -653,6 +654,11 @@ export default {
                     console.log(e);
                     this.normal('Notificación', "Error al cargar los datos", "error");
                 });
+        },
+
+        cambioFP() {
+            this.$refs.foobar_x.focus()
+            this.$refs.foobar_x.$refs.input.select()
         },
         getcambio() {
 
