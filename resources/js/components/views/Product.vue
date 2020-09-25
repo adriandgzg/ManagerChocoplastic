@@ -150,6 +150,11 @@
                         <template v-slot:item.prod_saleprice="{ item }">
                             <v-label>${{formatMoney(item.prod_saleprice)}}</v-label>
                         </template>
+                        <template v-slot:item.bulk="{ item }">
+                            <v-chip v-if="item.prod_bulk == 1" color="green" outlined>
+                                Granel</v-chip>
+                            <v-chip v-else color="red" outlined>NA Granel</v-chip>
+                        </template>
                         <template v-slot:item.action="{ item }">
                             <v-btn class="mx-2" fab dark small color="cyan" @click="editaVar(item)" title="Editar">
                                 <v-icon dark>mdi-pencil</v-icon>
@@ -262,12 +267,16 @@ export default {
                     value: 'prod_listprice'
                 },
                 {
-                    text: 'Precio Menudeo',
+                    text: 'Precio',
                     value: 'prod_saleprice'
                 },
                 {
                     text: 'Factor de conversión',
                     value: 'prod_fact_convert'
+                },
+                {
+                    text: 'Tipo',
+                    value: 'bulk'
                 },
                 {
                     text: '',
@@ -530,6 +539,8 @@ export default {
                     setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
                         this.variations = response.data.data;
+                        console.log('this.variations');
+                        console.log(this.variations);
                     } else {
                         this.normal('Notificación', response.data.status.message, "error");
                     }

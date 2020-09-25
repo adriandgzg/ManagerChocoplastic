@@ -263,6 +263,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -276,11 +281,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: 'Precio Mayoreo',
         value: 'prod_listprice'
       }, {
-        text: 'Precio Menudeo',
+        text: 'Precio',
         value: 'prod_saleprice'
       }, {
         text: 'Factor de conversión',
         value: 'prod_fact_convert'
+      }, {
+        text: 'Tipo',
+        value: 'bulk'
       }, {
         text: '',
         value: 'action'
@@ -516,6 +524,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         if (response.data.data != null) {
           _this4.variations = response.data.data;
+          console.log('this.variations');
+          console.log(_this4.variations);
         } else {
           _this4.normal('Notificación', response.data.status.message, "error");
         }
@@ -1673,6 +1683,31 @@ var render = function() {
                                       )
                                   )
                                 ])
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.bulk",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                item.prod_bulk == 1
+                                  ? _c(
+                                      "v-chip",
+                                      {
+                                        attrs: { color: "green", outlined: "" }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\r\n                                Granel"
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "v-chip",
+                                      { attrs: { color: "red", outlined: "" } },
+                                      [_vm._v("NA Granel")]
+                                    )
                               ]
                             }
                           },
