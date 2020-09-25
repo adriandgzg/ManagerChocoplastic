@@ -292,7 +292,7 @@ export default {
         },
 
         delete: function () {
-            axios.put('/product/delete', this.editado).then(response => {
+            axios.post('/product/frequents/delete', this.editado).then(response => {
 
                 this.textMsg = "¡Eliminado correctamente!";
                 this.normal('Notificación', this.textMsg, "success");

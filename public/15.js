@@ -299,7 +299,7 @@ __webpack_require__.r(__webpack_exports__);
     "delete": function _delete() {
       var _this5 = this;
 
-      axios.put('/product/delete', this.editado).then(function (response) {
+      axios.pupostt('/product/frequents/delete', this.editado).then(function (response) {
         _this5.textMsg = "¡Eliminado correctamente!";
 
         _this5.normal('Notificación', _this5.textMsg, "success");
