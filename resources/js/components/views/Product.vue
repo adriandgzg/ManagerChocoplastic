@@ -113,8 +113,8 @@
                         <span>Unidad de medida</span>
                         <v-select :items="measurements" v-model="selectMeas" label="Selecione una Unidad de Salida" single-line item-text="meas_name" item-value="meas_pk" persistent-hint></v-select>
 
-                        <v-text-field v-model="editadoVar.prod_listprice" label="Precio Mayoreo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
-                        <v-text-field v-model="editadoVar.prod_saleprice" label="Precio Menudeo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
+                        <!--<v-text-field v-model="editadoVar.prod_listprice" label="Precio Mayoreo" prefix="$" type="number" :rules="numberRules" required></v-text-field>-->
+                        <v-text-field v-model="editadoVar.prod_saleprice" label="Precio" prefix="$" type="number" :rules="numberRules" required></v-text-field>
                         <v-text-field v-model="editadoVar.prod_fact_convert" label="Factor de conversión" prefix="" type="number" :rules="numberRules" required></v-text-field>
                         <span>Venta a Granel</span>
                         <v-switch v-model="estadoGranelVar" />

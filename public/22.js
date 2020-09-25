@@ -1477,24 +1477,7 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
-                              label: "Precio Mayoreo",
-                              prefix: "$",
-                              type: "number",
-                              rules: _vm.numberRules,
-                              required: ""
-                            },
-                            model: {
-                              value: _vm.editadoVar.prod_listprice,
-                              callback: function($$v) {
-                                _vm.$set(_vm.editadoVar, "prod_listprice", $$v)
-                              },
-                              expression: "editadoVar.prod_listprice"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("v-text-field", {
-                            attrs: {
-                              label: "Precio Menudeo",
+                              label: "Precio",
                               prefix: "$",
                               type: "number",
                               rules: _vm.numberRules,
