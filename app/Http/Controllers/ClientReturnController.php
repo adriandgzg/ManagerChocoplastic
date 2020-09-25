@@ -137,7 +137,7 @@ class ClientReturnController extends ApiResponseController
                             DB::raw("$vclre_pk AS clre_fk"),
                             'prod_fk AS prod_fk',
                             'meas_fk AS meas_fk',
-                            'clsd_quantity AS clrd_quantity',
+                            '0 AS clrd_quantity',
                             'clsd_quantity AS clrd_quantity_sale',
                             'clsd_price AS clrd_price',
                             DB::raw("1 AS clrd_status"),
