@@ -541,7 +541,6 @@ class ClientSaleController extends ApiResponseController
             'clsa_pk' => 'required', //PK Venta
             'clie_fk' => 'required', //PK Cliente
             'pame_fk' => 'required', //PK Metodo Pago
-            //'stor_fk' => 'required', //PK Sucursal
             'bocu_fk' => 'required', //PK Caja
             'clde_amount' => 'required', //Monto Total
         ]);
@@ -562,9 +561,9 @@ class ClientSaleController extends ApiResponseController
             $vclsa_pk = $vInput['clsa_pk'];
             $vclie_fk = $vInput['clie_fk'];
             $vpame_fk = $vInput['pame_fk'];
-            //$vstor_fk = $vInput['stor_fk'];
             $vbocu_fk = $vInput['bocu_fk'];
             $vclde_amount = $vInput['clde_amount'];
+            $vclpa_amount_change = $vInput['clpa_amount_change'];
 
             //Consultar Venta Cliente
             $vClientSale = ClientSale::where('clsa_pk', '=', $vclsa_pk)->where('clsa_status', '=', 0)->first();
@@ -646,16 +645,6 @@ class ClientSaleController extends ApiResponseController
                     $vclsa_identifier =  "Ven_" . $vsyst_clie_sale;
 
                     //Modificar Venta (Finalizar)
-                    /*DB::table('client_sales')
-                    ->where('clsa_pk', '=', $vclsa_pk)
-                    ->update([
-                        'clsa_status' =>  $vclsa_status, 
-                        'clie_fk' =>  $vclie_fk, 
-                        'pame_fk' =>  $vpame_fk, 
-                        'stor_fk' => $vstor_fk, 
-                        'clsa_identifier' => $vclsa_identifier
-                    ]);*/
-                    //Modificar Venta Detalle
                     $vCSU = ClientSale::find($vclsa_pk);
                     $vCSU->clsa_status = $vclsa_status;
                     $vCSU->clie_fk = $vclie_fk;
@@ -666,9 +655,24 @@ class ClientSaleController extends ApiResponseController
                     //////////////////  Inserción de Log  //////////////////
                     $this->getstorelog('client_sales', $vclsa_pk, 2);
 
+                     //Modificar Folio del Venta
+                     DB::table('systems')
+                     ->update(['syst_clie_sale' =>  $vsyst_clie_sale + 1]);
+ 
+
                     if ($vpame_fk == 1) 
                     {
                         //De contado
+
+                        //Consutar Monto Efectivo
+                        $vCPM_Sel = ClientPaymentAmount::select('cpam_amount')->where('clsa_fk','=', $vclsa_pk)->where('pash_fk','=',1)->where('cpam_status','=',1)->first();
+
+                        $vcpam_amount_new = $vCPM_Sel->cpam_amount - $vclpa_amount_change;
+                        //Modificar el cambio
+                        DB::table('client_payment_amounts')
+                        ->where('clsa_fk', '=', $vclsa_pk)
+                        ->where('pash_fk', '=', 1)
+                        ->update(['cpam_amount' => $vcpam_amount_new]);
                     } 
                     else 
                     {
@@ -702,6 +706,7 @@ class ClientSaleController extends ApiResponseController
                                 'pash_fk',
                                 'bocu_fk',
                                 'cpam_amount AS clpa_amount',
+                                DB::raw("cpam_amount AS clpa_amount"),
                                 'cpam_reference AS clpa_reference',
                                 DB::raw("1 AS clpa_status"),
                                 DB::raw("NOW() AS created_at"),
@@ -723,45 +728,8 @@ class ClientSaleController extends ApiResponseController
                                     'updated_at'
                                 ]
                             , $vCPASel);
-                    /*
-                        //Efectivo
-                        if($vclpa_amount_cash > 0)
-                        {
-                            $vCPC = new ClientPayment();        
-                            $vCPC->clie_fk = $vclie_fk;
-                            $vCPC->clde_fk = $vclde_fk;
-                            $vCPC->pash_fk = 1;
-                            $vCPC->clpa_amount = $vclpa_amount_cash;
-                            $vCPC->save();
-
-                            //Asignación PK de Deuda Cliente
-                            $vclpa_pk = $vCPC->clpa_pk;
-
-                            //////////////////  Inserción de Log  //////////////////
-                            $this->getstorelog('client_payments', $vclpa_pk, 1);
-                        }
-
-                        //Transferencia
-                        if($vclpa_amount_transfer > 0)
-                        {
-                            $vCPT = new ClientPayment();        
-                            $vCPT->clie_fk = $vclie_fk;
-                            $vCPT->clde_fk = $vclde_fk;
-                            $vCPT->pash_fk = 2;
-                            $vCPT->clpa_amount = $vclpa_amount_transfer;
-                            $vCPT->save(); 
-
-                            //Asignación PK de Deuda Cliente
-                            $vclpa_pk2 = $vCPT->clpa_pk;
-
-                            //////////////////  Inserción de Log  //////////////////
-                            $this->getstorelog('client_payments', $vclpa_pk2, 1);
-                        }*/
+         
                     }
-
-                    //Modificar Folio del Venta
-                    DB::table('systems')
-                    ->update(['syst_clie_sale' =>  $vsyst_clie_sale + 1]);
 
 
                     //Aplicar modificación de Inventario
@@ -817,6 +785,7 @@ class ClientSaleController extends ApiResponseController
             }
 
         } catch (Exception $e) {
+            return $e;
             return response()->json([
                 'code' => 500,
                 'success' => false,

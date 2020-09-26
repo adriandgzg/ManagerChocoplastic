@@ -400,7 +400,7 @@ class BoxCutController extends ApiResponseController
 
                 $vTotal = ($vBCSel->bocu_initialamount + $vBCSel->totalcharge) - $vBCSel->totalwithdrawals;
 
-                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 150));
+                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 160));
                 $pdf->SetMargins(1, 1, 1);
                 $pdf->AddPage();
                 $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
@@ -562,7 +562,7 @@ class BoxCutController extends ApiResponseController
                 $pdf->Cell(0,10,'',0,0,'C');
                     
                 // PIE DE PAGINA
-                $pdf->Ln(5);
+                $pdf->Ln(17);
                 $pdf->Cell(60,0,'',0,1,'C');
                 $pdf->Ln(3);
                 $pdf->Cell(60,0,'__________________________________________________','', '1','C');

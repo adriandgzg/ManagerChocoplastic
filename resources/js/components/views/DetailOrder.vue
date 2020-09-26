@@ -546,11 +546,9 @@ export default {
         guardaFinalizar() {
             this.editadoSale.clde_amount = this.total
             this.editadoSale.clpa_amount_change = this.cambio
-            //this.editadoSale.clpa_amount_cash = this.efectivo
-            //this.editadoSale.clpa_amount_transfer = this.tarjeta
-
-            this.clpa_amount_change
             this.editadoSale.bocu_fk = this.bocu_pk
+            //console.log(this.editadoSale);
+            //return false;
             axios.post('/clientsales/update', this.editadoSale)
                 .then(response => {
                     if (response.data.code == 200) {
