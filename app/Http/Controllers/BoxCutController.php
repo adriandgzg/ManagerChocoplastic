@@ -295,6 +295,7 @@ class BoxCutController extends ApiResponseController
 
     public function printCorte(int $bocu_pk)
     {    
+        try{
         
             //Asignacion de variables
             $vbocu_pk = $bocu_pk;
@@ -353,6 +354,34 @@ class BoxCutController extends ApiResponseController
                     'BC.bocu_endamount', //Saldo Final
                     DB::raw("($vTotalCredit - $vCobrosCreditBox) AS totalcredit"), //Total Credito
 
+                    DB::raw("
+                            (
+                                SELECT SUM(CPA.cpam_amount) AS totaltransfer 
+                                FROM client_payment_amounts AS CPA 
+                                INNER JOIN client_sales AS CS ON CS.clsa_pk = CPA.clsa_fk
+                                WHERE CPA.cpam_status = 1 AND CPA.bocu_fk = BC.bocu_pk AND CPA.pash_fk = 2 AND CS.pame_fk = 1
+                            ) AS totaltransfer
+                    "), //Total Transferencia
+
+                    DB::raw("
+                            (
+                                SELECT SUM(CPA.cpam_amount) AS totalnotecredit 
+                                FROM client_payment_amounts AS CPA 
+                                INNER JOIN client_sales AS CS ON CS.clsa_pk = CPA.clsa_fk
+                                WHERE CPA.cpam_status = 1 AND CPA.bocu_fk = BC.bocu_pk AND CPA.pash_fk = 3 AND CS.pame_fk = 1
+                            ) AS totalnotecredit
+                    "), //Total Notra de Credito
+
+                    DB::raw("
+                            (
+                                SELECT SUM(CPA.cpam_amount) AS totalcard 
+                                FROM client_payment_amounts AS CPA 
+                                INNER JOIN client_sales AS CS ON CS.clsa_pk = CPA.clsa_fk
+                                WHERE CPA.cpam_status = 1 AND CPA.bocu_fk = BC.bocu_pk AND CPA.pash_fk = 4 AND CS.pame_fk = 1
+                            ) AS totalcard
+                    "), //Total Notra de Credito
+                    
+
                     'BC.bocu_observation',
                     'BC.bocu_status',
 
@@ -371,7 +400,7 @@ class BoxCutController extends ApiResponseController
 
                 $vTotal = ($vBCSel->bocu_initialamount + $vBCSel->totalcharge) - $vBCSel->totalwithdrawals;
 
-                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 140));
+                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(60, 150));
                 $pdf->SetMargins(1, 1, 1);
                 $pdf->AddPage();
                 $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
@@ -428,8 +457,6 @@ class BoxCutController extends ApiResponseController
                 $pdf->Ln(4);
                 $pdf->SetFont('Arial', '', 6);
                 $pdf->Cell(57, $lineHeigth, 'EFECTIVO', '', '1', 'C');
-
-                $pdf->Ln(2);
                 $pdf->SetFont('Arial', '', 5);
                 $pdf->Cell(10,4,'',0);
                 $pdf->Cell(25,4,'SALDO INICIAL',1);
@@ -476,16 +503,57 @@ class BoxCutController extends ApiResponseController
                 $pdf->Cell(15,4, '$' . number_format($vTotal - $vBCSel->bocu_endamount, 2) ,1,0,'R');
                 $pdf->Cell(10,4,'',0);
 
-                $pdf->Ln(8);
+                $pdf->Ln(6);
+                $pdf->SetFont('Arial', '', 6);
+                $pdf->Cell(57, $lineHeigth, utf8_decode('TRANSFERENCIA'), '', '1', 'C');
+
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(25,4,'TOTAL',1);
+                $pdf->Cell(15,4, '$' . number_format($vBCSel->totaltransfer, 2) ,1,0,'R');
+                $pdf->Cell(10,4,'',0);
+
+                $pdf->Ln(6);
+                $pdf->SetFont('Arial', '', 6);
+                $pdf->Cell(57, $lineHeigth, utf8_decode('NOTA DE CRÉDITO'), '', '1', 'C');
+
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(25,4,'TOTAL',1);
+                $pdf->Cell(15,4, '$' . number_format($vBCSel->totalnotecredit, 2) ,1,0,'R');
+                $pdf->Cell(10,4,'',0);
+
+                $pdf->Ln(6);
+                $pdf->SetFont('Arial', '', 6);
+                $pdf->Cell(57, $lineHeigth, utf8_decode('TARJETA BANCARIA'), '', '1', 'C');
+
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(25,4,'TOTAL',1);
+                $pdf->Cell(15,4, '$' . number_format($vBCSel->totalcard, 2) ,1,0,'R');
+                $pdf->Cell(10,4,'',0);
+
+                $pdf->Ln(6);
                 $pdf->SetFont('Arial', '', 6);
                 $pdf->Cell(57, $lineHeigth, utf8_decode('CRÉDITO'), '', '1', 'C');
 
-                $pdf->Ln(2);
                 $pdf->SetFont('Arial', 'B', 5);
                 $pdf->Cell(10,4,'',0);
                 $pdf->Cell(25,4,'TOTAL',1);
                 $pdf->Cell(15,4, '$' . number_format($vBCSel->totalcredit, 2) ,1,0,'R');
                 $pdf->Cell(10,4,'',0);
+
+                
+                $pdf->Ln(6);
+                $pdf->SetFont('Arial', '', 6);
+                $pdf->Cell(57, $lineHeigth, utf8_decode('TOTALES'), '', '1', 'C');
+
+                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Cell(10,4,'',0);
+                $pdf->Cell(25,4,'GRAN TOTAL',1);
+                $pdf->Cell(15,4, '$' . number_format($vTotal + $vBCSel->totaltransfer + $vBCSel->totalnotecredit + $vBCSel->totalcard + $vBCSel->totalcredit, 2) ,1,0,'R');
+                $pdf->Cell(10,4,'',0);
+                
 
                 
                 // Arial italic 8
@@ -494,18 +562,23 @@ class BoxCutController extends ApiResponseController
                 $pdf->Cell(0,10,'',0,0,'C');
                     
                 // PIE DE PAGINA
-                $pdf->Ln(20);
+                $pdf->Ln(5);
                 $pdf->Cell(60,0,'',0,1,'C');
                 $pdf->Ln(3);
                 $pdf->Cell(60,0,'__________________________________________________','', '1','C');
                 $pdf->Ln(2);
                 $pdf->Cell(60,0,utf8_decode($vBCSel->user),'', '1','C');
 
-
-
                 ob_get_clean();
                 $pdf->output('I', 'ticket', 'true');
-        //exit;
+       
+            }   
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $vTh;
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
+
     }
 }
