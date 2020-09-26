@@ -162,6 +162,7 @@ class ProductController extends ApiResponseController
                         'P.prod_saleprice', 
                         'P.prod_listprice', 
                         'P.prod_packingquantity', 
+                        'P.prod_minimumpurchase', 
                         'P.prod_status', 
                         'P.prod_bulk',
                         'P.prod_iva',
@@ -207,6 +208,7 @@ class ProductController extends ApiResponseController
                 'P.prod_saleprice', 
                 'P.prod_listprice', 
                 'P.prod_packingquantity', 
+                'P.prod_minimumpurchase', 
                 'P.prod_status', 
                 'P.prod_bulk',
                 'P.prod_iva',
@@ -754,6 +756,7 @@ class ProductController extends ApiResponseController
             $stores->prod_saleprice = $request->prod_saleprice;
             $stores->prod_listprice = $request->prod_listprice;
             $stores->prod_packingquantity = $request->prod_packingquantity;
+            $stores->prod_minimumpurchase = $request->prod_minimumpurchase;
             $stores->prod_status = $request->prod_status;
             $stores->prod_bulk = $request->prod_bulk;
             $stores->prod_iva = $request->prod_iva;
@@ -804,6 +807,7 @@ class ProductController extends ApiResponseController
             . ", prod_saleprice = " . $request->prod_saleprice
             . ", prod_listprice = " . $request->prod_listprice
             . ", prod_packingquantity = " . $request->prod_packingquantity
+            . ", prod_minimumpurchase = " . $request->prod_minimumpurchase
             . ", prod_iva = " . $request->prod_iva
             . ", prod_ieps = " . $request->prod_ieps
             . ", prod_status = " . $request->prod_status

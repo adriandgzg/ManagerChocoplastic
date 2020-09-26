@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
 use App\Product;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Stmt\Else_;
 
 class ClientOrderController extends ApiResponseController
 {
@@ -135,13 +136,31 @@ class ClientOrderController extends ApiResponseController
                 $vprod_pk = $cod["PK_Product"];
                 $vProduct = Product::where('prod_pk','=',$vprod_pk)->first();
 
+                $vprod_saleprice = 0;
+
+                if($cod["Quantity"] >= $vProduct->prod_minimumpurchase)
+                {
+                    if($vProduct->prod_listprice == 0)
+                    {
+                        $vprod_saleprice = $vProduct->prod_saleprice;
+                    }
+                    else
+                    {
+                        $vprod_saleprice = $vProduct->prod_listprice;
+                    }
+                }
+                else
+                {
+                    $vprod_saleprice = $vProduct->prod_saleprice;
+                }
+
                 //Inserción de la tabla principal (Pedido del cliente)
                 $vCORDI = new ClientOrderDetail();
                 $vCORDI->clor_fk = $vclor_pk;
                 $vCORDI->prod_fk = $vprod_pk;
                 $vCORDI->meas_fk = $vProduct->meas_fk_output;
                 $vCORDI->clod_quantity = $cod["Quantity"];
-                $vCORDI->clod_price = $vProduct->prod_saleprice;
+                $vCORDI->clod_price = $vprod_saleprice;
                 $vCORDI->clod_discountrate = 0;
                 $vCORDI->clod_ieps = 0;
                 $vCORDI->clod_iva = 0;

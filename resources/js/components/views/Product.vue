@@ -61,6 +61,7 @@
                         <v-text-field v-model="editado.prod_preferentialprice" label="Precio Preferencial" prefix="$" type="number" :rules="numberRules" required></v-text-field>
                         <v-text-field v-model="editado.prod_saleprice" label="Precio Menudeo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
                         <v-text-field v-model="editado.prod_listprice" label="Precio Mayoreo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
+                        <v-text-field v-model="editado.prod_minimumpurchase" label="Compra Mínima" type="number" :rules="numberRules" required></v-text-field>
                         <!--<v-text-field v-model="editado.prod_packingquantity" label="Stock" type="number" :rules="numberRules"></v-text-field>-->
                         <v-row>
                             <v-col cols="6">
@@ -263,10 +264,6 @@ export default {
                     value: 'meas_fk_output_name'
                 },
                 {
-                    text: 'Precio Mayoreo',
-                    value: 'prod_listprice'
-                },
-                {
                     text: 'Precio',
                     value: 'prod_saleprice'
                 },
@@ -323,6 +320,10 @@ export default {
                 {
                     text: 'Precio Mayoreo',
                     value: 'prod_listprice'
+                },
+                {
+                    text: 'Compra Mínima',
+                    value: 'prod_minimumpurchase'
                 },
                 {
                     text: 'Cantidad por Paquete',
@@ -389,6 +390,7 @@ export default {
                 prod_iva: 0,
                 prod_ieps: 0,
                 prod_packingquantity: 0,
+                prod_minimumpurchase: 0,
                 prod_status: 0,
                 is_mod: false,
                 imageUrl: this.imageUrl,
@@ -415,6 +417,7 @@ export default {
                 prod_iva: 0,
                 prod_ieps: 0,
                 prod_packingquantity: 0,
+                prod_minimumpurchase: 0,
                 prod_status: 0,
                 is_mod: false,
                 imageUrl: this.imageUrl,
