@@ -641,6 +641,7 @@ class ProductController extends ApiResponseController
                         'S.stor_name AS Store'
                     )
                     ->whereNull('P.prod_main_pk')
+                    ->where('PI.stor_fk', '=', $vStore_PK)
                     ->where('PI.prin_status', '=', 1)
                     ->where('P.prod_status', '=', 1)
                     ->where(function($vSubQuery) use($vText) {
