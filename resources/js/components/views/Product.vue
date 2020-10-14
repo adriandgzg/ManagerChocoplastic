@@ -62,6 +62,7 @@
                         <v-text-field v-model="editado.prod_saleprice" label="Precio Menudeo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
                         <v-text-field v-model="editado.prod_listprice" label="Precio Mayoreo" prefix="$" type="number" :rules="numberRules" required></v-text-field>
                         <v-text-field v-model="editado.prod_minimumpurchase" label="Compra Mínima" type="number" :rules="numberRules" required></v-text-field>
+                        <v-text-field v-model="editado.prod_packingquantity" label="Cantidad por paquete" type="number" :rules="numberRules" required></v-text-field>
                         <!--<v-text-field v-model="editado.prod_packingquantity" label="Stock" type="number" :rules="numberRules"></v-text-field>-->
                         <v-row>
                             <v-col cols="6">
