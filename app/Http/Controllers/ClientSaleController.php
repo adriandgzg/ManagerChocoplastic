@@ -872,6 +872,11 @@ class ClientSaleController extends ApiResponseController
                 ->get();
 
                 $vCount = count($vCSD);
+
+                
+                if($vCount <5)
+                $vHeight =120;
+                else
                 $vHeight = $vCount * 30;
                         
 
