@@ -24,7 +24,58 @@ class ProductInventoryController extends ApiResponseController
             //PK Sucursal 
             $vStore = Auth::user()->store_id;
 
-            $vPI = DB::table('product_inventories AS PI')
+            $vrole_id = Auth::user()->role_id;
+
+            if($vrole_id == 1)
+            {
+                $vPI = DB::table('product_inventories AS PI')
+                ->join('products AS P', 'P.prod_pk', '=', 'PI.prod_fk')
+                ->join('measurements AS M', 'M.meas_pk', '=', 'PI.meas_fk_output')
+                ->join('stores AS S', 'S.stor_pk', '=', 'PI.stor_fk')
+                ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                ->select(
+                    'PI.prin_pk',
+                    'PI.prin_stock',
+                    'PI.updated_at',
+
+                    'P.prod_pk',
+                    'P.prod_identifier',
+                    'P.prod_name',
+                    'P.prod_description',
+                    'P.prod_image',
+                    'P.prod_bulk',
+
+                    'M.meas_pk',
+                    'M.meas_name',
+
+                    'PC.prca_pk',
+                    'PC.prca_name',
+
+                    'S.stor_pk',
+                    'S.stor_name',
+                    DB::raw("
+                        (
+                        SELECT IFNULL(SUM(B.clod_quantity), 0) 
+                        FROM client_orders AS A INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                        WHERE A.clor_status = 1 AND B.clod_status = 1 AND B.prod_fk = P.prod_pk AND A.stor_fk = S.stor_pk
+                        ) AS stock_order
+                    "),
+                    DB::raw("
+                        (
+                        SELECT PI.prin_stock - IFNULL(SUM(B.clod_quantity), 0) 
+                        FROM client_orders AS A INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                        WHERE A.clor_status = 1 AND B.clod_status = 1 AND B.prod_fk = P.prod_pk AND A.stor_fk = S.stor_pk
+                        ) AS stock_app
+                    ")
+                )
+                ->where('PI.prin_status', '=', 1)
+                //->where('S.stor_pk', '=', $vStore)
+                ->orderByDesc('S.stor_pk')
+                ->get();
+            }
+            else
+            {
+                $vPI = DB::table('product_inventories AS PI')
                 ->join('products AS P', 'P.prod_pk', '=', 'PI.prod_fk')
                 ->join('measurements AS M', 'M.meas_pk', '=', 'PI.meas_fk_output')
                 ->join('stores AS S', 'S.stor_pk', '=', 'PI.stor_fk')
@@ -68,6 +119,10 @@ class ProductInventoryController extends ApiResponseController
                 ->where('S.stor_pk', '=', $vStore)
                 ->orderByDesc('PI.prin_pk')
                 ->get();
+
+            }
+
+            
             
             return $this->dbResponse($vPI, 200, null, 'Lista de Inventario');
           

@@ -117,6 +117,7 @@ class ProductFrequentController extends ApiResponseController
                     "ProductImage" => $vP->ProductImage,
                     "RetailPrice" => $vP->RetailPrice,
                     "WholesalePrice" => $vP->WholesalePrice,
+                    "MinimumPurchase" => $vP->MinimumPurchase,
                     "Stock" => $vP->Stock - $vSumclod_quantity,
                     "Category" => $vP->Category,
                     "Measurement" => $vP->Measurement,
