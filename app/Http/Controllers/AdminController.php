@@ -236,6 +236,7 @@ class AdminController extends Controller
                 ->update(array(
                         'name' => $request->name,
                         'email'=>$request->email,
+                        'verified'=>$request->verified,
                         'password'=>Hash::make($request->password)
                         )
                         );     
@@ -246,7 +247,8 @@ class AdminController extends Controller
             ->where('id', '=', $request->id)
             ->update(array(
                     'name' => $request->name,
-                    'email'=>$request->email
+                    'email'=>$request->email,
+                    'verified'=>$request->verified,
                     )
                     );     
         }
