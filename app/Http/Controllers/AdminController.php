@@ -218,14 +218,39 @@ class AdminController extends Controller
 
     public function updateAdministrator(Request $request)
     {
-        $admin = Admin::findOrFail($request->id);         
+        
+        /*$admin = Admin::findOrFail($request->id);         
+       
         $admin->name = $request->name;
         $admin->email = $request->email;
         $admin->verified = $request->verified;
         if($request->password != '' )
             $admin->password = Hash::make($request->password);  
 
-        $admin->save();
+            
+        $admin->save();*/
+        if($request->password != '' )
+        {
+        DB::table('admins')
+                ->where('id', '=', $request->id)
+                ->update(array(
+                        'name' => $request->name,
+                        'email'=>$request->email,
+                        'password'=>Hash::make($request->password)
+                        )
+                        );     
+        }
+        else
+        {
+            DB::table('admins')
+            ->where('id', '=', $request->id)
+            ->update(array(
+                    'name' => $request->name,
+                    'email'=>$request->email
+                    )
+                    );     
+        }
+        
     }
 
     public function updateBusinessAdministrator(Request $request)
