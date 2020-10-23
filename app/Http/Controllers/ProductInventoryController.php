@@ -68,7 +68,9 @@ class ProductInventoryController extends ApiResponseController
                         ) AS stock_app
                     ")
                 )
-                ->where('PI.prin_status', '=', 1)
+                ->where('PI.prin_status', '=', 1) 
+                ->whereNull('P.prod_main_pk')
+
                 //->where('S.stor_pk', '=', $vStore)
                 ->orderByDesc('S.stor_pk')
                 ->get();
@@ -116,6 +118,7 @@ class ProductInventoryController extends ApiResponseController
                     ")
                 )
                 ->where('PI.prin_status', '=', 1)
+                ->whereNull('P.prod_main_pk')
                 ->where('S.stor_pk', '=', $vStore)
                 ->orderByDesc('PI.prin_pk')
                 ->get();

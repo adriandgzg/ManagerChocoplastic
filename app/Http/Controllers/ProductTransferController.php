@@ -197,7 +197,7 @@ class ProductTransferController extends ApiResponseController
             $vVal = Validator::make($vInput, [
                 'prtr_pk' => 'required|int', //PK Traspaso 
                 'stor_fk_input' => 'required|int', //PK Sucursal Entrada 
-                'prtr_observation' => 'required', //Observacion
+                //'prtr_observation' => 'required', //Observacion
             ]);
 
             if ($vVal->fails()) {
@@ -223,7 +223,7 @@ class ProductTransferController extends ApiResponseController
             {
                 //Modificar Traspaso
                 $vPTU = ProductTransfer::find($vprtr_pk);
-                $vPTU->stor_fk_input = $vstor_fk_input;
+                $vPTU->stor_fk_output = $vstor_fk_input; //Sucursal de Salida
                 $vPTU->prtr_identifier = $vprtr_identifier;
                 $vPTU->prtr_observation = $vprtr_observation;
                 $vPTU->prtr_status = 2;

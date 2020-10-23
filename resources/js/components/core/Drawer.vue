@@ -221,7 +221,7 @@ export default {
                     {
                         to: '/returnmotives',
                         icon: 'mdi-chart-bubble',
-                        text: 'Motivo de Cancelación',
+                        text: 'Motivo de Devolución',
                         access: 'admin',
                     },
                     {

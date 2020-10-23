@@ -66,8 +66,8 @@ class ProductTransferDetailController extends ApiResponseController
             if ($vprtr_fk == 0) {
                 //Inserción de la tabla principal (Traspaso)
                 $vPTI = new ProductTransfer();
-                $vPTI->stor_fk_output = $vstor_fk_output;
-                $vPTI->stor_fk_input = null;
+                $vPTI->stor_fk_output = null;
+                $vPTI->stor_fk_input =  $vstor_fk_output;
                 $vPTI->prtr_identifier = null;
                 $vPTI->prtr_observation = null;
                 $vPTI->prtr_status = 1;

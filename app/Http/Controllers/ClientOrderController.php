@@ -24,8 +24,14 @@ class ClientOrderController extends ApiResponseController
     public function index()
     {
 
-        try {
-            $vClientOrders = DB::table('client_orders AS CO')
+        try 
+        {
+            $vStore = Auth::user()->store_id;
+            $vrole_id = Auth::user()->role_id;
+
+            if($vrole_id == 1)
+            {
+                $vClientOrders = DB::table('client_orders AS CO')
                 ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
                 ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
                 ->select(
@@ -39,6 +45,26 @@ class ClientOrderController extends ApiResponseController
                 ->orderByDesc('CO.clor_pk')
                 ->get();
 
+            }
+            else
+            {
+                $vClientOrders = DB::table('client_orders AS CO')
+                ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
+                ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
+                ->select(
+                    'CO.clor_pk',
+                    'CO.clor_identifier',
+                    'CO.created_at',
+                    'CO.clor_status',
+                    'S.stor_name'
+                )
+                ->where('S.stor_pk', '=', $vStore)
+                ->orderByDesc('CO.clor_pk')
+                ->get();
+
+
+            }
+           
             return response()->json([
                 'code' => 200,
                 'success' => true,
