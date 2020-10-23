@@ -727,12 +727,15 @@ class ClientSaleController extends ApiResponseController
                         //Consutar Monto Efectivo
                         $vCPM_Sel = ClientPaymentAmount::select('cpam_amount')->where('clsa_fk','=', $vclsa_pk)->where('pash_fk','=',1)->where('cpam_status','=',1)->first();
 
-                        $vcpam_amount_new = $vCPM_Sel->cpam_amount - $vclpa_amount_change;
-                        //Modificar el cambio
-                        DB::table('client_payment_amounts')
-                        ->where('clsa_fk', '=', $vclsa_pk)
-                        ->where('pash_fk', '=', 1)
-                        ->update(['cpam_amount' => $vcpam_amount_new]);
+                        if($vCPM_Sel)
+                        {
+                            $vcpam_amount_new = $vCPM_Sel->cpam_amount - $vclpa_amount_change;
+                            //Modificar el cambio
+                            DB::table('client_payment_amounts')
+                            ->where('clsa_fk', '=', $vclsa_pk)
+                            ->where('pash_fk', '=', 1)
+                            ->update(['cpam_amount' => $vcpam_amount_new]);
+                        }
                     } 
                     else 
                     {
