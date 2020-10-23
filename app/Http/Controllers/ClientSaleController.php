@@ -578,6 +578,9 @@ class ClientSaleController extends ApiResponseController
                     ->where('clsd_status', '=', 1)
                     ->get();
 
+                //Mensaje
+                $vMessage = '';
+
                 //Recorrer Venta Detallado Cliente
                 foreach($vCSDSel as $vP)
                 {
@@ -585,16 +588,30 @@ class ClientSaleController extends ApiResponseController
                     $vprod_fk = $vP->prod_fk;
                     $vclsd_quantity = $vP->clsd_quantity;
 
-                    //Buscar el Producto en el Inventario de la Sucursal 
-                    $vPISel = ProductInventory::join('products AS P', 'P.prod_pk', '=', 'prod_fk')
+                    //Consultar si es articulo principal o es articulo derivado
+                    $vProduct = Product::where('prod_pk', '=', $vprod_fk)->first();
 
+                    if($vProduct->prod_main_pk == NULL)
+                    {
+                        //Buscar el Producto en el Inventario de la Sucursal 
+                        $vPISel = ProductInventory::join('products AS P', 'P.prod_pk', '=', 'prod_fk')
                         ->where('prod_fk', '=', $vprod_fk)
                         ->where('prin_status', '=', 1)
                         ->where('stor_fk', '=', $vClientSale->stor_fk)
                         ->first();
+                    }
+                    else
+                    {
+                        //Buscar el Producto en el Inventario de la Sucursal || Producto Principal
+                        $vPISel = ProductInventory::join('products AS P', 'P.prod_pk', '=', 'prod_fk')
+                        ->where('prod_fk', '=', $vProduct->prod_main_pk)
+                        ->where('prin_status', '=', 1)
+                        ->where('stor_fk', '=', $vClientSale->stor_fk)
+                        ->first();
 
-                    //Mensaje
-                    $vMessage = '';
+                        $vclsd_quantity = $vP->clsd_quantity * $vProduct->prod_fact_convert;
+                    }
+
 
                     if ($vPISel) 
                     {
@@ -732,18 +749,46 @@ class ClientSaleController extends ApiResponseController
                     }
 
 
+
+                    
+                    
+
+
                     //Aplicar modificación de Inventario
                     foreach($vCSDSel as $vP)
                     {
                         //Datos del Producto a devolver
                         $vprod_fk = $vP->prod_fk; //PK Producto
-                        $vclsd_quantity = $vP->clsd_quantity; //Cantidad Venta
 
-                        //Buscar el Producto en el Inventario de la Sucursal 
-                        $vPI = ProductInventory::where('prod_fk', '=', $vprod_fk)
+
+                        if($vProduct->prod_main_pk == NULL)
+                        {
+                            //Buscar el Producto en el Inventario de la Sucursal 
+                            $vPI = ProductInventory::join('products AS P', 'P.prod_pk', '=', 'prod_fk')
+                            ->where('prod_fk', '=', $vprod_fk)
                             ->where('prin_status', '=', 1)
                             ->where('stor_fk', '=', $vClientSale->stor_fk)
                             ->first();
+                            $vclsd_quantity = $vP->clsd_quantity; //Cantidad Venta
+                        }
+                        else
+                        {
+                            //Buscar el Producto en el Inventario de la Sucursal || Producto Principal
+                            $vPI = ProductInventory::join('products AS P', 'P.prod_pk', '=', 'prod_fk')
+                            ->where('prod_fk', '=', $vProduct->prod_main_pk)
+                            ->where('prin_status', '=', 1)
+                            ->where('stor_fk', '=', $vClientSale->stor_fk)
+                            ->first();
+
+                            $vclsd_quantity = $vP->clsd_quantity * $vProduct->prod_fact_convert;
+                        }
+
+
+                        /*Buscar el Producto en el Inventario de la Sucursal 
+                        $vPI = ProductInventory::where('prod_fk', '=', $vprod_fk)
+                            ->where('prin_status', '=', 1)
+                            ->where('stor_fk', '=', $vClientSale->stor_fk)
+                            ->first();*/
 
                         $vprin_pk = $vPI->prin_pk; //PK Inventario
                         $vprin_stock = $vPI->prin_stock; //Stock actual
@@ -756,7 +801,6 @@ class ClientSaleController extends ApiResponseController
                         //////////////////  Inserción de Log  //////////////////
                         $this->getstorelog('product_inventories', $vprin_pk, 2);
                     }
-
                     
                     return response()->json([
                         'code' => 200,
@@ -785,7 +829,6 @@ class ClientSaleController extends ApiResponseController
             }
 
         } catch (Exception $e) {
-            return $e;
             return response()->json([
                 'code' => 500,
                 'success' => false,
