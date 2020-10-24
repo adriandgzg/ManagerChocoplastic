@@ -193,6 +193,7 @@ Route::get('product/inventories', 'ProductInventoryController@index');  //Invent
 
 //CRUD Traspaso
 Route::get('product/transfers', 'ProductTransferController@index');   
+Route::get('product/mytransfers', 'ProductTransferController@mytransfers');   
 Route::get('product/transfers/{prtr_pk}', 'ProductTransferController@show');  
 Route::post('product/transfers', 'ProductTransferController@store'); 
 Route::post('product/transfers/update', 'ProductTransferController@update'); //Estatus Solicitado

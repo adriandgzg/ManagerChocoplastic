@@ -91,128 +91,133 @@ export default [{
     },
     {
         path: '/detaiorder/:id',
-        name: 'Detalle de Orden', 
+        name: 'Detalle de Orden',
         view: 'DetailOrder'
     },
     {
         path: '/detaiorderread/:id',
-        name: 'Detalle de la Orden', 
+        name: 'Detalle de la Orden',
         view: 'DetailOrderRead'
     },
-    
+
     {
         path: '/detailsale/:id',
-        name: 'Detalle de Venta', 
+        name: 'Detalle de Venta',
         view: 'DetailSale'
     },
     {
         path: '/salesdetail/:id',
-        name: 'Detalle de la Venta', 
+        name: 'Detalle de la Venta',
         view: 'SalesDetail'
     },
     {
         path: '/clientdebts',
-        name: 'Cuentas por Cobrar', 
+        name: 'Cuentas por Cobrar',
         view: 'ClientDebts'
     },
     {
         path: '/userlist',
-        name: 'Usuarios', 
+        name: 'Usuarios',
         view: 'UserList'
     },
     {
         path: '/frequents',
-        name: 'Productos Frecuentes', 
+        name: 'Productos Frecuentes',
         view: 'Frequents'
     },
     {
         path: '/purchaseorder/:id',
-        name: 'Orden de Compra', 
+        name: 'Orden de Compra',
         view: 'PurchaseOrder'
     },
     {
         path: '/purchaseorderslist',
-        name: 'Ordenes de Compra', 
+        name: 'Ordenes de Compra',
         view: 'PurchaseOrdersList'
     },
     {
         path: '/purchaselist',
-        name: 'Compras', 
+        name: 'Compras',
         view: 'PurchaseList'
     },
     {
         path: '/purchases/:id/:directa',
-        name: 'Compra', 
+        name: 'Compra',
         view: 'Purchases'
     },
     {
         path: '/purchasesdetail/:id',
-        name: 'Detalle de Compra', 
+        name: 'Detalle de Compra',
         view: 'PurchasesDetail'
     },
     {
         path: '/providerdebts',
-        name: 'Cuentas por Pagar', 
+        name: 'Cuentas por Pagar',
         view: 'ProviderDebts'
     },
     {
         path: '/orderdetail/:id',
-        name: 'Detalle de Orden de Compra', 
+        name: 'Detalle de Orden de Compra',
         view: 'OrderDetail'
-    },    
+    },
     {
         path: '/clientsreturn/:id',
-        name: 'Devoluciones', 
+        name: 'Devoluciones',
         view: 'ClientsReturn'
-    },    
+    },
     {
         path: '/clientsrdetail/:id',
-        name: 'Detalle Devolución', 
+        name: 'Detalle Devolución',
         view: 'ClientsRDetail'
     },
     {
         path: '/clientsreturnlist',
-        name: 'Lista de Devoluciones', 
+        name: 'Lista de Devoluciones',
         view: 'ClientsReturnList'
     },
     {
         path: '/providersreturn/:id',
-        name: 'Devoluciones Proveedor', 
+        name: 'Devoluciones Proveedor',
         view: 'ProvidersReturn'
     },
     {
         path: '/providersreturnlist',
-        name: 'Lista Devoluciones Proveedor', 
+        name: 'Lista Devoluciones Proveedor',
         view: 'ReturnList'
     },
     {
         path: '/providersreturndetail/:id',
-        name: 'Detalle Devolución Proveedor', 
+        name: 'Detalle Devolución Proveedor',
         view: 'ProvidersReturnDetail'
     },
     {
         path: '/transferlist',
-        name: 'Traspaso', 
+        name: 'Traspaso',
         view: 'TransferList'
     },
     {
+        path: '/mytransferlist',
+        name: 'Mis Solicitudes',
+        view: 'MyTransferList'
+    },
+    {
         path: '/transferdetail/:id',
-        name: 'Detalle Traspaso', 
+        name: 'Detalle Traspaso',
         view: 'TransferDetail'
     },
     {
         path: '/transferdetailfin/:id',
-        name: 'Detalle de Traspaso', 
+        name: 'Detalle de Traspaso',
         view: 'TransferDetailFin'
     },
     {
         path: '/transferdetailview/:id',
-        name: 'Detalle Traspaso.', 
+        name: 'Detalle Traspaso.',
         view: 'TransferDetailView'
     },
     {
         path: '/boxcutlist',
-        name: 'Cajas', 
+        name: 'Cajas',
         view: 'BoxCuts'
     },
 ]

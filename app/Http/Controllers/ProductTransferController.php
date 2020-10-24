@@ -67,6 +67,53 @@ class ProductTransferController extends ApiResponseController
         
     }
 
+
+    public function mytransfers()
+    {
+        
+        try {
+            //Sucursal al que pertenece el Usuario App
+            $vStore_PK = Auth::user()->store_id;
+
+
+            $vPT = DB::table('product_transfers AS PT')
+                ->leftjoin('stores AS SO', 'SO.stor_pk', '=', 'PT.stor_fk_output')
+                ->leftjoin('stores AS SI', 'SI.stor_pk', '=', 'PT.stor_fk_input')
+                ->select(
+                    'PT.prtr_pk',
+                    'PT.prtr_identifier',
+                    'PT.prtr_observation',
+                    'PT.created_at',
+                    'PT.prtr_status',
+                    DB::raw('
+                    (CASE 
+                        WHEN PT.prtr_status = 0 THEN "Cancelada" 
+                        WHEN PT.prtr_status = 1 THEN "Pendiente" 
+                        WHEN PT.prtr_status = 2 THEN "Solicitado" 
+                        WHEN PT.prtr_status = 3 THEN "Finalizado" 
+                        ELSE "" END
+                    ) AS prtr_status_description'),
+
+                    'PT.stor_fk_output',
+                    'SO.stor_name AS stor_name_output',
+
+                    'PT.stor_fk_input',
+                    'SI.stor_name AS stor_name_input'
+                )
+                ->where('SI.stor_pk', '=', $vStore_PK)
+                ->orderByDesc('PT.prtr_pk')
+                ->get();
+            
+            return $this->dbResponse($vPT, 200, null, 'Lista de Traspasos');
+          
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
+        }
+        
+    }
+
     /**
      * Show the form for creating a new resource.
      *

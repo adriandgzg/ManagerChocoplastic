@@ -522,7 +522,7 @@ export default {
                     if (response.data.status.code == 200) {
                         //this.textMsg = "¡Actualizado correctamente!";
                         this.normal("Notificación", vMessage, "success");
-                        this.$router.push("/transferlist");
+                        this.$router.push("/mytransferlist");
                     } else {
                         this.normal("Notificación", vMessage, "error");
                     }
