@@ -253,7 +253,7 @@ Route::get('/', 'Auth\LoginController@login');
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/auth/user', function() { return Auth::user(); });
-    Route::get('/users', 'AdminController@users');
+    Route::get('/users', 'AdminController@users'); 
     Route::get('/usuarioBusiness/{id}', 'AdminController@usuarioBusiness');    
     Route::post('/admin/add', 'AdminController@addAdministrator');
     Route::put('/admin/update', 'AdminController@updateAdministrator');

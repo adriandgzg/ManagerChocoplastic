@@ -758,40 +758,33 @@ class ClientSaleController extends ApiResponseController
 
                         //Insertar Abonos de Cliente
 
-                        //Consultar Pagos
-                        $vCPASel = ClientPaymentAmount::where('clsa_fk', '=', $vclsa_pk)->where('cpam_status', '=', 1)
-                        ->select
-                        (
-                            array
+                        $vCPM_SelAbonos = ClientPaymentAmount::where('clsa_fk','=', $vclsa_pk)->where('cpam_status','=',1)->first();
+
+                        if($vCPM_SelAbonos)
+                        {
+                            //Consultar Pagos
+                            $vCPASel = ClientPaymentAmount::where('clsa_fk', '=', $vclsa_pk)->where('cpam_status', '=', 1)
+                            ->select
                             (
-                                DB::raw("$vclie_fk AS clie_fk"),
-                                DB::raw("$vclde_fk AS clde_fk"),
-                                'pash_fk',
-                                'bocu_fk',
-                                'cpam_amount AS clpa_amount',
-                                DB::raw("cpam_amount AS clpa_amount"),
-                                'cpam_reference AS clpa_reference',
-                                DB::raw("1 AS clpa_status"),
-                                DB::raw("NOW() AS created_at"),
-                                DB::raw("NOW() AS updated_at")
-                            )
-                        );
-                        //Insertar Venta Detallado Cliente
-                        DB::table('client_payments')
-                            ->insertUsing(
-                                [
-                                    'clie_fk',
-                                    'clde_fk', 
+                                array
+                                (
+                                    DB::raw("$vclie_fk AS clie_fk"),
+                                    DB::raw("$vclde_fk AS clde_fk"),
                                     'pash_fk',
                                     'bocu_fk',
-                                    'clpa_amount', 
-                                    'clpa_reference', 
-                                    'clpa_status', 
-                                    'created_at', 
-                                    'updated_at'
-                                ]
-                            , $vCPASel);
-         
+                                    'cpam_amount AS clpa_amount',
+                                    DB::raw("cpam_amount AS clpa_amount"),
+                                    'cpam_reference AS clpa_reference',
+                                    DB::raw("1 AS clpa_status"),
+                                    DB::raw("NOW() AS created_at"),
+                                    DB::raw("NOW() AS updated_at")
+                                )
+                            );
+                            //Insertar Venta Detallado Cliente
+                            DB::table('client_payments')
+                                ->insertUsing(['clie_fk', 'clde_fk', 'pash_fk', 'bocu_fk', 'clpa_amount', 'clpa_reference', 'clpa_status', 'created_at', 'updated_at'], $vCPASel);
+
+                        }
                     }
 
 
