@@ -7,12 +7,13 @@ use Throwable;
 use Validator;
 use App\System;
 use App\ProviderDebt;
+use App\ProductInventory;
 use App\ProviderPurchase;
 use Illuminate\Http\Request;
 use App\ProviderPurchaseOrder;
 use App\ProviderPurchaseOrderDetail;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
-use App\ProductInventory;
 
 class ProviderPurchaseController extends ApiResponseController
 {
@@ -25,46 +26,96 @@ class ProviderPurchaseController extends ApiResponseController
     {
         try {
 
-            $vPO = DB::table('provider_purchases AS PP')
-                ->leftjoin('provider_purchase_orders AS PPO', 'PPO.prpo_pk', '=', 'PP.prpo_fk')
-                ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PP.prov_fk')
-                ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PP.stor_fk')
-                ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'PP.pame_fk')
-                ->select(
-                    'PP.prpu_pk',
-                    'PP.prpu_identifier',
-                    'PP.prpu_type',
-                    'PP.created_at',
-                    DB::raw('
-                        (CASE 
-                            WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
-                            WHEN PP.prpu_type = 2 THEN "Compra directa" 
-                            ELSE "" END
-                        ) AS prpu_type_description'),
-                    'PP.prpu_status',
-                    DB::raw('
-                        (CASE 
-                            WHEN PP.prpu_status = 0 THEN "Cancelada" 
-                            WHEN PP.prpu_status = 1 THEN "Pendiente" 
-                            WHEN PP.prpu_status = 2 THEN "En Proceso de Pago" 
-                            WHEN PP.prpu_status = 3 THEN "Pagado" 
-                            ELSE "" END
-                        ) AS prpu_status_description'),
+            $vStore = Auth::user()->store_id;
+            $vrole_id = Auth::user()->role_id;
 
-                    'PPO.prpo_pk',
-                    'PPO.prpo_identifier',
+            if($vrole_id == 1)
+            {
 
-                    'P.prov_identifier',
-                    'P.prov_name',
-                    'P.prov_rfc',
+                $vPO = DB::table('provider_purchases AS PP')
+                    ->leftjoin('provider_purchase_orders AS PPO', 'PPO.prpo_pk', '=', 'PP.prpo_fk')
+                    ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PP.prov_fk')
+                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PP.stor_fk')
+                    ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'PP.pame_fk')
+                    ->select(
+                        'PP.prpu_pk',
+                        'PP.prpu_identifier',
+                        'PP.prpu_type',
+                        'PP.created_at',
+                        DB::raw('
+                            (CASE 
+                                WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
+                                WHEN PP.prpu_type = 2 THEN "Compra directa" 
+                                ELSE "" END
+                            ) AS prpu_type_description'),
+                        'PP.prpu_status',
+                        DB::raw('
+                            (CASE 
+                                WHEN PP.prpu_status = 0 THEN "Cancelada" 
+                                WHEN PP.prpu_status = 1 THEN "Pendiente" 
+                                WHEN PP.prpu_status = 2 THEN "En Proceso de Pago" 
+                                WHEN PP.prpu_status = 3 THEN "Pagado" 
+                                ELSE "" END
+                            ) AS prpu_status_description'),
 
-                    'PM.pame_name',
+                        'PPO.prpo_pk',
+                        'PPO.prpo_identifier',
 
-                    'S.stor_name'
-                )
-                //->where('PPO.prpo_status', '<>', 0)
-                ->orderByDesc('PP.prpu_pk')
-                ->get();
+                        'P.prov_identifier',
+                        'P.prov_name',
+                        'P.prov_rfc',
+
+                        'PM.pame_name',
+
+                        'S.stor_name'
+                    )
+                    ->orderByDesc('PP.prpu_pk')
+                    ->get();
+            }
+            else
+            {
+                $vPO = DB::table('provider_purchases AS PP')
+                    ->leftjoin('provider_purchase_orders AS PPO', 'PPO.prpo_pk', '=', 'PP.prpo_fk')
+                    ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PP.prov_fk')
+                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PP.stor_fk')
+                    ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'PP.pame_fk')
+                    ->select(
+                        'PP.prpu_pk',
+                        'PP.prpu_identifier',
+                        'PP.prpu_type',
+                        'PP.created_at',
+                        DB::raw('
+                            (CASE 
+                                WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
+                                WHEN PP.prpu_type = 2 THEN "Compra directa" 
+                                ELSE "" END
+                            ) AS prpu_type_description'),
+                        'PP.prpu_status',
+                        DB::raw('
+                            (CASE 
+                                WHEN PP.prpu_status = 0 THEN "Cancelada" 
+                                WHEN PP.prpu_status = 1 THEN "Pendiente" 
+                                WHEN PP.prpu_status = 2 THEN "En Proceso de Pago" 
+                                WHEN PP.prpu_status = 3 THEN "Pagado" 
+                                ELSE "" END
+                            ) AS prpu_status_description'),
+
+                        'PPO.prpo_pk',
+                        'PPO.prpo_identifier',
+
+                        'P.prov_identifier',
+                        'P.prov_name',
+                        'P.prov_rfc',
+
+                        'PM.pame_name',
+
+                        'S.stor_name'
+                    )
+                    ->where('S.stor_pk', '=', $vStore)
+                    ->orderByDesc('PP.prpu_pk')
+                    ->get();
+
+            }
             
             return $this->dbResponse($vPO, 200, null, 'Lista de Compra de Proveedor');
           

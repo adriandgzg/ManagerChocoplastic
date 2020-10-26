@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use DB;
-use Validator;
 use Throwable;
+use Validator;
 use App\System;
 use Illuminate\Http\Request;
 use App\ProviderPurchaseOrder;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
 
 class ProviderPurchaseOrderController extends ApiResponseController 
@@ -20,33 +21,69 @@ class ProviderPurchaseOrderController extends ApiResponseController
     public function index()
     {
         try {
+            $vStore = Auth::user()->store_id;
+            $vrole_id = Auth::user()->role_id;
 
-            $vPPO = DB::table('provider_purchase_orders AS PPO')
-                ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PPO.prov_fk')
-                ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PPO.stor_fk')
-                ->select(
-                    'PPO.prpo_pk',
-                    'PPO.prpo_identifier',
-                    'PPO.created_at',
-                    'PPO.prpo_status',
-                    DB::raw('(CASE 
-                    WHEN PPO.prpo_status = 0 THEN "Cancelado" 
-                    WHEN PPO.prpo_status = 1 THEN "Pendiente" 
-                    WHEN PPO.prpo_status = 2 THEN "Finalizado" 
-                    WHEN PPO.prpo_status = 3 THEN "Procesado" 
-                    ELSE "" END) AS prpo_status_description'),
+            if($vrole_id == 1)
+            {
+                $vPPO = DB::table('provider_purchase_orders AS PPO')
+                    ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PPO.prov_fk')
+                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PPO.stor_fk')
+                    ->select(
+                        'PPO.prpo_pk',
+                        'PPO.prpo_identifier',
+                        'PPO.created_at',
+                        'PPO.prpo_status',
+                        DB::raw('(CASE 
+                        WHEN PPO.prpo_status = 0 THEN "Cancelado" 
+                        WHEN PPO.prpo_status = 1 THEN "Pendiente" 
+                        WHEN PPO.prpo_status = 2 THEN "Finalizado" 
+                        WHEN PPO.prpo_status = 3 THEN "Procesado" 
+                        ELSE "" END) AS prpo_status_description'),
 
-                    'P.prov_pk',
-                    'P.prov_identifier',
-                    'P.prov_name',
-                    'P.prov_rfc',
+                        'P.prov_pk',
+                        'P.prov_identifier',
+                        'P.prov_name',
+                        'P.prov_rfc',
 
-                    'S.stor_pk',
-                    'S.stor_name'
-                )
-                ->where('PPO.prpo_status', '<>', 0)
-                ->orderByDesc('PPO.prpo_pk')
-                ->get();
+                        'S.stor_pk',
+                        'S.stor_name'
+                    )
+                    ->where('PPO.prpo_status', '<>', 0)
+                    ->orderByDesc('PPO.prpo_pk')
+                    ->get();
+
+                }
+                else
+                {
+                    $vPPO = DB::table('provider_purchase_orders AS PPO')
+                    ->leftjoin('providers AS P', 'P.prov_pk', '=', 'PPO.prov_fk')
+                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'PPO.stor_fk')
+                    ->select(
+                        'PPO.prpo_pk',
+                        'PPO.prpo_identifier',
+                        'PPO.created_at',
+                        'PPO.prpo_status',
+                        DB::raw('(CASE 
+                        WHEN PPO.prpo_status = 0 THEN "Cancelado" 
+                        WHEN PPO.prpo_status = 1 THEN "Pendiente" 
+                        WHEN PPO.prpo_status = 2 THEN "Finalizado" 
+                        WHEN PPO.prpo_status = 3 THEN "Procesado" 
+                        ELSE "" END) AS prpo_status_description'),
+
+                        'P.prov_pk',
+                        'P.prov_identifier',
+                        'P.prov_name',
+                        'P.prov_rfc',
+
+                        'S.stor_pk',
+                        'S.stor_name'
+                    )
+                    ->where('PPO.prpo_status', '<>', 0)
+                    ->where('S.stor_pk', '=', $vStore)
+                    ->orderByDesc('PPO.prpo_pk')
+                    ->get();
+                }
             
             return $this->dbResponse($vPPO, 200, null, 'Lista de Ordenes de Compra de Proveedor');
         } 
