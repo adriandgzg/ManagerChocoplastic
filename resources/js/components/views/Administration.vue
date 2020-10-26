@@ -182,6 +182,10 @@ export default {
             }, {
                 text: 'Perfil',
                 value: 'role.name'
+            
+            }, {
+                text: 'Sucursal',
+                value: 'stor_name'
             }, {
                 text: '',
                 value: 'estado'
@@ -256,7 +260,7 @@ export default {
             console.log(this.editado)
         },
         getstores() {
-            axios.get('/storeget')
+            axios.get('/storeget') 
                 .then(response => {
                     this.stores = response.data.data
                     console.log(this.stores)

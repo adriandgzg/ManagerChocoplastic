@@ -137,7 +137,7 @@ class ClientReturnController extends ApiResponseController
                             DB::raw("$vclre_pk AS clre_fk"),
                             'prod_fk AS prod_fk',
                             'meas_fk AS meas_fk',
-                            '0 AS clrd_quantity',
+                            DB::raw("0 AS clrd_quantity"),
                             'clsd_quantity AS clrd_quantity_sale',
                             'clsd_price AS clrd_price',
                             DB::raw("1 AS clrd_status"),
@@ -232,6 +232,7 @@ class ClientReturnController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
+            return $vTh;
             return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }

@@ -60,7 +60,8 @@ class AdminController extends Controller
      */
     public function users()
     {
-        $users=Admin::with(['permissions','role'])->get();
+        $users=Admin::leftJoin('stores', 'stores.stor_pk', '=', 'admins.store_id')
+        ->with(['permissions','role'])->get();
         return response()->json([
             'success' => true,
             'message' => 'Users loaded',

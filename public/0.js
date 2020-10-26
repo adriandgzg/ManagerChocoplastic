@@ -200,6 +200,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         text: 'Perfil',
         value: 'role.name'
       }, {
+        text: 'Sucursal',
+        value: 'stor_name'
+      }, {
         text: '',
         value: 'estado'
       }, {
