@@ -960,6 +960,227 @@ class ClientSaleController extends ApiResponseController
                 $vHeight =120;
                 else
                 $vHeight = $vCount * 30;
+
+         $tabla = '';     
+         
+         
+foreach ($vCSD as $product) {
+
+    $tabla = $tabla . '<tr>
+        <td>'. $product->prod_identifier.'</td>
+        <td>'. $product->clsd_quantity.'</td>
+        <td>'. $product->meas_name.'</td>
+        <td>$'. number_format($product->clsd_price,2) . '</td>
+        <td>$'. number_format($product->clsd_quantity * $product->clsd_price, 2) .'</td>
+    </tr>';
+}
+
+
+
+        $nombreImpresora = '
+        <html>
+    <head>
+    <style>
+    * {
+        font-size: 12px;
+        font-family: "Times New Roman";
+    }
+    
+    td,
+    th,
+    tr,
+    table {
+        border-top: 1px solid black;
+        border-collapse: collapse;
+    }
+    
+    td.producto,
+    th.producto {
+        width: 40px;
+        max-width: 40px;
+    }
+    
+    td.cantidad,
+    th.cantidad {
+        width: 50px;
+        max-width: 50px;
+        word-break: break-all;
+    }
+    
+    td.precio,
+    th.precio {
+        width: 80px;
+        max-width: 80px;
+        word-break: break-all;
+    }
+    
+    .centrado {
+        text-align: center;
+        align-content: center;
+    }
+    
+    .ticket {
+        width: 300px;
+        max-width: 300px;
+    }
+    
+    img {
+        max-width: inherit;
+        width: inherit;
+    }
+    </style>
+    </head>
+    <body onload="imprimir()">
+        <div class="ticket">
+            <img 
+                src="' . config('app.url') . '/images/logo_chocoplastic.png"
+                alt="Logotipo">
+            <p class="centrado"><b>RFC:</b> ' . $vCS->stor_rfc . '<br><b>DOMICILIO FISCAL: </b>' . $vCS->stor_addres . ' </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="cantidad">CLAVE</th>
+                        <th class="cantidad">CANT</th>
+                        <th class="cantidad">UNIDAD</th>
+                        <th class="cantidad">COSTO</th>                        
+                        <th class="precio">IMPORTE</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                '. $tabla.'
+                </tbody>
+            </table>
+            <p class="centrado">¡GRACIAS POR SU COMPRA!<br>parzibyte.me</p>
+        </div>
+        <form>
+<input type="button" value="Print Page" onClick="window.print()">
+</form>
+    </body>
+    <script language="JavaScript"> 
+function imprimir(){ 
+   	window.print();
+} 
+</script> 
+
+<script language="VBScript">
+// THIS VB SCRIP REMOVES THE PRINT DIALOG BOX AND PRINTS TO YOUR DEFAULT PRINTER
+Sub window_onunload()
+On Error Resume Next
+Set WB = nothing
+On Error Goto 0
+End Sub
+
+Sub Print()
+OLECMDID_PRINT = 6
+OLECMDEXECOPT_DONTPROMPTUSER = 2
+OLECMDEXECOPT_PROMPTUSER = 1
+
+
+On Error Resume Next
+
+If DA Then
+call WB.ExecWB(OLECMDID_PRINT, OLECMDEXECOPT_DONTPROMPTUSER,1)
+
+Else
+call WB.IOleCommandTarget.Exec(OLECMDID_PRINT ,OLECMDEXECOPT_DONTPROMPTUSER,"","","")
+
+End If
+
+If Err.Number <> 0 Then
+If DA Then 
+Alert("Nothing Printed :" & err.number & " : " & err.description)
+Else
+HandleError()
+End if
+End If
+On Error Goto 0
+End Sub
+
+If DA Then
+wbvers="8856F961-340A-11D0-A96B-00C04FD705A2"
+Else
+wbvers="EAB22AC3-30C1-11CF-A7EB-0000C05BAE0B"
+End If
+
+document.write "<object ID=""WB"" WIDTH=0 HEIGHT=0 CLASSID=""CLSID:"
+document.write wbvers & """> </object>"
+</script>
+</html>
+        ';
+}
+        return new HtmlString($nombreImpresora);
+        /*
+        $total = 0;
+        
+        //Asignacion de variables
+        $vclsa_pk = $clsa_pk;
+
+
+        if ($vclsa_pk == '' || $vclsa_pk == 0) {
+            return $this->dbResponse(null, 500, null, 'PK Obligatorio');
+        }
+
+        $vCS = DB::table('client_sales AS CS')
+            ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
+            ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
+            ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
+            ->select(
+                'CS.clsa_pk',
+                'CS.clsa_identifier',
+                'CS.clor_fk AS clor_pk',
+                DB::raw('(CASE 
+                    WHEN CS.clsa_status = 0 THEN "Pendiente" 
+                    WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
+                    WHEN CS.clsa_status = 3 THEN "Pagado" 
+                    ELSE "" END) AS clsa_status'),
+                'CS.created_at',
+
+                'C.clie_pk',
+                'C.clie_identifier',
+                'C.clie_name',
+                'C.clie_rfc',
+
+                'PM.pame_pk',
+                'PM.pame_name',
+
+                'S.stor_pk',
+                'S.stor_name',
+                'S.stor_rfc',
+                'S.stor_addres',
+            )
+            ->where('CS.clsa_pk', '=', $vclsa_pk)
+            ->first();
+
+        if($vCS)
+        {
+            $vCSD = DB::table('client_sale_details AS CSD')
+                ->join('products AS P', 'P.prod_pk', '=', 'CSD.prod_fk')
+                ->join('measurements AS M', 'M.meas_pk', '=', 'CSD.meas_fk')
+                ->select(
+                    'CSD.clsd_pk',
+                    'P.prod_pk',
+                    'P.prod_identifier',
+                    'P.prod_name',
+
+                    'M.meas_pk',
+                    'M.meas_name',
+                    'M.meas_abbreviation',
+
+                    'CSD.clsd_quantity',
+                    'CSD.clsd_price',
+                    'CSD.clsd_discountrate'
+                )
+                ->where('CSD.clsa_fk', '=', $vclsa_pk)
+                ->where('clsd_status', '=', 1)
+                ->get();
+
+                $vCount = count($vCSD);
+
+                
+                if($vCount <5)
+                $vHeight =120;
+                else
+                $vHeight = $vCount * 30;
                         
 
                 $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(80, $vHeight));
@@ -1081,7 +1302,7 @@ class ClientSaleController extends ApiResponseController
                 ob_get_clean();
                 $pdf->output('I', 'ticket', 'true');
                 //exit;
-            }
+            }*/
             
     }
 

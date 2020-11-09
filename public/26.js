@@ -1,1 +1,982 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[26],{53:function(e,t,a){"use strict";a.r(t);var o=a(1),n=a.n(o),r={data:function(){return{headersdetail:[{text:"ID",value:"prpa_pk",width:"10%"},{text:"Forma de Pago",value:"pash_name"},{text:"Monto pagado",value:"prpa_amount"},{text:"Referencia",value:"prpa_reference"},{text:"Fecha pago",value:"created_at"}],headers:[{text:"ID",value:"prde_pk",width:"10%"},{text:"No. Compra",value:"prpu_identifier"},{text:"Proveedor",value:"prov_name"},{text:"Monto",value:"prde_amount"},{text:"Monto Pagado",value:"prde_amount_paid"},{text:"Referencia",value:"prpa_reference"},{text:"Fecha",value:"created_at"},{text:"Estatus",value:"prde_status_description"},{text:"",value:"action",width:"20%"}],select:0,principal:!1,estado:!0,editado:{prde_fk:0,prpu_identifier:"",prov_fk:0,pash_fk:0,prpa_amount:0,prde_amount:0,prde_amount_paid:0,prde_amount_outstanding:0,prpa_reference:""},defaultItem:{prde_fk:0,prpu_identifier:"",prov_fk:0,pash_fk:0,prpa_amount:0,prde_amount:0,prde_amount_paid:0,prde_amount_outstanding:0,prpa_reference:""},editedIndex:-1,sales:[],detallepagos:[],clientsdebts:[],entities:[],search:"",dialog:!1,dialogdetail:!1,snackbar:!1,timeout:2e3,textMsg:"",valid:!1,validProvider:!1,payments:[],selectpame:"",folioRules:[function(e){return!!e||"Requerido."},function(e){return e&&e.length>=10||"Min 10 caracter"}],nameRules:[function(e){return!!e||"Requerido."},function(e){return e&&e.length>=3||"Min 3 caracteres"}],phoneRules:[function(e){return!!e||"Requerido."},function(e){return e&&10==e.length||"Requiere 10 caracteres"}],numberRules:[function(e){return!!e||"Requerido."},function(e){return e>0||"El número debe ser mayor o igual a cero"}]}},created:function(){this.getClientesPago(),this.getPayment()},methods:{formatMoney:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:2,a=arguments.length>2&&void 0!==arguments[2]?arguments[2]:".",o=arguments.length>3&&void 0!==arguments[3]?arguments[3]:",";try{t=Math.abs(t),t=isNaN(t)?2:t;var n=e<0?"-":"",r=parseInt(e=Math.abs(Number(e)||0).toFixed(t)).toString(),i=r.length>3?r.length%3:0;return n+(i?r.substr(0,i)+o:"")+r.substr(i).replace(/(\d{3})(?=\d)/g,"$1"+o)+(t?a+Math.abs(e-r).toFixed(t).slice(2):"")}catch(e){console.log(e)}},getClientesPago:function(){var e=this;axios.get("/provider/debts").then((function(t){console.log(t.data),e.clientsdebts=t.data.data})).catch((function(e){console.log(e)}))},cancelar:function(){this.dialog=!1,this.editado=Object.assign({},this.defaultItem),this.editedIndex=-1},abonar:function(e){this.dialog=!0,this.editado.prde_fk=e.prde_pk,this.editado.prov_fk=e.prov_pk,this.editado.pash_fk=0,this.editado.prpa_amount=0,this.editado.prpu_identifier=e.prpu_identifier,this.editado.prde_amount=e.prde_amount,this.editado.prde_amount_paid=e.prde_amount_paid,this.editado.prde_amount_outstanding=e.prde_amount_outstanding},getPayment:function(){var e=this;axios.get("/paymentshapesget").then((function(t){e.payments=t.data.data})).catch((function(e){console.log(e)}))},guardar:function(){var e=this;this.editado.pash_fk=this.selectpame.pash_pk,""!=this.selectpame&&null!=this.selectpame?axios.post("/provider/payments",this.editado).then((function(t){console.log(t),200==t.data.status.code?(e.textMsg="¡Actualizado correctamente!",e.normal("Notificación",t.data.status.message,"success"),e.getClientesPago(),e.cancelar()):e.normal("Notificación",t.data.status.message,"error")})).catch((function(t){e.errors.push(t)})):this.normal("Notificación","Debe seleccionar una Forma de Pago","error")},detalle:function(e){var t=this;console.log(e),axios.get("/provider/payments/"+e.prde_pk).then((function(e){console.log(e),t.detallepagos=e.data.data,t.dialogdetail=!0})).catch((function(e){console.log(e)}))},cancelardetalle:function(){this.dialogdetail=!1},normal:function(e,t,a){this.notice=new n.a({title:e,description:t,className:"open-normal",closable:!0,duration:3,type:a})}},computed:{formTitle:function(){return-1===this.editedIndex?"Nuevo Registro":"Editar Registro"}}},i=a(0),s=Object(i.a)(r,(function(){var e=this,t=e.$createElement,a=e._self._c||t;return a("v-app",[a("v-container",[a("v-dialog",{attrs:{"max-width":"700px",persistent:""},model:{value:e.dialogdetail,callback:function(t){e.dialogdetail=t},expression:"dialogdetail"}},[a("v-card",[a("v-card-title",{staticClass:"cyan white--text"},[a("span",{staticClass:"headline"},[e._v("Detalle de pagos")])]),e._v(" "),a("v-card-text",[a("v-data-table",{staticClass:"elevation-3",attrs:{headers:e.headersdetail,items:e.detallepagos,"sort-by":"id"},scopedSlots:e._u([{key:"item.prpa_amount",fn:function(t){var o=t.item;return[a("v-label",[e._v("$"+e._s(e.formatMoney(o.prpa_amount)))])]}}])})],1),e._v(" "),a("v-card-actions",[a("v-spacer"),e._v(" "),a("v-btn",{staticClass:"ma-2 white--text",attrs:{color:"blue-grey"},on:{click:e.cancelardetalle}},[e._v("Cancelar")])],1)],1)],1),e._v(" "),a("v-dialog",{attrs:{"max-width":"500px",persistent:""},model:{value:e.dialog,callback:function(t){e.dialog=t},expression:"dialog"}},[a("v-card",[a("v-card-title",{staticClass:"cyan white--text"},[a("span",{staticClass:"headline"},[e._v("Agregar pago")])]),e._v(" "),a("v-form",{model:{value:e.valid,callback:function(t){e.valid=t},expression:"valid"}},[a("v-card-text",[a("v-row",[a("v-col",{attrs:{cols:"6"}},[a("h4",[e._v(" Compra:")]),e._v(" "+e._s(e.editado.prpu_identifier)+"\r\n                            ")]),e._v(" "),a("v-col",{attrs:{cols:"6"}},[a("h4",[e._v(" Monto total:")]),e._v(" $"+e._s(e.formatMoney(e.editado.prde_amount))+"\r\n                            ")])],1),e._v(" "),a("v-row",[a("v-col",{attrs:{cols:"6"}},[a("h4",[e._v(" Monto pagado:")]),e._v(" $"+e._s(e.formatMoney(e.editado.prde_amount_paid))+"\r\n                            ")]),e._v(" "),a("v-col",{attrs:{cols:"6"}},[a("h4",[e._v(" Monto pendiente:")]),e._v(" $"+e._s(e.formatMoney(e.editado.prde_amount_outstanding))+"\r\n                            ")])],1),e._v(" "),a("v-row",[a("v-card-text",{staticClass:"category d-inline-flex font-weight-light"},[a("v-text-field",{attrs:{label:"Monto abonado",prefix:"$",type:"number",rules:e.numberRules,required:""},model:{value:e.editado.prpa_amount,callback:function(t){e.$set(e.editado,"prpa_amount",t)},expression:"editado.prpa_amount"}})],1)],1),e._v(" "),a("v-row",[a("v-card-text",{staticClass:"category d-inline-flex font-weight-light"},[a("v-combobox",{attrs:{required:"",items:e.payments,label:"Forma de pago","item-text":"pash_name","item-value":"pash_pk",filled:"",chips:"",placeholder:"Seleccionar una opción"},model:{value:e.selectpame,callback:function(t){e.selectpame=t},expression:"selectpame"}})],1)],1),e._v(" "),a("v-row",[a("v-card-text",{staticClass:"category d-inline-flex font-weight-light"},[a("v-text-field",{attrs:{label:"Referencia",type:"text"},model:{value:e.editado.prpa_reference,callback:function(t){e.$set(e.editado,"prpa_reference",t)},expression:"editado.prpa_reference"}})],1)],1)],1)],1),e._v(" "),a("v-card-actions",[a("v-spacer"),e._v(" "),a("v-btn",{staticClass:"ma-2 white--text",attrs:{color:"blue-grey"},on:{click:e.cancelar}},[e._v("Cancelar")]),e._v(" "),a("v-btn",{staticClass:"ma-2 white--text",attrs:{disabled:!e.valid,color:"teal accent-4"},on:{click:e.guardar}},[e._v("Guardar")])],1)],1)],1),e._v(" "),a("v-row",[a("v-col",[a("v-card",[a("v-data-table",{staticClass:"elevation-3",attrs:{headers:e.headers,items:e.clientsdebts,search:e.search,"sort-by":"id"},scopedSlots:e._u([{key:"top",fn:function(){return[a("v-system-bar",{attrs:{color:"indigo darken-2",dark:""}}),e._v(" "),a("v-toolbar",{attrs:{flat:"",color:"indigo"}},[a("v-divider",{staticClass:"mx-4",attrs:{inset:"",vertical:""}}),e._v(" "),a("v-spacer")],1),e._v(" "),a("v-col",{attrs:{cols:"12",sm:"12"}},[a("v-text-field",{attrs:{"append-icon":"search",label:"Buscar","single-line":"","hide-details":""},model:{value:e.search,callback:function(t){e.search=t},expression:"search"}})],1)]},proxy:!0},{key:"item.prde_amount",fn:function(t){var o=t.item;return[a("v-label",[e._v("$"+e._s(e.formatMoney(o.prde_amount)))])]}},{key:"item.prde_amount_paid",fn:function(t){var o=t.item;return[a("v-label",[e._v("$"+e._s(e.formatMoney(o.prde_amount_paid)))])]}},{key:"item.prde_amount_outstanding",fn:function(t){var o=t.item;return[a("v-label",[e._v("$"+e._s(e.formatMoney(o.prde_amount_outstanding)))])]}},{key:"item.action",fn:function(t){var o=t.item;return[a("v-btn",{staticClass:"mr-2",attrs:{fab:"",dark:"",small:"",color:"cyan",title:"Agregar pago"},on:{click:function(t){return e.abonar(o)}}},[a("v-icon",{attrs:{dark:""}},[e._v("mdi-coin")])],1),e._v(" "),a("v-btn",{staticClass:"mr-2",attrs:{fab:"",dark:"",small:"",color:"cyan",title:"Detalle"},on:{click:function(t){return e.detalle(o)}}},[a("v-icon",{attrs:{dark:""}},[e._v("mdi-parking")])],1)]}}])})],1)],1)],1)],1)],1)}),[],!1,null,null,null);t.default=s.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[26],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! crip-vue-notice */ "./node_modules/crip-vue-notice/lib/crip-vue-notice.js");
+/* harmony import */ var crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(crip_vue_notice__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      headersdetail: [{
+        text: 'ID',
+        value: 'prpa_pk',
+        width: '10%'
+      }, {
+        text: 'Forma de Pago',
+        value: 'pash_name'
+      }, {
+        text: 'Monto pagado',
+        value: 'prpa_amount'
+      }, {
+        text: 'Referencia',
+        value: 'prpa_reference'
+      }, {
+        text: 'Fecha pago',
+        value: 'created_at'
+      }],
+      headers: [{
+        text: 'ID',
+        value: 'prde_pk',
+        width: '10%'
+      }, {
+        text: 'No. Compra',
+        value: 'prpu_identifier'
+      }, {
+        text: 'Proveedor',
+        value: 'prov_name'
+      }, {
+        text: 'Monto',
+        value: 'prde_amount'
+      }, {
+        text: 'Monto Pagado',
+        value: 'prde_amount_paid'
+      }, {
+        text: 'Referencia',
+        value: 'prpa_reference'
+      }, {
+        text: 'Fecha',
+        value: 'created_at'
+      }, {
+        text: 'Estatus',
+        value: 'prde_status_description'
+      }, {
+        text: '',
+        value: 'action',
+        width: '20%'
+      }],
+      select: 0,
+      principal: false,
+      estado: true,
+      editado: {
+        prde_fk: 0,
+        //PK Cliente Deuda
+        prpu_identifier: '',
+        prov_fk: 0,
+        //PK Cliente
+        pash_fk: 0,
+        //PK Forma de Pago
+        prpa_amount: 0,
+        //Monto
+        prde_amount: 0,
+        prde_amount_paid: 0,
+        prde_amount_outstanding: 0,
+        prpa_reference: ''
+      },
+      defaultItem: {
+        prde_fk: 0,
+        //PK Cliente Deuda
+        prpu_identifier: '',
+        prov_fk: 0,
+        //PK Cliente
+        pash_fk: 0,
+        //PK Forma de Pago
+        prpa_amount: 0,
+        //Monto
+        prde_amount: 0,
+        prde_amount_paid: 0,
+        prde_amount_outstanding: 0,
+        prpa_reference: ''
+      },
+      editedIndex: -1,
+      sales: [],
+      detallepagos: [],
+      clientsdebts: [],
+      entities: [],
+      search: "",
+      dialog: false,
+      dialogdetail: false,
+      snackbar: false,
+      timeout: 2000,
+      textMsg: "",
+      valid: false,
+      validProvider: false,
+      payments: [],
+      selectpame: '',
+      folioRules: [function (value) {
+        return !!value || "Requerido.";
+      }, function (value) {
+        return value && value.length >= 10 || "Min 10 caracter";
+      }],
+      nameRules: [function (value) {
+        return !!value || 'Requerido.';
+      }, function (value) {
+        return value && value.length >= 3 || 'Min 3 caracteres';
+      }],
+      phoneRules: [function (value) {
+        return !!value || 'Requerido.';
+      }, function (value) {
+        return value && value.length == 10 || 'Requiere 10 caracteres';
+      }],
+      numberRules: [function (value) {
+        return !!value || 'Requerido.';
+      }, function (value) {
+        return value > 0 || 'El número debe ser mayor o igual a cero';
+      }]
+    };
+  },
+  created: function created() {
+    this.getClientesPago();
+    this.getPayment();
+  },
+  methods: {
+    formatMoney: function formatMoney(amount) {
+      var decimalCount = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+      var decimal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ".";
+      var thousands = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : ",";
+
+      try {
+        decimalCount = Math.abs(decimalCount);
+        decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+        var negativeSign = amount < 0 ? "-" : "";
+        var i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+        var j = i.length > 3 ? i.length % 3 : 0;
+        return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    getClientesPago: function getClientesPago() {
+      var _this = this;
+
+      axios.get("/provider/debts").then(function (response) {
+        console.log(response.data);
+        _this.clientsdebts = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    cancelar: function cancelar() {
+      this.dialog = false;
+      this.editado = Object.assign({}, this.defaultItem);
+      this.editedIndex = -1;
+    },
+    abonar: function abonar(item) {
+      this.dialog = true;
+      this.editado.prde_fk = item.prde_pk;
+      this.editado.prov_fk = item.prov_pk;
+      this.editado.pash_fk = 0;
+      this.editado.prpa_amount = 0;
+      this.editado.prpu_identifier = item.prpu_identifier;
+      this.editado.prde_amount = item.prde_amount;
+      this.editado.prde_amount_paid = item.prde_amount_paid;
+      this.editado.prde_amount_outstanding = item.prde_amount_outstanding;
+    },
+    getPayment: function getPayment() {
+      var _this2 = this;
+
+      axios.get("/paymentshapesget").then(function (response) {
+        _this2.payments = response.data.data;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    guardar: function guardar() {
+      var _this3 = this;
+
+      this.editado.pash_fk = this.selectpame.pash_pk;
+
+      if (this.selectpame == '' || this.selectpame == null) {
+        this.normal('Notificación', "Debe seleccionar una Forma de Pago", "error");
+        return;
+      }
+
+      axios.post('/provider/payments', this.editado).then(function (response) {
+        console.log(response);
+
+        if (response.data.status.code == 200) {
+          _this3.textMsg = "¡Actualizado correctamente!";
+
+          _this3.normal('Notificación', response.data.status.message, "success");
+
+          _this3.getClientesPago();
+
+          _this3.cancelar();
+        } else {
+          _this3.normal('Notificación', response.data.status.message, "error");
+        }
+      })["catch"](function (e) {
+        _this3.errors.push(e);
+      });
+    },
+    detalle: function detalle(item) {
+      var _this4 = this;
+
+      console.log(item);
+      axios.get("/provider/payments/" + item.prde_pk).then(function (response) {
+        console.log(response);
+        _this4.detallepagos = response.data.data;
+        _this4.dialogdetail = true;
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    },
+    cancelardetalle: function cancelardetalle() {
+      this.dialogdetail = false;
+    },
+    normal: function normal(Title, Description, Type) {
+      this.notice = new crip_vue_notice__WEBPACK_IMPORTED_MODULE_0___default.a({
+        title: Title,
+        description: Description,
+        className: "open-normal",
+        closable: true,
+        duration: 3,
+        type: Type
+      });
+    }
+  },
+  computed: {
+    formTitle: function formTitle() {
+      return this.editedIndex === -1 ? 'Nuevo Registro' : 'Editar Registro';
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-app",
+    [
+      _c(
+        "v-container",
+        [
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "700px", persistent: "" },
+              model: {
+                value: _vm.dialogdetail,
+                callback: function($$v) {
+                  _vm.dialogdetail = $$v
+                },
+                expression: "dialogdetail"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "cyan white--text" }, [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v("Detalle de pagos")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c("v-data-table", {
+                        staticClass: "elevation-3",
+                        attrs: {
+                          headers: _vm.headersdetail,
+                          items: _vm.detallepagos,
+                          "sort-by": "id"
+                        },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "item.prpa_amount",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c("v-label", [
+                                  _vm._v(
+                                    "$" +
+                                      _vm._s(_vm.formatMoney(item.prpa_amount))
+                                  )
+                                ])
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "ma-2 white--text",
+                          attrs: { color: "blue-grey" },
+                          on: { click: _vm.cancelardetalle }
+                        },
+                        [_vm._v("Cancelar")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "500px", persistent: "" },
+              model: {
+                value: _vm.dialog,
+                callback: function($$v) {
+                  _vm.dialog = $$v
+                },
+                expression: "dialog"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "cyan white--text" }, [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v("Agregar pago")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-form",
+                    {
+                      model: {
+                        value: _vm.valid,
+                        callback: function($$v) {
+                          _vm.valid = $$v
+                        },
+                        expression: "valid"
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c(
+                            "v-row",
+                            [
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" Compra:")]),
+                                _vm._v(
+                                  " " +
+                                    _vm._s(_vm.editado.prpu_identifier) +
+                                    "\r\n                            "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" Monto total:")]),
+                                _vm._v(
+                                  " $" +
+                                    _vm._s(
+                                      _vm.formatMoney(_vm.editado.prde_amount)
+                                    ) +
+                                    "\r\n                            "
+                                )
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" Monto pagado:")]),
+                                _vm._v(
+                                  " $" +
+                                    _vm._s(
+                                      _vm.formatMoney(
+                                        _vm.editado.prde_amount_paid
+                                      )
+                                    ) +
+                                    "\r\n                            "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("v-col", { attrs: { cols: "6" } }, [
+                                _c("h4", [_vm._v(" Monto pendiente:")]),
+                                _vm._v(
+                                  " $" +
+                                    _vm._s(
+                                      _vm.formatMoney(
+                                        _vm.editado.prde_amount_outstanding
+                                      )
+                                    ) +
+                                    "\r\n                            "
+                                )
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-card-text",
+                                {
+                                  staticClass:
+                                    "category d-inline-flex font-weight-light"
+                                },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Monto abonado",
+                                      prefix: "$",
+                                      type: "number",
+                                      rules: _vm.numberRules,
+                                      required: ""
+                                    },
+                                    model: {
+                                      value: _vm.editado.prpa_amount,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editado,
+                                          "prpa_amount",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "editado.prpa_amount"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-card-text",
+                                {
+                                  staticClass:
+                                    "category d-inline-flex font-weight-light"
+                                },
+                                [
+                                  _c("v-combobox", {
+                                    attrs: {
+                                      required: "",
+                                      items: _vm.payments,
+                                      label: "Forma de pago",
+                                      "item-text": "pash_name",
+                                      "item-value": "pash_pk",
+                                      filled: "",
+                                      chips: "",
+                                      placeholder: "Seleccionar una opción"
+                                    },
+                                    model: {
+                                      value: _vm.selectpame,
+                                      callback: function($$v) {
+                                        _vm.selectpame = $$v
+                                      },
+                                      expression: "selectpame"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-card-text",
+                                {
+                                  staticClass:
+                                    "category d-inline-flex font-weight-light"
+                                },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: {
+                                      label: "Referencia",
+                                      type: "text"
+                                    },
+                                    model: {
+                                      value: _vm.editado.prpa_reference,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editado,
+                                          "prpa_reference",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "editado.prpa_reference"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "ma-2 white--text",
+                          attrs: { color: "blue-grey" },
+                          on: { click: _vm.cancelar }
+                        },
+                        [_vm._v("Cancelar")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "ma-2 white--text",
+                          attrs: {
+                            disabled: !_vm.valid,
+                            color: "teal accent-4"
+                          },
+                          on: { click: _vm.guardar }
+                        },
+                        [_vm._v("Guardar")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-row",
+            [
+              _c(
+                "v-col",
+                [
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-data-table", {
+                        staticClass: "elevation-3",
+                        attrs: {
+                          headers: _vm.headers,
+                          items: _vm.clientsdebts,
+                          search: _vm.search,
+                          "sort-by": "id"
+                        },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "top",
+                            fn: function() {
+                              return [
+                                _c("v-system-bar", {
+                                  attrs: { color: "indigo darken-2", dark: "" }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "v-toolbar",
+                                  { attrs: { flat: "", color: "indigo" } },
+                                  [
+                                    _c("v-divider", {
+                                      staticClass: "mx-4",
+                                      attrs: { inset: "", vertical: "" }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("v-spacer")
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-col",
+                                  { attrs: { cols: "12", sm: "12" } },
+                                  [
+                                    _c("v-text-field", {
+                                      attrs: {
+                                        "append-icon": "search",
+                                        label: "Buscar",
+                                        "single-line": "",
+                                        "hide-details": ""
+                                      },
+                                      model: {
+                                        value: _vm.search,
+                                        callback: function($$v) {
+                                          _vm.search = $$v
+                                        },
+                                        expression: "search"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ]
+                            },
+                            proxy: true
+                          },
+                          {
+                            key: "item.prde_amount",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c("v-label", [
+                                  _vm._v(
+                                    "$" +
+                                      _vm._s(_vm.formatMoney(item.prde_amount))
+                                  )
+                                ])
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.prde_amount_paid",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c("v-label", [
+                                  _vm._v(
+                                    "$" +
+                                      _vm._s(
+                                        _vm.formatMoney(item.prde_amount_paid)
+                                      )
+                                  )
+                                ])
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.prde_amount_outstanding",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c("v-label", [
+                                  _vm._v(
+                                    "$" +
+                                      _vm._s(
+                                        _vm.formatMoney(
+                                          item.prde_amount_outstanding
+                                        )
+                                      )
+                                  )
+                                ])
+                              ]
+                            }
+                          },
+                          {
+                            key: "item.action",
+                            fn: function(ref) {
+                              var item = ref.item
+                              return [
+                                _c(
+                                  "v-btn",
+                                  {
+                                    staticClass: "mr-2",
+                                    attrs: {
+                                      fab: "",
+                                      dark: "",
+                                      small: "",
+                                      color: "cyan",
+                                      title: "Agregar pago"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.abonar(item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-coin")
+                                    ])
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    staticClass: "mr-2",
+                                    attrs: {
+                                      fab: "",
+                                      dark: "",
+                                      small: "",
+                                      color: "cyan",
+                                      title: "Detalle"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.detalle(item)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("v-icon", { attrs: { dark: "" } }, [
+                                      _vm._v("mdi-parking")
+                                    ])
+                                  ],
+                                  1
+                                )
+                              ]
+                            }
+                          }
+                        ])
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/views/ProviderDebts.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/views/ProviderDebts.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ProviderDebts.vue?vue&type=template&id=c772d85a& */ "./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a&");
+/* harmony import */ var _ProviderDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ProviderDebts.vue?vue&type=script&lang=js& */ "./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ProviderDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/views/ProviderDebts.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProviderDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ProviderDebts.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ProviderDebts.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProviderDebts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a& ***!
+  \****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ProviderDebts.vue?vue&type=template&id=c772d85a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/ProviderDebts.vue?vue&type=template&id=c772d85a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ProviderDebts_vue_vue_type_template_id_c772d85a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);

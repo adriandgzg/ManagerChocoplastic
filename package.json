@@ -27,6 +27,7 @@
     "dependencies": {
         "crip-vue-notice": "^1.1.1",
         "date-fns": "^2.11.1",
+        "jsprintmanager": "^3.0.5",
         "scriptjs": "^2.5.9",
         "v-money": "^0.8.1",
         "vue-chartist": "^2.2.1",

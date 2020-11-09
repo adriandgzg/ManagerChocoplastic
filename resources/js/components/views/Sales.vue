@@ -54,12 +54,49 @@
                             <v-btn class="mr-2" fab dark small color="cyan" title="Continuar venta" v-if="item.clsa_status == 'Pendiente' && boxEnabled != true" :href="'/detaiorder/'+item.clor_pk">
                                 <v-icon dark>mdi-cash-register</v-icon>
                             </v-btn>
+
+                            <v-btn class="mr-2" fab dark small color="cyan" title="Print venta" @click="imprimirVenta(item.clsa_pk)" target="_blank">
+                                <v-icon dark>mdi-printer</v-icon>
+                            </v-btn>
                         </template>
                     </v-data-table>
                 </v-card>
             </v-col>
         </v-row>
+        <v-dialog v-model="dialogTicket" fullscreen max-width="500">
+            <v-card>
+                <v-card-title>Crédito:</v-card-title>
+                <v-card-text>
 
+                    <v-row>
+                        <v-col>
+                            <v-card>
+                                <v-simple-table>
+                                    <template v-slot:default>
+                                        <thead>
+                                            <tr>
+                                                <th class="text-left">Forma de Pago</th>
+                                                <th class="text-left">Monto</th>
+                                                <th class="text-left">Referencia</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="item in pagos" :key="item.pash_name">
+                                                <td> item.pash_name }}</td>
+                                                <td> item.cpam_amount }}</td>
+                                                <td> item.cpam_reference }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </template>
+                                </v-simple-table>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+
+                </v-card-text>
+            </v-card>
+        </v-dialog>
     </v-container>
 </v-app>
 </template>
@@ -68,6 +105,7 @@
 import {
     mapGetters
 } from "vuex";
+import CripNotice from "crip-vue-notice";
 export default {
     data() {
         return {
@@ -137,6 +175,7 @@ export default {
             dialogQuestion: false,
             dialogQuestionDelete: false,
             messageQuestion: '',
+            dialogTicket: false,
         };
     },
     created() {
@@ -181,6 +220,21 @@ export default {
                     console.log(e);
                     this.normal('Notificación', "Error al cargar los datos", "error");
                 });
+        },
+        imprimirVenta(id) {
+            //this.normal('Notificación', "Aqui va a imprmir", "error");
+            //this.dialogTicket = true;
+
+        },
+        normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })
         },
     },
     computed: {

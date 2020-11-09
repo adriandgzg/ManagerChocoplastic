@@ -220,4 +220,9 @@ export default [{
         name: 'Cajas',
         view: 'BoxCuts'
     },
+    {
+        path: '/printticket',
+        name: 'Ticket', 
+        view: 'PrintTicket'
+    },
 ]
