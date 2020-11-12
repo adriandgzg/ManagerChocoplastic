@@ -962,7 +962,7 @@ class ClientSaleController extends ApiResponseController
                 else
                 $vHeight = $vCount * 30;
                         
-                $pdf = new FpdfJs($orientation = 'P', $unit = 'mm', array(80, $vHeight));
+                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(80, $vHeight));
                 $pdf->SetMargins(2, 1, 1,1);
                 $pdf->AddPage();
                 $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
@@ -1079,7 +1079,6 @@ class ClientSaleController extends ApiResponseController
                 $pdf->Cell(80,0,utf8_decode('Favor de revisar su mercancía. No se aceptan cambios ni devoluciones.'),0,1,'C');
 
                 ob_get_clean();
-                $pdf->IncludeJS('print(true);');
                 $pdf->output('I', 'ticket', 'true');
                 //exit;
             }
