@@ -501,7 +501,7 @@ class ClientSaleController extends ApiResponseController
 
                     'CD.clde_amount',  //Monto de la deuda
                     DB::raw('(SELECT IFNULL(SUM(clpa_amount), 0) AS clde_amount_paid FROM client_payments WHERE clde_fk = CD.clde_pk) AS clde_amount_paid'), //Monto Pagado
-                    DB::raw('(SELECT CD.clde_amount - IFNULL(SUM(clpa_amount), 0) AS clde_amount_outstanding FROM client_payments WHERE clde_fk = CD.clde_pk) AS clde_amount_outstanding'), //Monto Pendiente por pagar
+                    DB::raw('(SELECT CD.clde_amount - IFNULL(SUM(clpa_amount), 0) AS clde_amount_outstanding FROM client_payments WHERE clde_fk = CD.clde_pk) AS clde_amount_outstanding') //Monto Pendiente por pagar
                
 
                     //DB::raw('(SELECT CONCAT(U.phone_number, "-", U.name) AS user FROM logs AS L INNER JOIN users AS U ON L.user_fk = U.id WHERE L.table = "client_orders" AND L.pk_register = CO.clor_pk AND L.operation = 1 LIMIT 1) AS user') //Vededor
@@ -926,7 +926,7 @@ class ClientSaleController extends ApiResponseController
                 'S.stor_pk',
                 'S.stor_name',
                 'S.stor_rfc',
-                'S.stor_addres',
+                'S.stor_addres'
             )
             ->where('CS.clsa_pk', '=', $vclsa_pk)
             ->first();
@@ -962,7 +962,7 @@ class ClientSaleController extends ApiResponseController
                 else
                 $vHeight = $vCount * 30;
                         
-                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', array(80, $vHeight));
+                $pdf = new FpdfJs($orientation = 'P', $unit = 'mm', array(80, $vHeight));
                 $pdf->SetMargins(2, 1, 1,1);
                 $pdf->AddPage();
                 $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
@@ -1079,6 +1079,8 @@ class ClientSaleController extends ApiResponseController
                 $pdf->Cell(80,0,utf8_decode('Favor de revisar su mercancía. No se aceptan cambios ni devoluciones.'),0,1,'C');
 
                 ob_get_clean();
+
+                $pdf->IncludeJS('print();');
                 $pdf->output('I', 'ticket', 'true');
                 //exit;
             }
@@ -1126,7 +1128,7 @@ class ClientSaleController extends ApiResponseController
                 'S.stor_phone',
                 'CD.clde_amount',  //Monto de la deuda
                 DB::raw('(SELECT IFNULL(SUM(clpa_amount), 0) AS clde_amount_paid FROM client_payments WHERE clde_fk = CD.clde_pk) AS clde_amount_paid'), //Monto Pagado
-                DB::raw('(SELECT CD.clde_amount - IFNULL(SUM(clpa_amount), 0) AS clde_amount_outstanding FROM client_payments WHERE clde_fk = CD.clde_pk) AS clde_amount_outstanding'), //Monto Pendiente por pagar
+                DB::raw('(SELECT CD.clde_amount - IFNULL(SUM(clpa_amount), 0) AS clde_amount_outstanding FROM client_payments WHERE clde_fk = CD.clde_pk) AS clde_amount_outstanding') //Monto Pendiente por pagar
             )
             ->where('CS.clsa_pk', '=', $vclsa_pk)
             ->where('CS.pame_fk', '=', 2)
@@ -1154,8 +1156,9 @@ class ClientSaleController extends ApiResponseController
                         ->get();
                
 
-                $pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', 'Letter');
-               //$pdf->SetMargins(10, 2, 2,0);
+                //$pdf = new \Codedge\Fpdf\Fpdf\Fpdf($orientation = 'P', $unit = 'mm', 'Letter');
+                $pdf = new FpdfJs($orientation = 'P', $unit = 'mm', 'Letter');
+                //$pdf->SetMargins(10, 2, 2,0);
                 $pdf->SetMargins(10, 20);
                 $pdf->AddPage();
                 $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20

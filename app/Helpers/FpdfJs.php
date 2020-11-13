@@ -2,7 +2,8 @@
 
 namespace App\Helpers;
 
-use Codedge\Fpdf\Facades\Fpdf;
+
+use Codedge\Fpdf\Fpdf\Fpdf;
 
 class FpdfJs extends Fpdf
 {
