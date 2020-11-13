@@ -48,7 +48,7 @@
                                 <v-icon dark>mdi-eye</v-icon>
                             </v-btn>
 
-                            <v-btn v-if="item.clsa_status != 'Pendiente'" class="mr-2" fab dark small color="orange" :href="'/client/sales/printOrder/'+item.clsa_pk" target="_blank" title="Imprimir ticket">
+                            <v-btn v-if="item.clsa_status != 'Pendiente'" class="mr-2" fab dark small color="orange" @click="printTicket('/client/sales/printOrder/'+item.clsa_pk)"  title="Imprimir ticket">
                                 <v-icon dark>mdi-printer</v-icon>
                             </v-btn>
                             <v-btn class="mr-2" fab dark small color="cyan" title="Continuar venta" v-if="item.clsa_status == 'Pendiente' && boxEnabled != true" :href="'/detaiorder/'+item.clor_pk">
@@ -182,6 +182,12 @@ export default {
                     this.normal('Notificación', "Error al cargar los datos", "error");
                 });
         },
+      printTicket(url){
+        var newWin = window.open(url, "Imprimir orden",  "height=400,width=600");
+        setTimeout(function(){newWin.print(); },500);
+        setTimeout(function (){ newWin.close(); }, 8000);
+        return true;
+      }
     },
     computed: {
         ...mapGetters('auth', ['can'])

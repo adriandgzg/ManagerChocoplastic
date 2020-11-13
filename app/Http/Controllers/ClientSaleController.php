@@ -1080,7 +1080,7 @@ class ClientSaleController extends ApiResponseController
 
                 ob_get_clean();
 
-                $pdf->IncludeJS('print();');
+                //$pdf->IncludeJS('print();');
                 $pdf->output('I', 'ticket', 'true');
                 //exit;
             }
