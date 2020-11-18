@@ -157,45 +157,66 @@ class ClientOrderController extends ApiResponseController
             //Guardar el detallado del pedido (Productos)
             foreach ($vCODetail as $detail => $cod)
             {
-                $vprod_pk = $cod["PK_Product"];
-                $vProduct = Product::where('prod_pk','=',$vprod_pk)->first();
-
+                $vprod_pk = $cod["PK_Product"]; //PK del Producto
                 $vprod_saleprice = 0;
 
-                if($cod["Quantity"] >= $vProduct->prod_minimumpurchase)
+                //Consultar Producto
+                $vProduct = Product::where('prod_pk','=',$vprod_pk)->first();
+                if($vProduct)
                 {
-                    if($vProduct->prod_listprice == 0)
+                    //Validar Si es o No Producto Padre (Productos derivado NO aplica Precio Mayoreo)
+                    if($vProduct->prod_main_pk == NULL)
                     {
-                        $vprod_saleprice = $vProduct->prod_saleprice;
+                        //Producto Padre
+                        if($cod["Quantity"] >= $vProduct->prod_minimumpurchase)
+                        {
+                            if($vProduct->prod_listprice == 0)
+                            {
+                                $vprod_saleprice = $vProduct->prod_saleprice;
+                            }
+                            else
+                            {
+                                $vprod_saleprice = $vProduct->prod_listprice;
+                            }
+                        }
+                        else
+                        {
+                            $vprod_saleprice = $vProduct->prod_saleprice;
+                        }
                     }
                     else
                     {
-                        $vprod_saleprice = $vProduct->prod_listprice;
+                        //Producto Derivado
+                        $vprod_saleprice = $vProduct->prod_saleprice;
                     }
+
+
+                    //Inserción de la tabla principal (Pedido del cliente)
+                    $vCORDI = new ClientOrderDetail();
+                    $vCORDI->clor_fk = $vclor_pk;
+                    $vCORDI->prod_fk = $vprod_pk;
+                    $vCORDI->meas_fk = $vProduct->meas_fk_output;
+                    $vCORDI->clod_quantity = $cod["Quantity"];
+                    $vCORDI->clod_price = $vprod_saleprice;
+                    $vCORDI->clod_discountrate = 0;
+                    $vCORDI->clod_ieps = 0;
+                    $vCORDI->clod_iva = 0;
+                    $vCORDI->clod_status = 1;
+                    $vCORDI->save();
+                    
+                    //Asignación de PK Pedido Detalle Cliente
+                    $vclod_pk = $vCORDI->clod_pk;
+
+                    //////////////////  Inserción de Log  //////////////////
+                    $this->getstorelog('client_order_details', $vclod_pk, 1);
+
+
                 }
                 else
                 {
-                    $vprod_saleprice = $vProduct->prod_saleprice;
+                    return $this->dbResponse(null, 500, null, 'Producto NO Encontrado');
                 }
-
-                //Inserción de la tabla principal (Pedido del cliente)
-                $vCORDI = new ClientOrderDetail();
-                $vCORDI->clor_fk = $vclor_pk;
-                $vCORDI->prod_fk = $vprod_pk;
-                $vCORDI->meas_fk = $vProduct->meas_fk_output;
-                $vCORDI->clod_quantity = $cod["Quantity"];
-                $vCORDI->clod_price = $vprod_saleprice;
-                $vCORDI->clod_discountrate = 0;
-                $vCORDI->clod_ieps = 0;
-                $vCORDI->clod_iva = 0;
-                $vCORDI->clod_status = 1;
-                $vCORDI->save();
                 
-                //Asignación de PK Pedido Detalle Cliente
-                $vclod_pk = $vCORDI->clod_pk;
-
-                //////////////////  Inserción de Log  //////////////////
-                $this->getstorelog('client_order_details', $vclod_pk, 1);
             }
        
             return $this->dbResponse("Ped_" . $vsyst_clie_order, 200, null, 'Pedido Guardado Correctamente');

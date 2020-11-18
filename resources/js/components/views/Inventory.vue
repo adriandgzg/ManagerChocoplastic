@@ -133,7 +133,7 @@ export default {
                     setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
                         this.sales = response.data.data;
-                        console.log(this.sales)
+                        //console.log(this.sales)
                     } else {
                         this.normal('Notificación', response.data.status.message, "error");
                     }
