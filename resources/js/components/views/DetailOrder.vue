@@ -560,7 +560,7 @@ export default {
 
                             var newWin = window.open(route.href, "",  "height=600,width=400");
                             setTimeout(function(){newWin.print(); },500);
-                            setTimeout(function (){ newWin.close(); }, 15000);
+                            setTimeout(function (){ newWin.close(); }, 10000);
                         }
                         if (this.editadoSale.pame_fk == 2) {
                             //A Credito Reporte
@@ -569,7 +569,7 @@ export default {
                             });
                           var newWin = window.open(route.href, "",  "height=600,width=400");
                           setTimeout(function(){newWin.print(); },500);
-                          setTimeout(function (){ newWin.close(); }, 15000);
+                          setTimeout(function (){ newWin.close(); }, 20000);
                         }
                         this.normal('Notificación', '¡Actualizado correctamente!', "success");
                         this.$router.push('/sales');
