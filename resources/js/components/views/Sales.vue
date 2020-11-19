@@ -182,12 +182,12 @@ export default {
                     this.normal('Notificación', "Error al cargar los datos", "error");
                 });
         },
-      printTicket(url){
-        var newWin = window.open(url, "Imprimir orden",  "height=400,width=600");
-        setTimeout(function(){newWin.print(); },500);
-        setTimeout(function (){ newWin.close(); }, 8000);
-        return true;
-      }
+        printTicket(url){
+          var newWin = window.open(url, "Imprimir orden",  "height=400,width=600");
+          setTimeout(function(){newWin.print(); },500);
+          setTimeout(function (){ newWin.close(); }, 10000);
+          return true;
+        }
     },
     computed: {
         ...mapGetters('auth', ['can'])

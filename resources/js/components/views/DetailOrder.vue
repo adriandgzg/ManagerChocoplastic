@@ -557,14 +557,19 @@ export default {
                             let route = this.$router.resolve({
                                 path: "/client/sales/printOrder/" + response.data.data,
                             });
-                            window.open(route.href, "_blank");
+
+                            var newWin = window.open(route.href, "",  "height=600,width=400");
+                            setTimeout(function(){newWin.print(); },500);
+                            setTimeout(function (){ newWin.close(); }, 10000);
                         }
                         if (this.editadoSale.pame_fk == 2) {
                             //A Credito Reporte
                             let route = this.$router.resolve({
                                 path: "/client/sales/printCredit/" + response.data.data,
                             });
-                            window.open(route.href, "_blank");
+                          var newWin = window.open(route.href, "",  "height=600,width=400");
+                          setTimeout(function(){newWin.print(); },500);
+                          setTimeout(function (){ newWin.close(); }, 10000);
                         }
                         this.normal('Notificación', '¡Actualizado correctamente!', "success");
                         this.$router.push('/sales');
