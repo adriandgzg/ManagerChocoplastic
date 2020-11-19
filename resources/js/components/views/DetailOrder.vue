@@ -463,7 +463,8 @@ export default {
                         this.enabledStore = false
                 })
                 .catch(e => {
-                    this.errors.push(e)
+                    console.log(response.data.message)
+
                 })
         },
         formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {

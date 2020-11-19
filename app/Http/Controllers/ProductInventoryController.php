@@ -53,25 +53,128 @@ class ProductInventoryController extends ApiResponseController
 
                     'S.stor_pk',
                     'S.stor_name',
+              
                     DB::raw("
                         (
-                        SELECT IFNULL(SUM(B.clod_quantity), 0) 
-                        FROM client_orders AS A INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
-                        WHERE A.clor_status = 1 AND B.clod_status = 1 AND B.prod_fk = P.prod_pk AND A.stor_fk = S.stor_pk
+                            IFNULL((
+                                SELECT 
+                                    IFNULL(SUM(B.clod_quantity), 0) AS CantProductoPadre
+                                FROM 
+                                    client_orders AS A 
+                                    INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                                WHERE 
+                                    A.clor_status = 1 
+                                    AND B.clod_status = 1 
+                                    AND B.prod_fk = P.prod_pk 
+                                    AND A.stor_fk = S.stor_pk
+                            ), 0)
+                                +
+                            IFNULL((
+                                SELECT 
+                                SUM((IFNULL(B.clod_quantity, 0) * IFNULL(C.prod_fact_convert, 0))) AS CantProductoDerivado
+                                FROM 
+                                    client_orders AS A 
+                                    INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                                    INNER JOIN products AS C ON C.prod_pk = B.prod_fk
+                                WHERE 
+                                    A.clor_status = 1 
+                                    AND B.clod_status = 1 
+                                    AND A.stor_fk = S.stor_pk
+                                    AND C.prod_main_pk = P.prod_pk
+                            ), 0)
+                                +
+                            IFNULL((
+                                SELECT 
+                                    IFNULL(SUM(B.clsd_quantity), 0) AS CantProductoPadre
+                                FROM 
+                                    client_sales AS A 
+                                    INNER JOIN client_sale_details AS B ON A.clsa_pk = B.clsa_fk 
+                                WHERE 
+                                    A.clsa_status = 0 
+                                    AND B.clsd_status = 1 
+                                    AND B.prod_fk = P.prod_pk 
+                                    AND A.stor_fk = S.stor_pk
+                            ), 0)
+                                +
+                            IFNULL((
+                                SELECT  
+                                    SUM((IFNULL(B.clsd_quantity, 0) * IFNULL(C.prod_fact_convert, 0))) AS CantProductoDerivado
+                                FROM 
+                                    client_sales AS A 
+                                    INNER JOIN client_sale_details AS B ON A.clsa_pk = B.clsa_fk 
+                                    INNER JOIN products AS C ON C.prod_pk = B.prod_fk
+                                WHERE 
+                                    A.clsa_status = 0 
+                                    AND B.clsd_status = 1  
+                                    AND A.stor_fk = S.stor_pk
+                                    AND C.prod_main_pk = P.prod_pk
+                            ), 0)
                         ) AS stock_order
                     "),
                     DB::raw("
                         (
-                        SELECT PI.prin_stock - IFNULL(SUM(B.clod_quantity), 0) 
-                        FROM client_orders AS A INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
-                        WHERE A.clor_status = 1 AND B.clod_status = 1 AND B.prod_fk = P.prod_pk AND A.stor_fk = S.stor_pk
+                            PI.prin_stock
+                                -
+                            (
+                                IFNULL((
+                                    SELECT 
+                                        IFNULL(SUM(B.clod_quantity), 0) AS CantProductoPadre
+                                    FROM 
+                                        client_orders AS A 
+                                        INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                                    WHERE 
+                                        A.clor_status = 1 
+                                        AND B.clod_status = 1 
+                                        AND B.prod_fk = P.prod_pk 
+                                        AND A.stor_fk = S.stor_pk
+                                ), 0)
+                                    +
+                                IFNULL((
+                                    SELECT 
+                                        SUM((IFNULL(B.clod_quantity, 0) * IFNULL(C.prod_fact_convert, 0))) AS CantProductoDerivado
+                                    FROM 
+                                        client_orders AS A 
+                                        INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                                        INNER JOIN products AS C ON C.prod_pk = B.prod_fk
+                                    WHERE 
+                                        A.clor_status = 1 
+                                        AND B.clod_status = 1 
+                                        AND A.stor_fk = S.stor_pk
+                                        AND C.prod_main_pk = P.prod_pk
+                                ), 0)
+                                    +
+                                IFNULL((
+                                    SELECT 
+                                        IFNULL(SUM(B.clsd_quantity), 0) AS CantProductoPadre
+                                    FROM 
+                                        client_sales AS A 
+                                        INNER JOIN client_sale_details AS B ON A.clsa_pk = B.clsa_fk 
+                                    WHERE 
+                                        A.clsa_status = 0 
+                                        AND B.clsd_status = 1 
+                                        AND B.prod_fk = P.prod_pk 
+                                        AND A.stor_fk = S.stor_pk
+                                ), 0)
+                                    +
+                                IFNULL((
+                                    SELECT 
+                                        SUM((IFNULL(B.clsd_quantity, 0) * IFNULL(C.prod_fact_convert, 0))) AS CantProductoDerivado
+                                    FROM 
+                                        client_sales AS A 
+                                        INNER JOIN client_sale_details AS B ON A.clsa_pk = B.clsa_fk 
+                                        INNER JOIN products AS C ON C.prod_pk = B.prod_fk
+                                    WHERE 
+                                        A.clsa_status = 0 
+                                        AND B.clsd_status = 1  
+                                        AND A.stor_fk = S.stor_pk
+                                        AND C.prod_main_pk = P.prod_pk
+                                ), 0)
+                            )
                         ) AS stock_app
                     ")
                 )
                 ->where('PI.prin_status', '=', 1) 
                 ->whereNull('P.prod_main_pk')
-
-                //->where('S.stor_pk', '=', $vStore)
                 ->orderByDesc('S.stor_pk')
                 ->get();
             }
@@ -104,16 +207,121 @@ class ProductInventoryController extends ApiResponseController
                     'S.stor_name',
                     DB::raw("
                         (
-                        SELECT IFNULL(SUM(B.clod_quantity), 0) 
-                        FROM client_orders AS A INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
-                        WHERE A.clor_status = 1 AND B.clod_status = 1 AND B.prod_fk = P.prod_pk AND A.stor_fk = S.stor_pk
+                            IFNULL((
+                                SELECT 
+                                    IFNULL(SUM(B.clod_quantity), 0) AS CantProductoPadre
+                                FROM 
+                                    client_orders AS A 
+                                    INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                                WHERE 
+                                    A.clor_status = 1 
+                                    AND B.clod_status = 1 
+                                    AND B.prod_fk = P.prod_pk 
+                                    AND A.stor_fk = S.stor_pk
+                            ), 0)
+                                +
+                            IFNULL((
+                                SELECT 
+                                    SUM((IFNULL(B.clod_quantity, 0) * IFNULL(C.prod_fact_convert, 0))) AS CantProductoDerivado
+                                FROM 
+                                    client_orders AS A 
+                                    INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                                    INNER JOIN products AS C ON C.prod_pk = B.prod_fk
+                                WHERE 
+                                    A.clor_status = 1 
+                                    AND B.clod_status = 1 
+                                    AND A.stor_fk = S.stor_pk
+                                    AND C.prod_main_pk = P.prod_pk
+                      
+                            ), 0)
+                                +
+                            IFNULL((
+                                SELECT 
+                                    IFNULL(SUM(B.clsd_quantity), 0) AS CantProductoPadre
+                                FROM 
+                                    client_sales AS A 
+                                    INNER JOIN client_sale_details AS B ON A.clsa_pk = B.clsa_fk 
+                                WHERE 
+                                    A.clsa_status = 0 
+                                    AND B.clsd_status = 1 
+                                    AND B.prod_fk = P.prod_pk 
+                                    AND A.stor_fk = S.stor_pk
+                            ), 0)
+                                +
+                            IFNULL((
+                                SELECT 
+                                    SUM((IFNULL(B.clsd_quantity, 0) * IFNULL(C.prod_fact_convert, 0))) AS CantProductoDerivado
+                                FROM 
+                                    client_sales AS A 
+                                    INNER JOIN client_sale_details AS B ON A.clsa_pk = B.clsa_fk 
+                                    INNER JOIN products AS C ON C.prod_pk = B.prod_fk
+                                WHERE 
+                                    A.clsa_status = 0 
+                                    AND B.clsd_status = 1  
+                                    AND A.stor_fk = S.stor_pk
+                                    AND C.prod_main_pk = P.prod_pk
+                            ), 0)
                         ) AS stock_order
                     "),
                     DB::raw("
                         (
-                        SELECT PI.prin_stock - IFNULL(SUM(B.clod_quantity), 0) 
-                        FROM client_orders AS A INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
-                        WHERE A.clor_status = 1 AND B.clod_status = 1 AND B.prod_fk = P.prod_pk AND A.stor_fk = S.stor_pk
+                            PI.prin_stock
+                                -
+                            (
+                                IFNULL((
+                                    SELECT 
+                                        IFNULL(SUM(B.clod_quantity), 0) AS CantProductoPadre
+                                    FROM 
+                                        client_orders AS A 
+                                        INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                                    WHERE 
+                                        A.clor_status = 1 
+                                        AND B.clod_status = 1 
+                                        AND B.prod_fk = P.prod_pk 
+                                        AND A.stor_fk = S.stor_pk
+                                ), 0)
+                                    +
+                                IFNULL((
+                                    SELECT 
+                                        SUM((IFNULL(B.clod_quantity, 0) * IFNULL(C.prod_fact_convert, 0))) AS CantProductoDerivado
+                                    FROM 
+                                        client_orders AS A 
+                                        INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                                        INNER JOIN products AS C ON C.prod_pk = B.prod_fk
+                                    WHERE 
+                                        A.clor_status = 1 
+                                        AND B.clod_status = 1 
+                                        AND A.stor_fk = S.stor_pk
+                                        AND C.prod_main_pk = P.prod_pk
+                                ), 0)
+                                    +
+                                IFNULL((
+                                    SELECT 
+                                        IFNULL(SUM(B.clsd_quantity), 0) AS CantProductoPadre
+                                    FROM 
+                                        client_sales AS A 
+                                        INNER JOIN client_sale_details AS B ON A.clsa_pk = B.clsa_fk 
+                                    WHERE 
+                                        A.clsa_status = 0 
+                                        AND B.clsd_status = 1 
+                                        AND B.prod_fk = P.prod_pk 
+                                        AND A.stor_fk = S.stor_pk
+                                ), 0)
+                                    +
+                                IFNULL((
+                                    SELECT 
+                                        SUM((IFNULL(B.clsd_quantity, 0) * IFNULL(C.prod_fact_convert, 0))) AS CantProductoDerivado
+                                    FROM 
+                                        client_sales AS A 
+                                        INNER JOIN client_sale_details AS B ON A.clsa_pk = B.clsa_fk 
+                                        INNER JOIN products AS C ON C.prod_pk = B.prod_fk
+                                    WHERE 
+                                        A.clsa_status = 0 
+                                        AND B.clsd_status = 1  
+                                        AND A.stor_fk = S.stor_pk
+                                        AND C.prod_main_pk = P.prod_pk
+                                ), 0)
+                            )
                         ) AS stock_app
                     ")
                 )
@@ -126,13 +334,24 @@ class ProductInventoryController extends ApiResponseController
             }
 
             
-            
+            /*
+            SELECT 
+                                 - IFNULL(SUM(B.clod_quantity), 0) 
+                            FROM 
+                                client_orders AS A 
+                                INNER JOIN client_order_details AS B ON A.clor_pk = B.clor_fk 
+                            WHERE 
+                                A.clor_status = 1 
+                                AND B.clod_status = 1 
+                                AND B.prod_fk = P.prod_pk 
+                                AND A.stor_fk = S.stor_pk 
+            */
             return $this->dbResponse($vPI, 200, null, 'Lista de Inventario');
           
         }
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
+            return $this->dbResponse(null, 500, $vTh->getMessage(), 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 

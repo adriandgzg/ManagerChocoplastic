@@ -133,13 +133,12 @@ export default {
                     setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
                         this.sales = response.data.data;
-                        //console.log(this.sales)
                     } else {
                         this.normal('Notificación', response.data.status.message, "error");
                     }
                 })
                 .catch(e => {
-                    console.log(e);
+                        console.log('Detalle: ' + response.data.status.technicaldetail);
                     this.normal('Notificación', "Error al cargar los datos", "error");
                 });
         },
