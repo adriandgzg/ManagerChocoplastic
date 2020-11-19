@@ -188,6 +188,9 @@ export default {
                 }, {
                     text: 'No. Empleado',
                     value: 'phone_number'
+                },{
+                    text: 'Sucursal',
+                    value: 'stor_name'
                 },
                 {
                     text: '',
@@ -264,7 +267,7 @@ export default {
     methods: {
         getUser() {
             this.loading = true
-            axios.get('/listUsers')
+            axios.get('/listUsers') 
                 .then(response => {
                     setTimeout(() => (this.loading = false), 500)
                     this.usuarios = response.data.data

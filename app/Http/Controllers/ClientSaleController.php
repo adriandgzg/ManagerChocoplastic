@@ -577,6 +577,7 @@ class ClientSaleController extends ApiResponseController
      * @param  \App\ClientSale  $clientSale
      * @return \Illuminate\Http\Response
      */
+    
     public function update(Request $r)
     {
         $vInput = $r->all();
@@ -789,19 +790,16 @@ class ClientSaleController extends ApiResponseController
                     }
 
 
-
-                    
-                    
-
-
                     //Aplicar modificación de Inventario
                     foreach($vCSDSel as $vP)
                     {
                         //Datos del Producto a devolver
                         $vprod_fk = $vP->prod_fk; //PK Producto
+                        $vclsd_quantity = 0;
 
+                        $vProductSel = Product::where('prod_pk', '=', $vprod_fk)->first();
 
-                        if($vProduct->prod_main_pk == NULL)
+                        if($vProductSel->prod_main_pk == NULL)
                         {
                             //Buscar el Producto en el Inventario de la Sucursal 
                             $vPI = ProductInventory::join('products AS P', 'P.prod_pk', '=', 'prod_fk')
@@ -815,20 +813,13 @@ class ClientSaleController extends ApiResponseController
                         {
                             //Buscar el Producto en el Inventario de la Sucursal || Producto Principal
                             $vPI = ProductInventory::join('products AS P', 'P.prod_pk', '=', 'prod_fk')
-                            ->where('prod_fk', '=', $vProduct->prod_main_pk)
+                            ->where('prod_fk', '=', $vProductSel->prod_main_pk)
                             ->where('prin_status', '=', 1)
                             ->where('stor_fk', '=', $vClientSale->stor_fk)
                             ->first();
 
-                            $vclsd_quantity = $vP->clsd_quantity * $vProduct->prod_fact_convert;
+                            $vclsd_quantity = $vP->clsd_quantity * $vProductSel->prod_fact_convert;
                         }
-
-
-                        /*Buscar el Producto en el Inventario de la Sucursal 
-                        $vPI = ProductInventory::where('prod_fk', '=', $vprod_fk)
-                            ->where('prin_status', '=', 1)
-                            ->where('stor_fk', '=', $vClientSale->stor_fk)
-                            ->first();*/
 
                         $vprin_pk = $vPI->prin_pk; //PK Inventario
                         $vprin_stock = $vPI->prin_stock; //Stock actual
@@ -837,6 +828,10 @@ class ClientSaleController extends ApiResponseController
                         $vPIU = ProductInventory::find($vprin_pk);
                         $vPIU->prin_stock = $vprin_stock - $vclsd_quantity;
                         $vPIU->save();
+
+                        $vSQL = '';//'SQL: ' . $vPIU->toSql();
+                        $vBinding = ''; //'Binding: ' . $vPIU->getBindings();
+
 
                         //////////////////  Inserción de Log  //////////////////
                         $this->getstorelog('product_inventories', $vprin_pk, 2);
@@ -872,10 +867,11 @@ class ClientSaleController extends ApiResponseController
             return response()->json([
                 'code' => 500,
                 'success' => false,
-                'message' => $e
+                'message' => $e->getMessage()
             ], 200);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
