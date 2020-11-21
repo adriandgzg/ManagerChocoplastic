@@ -33,12 +33,27 @@
                             </v-col>
                         </template>
 
+                        <template v-slot:item="props">
+                            <tr>
+                                <td style="font-size: 18px !important; font-weight: 600 !important">{{props.item.prod_identifier}}</td>
+                                <td>{{props.item.prod_name}}</td>
+                                <td>{{props.item.meas_name}}</td>
+                                <td>{{props.item.prca_name}}</td>
+                                <td>{{props.item.stor_name}}</td>
+                                <td>{{props.item.prin_stock}}</td>
+                                <td>{{props.item.stock_order}}</td>
+                                <td>{{props.item.prin_stock - props.item.stock_order}}</td>
+                            </tr>
+                        </template>
+
+                   
                         <!--<template v-slot:item.action="{ item }">   
                         <v-btn class="mr-2" fab dark small color="indigo" v-if="item.clsa_status != 'Pendiente'" 
                                :href="'/clientsreturn/'+item.clor_pk" title="Devolución">
                             <v-icon dark>mdi-archive-arrow-up</v-icon>
                         </v-btn>  
                     </template>-->
+
                     </v-data-table>
                 </v-card>
             </v-col>
@@ -84,7 +99,7 @@ export default {
                 },
                 {
                     text: 'Stock App',
-                    value: 'stock_app'
+                    value: 'prin_stock' - 'stock_order'
                 }
 
             ],
@@ -135,6 +150,8 @@ export default {
                         this.sales = response.data.data;
                     } else {
                         this.normal('Notificación', response.data.status.message, "error");
+                        console.log('Detalle: ' + response.data.status.technicaldetail);
+
                     }
                 })
                 .catch(e => {
