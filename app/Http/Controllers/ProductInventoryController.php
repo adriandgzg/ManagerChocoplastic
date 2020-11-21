@@ -186,20 +186,7 @@ class ProductInventoryController extends ApiResponseController
                                     AND B.prod_fk = P.prod_pk 
                                     AND A.stor_fk = S.stor_pk
                             ), 0)
-                                +
-                            IFNULL((
-                                SELECT 
-                                    SUM((IFNULL(B.clsd_quantity, 0) * IFNULL(C.prod_fact_convert, 0))) AS CantProductoDerivado
-                                FROM 
-                                    client_sales AS A 
-                                    INNER JOIN client_sale_details AS B ON A.clsa_pk = B.clsa_fk 
-                                    INNER JOIN products AS C ON C.prod_pk = B.prod_fk
-                                WHERE 
-                                    A.clsa_status = 0 
-                                    AND B.clsd_status = 1  
-                                    AND A.stor_fk = S.stor_pk
-                                    AND C.prod_main_pk = P.prod_pk
-                            ), 0)
+                            
                         ) AS stock_order
                     ")
                 )
