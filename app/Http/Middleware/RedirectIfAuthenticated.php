@@ -19,10 +19,10 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard($guard)->check()) {
             if(Auth::user()->store_id == null){
-                return redirect('/sales');
+                return redirect('/dashboard');
             }
             else{
-                return redirect('/sales');
+                return redirect('/dashboard');
             }
         }
 
