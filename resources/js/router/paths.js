@@ -11,7 +11,7 @@ Vue.use(VueRouter);
 
 export default [{
         path: '/dashboard',
-        name: 'Dashboard',
+        name: 'Bienvenido',
         view: 'Dashboard'
     },
     {

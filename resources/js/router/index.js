@@ -16,36 +16,37 @@ import paths from './paths'
 //import Meta from 'vue-meta'
 
 function route(path, view, name) {
-  return {
-    name: name || view,
-    path,
-    component: (resovle) => import(
-        `./../components/views/${view}.vue`
-        ).then(resovle)
-  }
+    return {
+        name: name || view,
+        path,
+        component: (resovle) =>
+            import (
+                `./../components/views/${view}.vue`
+            ).then(resovle)
+    }
 }
 
 Vue.use(Router)
 
 // Create a new router
 const router = new Router({
-  mode: 'history',
-  routes: paths.map(path => route(path.path, path.view, path.name)).concat([
-    {path: '*', redirect: '/sales'},
-    {path: '/login'},
-    {path: '/logout'},
-    {path: '/password/reset'},
-    {path: '/'},
-  ]),
-  scrollBehavior (to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
+    mode: 'history',
+    routes: paths.map(path => route(path.path, path.view, path.name)).concat([
+        { path: '*', redirect: '/dashboard' },
+        { path: '/login' },
+        { path: '/logout' },
+        { path: '/password/reset' },
+        { path: '/' },
+    ]),
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        }
+        if (to.hash) {
+            return { selector: to.hash }
+        }
+        return { x: 0, y: 0 }
     }
-    if (to.hash) {
-      return { selector: to.hash }
-    }
-    return { x: 0, y: 0 }
-  }
 })
 
 //Vue.use(Meta)
