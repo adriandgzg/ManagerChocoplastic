@@ -15,7 +15,22 @@ class ProviderController extends Controller
      */
     public function index()
     {
-        //
+        $provider = DB::table('providers AS P')
+        ->select
+        (
+            'P.prov_pk',
+            'P.prov_identifier',
+            DB::raw("CONCAT(P.prov_identifier, ' - ', P.prov_name) AS prov_name") 
+        )
+        ->where('P.prov_status' , '=', 1)
+        ->get();
+        
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Listado de Proveedores',
+            'data' => $provider,
+        ], 200);
     }
 
     

@@ -432,7 +432,7 @@ export default {
         },
 
         getProviders() {
-            axios.get("/providerlist")
+            axios.get("/providers")
                 .then(response => {
                     this.providers = response.data.data;
                 })

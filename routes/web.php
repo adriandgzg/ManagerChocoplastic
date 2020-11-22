@@ -20,7 +20,8 @@ Route::get('/entitieslist', 'FederalEntityController@EntitiesList');
 Route::get('/listUser', 'AdminController@listUser');
 Route::get('/rolUser/{idUser}', 'AdminController@rolUser');
 
-Route::get('/providerlist', 'ProviderController@ProvidersList');
+Route::get('/providerlist', 'ProviderController@ProvidersList'); 
+Route::get('/providers', 'ProviderController@index'); 
 Route::post('/providers/add', 'ProviderController@add');
 Route::put('/providers/update', 'ProviderController@update');
 Route::put('/providers/delete', 'ProviderController@delete');
