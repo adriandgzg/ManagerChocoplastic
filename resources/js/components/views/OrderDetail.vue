@@ -626,7 +626,7 @@ export default {
                         if (response.data.code == 200) {
                             this.textMsg = "¡Actualizado correctamente!";
                             this.normal('Notificación', '¡Actualizado correctamente!', "success");
-                            this.$router.push('/sales');
+                            this.$router.push('/orders');
                         } else {
                             this.normal('Notificación', response.data.message, "error");
                         }

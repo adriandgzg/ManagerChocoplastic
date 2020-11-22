@@ -23,14 +23,17 @@ class LoginProxyController extends ApiResponseController
      */
     public function attemptLogin($phonne_number, $password)
     {
-        $user = User::where(['phone_number' => $phonne_number])->first();
+        $vUser = User::join('stores AS S', 'S.stor_pk', '=', 'stor_fk')->where(['phone_number' => $phonne_number])->first();
 
-        if (!is_null($user)) {
+        if (!is_null($vUser)) {
             return $this->proxy(
-                'password', [
-                'username' => $phonne_number,
-                'password' => $password
-            ]);
+                'password', 
+                $vUser->stor_name, 
+                [
+                    'username' => $phonne_number,
+                    'password' => $password
+                ]
+            );
         }
 
     }
@@ -41,7 +44,7 @@ class LoginProxyController extends ApiResponseController
      * @param string $grantType what type of grant type should be proxied
      * @param array $data the data to send to the server
      */
-    public function proxy($grantType, array $data = [])
+    public function proxy($grantType, string $pStore, array $data = [])
     {
         $data = array_merge($data, [
             'client_id' => 2, //config('PASSWORD_CLIENT_ID'),
@@ -57,6 +60,7 @@ class LoginProxyController extends ApiResponseController
         $vResult = json_decode($response->getContent());
 
         $vResult->syst_prod_desc_availability = $vSystem->syst_prod_desc_availability;
+        $vResult->store = $pStore;
 
         return $this->dbResponse($vResult, 200, null, isset($vResult->error) ? $vResult->message : 'Login Exitoso');
     }

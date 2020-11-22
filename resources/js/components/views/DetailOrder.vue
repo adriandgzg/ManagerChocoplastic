@@ -573,7 +573,7 @@ export default {
                           setTimeout(function (){ newWin.close(); }, 20000);
                         }
                         this.normal('Notificación', '¡Actualizado correctamente!', "success");
-                        this.$router.push('/sales');
+                        this.$router.push('/orders');
                     } else {
                         this.normal('Notificación', response.data.message, "error");
                     }
