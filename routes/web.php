@@ -33,7 +33,7 @@ Route::put('/clients/delete', 'ClientController@delete');
 Route::get('/clients/genders', 'ClientController@Genders');
 
 Route::get('/storelist', 'StoreController@StoresList');
-Route::get('/storeget', 'StoreController@Stores');
+Route::get('/storeget', 'StoreController@Stores'); 
 Route::post('/store/add', 'StoreController@add');
 Route::put('/store/update', 'StoreController@update');
 Route::put('/store/delete', 'StoreController@delete');
@@ -189,6 +189,7 @@ Route::get('/box/cuts/{bocu_pk}', 'BoxCutController@show'); //Consultar Box
 
 //Inventario de Productos
 Route::get('product/inventories', 'ProductInventoryController@index');  //Inventario 
+Route::get('product/inventories/{stor_pk}', 'ProductInventoryController@sucursal');  //Inventario  
 
 
 //CRUD Traspaso

@@ -31,6 +31,16 @@
                             <v-col cols="12" sm="12">
                                 <v-text-field autofocus v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
                             </v-col>
+                            <v-card-text>
+                            <v-row>
+                                <v-col cols="6">
+                                    <v-combobox required v-model="SelectSucursal"  :items="stores" label="Sucursal" :disabled="enabledStore" item-text="stor_name" item-value="stor_pk" filled chips placeholder="Seleccionar una sucursal"></v-combobox>
+                                </v-col>
+                                <v-col cols="4" sm="4">
+                                    <v-btn color="success" class="mr-4" @click="getInventarioSucursal">Buscar</v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
                         </template>
 
                         <template v-slot:item="props">
@@ -45,14 +55,6 @@
                                 <td>{{props.item.prin_stock - props.item.stock_order}}</td>
                             </tr>
                         </template>
-
-                   
-                        <!--<template v-slot:item.action="{ item }">   
-                        <v-btn class="mr-2" fab dark small color="indigo" v-if="item.clsa_status != 'Pendiente'" 
-                               :href="'/clientsreturn/'+item.clor_pk" title="Devolución">
-                            <v-icon dark>mdi-archive-arrow-up</v-icon>
-                        </v-btn>  
-                    </template>-->
 
                     </v-data-table>
                 </v-card>
@@ -115,6 +117,11 @@ export default {
             timeout: 2000,
             idUserStore: 0,
             textMsg: "",
+            menu1: false,
+            stores: [],
+            SelectSucursal: "",
+            enabledStore: false,
+
             folioRules: [
                 value => !!value || "Requerido.",
                 value => (value && value.length >= 10) || "Min 10 caracter"
@@ -134,11 +141,41 @@ export default {
         };
     },
     created() {
-        this.getSales();
+        this.getStores();
+        this.getUsers();
     },
 
     methods: {
+        getStores() {
+            axios
+                .get("/storeget")
+                .then((response) => {
+                    this.stores = response.data.data;
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        },
 
+      
+
+
+        getUsers() {
+            axios.get('/listUser')
+                .then(response => {
+                    this.users = response.data.data
+
+                    if (this.users.store_id > 0) {
+                        this.enabledStore = true
+                        this.SelectSucursal = this.stores.find(item => item.stor_pk == this.users.store_id)
+                    } else
+                        this.enabledStore = false
+
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                })
+        },
         getSales() {
 
             this.loading = true
@@ -160,6 +197,47 @@ export default {
                 });
         },
 
+
+        getInventarioSucursal() {
+            /*axios
+                .get("/shipments/show/transactionsnotify?date=" + this.starttime)
+                .then(response => {
+                    console.log(response.data.data);
+                    this.stores = response.data.data;
+
+                })
+                .catch(e => {
+                    this.errors.push(e);
+                });
+*/
+                console.log(this.SelectSucursal.stor_pk); 
+                if(this.SelectSucursal == "")
+                {
+                    this.normal('Sucursal', "Seleccionar Sucursal", "warning");
+
+                    return false;
+                }
+
+                 this.loading = true
+            axios
+                .get("/product/inventories/" +  this.SelectSucursal.stor_pk)
+                .then(response => {
+                    setTimeout(() => (this.loading = false), 500)
+                    if (response.data.data != null) {
+                        this.sales = response.data.data;
+                    } else {
+                        this.normal('Notificación', response.data.status.message, "error");
+                        console.log('Detalle: ' + response.data.status.technicaldetail);
+
+                    }
+                })
+                .catch(e => {
+                        console.log('Detalle: ' + response.data.status.technicaldetail);
+                    this.normal('Notificación', "Error al cargar los datos", "error");
+                });
+
+        },
+
         normal(Title, Description, Type) {
             this.notice = new CripNotice({
                 title: Title,
@@ -169,7 +247,7 @@ export default {
                 duration: 3,
                 type: Type,
             })
-        },
+        }
     }
 }
 </script>
