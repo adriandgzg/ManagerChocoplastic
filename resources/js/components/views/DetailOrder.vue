@@ -82,7 +82,7 @@
 
                             <v-col cols="6">
                                 <v-card-text class="category d-inline-flex font-weight-light">
-                                    <v-combobox required v-model="selectpame" :items="payments" label="Métodos de pago" item-text="pame_name" item-value="pame_pk" filled chips placeholder="Seleccionar Cliente"></v-combobox>
+                                    <v-combobox required v-model="selectpame" :items="payments" label="Métodos de pago" item-text="pame_name" item-value="pame_pk" filled chips placeholder="Seleccionar Método de Pago"></v-combobox>
                                 </v-card-text>
                             </v-col>
                         </v-row>
@@ -503,20 +503,24 @@ export default {
             }
         },
         finalizar() {
+
+
+
+
             this.efectivo = 0;
             this.tarjeta = 0;
             this.getPagos();
             if (this.selectClient == '' || this.selectClient == null) {
-                this.normal('Alerta', 'Debe seleccionar un cliente', "error");
+                this.normal('Alerta', 'Debe seleccionar un cliente', "warning");
                 return;
             }
             if (this.selectpame == '' || this.selectpame == null) {
-                this.normal('Alerta', 'Debe seleccionar un método de pago', "error");
+                this.normal('Alerta', 'Debe seleccionar un método de pago', "warning");
                 return;
             }
             if (!this.enabledStore)
                 if (this.selectStore == '' || this.selectStore == null) {
-                    this.normal('Alerta', 'Debe seleccionar una sucursal', "error");
+                    this.normal('Alerta', 'Debe seleccionar una sucursal', "warning");
                     return;
                 }
             this.editadoSale.clsa_pk = this.saleHeader.clsa_pk;
