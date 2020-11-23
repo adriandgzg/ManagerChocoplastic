@@ -898,7 +898,6 @@ class ClientSaleController extends ApiResponseController
 
         $vCS = DB::table('client_sales AS CS')
             ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
-            ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
             ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
             ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
             ->select(
@@ -923,9 +922,7 @@ class ClientSaleController extends ApiResponseController
                 'S.stor_pk',
                 'S.stor_name',
                 'S.stor_rfc',
-                'S.stor_addres',
-                DB::raw('(SELECT  U.name AS user FROM logs AS L INNER JOIN users AS U ON L.user_fk = U.id WHERE L.table = "client_orders" AND L.pk_register = CO.clor_pk AND L.operation = 1 LIMIT 1) AS user') //Vededor
-
+                'S.stor_addres'
             )
             ->where('CS.clsa_pk', '=', $vclsa_pk)
             ->first();
@@ -957,9 +954,12 @@ class ClientSaleController extends ApiResponseController
 
                 
                 if($vCount <5)
-                $vHeight =120;
+                $vHeight =130;
                 else
-                $vHeight = $vCount * 30;
+                    if ($vCount <15)
+                        $vHeight = $vCount * 18;
+                    else
+                        $vHeight = $vCount * 12;
                         
                 $pdf = new FpdfJs($orientation = 'P', $unit = 'mm', array(80, $vHeight));
                 $pdf->SetMargins(2, 1, 1,1);
@@ -967,27 +967,26 @@ class ClientSaleController extends ApiResponseController
                 $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
                 $pdf->Image(config('app.url') . '/images/logo_chocoplastic.png', 27, 2, 25);
                 $pdf->Ln(12);
-                //$pdf->SetY(12);
                 $lineHeigth = 2;
 
                 
                 $pdf->SetFont('Arial','',8);
                 // Número de página
                 
-                $pdf->SetFont('Arial', 'B', 4);
-                $pdf->Cell(30, $lineHeigth, 'RFC:', '', '0', 'R');
+                $pdf->SetFont('Arial', 'B', 7);
+                $pdf->Cell(30, $lineHeigth+1, 'RFC:', '', '0', 'R');
                 
-                $pdf->SetFont('Arial', '', 3);
-                $pdf->Cell(30, $lineHeigth, $vCS->stor_rfc, '', '0', 'L');
+                $pdf->SetFont('Arial', '', 7);
+                $pdf->Cell(30, $lineHeigth+1, $vCS->stor_rfc, '', '0', 'L');
                 $pdf->Ln();
-               // $pdf->SetY(15);
-                $pdf->SetFont('Arial', 'B', 4);
-                $pdf->Cell(80, $lineHeigth, 'Domicilio Fiscal:', '', '0', 'C');
+                $pdf->SetFont('Arial', 'B', 7);
+                $pdf->Cell(80, $lineHeigth+1, 'Domicilio Fiscal:', '', '0', 'C');
                 $pdf->Ln();
-                $pdf->SetFont('Arial', '', 3);
-                $pdf->Cell(80, $lineHeigth, utf8_decode($vCS->stor_addres), '', '1', 'C');
+                $pdf->SetFont('Arial', '', 7);
+                //$pdf->Cell(80, $lineHeigth+1, utf8_decode($vCS->stor_addres), '', '1', 'C');
+                $pdf->Cell(80, $lineHeigth+1, substr(utf8_decode($vCS->stor_addres), 0, 30), '', '1', 'C');
+                
                 $pdf->Ln();
-                //$pdf->SetY(20);
                 $pdf->SetFont('Arial', '', 5);
                 $pdf->Cell(80, $lineHeigth,'------------------------------------------------------------------------------------------------------------------------------', '', '1', 'L');
                 $pdf->Ln();
@@ -997,17 +996,15 @@ class ClientSaleController extends ApiResponseController
                 $pdf->Ln();
                 $pdf->Cell(80, $lineHeigth,'------------------------------------------------------------------------------------------------------------------------------', '', '1', 'L');
                 $pdf->Ln();
-                $pdf->SetFont('Arial', 'B', 6);
-                $pdf->Cell(75, $lineHeigth, '' . $vCS->clsa_identifier, '', '1');
-                $pdf->SetFont('Arial', '', 5);
-                $pdf->Cell(75, $lineHeigth, '' . $vCS->created_at, '', '1');
-                $pdf->Cell(75, $lineHeigth, 'Tipo de Pago: ' . utf8_decode($vCS->pame_name), '', '1');
-                $pdf->Cell(75, $lineHeigth, 'Cliente: ' . utf8_decode($vCS->clie_name), '', '1');
-                $pdf->Cell(75, $lineHeigth, 'Vendedor: ' . utf8_decode($vCS->user), '', '1');
-                
+                $pdf->SetFont('Arial', 'B', 7);
+                $pdf->Cell(75, $lineHeigth+2, '' . $vCS->clsa_identifier, '', '1');                
+                $pdf->SetFont('Arial', '', 7);
+                $pdf->Cell(75, $lineHeigth+1, '' . $vCS->created_at, '', '1');                
+                $pdf->Cell(75, $lineHeigth+1, 'Tipo de Pago: ' . utf8_decode($vCS->pame_name), '', '1');                
+                $pdf->Cell(75, $lineHeigth+1, 'Cliente: ' . utf8_decode($vCS->clie_name), '', '1');
 
-                
-                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->Ln();
+                $pdf->SetFont('Arial', 'B', 7);
                 $header = array('CLAVE', 'CANT.', 'UNIDAD', 'COSTO','IMPORTE');
                 foreach($header as $col)
                 {
@@ -1017,16 +1014,16 @@ class ClientSaleController extends ApiResponseController
                 $disprice = 0;
                 $total = 0;
                 foreach ($vCSD as $product) {
-                    $pdf->SetFont('Arial', 'B', 5);
+                    $pdf->SetFont('Arial', 'B', 7);
                     $price = $product->clsd_quantity * $product->clsd_price;  
                     $vImporte = ($product->clsd_quantity * $product->clsd_price)  * (1 - ($product->clsd_discountrate / 100));
                     $vDescuento = ($product->clsd_quantity * $product->clsd_price)  * (($product->clsd_discountrate / 100));
                     $disprice = $disprice + $vDescuento;
-                    $pdf->SetFont('Arial', 'B', 5);
+                    $pdf->SetFont('Arial', 'B', 7);
                     $total = $total + $price;
-                    $pdf->Cell(28, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 30), '', '0');
-                    $pdf->Ln();
-                    $pdf->SetFont('Arial', '', 5);
+                    $pdf->Cell(28, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 50), '', '0');
+                    $pdf->Ln(3);
+                    $pdf->SetFont('Arial', '', 7);
                     $pdf->Cell(16, $lineHeigth, $product->prod_identifier, '', '0');
                     $pdf->Cell(16, $lineHeigth, $product->clsd_quantity, '', '0');
                     $pdf->Cell(16, $lineHeigth, $product->meas_abbreviation, '', '0');
@@ -1060,7 +1057,7 @@ class ClientSaleController extends ApiResponseController
                 $pdf->Ln(3);
 
                 $pdf->Cell(47, $lineHeigth, '', '', '0','L');
-                $pdf->SetFont('Arial', 'B', 5);
+                $pdf->SetFont('Arial', 'B', 7);
                 $pdf->Cell(10, $lineHeigth, 'TOTAL', '', '0','L');
                 $pdf->Cell(17, $lineHeigth, "$" . number_format($total1, 2), '', '0','R');
                 
@@ -1068,7 +1065,7 @@ class ClientSaleController extends ApiResponseController
                 // Posición: a 1,5 cm del final
                 $pdf->SetY(-20);
                 // Arial italic 8
-                $pdf->SetFont('Arial','I',4);
+                $pdf->SetFont('Arial','I',6);
                 // Número de página
                 $pdf->Cell(0,10,'',0,0,'C');
                  
