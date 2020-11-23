@@ -446,15 +446,19 @@ export default {
             this.editedIndex = -1;
         },
         buscar() {
+            this.loading = true;
+
+            
             axios
                 .get("/product/inventories")
                 .then((response) => {
+                    setTimeout(() => (this.loading = false), 500);
                     this.products = response.data.data;
                     this.dialog = true;
-                    console.log(response.data);
                 })
                 .catch((e) => {
-                    this.errors.push(e);
+                    setTimeout(() => (this.loading = false), 500);
+                    this.normal("Notificación", "Error al cargar los datos", "error");
                 });
         },
 

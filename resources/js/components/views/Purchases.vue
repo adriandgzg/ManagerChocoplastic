@@ -513,6 +513,12 @@ export default {
                 .get("/product/measurements/" + id)
                 .then(response => {
                     this.measurements = response.data.data;
+
+                    for (var i = 0; i < this.measurements.length; i++) {
+                        if(this.measurements[i].meas_pk == this.detail.meas_fk){
+                            this.selectmeas = this.measurements[i];
+                        }
+                    }
                 })
                 .catch(e => {
                     console.log(e);
@@ -535,6 +541,9 @@ export default {
             //this.detail.stor_fk = this.selectStore.stor_pk
             this.detail.pame_fk = this.selectpame.pame_pk
 
+            this.detail.meas_fk = item.meas_fk_input;
+
+
             if (!this.enabledStore)
                 this.detail.stor_fk = this.selectStore.stor_pk;
             else
@@ -544,6 +553,8 @@ export default {
             this.detail.prod_name = item.prod_name
 
             this.getMeasurement(item.prod_pk)
+            
+
             this.dialogAgregar = true
         },
 
