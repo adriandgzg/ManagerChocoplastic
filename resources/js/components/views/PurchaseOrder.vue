@@ -446,6 +446,11 @@ export default {
                 .get("/product/measurements/" + id)
                 .then(response => {
                     this.measurements = response.data.data;
+                    for (var i = 0; i < this.measurements.length; i++) {
+                        if(this.measurements[i].meas_pk == this.detail.meas_fk){
+                            this.selectmeas = this.measurements[i];
+                        }
+                    }
                 })
                 .catch(e => {
                     console.log(e);
