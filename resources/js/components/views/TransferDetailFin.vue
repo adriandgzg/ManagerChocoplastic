@@ -588,6 +588,8 @@ export default {
                         this.$router.push("/transferlist");
                     } else {
                         this.normal("Notificación", vMessage, "error");
+                         console.log(response.data.status.technicaldetail);
+
                     }
                 })
                 .catch((e) => {
