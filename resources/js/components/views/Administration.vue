@@ -463,6 +463,7 @@ export default {
 
             axios.put('/admin/updateBusiness', this.editadoBusiness).then(response => {
                 this.normal('Notificación', '¡Actualizado correctamente!', "success");
+                this.getUsers();
             });
         },
         desactivarUsuario(item) {

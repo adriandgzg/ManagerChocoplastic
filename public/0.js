@@ -481,6 +481,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.editadoBusiness.checkB) this.editadoBusiness.idBusiness = this.selectStore.stor_pk;else this.editadoBusiness.idBusiness = 0;
       axios.put('/admin/updateBusiness', this.editadoBusiness).then(function (response) {
         _this13.normal('Notificación', '¡Actualizado correctamente!', "success");
+
+        _this13.getUsers();
       });
     },
     desactivarUsuario: function desactivarUsuario(item) {
