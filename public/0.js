@@ -235,19 +235,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         id: '',
         name: '',
         email: '',
-        password: ''
+        password: '',
+        verified: 0
       },
       editadoTemp: {
         id: '',
         name: '',
         email: '',
-        password: ''
+        password: '',
+        verified: 0
       },
       editadoDefault: {
         id: '',
         name: '',
         email: '',
-        password: ''
+        password: '',
+        verified: 0
       },
       editadoBusiness: {
         id: '',
@@ -255,7 +258,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         email: '',
         password: '',
         checkB: false,
-        idBusiness: 0
+        idBusiness: 0,
+        verified: 0
       },
       business: [],
       selectBusiness: ''
@@ -429,6 +433,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.editado.id = this.editadoTemp.id;
       this.editado.name = this.editadoTemp.name;
       this.editado.email = this.editadoTemp.email;
+      this.editado.verified = this.editadoTemp.verified;
       this.editado.password = '';
       console.log(this.editado);
       this.dialog = true;
@@ -464,7 +469,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     editarAdmin: function editarAdmin() {
       var _this12 = this;
 
-      console.log(this.editado);
       axios.put('/admin/update', this.editado).then(function (response) {
         _this12.normal('Notificación', '¡Actualizado correctamente!', "success");
 
@@ -475,7 +479,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this13 = this;
 
       if (this.editadoBusiness.checkB) this.editadoBusiness.idBusiness = this.selectStore.stor_pk;else this.editadoBusiness.idBusiness = 0;
-      console.log(this.editadoBusiness);
       axios.put('/admin/updateBusiness', this.editadoBusiness).then(function (response) {
         _this13.normal('Notificación', '¡Actualizado correctamente!', "success");
       });

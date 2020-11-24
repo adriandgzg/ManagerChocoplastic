@@ -267,13 +267,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/roles', 'RoleController@index');
     Route::get('/permissions', 'PermissionController@index');
     Route::put('/user/updateStatus', 'AdminController@updateStatus');
-
-
-
-
-
-    
 });
+
+
 Route::get('{any}', function () {
     return view('layouts.app');
 })->where('any','^(?!api).*$')->middleware('auth');

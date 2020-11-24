@@ -79,6 +79,7 @@ class AdminController extends Controller
             'message' => 'Users loaded',
             'data' =>$users,
         ], 200);
+
     }
 
     /**
@@ -234,7 +235,7 @@ class AdminController extends Controller
 
     public function updateAdministrator(Request $request)
     {
-        
+       
         /*$admin = Admin::findOrFail($request->id);         
        
         $admin->name = $request->name;
@@ -245,8 +246,22 @@ class AdminController extends Controller
 
             
         $admin->save();*/
+       
+        $admin = Admin::findOrFail($request->id);         
+       
+        $admin->name = $request->name;
+        $admin->email = $request->email;
+        $admin->verified = $request->verified;
+        if($request->password != '' )
+            $admin->password = Hash::make($request->password);  
+
+            
+        $admin->save();  
+            
+/*
         if($request->password != '' )
         {
+            dd("Cpn pass");
         DB::table('admins')
                 ->where('id', '=', $request->id)
                 ->update(array(
@@ -259,6 +274,7 @@ class AdminController extends Controller
         }
         else
         {
+            dd($request);
             DB::table('admins')
             ->where('id', '=', $request->id)
             ->update(array(
@@ -266,8 +282,10 @@ class AdminController extends Controller
                     'email'=>$request->email,
                     'verified'=>$request->verified,
                     )
-                    );     
-        }
+                    );  
+                    
+        }*/
+
         
     }
 
