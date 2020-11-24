@@ -315,7 +315,8 @@ export default {
                 prod_identifier: 0,
                 prod_name: '',
                 prod_description: '',
-                meas_name: ''
+                meas_name: '',
+                meas_fk:0,
             },
             defaultItem: {
                 ppod_pk: 0,
@@ -326,7 +327,8 @@ export default {
                 prod_identifier: 0,
                 prod_name: '',
                 prod_description: '',
-                meas_name: ''
+                meas_name: '',
+                meas_fk:0,
             },
             detail: {
                 prpo_fk: 0,
@@ -341,6 +343,7 @@ export default {
                 prod_iva: 0,
                 syst_ieps: 0,
                 syst_iva: 0,
+                meas_fk:0,
             },
             detailDefault: {
                 prpo_fk: 0,
@@ -355,6 +358,7 @@ export default {
                 prod_iva: 0,
                 syst_ieps: 0,
                 syst_iva: 0,
+                meas_fk:0,
             },
             orderHeader: {
                 prpo_pk: 0,
@@ -446,6 +450,7 @@ export default {
                 .get("/product/measurements/" + id)
                 .then(response => {
                     this.measurements = response.data.data;
+                   
                     for (var i = 0; i < this.measurements.length; i++) {
                         if(this.measurements[i].meas_pk == this.detail.meas_fk){
                             this.selectmeas = this.measurements[i];
@@ -464,6 +469,9 @@ export default {
             } else {
                 this.detail.prpo_fk = 0;
             }
+
+             console.log(item);
+             this.detail.meas_fk = item.meas_fk_input;
             this.detail.prod_fk = item.prod_pk;
             this.detail.ppod_quantity = 1;
             this.detail.ppod_providerprice = 0;

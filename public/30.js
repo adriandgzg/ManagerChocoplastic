@@ -326,7 +326,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         prod_identifier: 0,
         prod_name: '',
         prod_description: '',
-        meas_name: ''
+        meas_name: '',
+        meas_fk: 0
       },
       defaultItem: {
         ppod_pk: 0,
@@ -337,7 +338,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         prod_identifier: 0,
         prod_name: '',
         prod_description: '',
-        meas_name: ''
+        meas_name: '',
+        meas_fk: 0
       },
       detail: {
         prpo_fk: 0,
@@ -351,7 +353,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         prod_ieps: 0,
         prod_iva: 0,
         syst_ieps: 0,
-        syst_iva: 0
+        syst_iva: 0,
+        meas_fk: 0
       },
       detailDefault: {
         prpo_fk: 0,
@@ -365,7 +368,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         prod_ieps: 0,
         prod_iva: 0,
         syst_ieps: 0,
-        syst_iva: 0
+        syst_iva: 0,
+        meas_fk: 0
       },
       orderHeader: {
         prpo_pk: 0,
@@ -469,6 +473,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.detail.prpo_fk = 0;
       }
 
+      console.log(item);
+      this.detail.meas_fk = item.meas_fk_input;
       this.detail.prod_fk = item.prod_pk;
       this.detail.ppod_quantity = 1;
       this.detail.ppod_providerprice = 0;
