@@ -40,7 +40,7 @@
         <v-dialog v-model="dialog" max-width="800px">
             <v-card>
                 <v-card-title class="cyan white--text">
-                    <span class="headline">Buscar producto || Inventario</span>
+                    <span class="headline">Buscar Productos</span>
                 </v-card-title>
 
                 <v-data-table :headers="headers" :items="products" :search="search" sort-by="id" class="elevation-3">
@@ -48,9 +48,6 @@
                         <v-col cols="12" sm="12">
                             <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
                         </v-col>
-                    </template>
-                    <template v-slot:item.prod_saleprice="{ item }">
-                        <v-label>${{formatMoney(item.prod_saleprice)}}</v-label>
                     </template>
                     <template v-slot:item.bulk="{ item }">
                         <v-chip v-if="item.prod_bulk == 1" color="green" outlined>Granel</v-chip>
@@ -168,7 +165,7 @@ export default {
                 },
                 {
                     text: "Unidad Salida",
-                    value: "meas_name",
+                    value: "meas_fk_input_name",
                 },
                 {
                     text: "Tipo",
@@ -444,15 +441,18 @@ export default {
             this.editedIndex = -1;
         },
         buscar() {
+            this.loading = true;
+
             axios
-                .get("/product/inventories")
+                .get("/product/search")
                 .then((response) => {
+                    setTimeout(() => (this.loading = false), 500);
                     this.products = response.data.data;
                     this.dialog = true;
-                    console.log(response.data);
                 })
                 .catch((e) => {
-                    this.errors.push(e);
+                    setTimeout(() => (this.loading = false), 500);
+                    this.normal("Notificación", "Error al cargar los datos", "error");
                 });
         },
         guardaBorrar() {
@@ -510,7 +510,7 @@ export default {
         },
         buscar() {
             axios
-                .get("/product/inventories")
+                .get("/product/search")
                 .then((response) => {
                     this.products = response.data.data;
                     this.dialog = true;
