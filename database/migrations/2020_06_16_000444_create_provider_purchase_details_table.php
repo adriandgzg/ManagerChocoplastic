@@ -26,7 +26,7 @@ class CreateProviderPurchaseDetailsTable extends Migration
             $table->bigInteger('meas_fk')->unsigned(); //Llave Foranea Catálogo Unidad de Medida
             $table->foreign('meas_fk')->references('meas_pk')->on('measurements')->onUpdate('cascade');
 
-            $table->integer('prpd_quantity'); //Cantidad
+            $table->decimal('prpd_quantity', 12, 2); //Cantidad
             $table->decimal('prpd_price', 12, 2); //Precio
             $table->decimal('prpd_discountrate', 12, 2); //Porcentaje Descuento
             $table->decimal('prpd_ieps', 12, 2); //IEPS

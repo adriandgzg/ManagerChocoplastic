@@ -23,7 +23,7 @@ class CreateProductTransferDetailsTable extends Migration
             $table->bigInteger('prod_fk')->unsigned(); //Llave Foranea Catálogo de Productos 
             $table->foreign('prod_fk')->references('prod_pk')->on('products')->onUpdate('cascade');
 
-            $table->integer('prtd_quantity'); //Cantidad
+            $table->decimal('prtd_quantity', 12, 2); //Cantidad
             $table->smallInteger('prtd_status')->default(1); //Estatus
 
             $table->timestamps();

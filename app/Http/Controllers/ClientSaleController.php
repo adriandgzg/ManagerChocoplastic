@@ -898,6 +898,7 @@ class ClientSaleController extends ApiResponseController
 
         $vCS = DB::table('client_sales AS CS')
             ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
+            ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
             ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
             ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
             ->select(
@@ -922,7 +923,8 @@ class ClientSaleController extends ApiResponseController
                 'S.stor_pk',
                 'S.stor_name',
                 'S.stor_rfc',
-                'S.stor_addres'
+                'S.stor_addres',
+                DB::raw('(SELECT U.name AS user FROM logs AS L INNER JOIN users AS U ON L.user_fk = U.id WHERE L.table = "client_orders" AND L.pk_register = CO.clor_pk AND L.operation = 1 LIMIT 1) AS user') //Vededor
             )
             ->where('CS.clsa_pk', '=', $vclsa_pk)
             ->first();
@@ -1002,6 +1004,7 @@ class ClientSaleController extends ApiResponseController
                 $pdf->Cell(75, $lineHeigth+1, '' . $vCS->created_at, '', '1');                
                 $pdf->Cell(75, $lineHeigth+1, 'Tipo de Pago: ' . utf8_decode($vCS->pame_name), '', '1');                
                 $pdf->Cell(75, $lineHeigth+1, 'Cliente: ' . utf8_decode($vCS->clie_name), '', '1');
+                $pdf->Cell(75, $lineHeigth+1, 'Vendedor: ' . utf8_decode($vCS->user), '', '1');
 
                 $pdf->Ln();
                 $pdf->SetFont('Arial', 'B', 7);
