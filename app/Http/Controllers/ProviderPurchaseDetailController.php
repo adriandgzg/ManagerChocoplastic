@@ -153,7 +153,7 @@ class ProviderPurchaseDetailController extends ApiResponseController
             $vInput = $r->all();
 
             $vVal = Validator::make($vInput, [
-                'prpd_pk' => 'required|int', //PK Compra Detalle
+                'prpd_pk' => 'required', //PK Compra Detalle
                 'prpd_quantity' => 'required', //Cantidad
                 'prpd_price' => 'required', //Precio
                 'prpd_discountrate' => 'required' //% Descuento
