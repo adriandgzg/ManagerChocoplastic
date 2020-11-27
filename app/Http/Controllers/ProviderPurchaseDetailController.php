@@ -57,7 +57,7 @@ class ProviderPurchaseDetailController extends ApiResponseController
         ]);
 
         if ($vVal->fails()) {
-            return $this->dbResponse(null, 500, $vVal->errors(), 'Detalle de Validación');
+            return $this->dbResponse(null, 500, $vVal->errors(), $vVal->errors());
         }
 
         try {
