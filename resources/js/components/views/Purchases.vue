@@ -585,9 +585,8 @@ export default {
                     console.log(this.detail);
                     if (response.data.status.code == 200) {
 
-                        this.textMsg = "¡Actualizado correctamente!";
                         this.prpo_pk = response.data.data;
-                        //this.normal('Notificación','¡Actualizado correctamente!' ,"success");
+                        this.normal('Notificación','¡Producto Agregado correctamente!' ,"success");
                         this.createCompra();
                         this.dialogAgregar = false;
                         this.getTotal();

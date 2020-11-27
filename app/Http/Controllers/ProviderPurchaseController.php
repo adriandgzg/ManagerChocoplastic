@@ -18,7 +18,7 @@ use App\Http\Controllers\api\ApiResponseController;
 class ProviderPurchaseController extends ApiResponseController
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource. 
      *
      * @return \Illuminate\Http\Response
      */
