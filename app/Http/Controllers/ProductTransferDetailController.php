@@ -48,7 +48,7 @@ class ProductTransferDetailController extends ApiResponseController
             $vVal = Validator::make($vInput, [
                 'prtr_fk' => 'required|int', //PK Traspaso
                 'prod_fk' => 'required|int', //PK Producto
-                'prtd_quantity' => 'required|int', //Cantidad
+                'prtd_quantity' => 'required', //Cantidad
             ]);
 
             if ($vVal->fails()) {
@@ -137,7 +137,7 @@ class ProductTransferDetailController extends ApiResponseController
 
             $vVal = Validator::make($vInput, [
                 'prtd_pk' => 'required|int', //PK Traspaso Detalle
-                'prtd_quantity' => 'required|int' //Cantidad
+                'prtd_quantity' => 'required' //Cantidad
             ]);
 
             if ($vVal->fails()) {

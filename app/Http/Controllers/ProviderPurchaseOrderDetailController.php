@@ -48,7 +48,7 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
                 'prpo_fk' => 'required|int', //PK Orden Compra
                 'prod_fk' => 'required|int', //PK Producto
                 'meas_fk' => 'required|int', //PK Unidad Medida
-                'ppod_quantity' => 'required|int', //Cantidad
+                'ppod_quantity' => 'required', //Cantidad
                 'ppod_providerprice' => 'required', //Precio
                 'ppod_discountrate' => 'required', //% Descuento
                 //'ppod_ieps' => 'required', //% Descuento
@@ -151,7 +151,7 @@ class ProviderPurchaseOrderDetailController extends ApiResponseController
             $vVal = Validator::make($vInput, [
                 'ppod_pk' => 'required|int', //PK Orden Compra Detalle
                 'prod_fk' => 'required|int', //PK Producto
-                'ppod_quantity' => 'required|int', //Cantidad
+                'ppod_quantity' => 'required', //Cantidad
                 'ppod_providerprice' => 'required', //Precio
                 'ppod_discountrate' => 'required' //% Descuento
             ]);

@@ -49,7 +49,7 @@ class ProviderPurchaseDetailController extends ApiResponseController
             'stor_fk' => 'required|int', // PK Sucursal
             'prod_fk' => 'required|int', // PK Producto
             'meas_fk' => 'required|int', // PK Unidad Medida
-            'prpd_quantity' => 'required|int', //Cantidad
+            'prpd_quantity' => 'required', //Cantidad
             'prpd_price' => 'required', //Precio
             'prpd_discountrate' => 'required', //% Descuento
             //'prpd_ieps' => 'required', //IEPS
@@ -89,7 +89,7 @@ class ProviderPurchaseDetailController extends ApiResponseController
                 $this->getstorelog('provider_purchases', $vprpu_pk, 1);
             } 
 
-            $vProd = Product::where('prod_pk', '=', $vprod_fk)->first();
+            //$vProd = Product::where('prod_pk', '=', $vprod_fk)->first();
 
             //Inserción Productos de la Orden de Compra del Proveedor
             $vPPD = new ProviderPurchaseDetail();
@@ -114,7 +114,7 @@ class ProviderPurchaseDetailController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
+            return $this->dbResponse(null, 500, $vTh->getMessage(), 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
@@ -154,7 +154,7 @@ class ProviderPurchaseDetailController extends ApiResponseController
 
             $vVal = Validator::make($vInput, [
                 'prpd_pk' => 'required|int', //PK Compra Detalle
-                'prpd_quantity' => 'required|int', //Cantidad
+                'prpd_quantity' => 'required', //Cantidad
                 'prpd_price' => 'required', //Precio
                 'prpd_discountrate' => 'required' //% Descuento
             ]);

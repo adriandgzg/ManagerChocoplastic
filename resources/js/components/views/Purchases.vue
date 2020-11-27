@@ -44,7 +44,7 @@
             <v-form v-model="validProvider">
                 <v-card>
                     <v-toolbar dark color="cyan">
-                        <v-toolbar-title>Agregar producto</v-toolbar-title>
+                        <v-toolbar-title>Agregar Producto</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
                             <v-btn icon dark @click="dialogAgregar = false">
@@ -565,12 +565,6 @@ export default {
                     this.normal('Notificación', "Debe seleccionar un proveedor", "error");
                     return;
                 }
-            // if (!this.enabledStore)
-            //     if (this.selectStore == '' || this.selectStore == null) {
-            //         this.normal('Notificación', "Debe seleccionar una sucursal", "error");
-
-            //         return;
-            //     }
 
             if (this.selectpame == '' || this.selectpame == null) {
                 this.normal('Notificación', "Debe seleccionar una forma de pago", "error");
@@ -588,7 +582,7 @@ export default {
 
             axios.post('/provider/purchase/details', this.detail)
                 .then(response => {
-                    console.log(response)
+                    console.log(this.detail);
                     if (response.data.status.code == 200) {
 
                         this.textMsg = "¡Actualizado correctamente!";
@@ -599,12 +593,14 @@ export default {
                         this.getTotal();
 
                     } else {
-                        this.normal('Notificación', response.data.message, "error");
+                        this.normal('Notificación', response.data.status.message, "error");
                     }
 
                 })
                 .catch(e => {
-                    this.errors.push(e)
+                    //this.errors.push(e)
+                        this.normal('Notificación', response.data.status.message, "error");
+
                 })
 
         },
