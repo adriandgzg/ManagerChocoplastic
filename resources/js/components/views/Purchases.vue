@@ -136,7 +136,7 @@
                                 <v-label v-if="directa == 1">
                                     <h3>Sucursal:</h3> {{editadoHeader.stor_name}}
                                 </v-label>
-                                <v-combobox v-if="directa == 2" required v-model="selectProv" :items="providers" label="Proveedor" item-text="prov_name" item-value="prov_pk" filled chips placeholder="Seleccionar una proveedor"></v-combobox>
+                                <v-combobox v-if="directa == 2" required v-model="selectProv" :items="providers" label="Proveedor" item-text="prov_name" item-value="prov_pk" filled chips placeholder="Seleccionar un Proveedor"></v-combobox>
                             </v-card-text>
                         </v-col>
                         <v-col cols="6">

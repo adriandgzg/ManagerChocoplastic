@@ -145,7 +145,17 @@ class ProviderReturnController extends ApiResponseController
                             'prod_fk AS prod_fk',
                             'P.meas_fk_output AS meas_fk',
                             DB::raw("0 AS prrd_quantity"),
-                            DB::raw("prpd_quantity * prod_packingquantity AS prrd_quantity_purchase"),
+                            DB::raw('(
+                                    CASE WHEN PPD.meas_fk = P.meas_fk_input 
+                                        THEN 
+                                            prpd_quantity * prod_packingquantity 
+                                        ELSE 
+                                            prpd_quantity 
+                                    END
+                                    ) AS prrd_quantity_purchase'),
+
+
+
                             'prpd_price AS prrd_price',
                             DB::raw("1 AS prrd_status"),
                             DB::raw("NOW() AS created_at"),

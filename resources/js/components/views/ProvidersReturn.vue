@@ -64,7 +64,7 @@
                         <v-row>
                             <v-col cols="4">
                                 <v-card-text class="category d-inline-flex font-weight-light">
-                                    <v-combobox required v-model="selectReturn" :items="returns" label="Motivo de devolución" item-text="remo_description" item-value="remo_pk" filled chips placeholder="Seleccionar Cliente"></v-combobox>
+                                    <v-combobox required v-model="selectReturn" :items="returns" label="Motivo de Devolución" item-text="remo_description" item-value="remo_pk" filled chips placeholder="Seleccionar Motivo de Devolución"></v-combobox>
                                 </v-card-text>
                             </v-col>
                             <v-col cols="8">
