@@ -776,7 +776,7 @@ class ClientSaleController extends ApiResponseController
                                     'bocu_fk',
                                     'cpam_amount AS clpa_amount',
                                     DB::raw("cpam_amount AS clpa_amount"),
-                                    'cpam_reference AS clpa_reference',
+                                    DB::raw("cpam_reference AS clpa_reference"),
                                     DB::raw("1 AS clpa_status"),
                                     DB::raw("NOW() AS created_at"),
                                     DB::raw("NOW() AS updated_at")
