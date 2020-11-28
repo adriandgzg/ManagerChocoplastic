@@ -528,7 +528,14 @@ export default {
 
         openAgregar(item) {
             if (this.desserts.length > 0) {
-                this.detail.prpu_pk = this.prpo_pk;
+                if(this.directa == 1)
+                {
+                    this.detail.prpu_pk = this.prpu_pk;
+                }
+                else
+                {
+                  this.detail.prpu_pk = this.prpo_pk;
+                }
             } else {
                 this.detail.prpu_pk = 0;
             }
@@ -561,9 +568,12 @@ export default {
         agregar(item) {
             if (!this.directa == 2)
                 if (this.selectProv == '' || this.selectProv == null) {
-
                     this.normal('Notificación', "Debe seleccionar un proveedor", "error");
                     return;
+                }
+                else
+                {
+                    this.detail.prov_fk = this.selectProv.prov_pk;
                 }
 
             if (this.selectpame == '' || this.selectpame == null) {
@@ -584,8 +594,12 @@ export default {
                 .then(response => {
                     console.log(this.detail);
                     if (response.data.status.code == 200) {
-
-                        this.prpo_pk = response.data.data;
+                        if(this.directa == 2)
+                        {
+                            this.prpo_pk = response.data.data;
+                        }
+          
+                        
                         this.normal('Notificación','¡Producto Agregado correctamente!' ,"success");
                         this.createCompra();
                         this.dialogAgregar = false;
@@ -633,7 +647,7 @@ export default {
         createCompra() {
             this.loading = true
             if (this.directa == 1) {
-                axios.post('/provider/purchases?prpo_pk=' + this.prpo_pk + '')
+                axios.post('/provider/purchases?prpo_pk=' + this.prpo_pk + '') 
                     .then(response => {
                         setTimeout(() => (this.loading = false), 500)
                         if (response.data.data != null) {
@@ -667,7 +681,8 @@ export default {
                     .catch(e => {
                         //this.errors.push(e)
                         console.log(e)
-                        this.normal('Notificación', "Error al cargar los datos11", "error");
+                        //this.normal('Notificación', "Error al cargar los datos11", "error");
+                        // this.normal('Notificación', response.data.status.message, "error");
                     })
             } else {
                 axios.get('/provider/purchases/' + this.prpo_pk + '')

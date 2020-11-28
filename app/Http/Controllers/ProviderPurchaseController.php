@@ -477,7 +477,7 @@ class ProviderPurchaseController extends ApiResponseController
 
                 $vProviderPurchaseDetail = DB::table('provider_purchase_details AS PPD')
                     ->join('products AS P', 'P.prod_pk', '=', 'PPD.prod_fk')
-                    ->join('measurements AS M', 'M.meas_pk', '=', 'PPD.meas_fk')
+                    ->leftjoin('measurements AS M', 'M.meas_pk', '=', 'PPD.meas_fk')
                     ->select(
                         'PPD.prpd_pk',
                         'PPD.prpu_fk',
