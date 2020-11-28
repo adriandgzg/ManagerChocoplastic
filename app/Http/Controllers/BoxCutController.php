@@ -58,6 +58,7 @@ class BoxCutController extends ApiResponseController
                         'BC.created_at',
                         DB::raw('CONCAT(S.stor_identifier, "-", S.stor_name) AS stor_name')
                     )
+                    ->orderByDesc('BC.bocu_pk')
                     ->get();
             }
             else
@@ -79,10 +80,10 @@ class BoxCutController extends ApiResponseController
                         DB::raw('CONCAT(S.stor_identifier, "-", S.stor_name) AS stor_name')
                     )
                     ->where('BC.stor_fk', '=', $vStore)
+                    ->orderByDesc('BC.bocu_pk')
                     ->get();
 
             }
-            
 
             return response()->json([
                 'code' => 200,
