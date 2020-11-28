@@ -49,6 +49,27 @@
             <v-col>
                 <v-card>
                     <v-row>
+                         <v-col cols="4">
+                            <v-card-text class="category d-inline-flex font-weight-light">
+                                <v-label>
+                                    <h3>Identificador:</h3> {{editadoHeader.prpu_identifier}}
+                                </v-label>
+                            </v-card-text>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-card-text class="category d-inline-flex font-weight-light">
+                                <v-label>
+                                    <h3>Tipo:</h3> {{editadoHeader.prpu_type}}
+                                </v-label>
+                            </v-card-text>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-card-text class="category d-inline-flex font-weight-light">
+                                <v-label>
+                                    <h3>Fecha:</h3> {{editadoHeader.created_at}}
+                                </v-label>
+                            </v-card-text>
+                        </v-col>
                         <v-col cols="4">
                             <v-card-text class="category d-inline-flex font-weight-light">
                                 <v-label>
@@ -244,6 +265,7 @@ export default {
                 prpu_status: 0,
                 created_at: '',
                 updated_at: '',
+                prpu_type: ''
             },
             editado: {
                 prpd_pk: 0,
@@ -422,7 +444,7 @@ export default {
 
         createCompra() {
             this.loading = true
-            axios.get('/provider/purchases/' + this.prpo_pk + '')
+            axios.get('/provider/purchases/' + this.prpo_pk + '') 
                 .then(response => {
                     setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
