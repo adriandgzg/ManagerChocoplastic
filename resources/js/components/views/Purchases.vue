@@ -545,9 +545,9 @@ export default {
             this.detail.prpd_price = 0;
             this.detail.prpd_discountrate = 0;
 
-            this.detail.prov_fk = this.selectProv.prov_pk
+            this.detail.prov_fk = this.selectProv.prov_pk;
             //this.detail.stor_fk = this.selectStore.stor_pk
-            this.detail.pame_fk = this.selectpame.pame_pk
+            this.detail.pame_fk = this.selectpame.pame_pk;
 
             this.detail.meas_fk = item.meas_fk_input;
 
@@ -577,6 +577,12 @@ export default {
                     this.detail.prov_fk = this.prov_pk;
                 }
 
+                if(this.directa == 1)
+                {
+                    this.detail.prov_fk = this.prov_pk;
+
+                }
+
             if (this.selectpame == '' || this.selectpame == null) {
                 this.normal('Notificación', "Debe seleccionar una forma de pago", "error");
                 return;
@@ -587,6 +593,8 @@ export default {
                 return;
             }
           
+          console.log("this.prov_pk");
+          console.log(this.prov_pk);
 
             this.detail.meas_fk = this.selectmeas.meas_pk;
 
