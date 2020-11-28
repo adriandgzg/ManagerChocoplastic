@@ -822,6 +822,11 @@ export default {
             this.orderHeader.prpu_pk = this.prpu_pk
             this.orderHeader.prpo_pk = this.prpo_pk
             this.orderHeader.prov_fk = this.selectProv.prov_pk
+
+            if(this.directa == 1)
+            {
+                this.orderHeader.prov_fk = this.prov_pk;
+            }
             //this.orderHeader.stor_fk = this.selectStore.stor_pk
             this.orderHeader.pame_fk = this.selectpame.pame_pk
             this.orderHeader.prpu_amount = this.total
@@ -843,7 +848,7 @@ export default {
                         this.normal('Notificación', '¡Actualizado correctamente!', "success");
                         this.$router.push('/purchaselist');
                     } else {
-                        this.normal('Notificación', response.data.status.code.message, "error");
+                        this.normal('Notificación', response.data.status.message, "error");
                     }
 
                 })
