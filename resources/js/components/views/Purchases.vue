@@ -425,6 +425,7 @@ export default {
             dialogAgregar: false,
             measurements: [],
             selectmeas: '',
+            prov_pk: 0,
             minNumberRules: [
                 value => !!value || 'Requerido.',
                 value => value > 0 || 'El número debe ser mayor o igual a cero',
@@ -573,22 +574,19 @@ export default {
                 }
                 else
                 {
-                    this.detail.prov_fk = this.selectProv.prov_pk;
+                    this.detail.prov_fk = this.prov_pk;
                 }
 
             if (this.selectpame == '' || this.selectpame == null) {
                 this.normal('Notificación', "Debe seleccionar una forma de pago", "error");
-
                 return;
             }
 
             if (this.selectmeas == '' || this.selectmeas == null) {
                 this.normal('Notificación', "Debe seleccionar una unidad de medida", "error");
-
                 return;
             }
-            console.log("selectProv");
-            console.log(this.selectProv);
+          
 
             this.detail.meas_fk = this.selectmeas.meas_pk;
 
@@ -657,15 +655,16 @@ export default {
                             this.desserts = response.data.data.ProviderPurchaseDetail;
                             this.getTotal();
                             this.prpu_pk = response.data.data.ProviderPurchase.prpu_pk;
+                            this.prov_pk =response.data.data.ProviderPurchase.prov_fk;
                             //response.data.data.ProviderPurchaseDetail//
                             this.editadoHeader = response.data.data.ProviderPurchase;
                             var i = 0;
-                            for (i = 0; i < this.providers.length; i++) {
+                            /*for (i = 0; i < this.providers.length; i++) {
 
                                 if (response.data.data.ProviderPurchase.prov_fk == this.providers[i].prov_pk) {
                                     this.selectProv = this.providers[i];
                                 }
-                            }
+                            }*/
 
                             for (i = 0; i < this.stores.length; i++) {
 
