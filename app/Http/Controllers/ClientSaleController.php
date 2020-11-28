@@ -774,7 +774,6 @@ class ClientSaleController extends ApiResponseController
                                     DB::raw("$vclde_fk AS clde_fk"),
                                     'pash_fk',
                                     'bocu_fk',
-                                    'cpam_amount AS clpa_amount',
                                     DB::raw("cpam_amount AS clpa_amount"),
                                     DB::raw("cpam_reference AS clpa_reference"),
                                     DB::raw("1 AS clpa_status"),
