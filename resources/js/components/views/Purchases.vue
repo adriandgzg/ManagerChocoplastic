@@ -588,7 +588,7 @@ export default {
                 return;
             }
             console.log("selectProv");
-            console.log(selectProv);
+            console.log(this.selectProv);
 
             this.detail.meas_fk = this.selectmeas.meas_pk;
 
