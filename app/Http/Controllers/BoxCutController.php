@@ -34,29 +34,61 @@ class BoxCutController extends ApiResponseController
     
     public function ListBoxCuts()
     {
-        try {
-            $vClientSales = DB::table('box_cuts AS BC')
-                ->select(
-                    'BC.bocu_pk',
-                    
-                    DB::raw('(CASE 
-                        WHEN BC.bocu_status = 1 THEN "Abierta" 
-                        WHEN BC.bocu_status = 2 THEN "Cerrada"                          
-                        ELSE "" END) AS bocu_status'),
+        try 
+        {
+
+            $vStore = Auth::user()->store_id;
+            $vrole_id = Auth::user()->role_id;
+
+            if($vrole_id == 1)
+            {
+                $vBox = DB::table('box_cuts AS BC')
+                    ->join('stores AS S', 'S.stor_pk', '=', 'BC.stor_fk')
+                    ->select(
+                        'BC.bocu_pk',
+                        DB::raw('(CASE 
+                            WHEN BC.bocu_status = 1 THEN "Abierta" 
+                            WHEN BC.bocu_status = 2 THEN "Cerrada"                          
+                            ELSE "" END) AS bocu_status'),
                         'BC.bocu_startdate',
                         'BC.bocu_initialamount',
                         'BC.bocu_enddate',
                         'BC.bocu_endamount',
                         'BC.bocu_observation',
                         'BC.created_at',
-                )
-                ->get();
+                        DB::raw('CONCAT(S.stor_identifier, "-", S.stor_name) AS stor_name')
+                    )
+                    ->get();
+            }
+            else
+            {
+                $vBox = DB::table('box_cuts AS BC')
+                    ->join('stores AS S', 'S.stor_pk', '=', 'BC.stor_fk')
+                    ->select(
+                        'BC.bocu_pk',
+                        DB::raw('(CASE 
+                            WHEN BC.bocu_status = 1 THEN "Abierta" 
+                            WHEN BC.bocu_status = 2 THEN "Cerrada"                          
+                            ELSE "" END) AS bocu_status'),
+                        'BC.bocu_startdate',
+                        'BC.bocu_initialamount',
+                        'BC.bocu_enddate',
+                        'BC.bocu_endamount',
+                        'BC.bocu_observation',
+                        'BC.created_at',
+                        DB::raw('CONCAT(S.stor_identifier, "-", S.stor_name) AS stor_name')
+                    )
+                    ->where('BC.stor_fk', '=', $vStore)
+                    ->get();
+
+            }
+            
 
             return response()->json([
                 'code' => 200,
                 'success' => true,
-                'message' => 'Ventas de los clientes',
-                'data' =>  $vClientSales
+                'message' => 'Lista de Cajas',
+                'data' =>  $vBox
             ], 200);
             
         } catch (Exception $e) {

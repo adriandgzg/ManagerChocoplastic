@@ -73,8 +73,11 @@ export default {
         return {
             headers: [{
                     text: 'ID',
-                    value: 'bocu_pk',
-                    width: '10%'
+                    value: 'bocu_pk'
+                },
+                {
+                    text: 'Sucursal',
+                    value: 'stor_name'
                 },
                 {
                     text: 'Fecha Apertura',
