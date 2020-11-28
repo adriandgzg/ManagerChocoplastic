@@ -26,8 +26,8 @@ class CreateClientReturnDetailsTable extends Migration
             $table->bigInteger('meas_fk')->unsigned(); //Llave Foranea Catálogo Unidad de Medida
             $table->foreign('meas_fk')->references('meas_pk')->on('measurements')->onUpdate('cascade');
 
-            $table->integer('clrd_quantity'); //Cantidad
-            $table->integer('clrd_quantity_sale'); //Cantidad Venta (Validar cantidad maxima)
+            $table->decimal('clrd_quantity', 12, 2); //Cantidad
+            $table->decimal('clrd_quantity_sale', 12, 2); //Cantidad Venta (Validar cantidad maxima)
             $table->decimal('clrd_price', 12, 2); //Precio Compra 
             $table->smallInteger('clrd_status')->default(1); //Estatus
             $table->timestamps();

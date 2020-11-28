@@ -359,7 +359,7 @@ export default {
         onQuantityChange(item) {
             this.editado = Object.assign({}, item)
             console.log(this.editado)
-            if (this.editado.prrd_quantity > this.editado.prrd_quantity_purchase) {
+            if (parseFloat(this.editado.prrd_quantity) > parseFloat(this.editado.prrd_quantity_purchase)) {
                 this.textMsg = "¡El cantidad devuelta no puede ser mayor a la cantidad comprada!";
                 this.alertError = true;
                 setTimeout(() => {

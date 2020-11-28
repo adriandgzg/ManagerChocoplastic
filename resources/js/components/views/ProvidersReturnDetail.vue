@@ -80,10 +80,9 @@
                         <template v-slot:default>
                             <thead>
                                 <tr>
-                                    <th class="text-left">ID</th>
+                                    <th class="text-left">Identificador</th>
                                     <th class="text-left">Producto</th>
                                     <th class="text-left">Unidad Medida</th>
-                                    <th class="text-left">Cantidad</th>
                                     <th class="text-left">Cantidad Devuelta</th>
                                     <th></th>
                                 </tr>
@@ -93,7 +92,6 @@
                                     <td>{{ item.prod_identifier }}</td>
                                     <td>{{ item.prod_name }}</td>
                                     <td>{{ item.meas_name }}</td>
-                                    <td>{{item.prrd_quantity_purchase}}</td>
                                     <td>{{item.prrd_quantity}}</td>
                                     <td></td>
                                 </tr>
@@ -108,72 +106,7 @@
             </v-col>
         </v-row>
 
-        <!-- Dialog -->
 
-        <v-dialog v-model="dialogcredito" max-width="500">
-            <v-card>
-                <v-card-title>Crédito:</v-card-title>
-                <v-card-text>
-                    <span class="subheading font-weight-bold">Forma de Pago:</span>
-                    <v-text-field label="Efectivo: " prefix="$" type="number" v-model="efectivo"></v-text-field>
-                    <v-text-field label="Transferencia: " v-model="tarjeta" prefix="$" type="number"></v-text-field>
-
-                    <br />
-                    <tr>
-                        <td>Subtotal</td>
-                        <td> ${{formatMoney(subtotal)}}</td>
-                        <td />
-                    </tr>
-                    <tr>
-                        <td>Total I.V.A.</td>
-                        <td> ${{formatMoney(iva)}}</td>
-                        <td />
-                    </tr>
-                    <tr>
-                        <td>Total</td>
-                        <td> ${{formatMoney(total)}}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Crédito</td>
-                        <td> ${{formatMoney(total - efectivo - tarjeta) }}</td>
-                    </tr>
-
-                    <v-btn @click="dialogcredito = !dialogcredito">Cancelar</v-btn>
-                    <v-btn @click="finalizarVenta" color="warning">Confirmar</v-btn>
-                </v-card-text>
-            </v-card>
-        </v-dialog>
-
-        <v-dialog v-model="dialogcontado" max-width="500">
-            <v-card>
-                <v-card-title>Contado</v-card-title>
-
-                <v-card-text>
-                    <span class="subheading font-weight-bold">Forma de Pago:</span>
-
-                    <v-text-field label="Efectivo: " v-model="efectivo" required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
-                    <v-text-field label="Transferencia: " v-model="tarjeta" required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
-
-                    <br />
-                    <tr>
-                        <td>Subtotal</td>
-                        <td> ${{formatMoney(subtotal)}}</td>
-                        <td />
-                    </tr>
-                    <tr>
-                        <td>Total I.V.A.</td>
-                        <td> ${{formatMoney(iva)}}</td>
-                        <td />
-                    </tr>
-                    <tr>
-                        <td>Total</td>
-                        <td> ${{formatMoney(total)}}</td>
-                    </tr>
-                    <v-btn @click="dialogcontado = !dialogcontado">Cancelar</v-btn>
-                    <v-btn @click="finalizarVenta" color="success">Confirmar</v-btn>
-                </v-card-text>
-            </v-card>
-        </v-dialog>
     </v-container>
 </v-app>
 </template>

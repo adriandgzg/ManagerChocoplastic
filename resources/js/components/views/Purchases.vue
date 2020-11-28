@@ -813,7 +813,7 @@ export default {
                 return;
             }
 
-            this.messageQuestion = '¿Está seguro de finalizar la compra?';
+            this.messageQuestion = '¿Está seguro de Finalizar la Compra?';
 
             this.dialogQuestion = true
 

@@ -113,7 +113,7 @@
                     <v-row>
                         <v-col cols="6">
                             <v-card-text class="category d-inline-flex font-weight-light">
-                                <v-combobox required v-model="selectProv" :items="providers" label="Proveedor" item-text="prov_name" item-value="prov_pk" filled chips placeholder="Seleccionar una proveedor"></v-combobox>
+                                <v-combobox required v-model="selectProv" :items="providers" label="Proveedor" item-text="prov_name" item-value="prov_pk" filled chips placeholder="Seleccionar un Proveedor"></v-combobox>
                             </v-card-text>
                         </v-col>
 
