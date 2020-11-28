@@ -1216,8 +1216,8 @@ class ClientSaleController extends ApiResponseController
                 $total = 0;
                 foreach ($vCSD as $product) {
                     $pdf->SetFont('Arial', 'B', 10);
-                    $pdf->Cell(25, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 30), '', '0');
-                        $pdf->Ln(5);
+                    $pdf->Cell(25, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 60), '', '0');
+                    $pdf->Ln(5);
                     $price = $product->clsd_quantity * $product->clsd_price;  
                     $pdf->SetFont('Arial', '', 10);
                         $total = $total + $price;
