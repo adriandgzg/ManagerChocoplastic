@@ -817,6 +817,10 @@ class ProductController extends ApiResponseController
             
         );
 
+
+        //Modificación de nombre producto derivado
+        \DB::update("UPDATE products SET prod_name = '" . $request->prod_name . "', prod_description = '" . $request->prod_description . "' WHERE prod_main_pk = ". $request->prod_pk);
+
         return response()->json([
             'code' => 200,
             'success' => true,
