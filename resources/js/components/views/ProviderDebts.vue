@@ -148,8 +148,7 @@ export default {
             ],
             headers: [{
                     text: 'ID',
-                    value: 'prde_pk',
-                    width: '10%'
+                    value: 'prde_pk'
                 },
                 {
                     text: 'No. Compra',
@@ -160,21 +159,17 @@ export default {
                     value: 'prov_name'
                 },
                 {
-                    text: 'Monto',
+                    text: 'Monto Cuenta',
                     value: 'prde_amount'
                 },
                 {
                     text: 'Monto Pagado',
                     value: 'prde_amount_paid'
                 },
-
-                {
-                    text: 'Referencia',
-                    value: 'prpa_reference'
-                },
                 {
                     text: 'Fecha',
-                    value: 'created_at'
+                    value: 'created_at',
+                    width: '15%'
                 },
                 {
                     text: 'Estatus',
@@ -184,7 +179,7 @@ export default {
                 {
                     text: '',
                     value: 'action',
-                    width: '20%'
+                    width: '15%'
                 },
 
             ],

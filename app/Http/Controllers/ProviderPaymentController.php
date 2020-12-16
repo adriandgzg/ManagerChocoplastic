@@ -79,7 +79,6 @@ class ProviderPaymentController extends ApiResponseController
                     $vPP = new ProviderPayment();        
                     $vPP->prov_fk = $vprov_fk;
                     $vPP->prde_fk = $vprde_fk;
-                    $vPP->prde_fk = $vprde_fk;
                     $vPP->pash_fk = $vpash_fk;
                     $vPP->prpa_amount = $vprpa_amount;
                     $vPP->prpa_reference = $vprpa_reference;

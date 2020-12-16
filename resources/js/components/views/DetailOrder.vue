@@ -199,10 +199,10 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td />
                                                 <td>Total</td>
                                                 <td>${{formatMoney(montototal)}}</td>
-                                                <td />
+                                                <td></td>
+                                                <td></td>
                                             </tr>
                                         </tfoot>
                                     </template>
@@ -226,7 +226,7 @@
                     </tr>
                     <tr>
                         <td>Total Crédito</td>
-                        <td> ${{formatMoney(total - efectivo - tarjeta) }}</td>
+                        <td> ${{formatMoney(total - montototal) }}</td>
                     </tr>
 
                     <v-btn @click="dialogcredito = !dialogcredito">Cancelar</v-btn>
@@ -504,9 +504,6 @@ export default {
         },
         finalizar() {
 
-
-
-
             this.efectivo = 0;
             this.tarjeta = 0;
             this.getPagos();
@@ -545,6 +542,17 @@ export default {
                     return;
                 }
             }
+
+            if (this.editadoSale.pame_fk == 2) {
+                var vValidacionMonto = parseFloat(this.total) - parseFloat(this.montototal);
+                if (vValidacionMonto == 0) {
+                    this.normal('Notificación', 'El Monto de Total Crédito debe de ser mayor a 0, cambiar de Método de Pago', "success");
+                    return;
+                } 
+            }
+
+
+
             this.messageQuestion = '¿Desea finalizar la Venta?';
             this.dialogQuestion = true
         },

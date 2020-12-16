@@ -93,7 +93,7 @@ export default {
             headers: [
 
                 {
-                    text: 'ID Compra',
+                    text: 'Compra',
                     value: 'prpu_identifier'
                 },
                 {
@@ -109,11 +109,11 @@ export default {
                     value: 'prpu_type_description'
                 },
                 {
-                    text: 'ID Orden de Compra',
+                    text: 'Orden Compra',
                     value: 'prpo_identifier'
                 },
                 {
-                    text: 'Método de pago',
+                    text: 'Método Pago',
                     value: 'pame_name'
                 },
                 {

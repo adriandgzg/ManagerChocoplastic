@@ -6,13 +6,15 @@ use DB;
 use Throwable;
 use Validator;
 use App\ProviderReturn;
+use App\ProviderPayment;
 use App\ProductInventory;
 use App\ProviderPurchase;
 use Illuminate\Http\Request;
 use App\ProviderReturnDetail;
 use App\ProviderPurchaseDetail;
-use App\Http\Controllers\api\ApiResponseController;
 use PHPUnit\Framework\Constraint\IsFalse;
+use App\Http\Controllers\api\ApiResponseController;
+use App\ProviderDebt;
 
 class ProviderReturnController extends ApiResponseController
 {
@@ -154,9 +156,15 @@ class ProviderReturnController extends ApiResponseController
                                     END
                                     ) AS prrd_quantity_purchase'),
 
+                            DB::raw('(
+                                CASE WHEN PPD.meas_fk = P.meas_fk_input 
+                                    THEN 
+                                        prpd_price / prod_packingquantity 
+                                    ELSE 
+                                        prpd_price 
+                                END
+                                ) AS prrd_price'),
 
-
-                            'prpd_price AS prrd_price',
                             DB::raw("1 AS prrd_status"),
                             DB::raw("NOW() AS created_at"),
                             DB::raw("NOW() AS updated_at")
@@ -178,6 +186,8 @@ class ProviderReturnController extends ApiResponseController
                             ]
                         , $vSelPPD);
                 }
+
+
 
                 //Consulta Devolución Proveedor
                 $vProviderReturns = DB::table('provider_returns AS PR')
@@ -467,6 +477,35 @@ class ProviderReturnController extends ApiResponseController
 
                     //////////////////  Inserción de Log  //////////////////
                     $this->getstorelog('provider_returns', $vprre_pk, 2);
+
+                    
+                    //Anexar Monto por Devolución
+                    
+                    //Consultar Deuda
+                    $vPDSel = ProviderDebt::where('prpu_fk', '=', $vProviderReturn->prpu_fk)->first();
+                    //Validar Si si aplica inserción de pago de deuda
+                    if($vPDSel)
+                    {
+                        //Consultar Monto de la Devolución
+                        $vMontoDevolucion = ProviderReturnDetail::where('prre_fk', '=', $vprre_pk)->where('prrd_status', '=', 1)->sum(\DB::raw('prrd_price * prrd_quantity')); 
+
+                        //Insertar Pago del Proveedor
+                        $vPP = new ProviderPayment();        
+                        $vPP->prov_fk = $vProviderReturn->prov_fk;
+                        $vPP->prde_fk = $vPDSel->prde_pk;
+                        $vPP->pash_fk = 5;
+                        $vPP->prpa_amount = $vMontoDevolucion;
+                        $vPP->prpa_reference = 'Devolución';
+                        $vPP->save();
+
+                        //Asignación de PK de Pago Proveedor
+                        $vprpa_pk = $vPP->prpa_pk;
+
+                        //////////////////  Inserción de Log  //////////////////
+                        $this->getstorelog('provider_payments', $vprpa_pk, 1);
+                    }
+
+
 
                     //Aplicar modificación de Inventario
                     foreach($vPRD as $vP)
