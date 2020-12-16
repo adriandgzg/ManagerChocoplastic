@@ -159,7 +159,7 @@ export default {
                     value: 'prov_name'
                 },
                 {
-                    text: 'Monto Cuenta',
+                    text: 'Monto Deuda',
                     value: 'prde_amount'
                 },
                 {
@@ -167,9 +167,12 @@ export default {
                     value: 'prde_amount_paid'
                 },
                 {
+                    text: "Monto Pendiente",
+                    value: "prde_amount_outstanding",
+                },
+                {
                     text: 'Fecha',
-                    value: 'created_at',
-                    width: '15%'
+                    value: 'created_at'
                 },
                 {
                     text: 'Estatus',

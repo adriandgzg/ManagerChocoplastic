@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use DB;
 use Throwable;
 use Validator;
+use App\ClientDebt;
 use App\ClientSale;
 use App\ClientReturn;
+use App\ClientPayment;
 use App\ClientSaleDetail;
 use App\ProductInventory;
+use App\ClientReturnDetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
 
@@ -353,6 +356,7 @@ class ClientReturnController extends ApiResponseController
         $vVal = Validator::make($vInput, [
             'clre_pk' => 'required|int', // PK Devolucion Cliente
             'remo_fk' => 'required|int', // PK Motivo Devolucion
+            'bocu_fk' => 'required|int', // PK Caja
         ]);
 
         if ($vVal->fails()) {
@@ -364,6 +368,7 @@ class ClientReturnController extends ApiResponseController
            $vclre_pk = $vInput['clre_pk'];
            $vremo_fk = $vInput['remo_fk'];
            $vclre_observation = $vInput['clre_observation'];
+           $vbocu_fk = $vInput['bocu_fk'];
 
             $vClientReturn = ClientReturn::where('clre_pk', '=', $vclre_pk)->first();
 
@@ -381,6 +386,40 @@ class ClientReturnController extends ApiResponseController
                 
                 //////////////////  Inserción de Log  //////////////////
                 $this->getstorelog('client_returns', $vclre_pk, 2);
+
+
+                //Anexar Monto por Devolución
+
+                //Consultar Deuda Cliente
+                $vCDSel = ClientDebt::where('clsa_fk', '=', $vClientReturn->clsa_fk)->first();
+                //Validar Si si aplica inserción de pago de deuda
+                if($vCDSel)
+                {
+                    //Consultar Monto de la Devolución
+                    $vMontoDevolucion = ClientReturnDetail::where('clre_fk', '=', $vclre_pk)->where('clrd_status', '=', 1)->sum(\DB::raw('clrd_price * clrd_quantity')); 
+
+                    //Insertar Pago del cliente
+                    $vCPC = new ClientPayment();        
+                    $vCPC->clie_fk = $vClientReturn->clie_fk;
+                    $vCPC->clde_fk = $vCDSel->clde_pk;
+                    $vCPC->pash_fk = 5;
+                    $vCPC->bocu_fk = $vbocu_fk;
+                    $vCPC->clpa_amount = $vMontoDevolucion;
+                    $vCPC->clpa_reference = 'Devolución';
+                    $vCPC->save();
+
+                    //Asignación de PK Pago Cliente
+                    $vclpa_pk = $vCPC->clpa_pk;
+
+                    //////////////////  Inserción de Log  //////////////////
+                    $this->getstorelog('client_payments', $vclpa_pk, 1);
+
+                }
+
+
+
+
+
 
                 /////////////////////////////////Anexo de Inventario
                 $vPPD = DB::table('client_return_details AS CRD')
@@ -432,8 +471,7 @@ class ClientReturnController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $vTh;
-            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
+            return $this->dbResponse(null, 500, $vTh->getMessage(), 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 

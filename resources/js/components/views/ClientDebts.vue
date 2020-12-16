@@ -188,7 +188,6 @@ export default {
         {
           text: "ID",
           value: "clpa_pk",
-          width: "10%",
         },
         {
           text: "Forma de Pago",
@@ -243,6 +242,7 @@ export default {
         {
           text: "",
           value: "action",
+          width: '15%'
         },
       ],
       select: 0,
