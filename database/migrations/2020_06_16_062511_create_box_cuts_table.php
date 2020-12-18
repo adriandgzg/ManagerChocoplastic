@@ -27,6 +27,7 @@ class CreateBoxCutsTable extends Migration
             $table->decimal('bocu_endamount', 12, 2)->default(0); //Monto Final
             $table->decimal('bocu_amountcash', 12, 2)->default(0); //Total Contado
             $table->decimal('bocu_amountsum', 12, 2)->default(0); //Total Suma
+            $table->smallInteger('bocu_cancelorders')->default(0); //Estatus
             $table->smallInteger('bocu_status')->default(1); //Estatus
             $table->string('bocu_observation', 5000)->nullable(); //Observación
             $table->timestamps();

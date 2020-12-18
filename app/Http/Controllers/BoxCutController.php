@@ -289,11 +289,21 @@ class BoxCutController extends ApiResponseController
     {
         try{
 
+            if($request->bocu_cancelorders == 1)
+            {
+                $vBCSel = DB::table('box_cuts AS BC')->select('BC.stor_fk')->where('BC.bocu_pk', '=', $request->bocu_pk)->first();
+
+                DB::table('client_orders')
+                ->whereDate('created_at', '=', date('Y-m-d'))
+                ->where('stor_fk', '=', $vBCSel->stor_fk)
+                ->update(['clor_status' =>  0]);
+            }
             \DB::update("update box_cuts set"
             . "   bocu_enddate = '" . $request->bocu_enddate 
             . "', bocu_status = 2 " 
             . ",  bocu_endamount  = '" .  $request->bocu_endamount
             . "', bocu_observation = '" .  $request->bocu_observation
+            . "', bocu_cancelorders = '" .  $request->bocu_cancelorders
             . "' where bocu_pk = ". $request->bocu_pk);
 
             //////////////////  Inserción de Log  //////////////////
@@ -310,7 +320,7 @@ class BoxCutController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
+            return $this->dbResponse(null, 500, $vTh->getMessage(), 'Detalle Interno, informar al Administrador del Sistema.');
         }
 
     }

@@ -55,6 +55,12 @@
                             </v-col>
                         </v-row>
                         <v-row>
+                            <v-col cols="6">
+                                <span>Cancelar ventas del día</span>
+                                <v-switch v-model="CancelarVentas" />
+                            </v-col>
+                        </v-row> 
+                        <v-row>
                             <v-col>
                                 <v-card>
                                     <v-card-title class="green white--text">
@@ -208,6 +214,8 @@ export default {
         dateFormatted: '',
         boxEnabled: false,
         boxDrawals: false,
+        CancelarVentas: false,
+
         editadoBox: {
             admi_fk: 0,
             bocu_amountcash: 0,
@@ -218,6 +226,7 @@ export default {
             bocu_startdate: '',
             bocu_observation: '',
             bocu_status: 1,
+            bocu_cancelorders: 0,
             bocu_pk: 0,
         },
         editadoBoxDefault: {
@@ -230,6 +239,7 @@ export default {
             bocu_startdate: '',
             bocu_observation: '',
             bocu_status: 1,
+            bocu_cancelorders: 0,
             bocu_pk: 0,
         },
         editadoDrawals: {
@@ -408,6 +418,15 @@ export default {
 
         guardarCierre() {
             this.editadoBox.bocu_enddate = this.dateFormatted;
+            if (this.CancelarVentas == true)
+            {
+                this.editadoBox.bocu_cancelorders = 1;
+            }
+            else
+            {
+                this.editadoBox.bocu_cancelorders = 0;
+            }
+
 
             axios.post('/box/update', this.editadoBox)
                 .then(response => {
@@ -428,7 +447,7 @@ export default {
                         this.editadoBox = this.editadoBoxDefault;
                         this.$router.go();
                     } else {
-                        this.normal('Notificación', response.data.message, "error");
+                        this.normal('Notificación', response.data.status.technicaldetail, "error");
                     }
 
                 })
