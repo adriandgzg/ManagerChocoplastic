@@ -56,7 +56,7 @@
                         </v-row>
                         <v-row>
                             <v-col cols="6">
-                                <span>Cancelar ventas del día</span>
+                                <span>Cancelar pedidos del día</span>
                                 <v-switch v-model="CancelarVentas" />
                             </v-col>
                         </v-row> 
