@@ -425,6 +425,17 @@ export default {
           console.log(this.editado);
           console.log(response);
           if (response.data.code == 200) {
+
+            let route = this.$router.resolve({
+                path: "/client/payments/report/" + response.data.data,
+            });
+
+            var newWin = window.open(route.href, "",  "height=600,width=400");
+            setTimeout(function(){newWin.print(); },500);
+            setTimeout(function (){ newWin.close(); }, 40000);
+
+
+
             this.normal("Notificación", response.data.message, "success");
             this.getClientesPago();
             this.cancelar();

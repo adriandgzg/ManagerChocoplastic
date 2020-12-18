@@ -101,7 +101,7 @@ Route::get('/client/sales/report/{clsa_pk}', 'ClientSaleController@showreport');
 Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente) 
 Route::post('/clientsales/update', 'ClientSaleController@update'); //Finalizar Venta (Cliente)
 Route::get('/client/sales/printOrder/{clsa_pk}', 'ClientSaleController@printOrder'); //Detalle de Venta (Cliente) 
-Route::get('/client/sales/printCredit/{clsa_pk}', 'ClientSaleController@printCredit'); //Detalle de Venta (Cliente) 
+Route::get('/client/sales/printCredit/{clsa_pk}', 'ClientSaleController@printCredit'); //Reporte de Credito (Cliente) 
 
 Route::post('/client_sale_details/update', 'ClientSaleDetailController@update'); //Venta Producto Modificar (Cliente)
 Route::post('/client_sale_details/destroy', 'ClientSaleDetailController@destroy'); //Venta Producto Eliminar (Cliente)
@@ -111,6 +111,7 @@ Route::post('/client_sale_details/destroy', 'ClientSaleDetailController@destroy'
 Route::get('/client/debts', 'ClientDebtController@index'); //Lista de Deudas (Cliente) 
 Route::post('/client/payments', 'ClientPaymentController@store'); //Guardar Pagos (Cliente)
 Route::get('/client/payments/{clde_fk}', 'ClientPaymentController@show'); //Lista de Pagos, filtrado por deuda (Cliente)
+Route::get('/client/payments/report/{clpa_pk}', 'ClientPaymentController@printreport'); //Reporte de Pago Abono (Cliente) 
 
 
 //Cuentas por Pagar a Proveedor
