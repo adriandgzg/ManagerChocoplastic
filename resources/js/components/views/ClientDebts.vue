@@ -267,6 +267,7 @@ export default {
         clpa_amount: 0, //Monto clde
         clde_amount: 0,
         clde_amount_paid: 0,
+        clpa_reference: "",
         clde_amount_outstanding: 0,
       },
       editedIndex: -1,
@@ -392,7 +393,7 @@ export default {
       this.editado.pash_fk = 0;
       this.editado.clpa_amount = 0;
       this.editado.clde_amount = item.clde_amount;
-      //this.editado.clpa_reference = item.clpa_reference
+      this.editado.clpa_reference = "";
       this.editado.clde_amount_paid = item.clde_amount_paid;
       this.editado.clde_amount_outstanding = item.clde_amount_outstanding;
     },
