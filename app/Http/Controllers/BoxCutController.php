@@ -296,6 +296,7 @@ class BoxCutController extends ApiResponseController
                 DB::table('client_orders')
                 ->whereDate('created_at', '=', date('Y-m-d'))
                 ->where('stor_fk', '=', $vBCSel->stor_fk)
+                ->where('clor_status', '=', 1)
                 ->update(['clor_status' =>  0]);
             }
             \DB::update("update box_cuts set"
