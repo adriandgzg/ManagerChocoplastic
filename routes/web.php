@@ -118,6 +118,7 @@ Route::get('/client/payments/report/{clpa_pk}', 'ClientPaymentController@printre
 Route::get('/provider/debts', 'ProviderDebtController@index'); //Lista de Deudas (Proveedor) 
 Route::post('/provider/payments', 'ProviderPaymentController@store'); //Guardar Pagos (Proveedor) 
 Route::get('/provider/payments/{prde_fk}', 'ProviderPaymentController@show'); //Lista de Pagos, filtrado por deuda (Proveedor)
+Route::get('/provider/payments/report/{prpa_pk}', 'ProviderPaymentController@printreport'); //Reporte de Pago Abono (Cliente)  
 
 
 

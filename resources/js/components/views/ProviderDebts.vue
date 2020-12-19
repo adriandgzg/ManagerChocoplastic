@@ -101,7 +101,7 @@
                         </template>
                         <template v-slot:item.action="{ item }">
 
-                            <v-btn class="mr-2" fab dark small color="cyan" @click="abonar(item)" title="Agregar pago">
+                            <v-btn v-if="item.prde_status_description == 'Activo'"  class="mr-2" fab dark small color="cyan" @click="abonar(item)" title="Agregar pago">
                                 <v-icon dark>mdi-coin</v-icon>
                             </v-btn>
 
@@ -317,6 +317,17 @@ export default {
                 .then(response => {
                     console.log(response)
                     if (response.data.status.code == 200) {
+
+                        let route = this.$router.resolve({
+                            path: "/provider/payments/report/" + response.data.data,
+                        });
+
+                        var newWin = window.open(route.href, "", "height=600,width=400");
+            
+                        setTimeout(function () {
+                        newWin.close();
+                        }, 40000);
+
 
                         this.textMsg = "¡Actualizado correctamente!";
                         this.normal('Notificación', response.data.status.message, "success");

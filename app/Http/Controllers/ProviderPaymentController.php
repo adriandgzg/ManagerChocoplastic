@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use DB;
 use Throwable;
 use Validator;
-
 use App\ProviderDebt;
 use App\ProviderPayment;
+use App\Helpers\FpdfJs;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
 
@@ -112,7 +112,7 @@ class ProviderPaymentController extends ApiResponseController
                         //////////////////  Inserción de Log  //////////////////
                         $this->getstorelog('provider_purchases', $vProvDebt->prpu_fk, 2);
                     }
-                    return $this->dbResponse(null, 200, null, 'Pago Guardado Correctamente');
+                    return $this->dbResponse($vprpa_pk, 200, null, 'Pago Guardado Correctamente');
                 }
                 else
                 {
@@ -194,7 +194,7 @@ class ProviderPaymentController extends ApiResponseController
     public function update(Request $request, ProviderPayment $providerPayment)
     {
         //
-    }
+    } 
 
     /**
      * Remove the specified resource from storage.
@@ -206,4 +206,197 @@ class ProviderPaymentController extends ApiResponseController
     {
         //
     }
+
+
+
+    public function printreport($prpa_pk)
+    {
+        try  
+        {
+            //Asignacion de variables
+            $vprpa_pk = $prpa_pk;
+
+
+            if ($vprpa_pk == '' || $vprpa_pk == 0) {
+                return $this->dbResponse(null, 500, null, 'PK Obligatorio');
+            }
+
+            $vCPSel = DB::table('provider_payments AS PP')
+            ->join('providers AS P', 'P.prov_pk', '=', 'PP.prov_fk')
+            ->join('provider_debts AS PD', 'PD.prde_pk', '=', 'PP.prde_fk')
+            ->join('payment_shapes AS PS', 'PS.pash_Pk', '=', 'PP.pash_fk')
+            ->join('provider_purchases AS PPU', 'PPU.prpu_pk', '=', 'PD.prpu_fk')
+            ->join('stores AS S', 'S.stor_pk', '=', 'PPU.stor_fk')
+            ->select(
+                'PP.prpa_pk',
+                'PP.prpa_amount',
+                'PP.prpa_reference',
+                DB::raw("PP.created_at  AS created_at_pay"),
+
+                'PS.pash_pk',        
+                'PS.pash_name', 
+                
+                'P.prov_pk',
+                'P.prov_identifier',
+                'P.prov_name',
+                'P.prov_rfc',
+
+
+                'S.stor_pk',
+                'S.stor_name',
+                'S.stor_rfc',
+                'S.stor_addres',
+                'S.stor_phone',
+
+                'PPU.prpu_identifier',     
+
+                'PD.prde_pk',
+                'PD.prde_amount',  //Monto de la deuda
+                DB::raw('(SELECT IFNULL(SUM(prpa_amount), 0) AS prde_amount_paid FROM provider_payments WHERE prde_fk = PD.prde_pk) AS prde_amount_paid'),//Monto Pagado
+                DB::raw('(SELECT PD.prde_amount - IFNULL(SUM(prpa_amount), 0) AS prde_amount_outstanding FROM provider_payments WHERE prde_fk = PD.prde_pk) AS prde_amount_outstanding'), //Monto Pendiente por pagar
+                DB::raw('(CASE 
+                    WHEN PD.prde_status = 1 THEN "Activo" 
+                    WHEN PD.prde_status = 2 THEN "Pagado" 
+                    ELSE "" END) AS prde_status_description'),
+                DB::raw("PD.created_at  AS created_at_debt")
+
+            )
+            ->where('PP.prpa_status', '=', 1)
+            ->where('PP.prpa_pk', '=', $vprpa_pk)
+            ->first();
+
+            $pdf = new FpdfJs($orientation = 'P', $unit = 'mm', 'Letter');
+            //$pdf->SetMargins(10, 2, 2,0);
+            $pdf->SetMargins(10, 20);
+            $pdf->AddPage();
+            $pdf->SetFont('Arial', 'B', 8);    //Letra Arial, negrita (Bold), tam. 20
+            $pdf->Image(config('app.url') . '/images/bg.png', 3, 2, 210);
+            $pdf->Image(config('app.url') . '/images/logo_chocoplastic.png', 15, 10, 60);
+            
+                
+            $lineHeigth = 2;                
+            $pdf->Ln(20);
+            // Número de página
+            
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(10, $lineHeigth, 'RFC:', '', '0', 'L');
+            
+            $pdf->SetFont('Arial', '', 10);                
+            $pdf->Cell(5, $lineHeigth, utf8_decode($vCPSel->stor_rfc), '', '0', 'L');
+            
+            $pdf->Ln(4);
+            
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(30, $lineHeigth, 'Domicilio Fiscal:', '', '0', 'L');
+            
+            $pdf->SetFont('Arial', '', 8);
+            $pdf->Cell(5, $lineHeigth, utf8_decode($vCPSel->stor_addres), '', '0', 'L');
+            
+            $pdf->Ln(6);
+            
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(210, $lineHeigth, utf8_decode($vCPSel->stor_name), '', '1', 'C');
+            
+            $pdf->Ln(6);
+        
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, 'Tipo de Pago:', '', '0', 'L');
+            $pdf->SetFont('Arial', '', 12);                
+            $pdf->Cell(5, $lineHeigth,'Abono al Proveedor', '', '0', 'L');
+            $pdf->Ln(7);
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, 'Fecha de Compra: ', '', '0', 'L');
+            $pdf->SetFont('Arial', '', 12);                
+            $pdf->Cell(5, $lineHeigth, utf8_decode(date('d/m/Y h:i a', strtotime($vCPSel->created_at_debt))) , '', '0', 'L');
+            $pdf->Ln(7);
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, utf8_decode('Número de Compra: '), '', '0', 'L');
+            $pdf->SetFont('Arial', '', 12);                
+            $pdf->Cell(5, $lineHeigth, utf8_decode($vCPSel->prpu_identifier), '', '0', 'L');
+            $pdf->Ln(7);
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, 'Proveedor:', '', '0', 'L');
+            $pdf->SetFont('Arial', '', 12);                
+            $pdf->Cell(5, $lineHeigth, utf8_decode($vCPSel->prov_name), '', '0', 'L');
+            $pdf->Ln(7);
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, 'Fecha de Pago:', '', '0', 'L');
+            $pdf->SetFont('Arial', '', 12);                
+            $pdf->Cell(5, $lineHeigth,  utf8_decode(date('d/m/Y h:i a', strtotime($vCPSel->created_at_pay))), '', '0', 'L');
+            $pdf->Ln(7);
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, 'Forma de Pago:', '', '0', 'L');
+            $pdf->SetFont('Arial', '', 12);                
+            $pdf->Cell(5, $lineHeigth, utf8_decode($vCPSel->pash_name), '', '0', 'L');
+            $pdf->Ln(7);
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, 'Monto Abonado:', '', '0', 'L');
+            $pdf->SetFont('Arial', 'B', 12);                
+            $pdf->Cell(5, $lineHeigth, '$' . utf8_decode(number_format($vCPSel->prpa_amount, 2)), '', '0', 'L');
+            $pdf->Ln(7);
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, 'Monto Total:', '', '0', 'L');
+            $pdf->SetFont('Arial', '', 12);                
+            $pdf->Cell(5, $lineHeigth, '$' . utf8_decode(number_format($vCPSel->prde_amount, 2)), '', '0', 'L');
+            $pdf->Ln(7);
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, 'Monto Pagado:', '', '0', 'L');
+            $pdf->SetFont('Arial', '', 12);                
+            $pdf->Cell(5, $lineHeigth, '$' . utf8_decode(number_format($vCPSel->prde_amount_paid, 2)), '', '0', 'L');
+            $pdf->Ln(7);
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, 'Monto Pendiente:', '', '0', 'L');
+            $pdf->SetFont('Arial', '', 12);                
+            $pdf->Cell(5, $lineHeigth, '$' . utf8_decode(number_format($vCPSel->prde_amount_outstanding, 2)), '', '0', 'L');
+            $pdf->Ln(6);
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, 'Referencia:', '', '0', 'L');
+            $pdf->SetFont('Arial', '', 12);                
+            $pdf->Cell(5, $lineHeigth, utf8_decode($vCPSel->prpa_reference), '', '0', 'L');
+            $pdf->Ln(7);
+
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(45, $lineHeigth, 'Estatus Cuenta:', '', '0', 'L');
+            $pdf->SetFont('Arial', '', 12);                
+            $pdf->Cell(5, $lineHeigth, utf8_decode($vCPSel->prde_status_description), '', '0', 'L');
+            $pdf->Ln(7);
+
+
+            $pdf->Ln(20);                
+            $pdf->Cell(180, $lineHeigth, utf8_decode(('_____________________________________________' )), '0', '0', 'C');  
+            $pdf->Ln(5);
+            $pdf->Cell(180, $lineHeigth, utf8_decode(('Nombre y firma' )), '0', '0', 'C');                
+
+            $pdf->SetAutoPageBreak(false);
+            $pdf->SetY(-15);
+            $pdf->SetX(7);
+            $pdf->SetDrawColor(0,80,180);   
+            $pdf->SetFillColor(250,70,51);
+            $pdf->Cell(200,1,utf8_decode(' '),0,1,'C', true);
+            $pdf->SetX(7);
+            $pdf->SetFillColor(255,219,216);
+            $pdf->SetFont('Arial', '', 8);
+            $pdf->Cell(200,8,utf8_decode($vCPSel->stor_name . ' TEL.' . $vCPSel->stor_phone),0,1,'C', true);
+            ob_get_clean();
+            $pdf->output('I', 'ticket', 'true');
+
+        } catch (\Throwable $vTh) {
+            return  $vTh->getMessage();
+        }
+        
+            
+    }
+
+
 }

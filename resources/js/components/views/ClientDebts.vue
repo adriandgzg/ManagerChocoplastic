@@ -1,12 +1,18 @@
 <template>
   <v-app>
     <v-container>
-      <v-alert type="warning" v-model="boxEnabled">Para realizar una venta, primero debe abrir caja.</v-alert>
+      <v-alert type="warning" v-model="boxEnabled"
+        >Para realizar una venta, primero debe abrir caja.</v-alert
+      >
       <v-dialog v-model="loading" persistent width="300">
         <v-card color="white">
           <v-card-text>
             Cargando
-            <v-progress-linear indeterminate color="green" class="mb-0"></v-progress-linear>
+            <v-progress-linear
+              indeterminate
+              color="green"
+              class="mb-0"
+            ></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -25,13 +31,18 @@
               class="elevation-3"
             >
               <template v-slot:item.clpa_amount="{ item }">
-                <v-label>${{formatMoney(item.clpa_amount)}}</v-label>
+                <v-label>${{ formatMoney(item.clpa_amount) }}</v-label>
               </template>
             </v-data-table>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue-grey" class="ma-2 white--text" @click="cancelardetalle">Cancelar</v-btn>
+            <v-btn
+              color="blue-grey"
+              class="ma-2 white--text"
+              @click="cancelardetalle"
+              >Cancelar</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -47,21 +58,21 @@
               <v-row>
                 <v-col cols="6">
                   <h4>No. Venta:</h4>
-                  {{editado.clsa_identifier}}
+                  {{ editado.clsa_identifier }}
                 </v-col>
                 <v-col cols="6">
                   <h4>Monto total:</h4>
-                  ${{formatMoney(editado.clde_amount)}}
+                  ${{ formatMoney(editado.clde_amount) }}
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="6">
                   <h4>Monto pagado:</h4>
-                  ${{formatMoney(editado.clde_amount_paid)}}
+                  ${{ formatMoney(editado.clde_amount_paid) }}
                 </v-col>
                 <v-col cols="6">
                   <h4>Monto pendiente:</h4>
-                  ${{formatMoney(editado.clde_amount_outstanding)}}
+                  ${{ formatMoney(editado.clde_amount_outstanding) }}
                 </v-col>
               </v-row>
 
@@ -93,20 +104,27 @@
               </v-row>
               <v-row>
                 <v-card-text class="category d-inline-flex font-weight-light">
-                  <v-text-field v-model="editado.clpa_reference" label="Referencia" type="text"></v-text-field>
+                  <v-text-field
+                    v-model="editado.clpa_reference"
+                    label="Referencia"
+                    type="text"
+                  ></v-text-field>
                 </v-card-text>
               </v-row>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue-grey" class="ma-2 white--text" @click="cancelar">Cancelar</v-btn>
+            <v-btn color="blue-grey" class="ma-2 white--text" @click="cancelar"
+              >Cancelar</v-btn
+            >
             <v-btn
               :disabled="!valid"
               color="teal accent-4"
               class="ma-2 white--text"
               @click="guardar"
-            >Guardar</v-btn>
+              >Guardar</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -137,17 +155,19 @@
                 </v-col>
               </template>
               <template v-slot:item.clde_amount="{ item }">
-                <v-label>${{formatMoney(item.clde_amount)}}</v-label>
+                <v-label>${{ formatMoney(item.clde_amount) }}</v-label>
               </template>
               <template v-slot:item.clde_amount_paid="{ item }">
-                <v-label>${{formatMoney(item.clde_amount_paid)}}</v-label>
+                <v-label>${{ formatMoney(item.clde_amount_paid) }}</v-label>
               </template>
               <template v-slot:item.clde_amount_outstanding="{ item }">
-                <v-label>${{formatMoney(item.clde_amount_outstanding)}}</v-label>
+                <v-label
+                  >${{ formatMoney(item.clde_amount_outstanding) }}</v-label
+                >
               </template>
               <template v-slot:item.action="{ item }">
                 <v-btn
-                  v-if="boxEnabled != true"
+                  v-if="boxEnabled != true && item.clde_status_description == 'Activo'" 
                   class="mr-2"
                   fab
                   dark
@@ -242,7 +262,7 @@ export default {
         {
           text: "",
           value: "action",
-          width: '15%'
+          width: "15%",
         },
       ],
       select: 0,
@@ -426,16 +446,17 @@ export default {
           console.log(this.editado);
           console.log(response);
           if (response.data.code == 200) {
-
             let route = this.$router.resolve({
-                path: "/client/payments/report/" + response.data.data,
+              path: "/client/payments/report/" + response.data.data,
             });
 
-            var newWin = window.open(route.href, "",  "height=600,width=400");
-            setTimeout(function(){newWin.print(); },500);
-            setTimeout(function (){ newWin.close(); }, 40000);
-
-
+            var newWin = window.open(route.href, "", "height=600,width=400");
+            setTimeout(function () {
+              newWin.print();
+            }, 500);
+            setTimeout(function () {
+              newWin.close();
+            }, 40000);
 
             this.normal("Notificación", response.data.message, "success");
             this.getClientesPago();
