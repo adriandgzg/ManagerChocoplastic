@@ -604,40 +604,52 @@ export default {
             } else {
                 this.alta()
             }
-            this.cancelar()
+            //this.cancelar()
         },
         alta: function () {
             axios.post('/product/add', this.editado).then(response => {
                     console.log(response.data)
+                    if(response.data.status.code == 501) {
+                        this.normal('Detalle de validación', 'El campo identificador ya ha sido registrado.', "error");
+                    }
+                    else
                     if (response.data.status.code == 200) {
                         this.dialogSuccess = false
                         this.textMsg = response.data.status.message
                         this.normal('Notificación', this.textMsg, "success");
                         this.getProducts();
+                        this.cancelar();
                     } else {
                         this.normal('Notificación', response.data.status.technicaldetail.errorInfo[2], "error");
                     }
                 })
                 .catch(e => {
-                    this.errors.push(e)
+                    //this.errors.push(e)
+                    this.normal('Notificación', 'Ocurrio un error al intentar guardar los cambios. Intente más tarde.', "error");
                 })
         },
 
         editar: function () {
             axios.put('/product/update', this.editado).then(response => {
                     console.log(response)
-                    if (response.data.code == 200) {
+                    if(response.data.status.code == 501) {
+                        this.normal('Detalle de validación', 'El campo identificador ya ha sido registrado.', "error");
+                    }
+                    else
+                    if (response.data.status.code == 200) {
                         this.dialogSuccess = false
                         this.textMsg = '¡Actualización Exitosa!'
                         this.normal('Notificación', this.textMsg, "success");
                         this.getProducts();
+                        this.cancelar()
                     } else {
 
-                        this.normal('Notificación', response.data.message, "error");
+                        this.normal('Notificación', response.data.status.message, "error");
                     }
                 })
                 .catch(e => {
-                    this.errors.push(e)
+                    //this.errors.push(e)
+                    this.normal('Notificación', 'Ocurrio un error al intentar guardar los cambios. Intente más tarde.', "error");
                 })
         },
 

@@ -729,6 +729,17 @@ class ProductController extends ApiResponseController
     {        
         try 
         {
+
+            $vInput = $request->all();
+
+            $vVal = Validator::make($vInput, [
+                'prod_identifier' => 'required|unique:products|max:255',          
+            ]);
+
+            if ($vVal->fails()) {
+                return $this->dbResponse(null, 501, $vVal->errors(), 'Detalle de Validación');
+            }
+
             $stores = new Product();      
             $imageName = '';
             $urlImage = '';
@@ -778,6 +789,12 @@ class ProductController extends ApiResponseController
     public function update(Request $request)
     {        
         
+        $query = \DB::select("SELECT * FROM products WHERE prod_identifier = ". $request->prod_identifier . " and prod_pk !=". $request->prod_pk . " and prod_main_pk is null");
+
+        if($query){
+            return $this->dbResponse(null, 501, "El campos ya se registro", 'Detalle de Validación');
+        }
+
         $imageName = '';
         $urlImage = '';
         $ruta =   public_path('/images/products/');
@@ -820,13 +837,13 @@ class ProductController extends ApiResponseController
 
         //Modificación de nombre producto derivado
         \DB::update("UPDATE products SET prod_name = '" . $request->prod_name . "', prod_description = '" . $request->prod_description . "' WHERE prod_main_pk = ". $request->prod_pk);
-
-        return response()->json([
+        return $this->dbResponse("Modificado", 200, null, 'Modificado Correctamente');
+        /*return response()->json([
             'code' => 200,
             'success' => true,
             'message' => 'Producto Modificado Correctamente',
             'data' => null
-        ], 200);
+        ], 200);*/
 
     }
 
