@@ -52,8 +52,8 @@
                         <template v-slot:item.status="{ item }">
                             <v-chip v-if="item.prpu_status == 0" color="red" dark> {{item.prpu_status_description}} </v-chip>
                             <v-chip v-if="item.prpu_status == 1" color="orange" dark> {{item.prpu_status_description}} </v-chip>
-                            <v-chip v-if="item.prpu_status == 2" color="green" dark> {{item.prpu_status_description}} </v-chip>
-                            <v-chip v-if="item.prpu_status == 3" color="blue" dark> {{item.prpu_status_description}} </v-chip>
+                            <v-chip v-if="item.prpu_status == 2" color="blue" dark> {{item.prpu_status_description}} </v-chip>
+                            <v-chip v-if="item.prpu_status == 3" color="green" dark> {{item.prpu_status_description}} </v-chip>
 
                         </template>
                         <template v-slot:item.action="{ item }">
@@ -117,12 +117,16 @@ export default {
                     value: 'pame_name'
                 },
                 {
-                    text: 'Estatus',
-                    value: 'status'
-                },
-                {
                     text: 'Fecha',
                     value: 'created_at'
+                },
+                {
+                    text: 'Nota/Factura',
+                    value: 'prpu_observation'
+                },
+                {
+                    text: 'Estatus',
+                    value: 'status'
                 },
                 {
                     text: '',
@@ -186,6 +190,7 @@ export default {
                 prpu_status: 0,
                 created_at: '',
                 updated_at: '',
+                prpu_observation: ''
             },
         };
     },

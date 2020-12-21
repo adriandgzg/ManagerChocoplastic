@@ -40,12 +40,13 @@ class ProviderPurchaseController extends ApiResponseController
                     ->select(
                         'PP.prpu_pk',
                         'PP.prpu_identifier',
+                        'PP.prpu_observation',
                         'PP.prpu_type',
                         'PP.created_at',
                         DB::raw('
                             (CASE 
-                                WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
-                                WHEN PP.prpu_type = 2 THEN "Compra directa" 
+                                WHEN PP.prpu_type = 1 THEN "Orden Compra" 
+                                WHEN PP.prpu_type = 2 THEN "Compra Directa" 
                                 ELSE "" END
                             ) AS prpu_type_description'),
                         'PP.prpu_status',
@@ -53,7 +54,7 @@ class ProviderPurchaseController extends ApiResponseController
                             (CASE 
                                 WHEN PP.prpu_status = 0 THEN "Cancelada" 
                                 WHEN PP.prpu_status = 1 THEN "Pendiente" 
-                                WHEN PP.prpu_status = 2 THEN "En Proceso de Pago" 
+                                WHEN PP.prpu_status = 2 THEN "Proceso Pago" 
                                 WHEN PP.prpu_status = 3 THEN "Pagado" 
                                 ELSE "" END
                             ) AS prpu_status_description'),
@@ -82,12 +83,13 @@ class ProviderPurchaseController extends ApiResponseController
                     ->select(
                         'PP.prpu_pk',
                         'PP.prpu_identifier',
+                        'PP.prpu_observation',
                         'PP.prpu_type',
                         'PP.created_at',
                         DB::raw('
                             (CASE 
-                                WHEN PP.prpu_type = 1 THEN "Por orden de compra" 
-                                WHEN PP.prpu_type = 2 THEN "Compra directa" 
+                                WHEN PP.prpu_type = 1 THEN "Orden Compra" 
+                                WHEN PP.prpu_type = 2 THEN "Compra Directa" 
                                 ELSE "" END
                             ) AS prpu_type_description'),
                         'PP.prpu_status',
@@ -95,7 +97,7 @@ class ProviderPurchaseController extends ApiResponseController
                             (CASE 
                                 WHEN PP.prpu_status = 0 THEN "Cancelada" 
                                 WHEN PP.prpu_status = 1 THEN "Pendiente" 
-                                WHEN PP.prpu_status = 2 THEN "En Proceso de Pago" 
+                                WHEN PP.prpu_status = 2 THEN "Proceso Pago" 
                                 WHEN PP.prpu_status = 3 THEN "Pagado" 
                                 ELSE "" END
                             ) AS prpu_status_description'),
