@@ -52,7 +52,7 @@
                          <v-col cols="4">
                             <v-card-text class="category d-inline-flex font-weight-light">
                                 <v-label>
-                                    <h3>Identificador:</h3> {{editadoHeader.prpu_identifier}}
+                                    <h3>Identificador: <br/> {{editadoHeader.prpu_identifier}}</h3>
                                 </v-label>
                             </v-card-text>
                         </v-col>
@@ -77,7 +77,6 @@
                                 </v-label>
                             </v-card-text>
                         </v-col>
-
                         <v-col cols="4">
                             <v-card-text class="category d-inline-flex font-weight-light">
                                 <v-label>
@@ -89,6 +88,13 @@
                             <v-card-text class="category d-inline-flex font-weight-light">
                                 <v-label>
                                     <h3>Método de pago:</h3> {{editadoHeader.pame_name}}
+                                </v-label>
+                            </v-card-text>
+                        </v-col>
+                        <v-col cols="4">
+                            <v-card-text class="category d-inline-flex font-weight-light">
+                                <v-label>
+                                    <h3>Número Nota / Factura:</h3> {{editadoHeader.prpu_observation}}
                                 </v-label>
                             </v-card-text>
                         </v-col>
@@ -265,7 +271,8 @@ export default {
                 prpu_status: 0,
                 created_at: '',
                 updated_at: '',
-                prpu_type: ''
+                prpu_type: '',
+                prpu_observation: ''
             },
             editado: {
                 prpd_pk: 0,

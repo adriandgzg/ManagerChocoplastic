@@ -439,6 +439,7 @@ class ProviderPurchaseController extends ApiResponseController
             ->select(
                 'PP.prpu_pk',
                 'PP.prpu_identifier',
+                'PP.prpu_observation',
                 'PP.created_at',
                 DB::raw('
                     (CASE 
