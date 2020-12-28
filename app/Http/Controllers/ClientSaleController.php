@@ -984,7 +984,7 @@ class ClientSaleController extends ApiResponseController
                 $pdf->Ln();
                 
                 $pdf->SetFont('Arial', 'B', 7);
-                $pdf->Cell(30, $lineHeigth+1, 'Teléfono :', '', '0', 'R');
+                $pdf->Cell(30, $lineHeigth+1, utf8_decode('Teléfono:'), '', '0', 'R');
                 $pdf->SetFont('Arial', '', 7);
                 $pdf->Cell(30, $lineHeigth+1, $vCS->stor_phone, '', '0', 'L');
                 $pdf->Ln();
