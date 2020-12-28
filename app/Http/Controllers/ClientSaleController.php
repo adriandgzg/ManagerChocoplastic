@@ -925,6 +925,7 @@ class ClientSaleController extends ApiResponseController
                     'S.stor_name',
                     'S.stor_rfc',
                     'S.stor_addres',
+                    'S.stor_phone',
                     DB::raw('(SELECT U.name AS user FROM logs AS L INNER JOIN users AS U ON L.user_fk = U.id WHERE L.table = "client_orders" AND L.pk_register = CO.clor_pk AND L.operation = 1 LIMIT 1) AS user') //Vededor
                 )
                 ->where('CS.clsa_pk', '=', $vclsa_pk)
@@ -978,10 +979,17 @@ class ClientSaleController extends ApiResponseController
                 
                 $pdf->SetFont('Arial', 'B', 7);
                 $pdf->Cell(30, $lineHeigth+1, 'RFC:', '', '0', 'R');
-                
                 $pdf->SetFont('Arial', '', 7);
                 $pdf->Cell(30, $lineHeigth+1, $vCS->stor_rfc, '', '0', 'L');
                 $pdf->Ln();
+                
+                $pdf->SetFont('Arial', 'B', 7);
+                $pdf->Cell(30, $lineHeigth+1, 'Teléfono :', '', '0', 'R');
+                $pdf->SetFont('Arial', '', 7);
+                $pdf->Cell(30, $lineHeigth+1, $vCS->stor_phone, '', '0', 'L');
+                $pdf->Ln();
+
+
                 $pdf->SetFont('Arial', 'B', 7);
                 $pdf->Cell(80, $lineHeigth+1, 'Domicilio Fiscal:', '', '0', 'C');
                 $pdf->Ln();
