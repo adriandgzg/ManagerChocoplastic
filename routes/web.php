@@ -127,7 +127,7 @@ Route::get('/provider/payments/report/{prpa_pk}', 'ProviderPaymentController@pri
 Route::get('/product/frequents', 'ProductFrequentController@list'); 
 Route::post('/product/frequents', 'ProductFrequentController@store'); 
 Route::post('/product/frequents/update', 'ProductFrequentController@update'); 
-Route::post('/product/frequents/destroy', 'ProductFrequentController@destroy'); 
+Route::post('/product/frequents/delete', 'ProductFrequentController@destroy'); 
 
 
 
