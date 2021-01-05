@@ -51,8 +51,6 @@
                                 <td>{{props.item.prca_name}}</td>
                                 <td>{{props.item.stor_name}}</td>
                                 <td>{{props.item.prin_stock}}</td>
-                                <td>{{props.item.stock_order}}</td>
-                                <td>{{props.item.prin_stock - props.item.stock_order}}</td>
                             </tr>
                         </template>
 
@@ -94,7 +92,8 @@ export default {
                 {
                     text: 'Stock',
                     value: 'prin_stock'
-                },
+                }
+                /*,
                 {
                     text: 'Pedido',
                     value: 'stock_order'
@@ -102,7 +101,7 @@ export default {
                 {
                     text: 'Stock App',
                     value: 'prin_stock' - 'stock_order'
-                }
+                }*/
 
             ],
             select: 0,
