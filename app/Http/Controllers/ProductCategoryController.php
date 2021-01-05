@@ -60,11 +60,19 @@ class ProductCategoryController extends ApiResponseController
     public function add(Request $request)
     {        
        
-        $stores = new ProductCategory();        
-        $stores->prca_name = $request->prca_name;
-        $stores->prca_status = $request->prca_status;
-
-        $stores->save();
+         
+        try 
+        {
+            $stores = new ProductCategory();        
+            $stores->prca_name = $request->prca_name;
+            $stores->prca_abbreviation = $request->prca_name;
+            $stores->prca_status = $request->prca_status;
+   
+            $stores->save();
+        } 
+        catch (Exception $e) {
+            return $this->dbResponse(null, 500, $e, null);
+        }
     }
 
     public function update(Request $request)

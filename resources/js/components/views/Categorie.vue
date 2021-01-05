@@ -16,7 +16,7 @@
             </v-card>
         </v-dialog>
 
-        <v-dialog v-model="dialogQuestion" persistent max-width="290">
+        <!-- <v-dialog v-model="dialogQuestion" persistent max-width="290">
             <v-card>
                 <v-card-title class="headline">Información</v-card-title>
                 <v-card-text>{{messageQuestion}}.</v-card-text>
@@ -26,7 +26,7 @@
                     <v-btn color="green darken-1" text @click="guardaFinalizar">Continuar</v-btn>
                 </v-card-actions>
             </v-card>
-        </v-dialog>
+        </v-dialog> -->
         <v-dialog v-model="dialogQuestionDelete" persistent max-width="290">
             <v-card>
                 <v-card-title class="headline">Alerta</v-card-title>
@@ -220,7 +220,10 @@ export default {
             this.cancelar()
         },
         alta: function () {
+            console.log("this.editado");
+            console.log(this.editado);
             axios.post('/categories/add', this.editado).then(response => {
+                console.log(response);
                 this.snackbar = true
                 this.textMsg = '¡Alta exitosa!'
                 this.getCategories();

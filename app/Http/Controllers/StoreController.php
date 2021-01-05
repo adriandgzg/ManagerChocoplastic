@@ -66,15 +66,24 @@ class StoreController extends ApiResponseController
 
     public function add(Request $request)
     {        
-       
+        try 
+        {
         $stores = new Store();        
         $stores->stor_name = $request->stor_name;
+        $stores->stor_businessname= $request->stor_name;
+        $stores->stor_identifier = $request->stor_name;
+        $stores->stor_rfc = 'XAXX010101000';
         $stores->stor_phone = $request->stor_phone;
+        $stores->stor_cellphone = $request->stor_phone;
         $stores->stor_addres = $request->stor_addres;
         $stores->stor_main = $request->stor_main;
         $stores->stor_status = $request->stor_status;
 
         $stores->save();
+    } 
+    catch (Exception $e) {
+        return $this->dbResponse(null, 500, $e, null);
+    }
     }
 
     public function update(Request $request)
