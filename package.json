@@ -11,7 +11,7 @@
     },
     "devDependencies": {
         "@mdi/font": "^4.9.95",
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "cross-env": "^5.2.1",
         "gravatar": "^1.8.0",
         "laravel-mix": "^4.1.4",
