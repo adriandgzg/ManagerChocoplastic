@@ -57,7 +57,7 @@ export default {
     return {
          headers: [
                     {
-                        text: 'ID',
+                        text: 'Compra',
                         value: 'clsa_identifier',
                         width: '10%'
                     },                     

@@ -68,7 +68,9 @@ class ProviderPurchaseController extends ApiResponseController
 
                         'PM.pame_name',
 
-                        'S.stor_name'
+                        'S.stor_name',
+                        DB::raw('(SELECT COUNT(*) AS Cant FROM provider_returns WHERE prre_status = 2 AND prpu_fk = PP.prpu_pk) AS cantreturn') //Cantidad de Devoluciones
+
                     )
                     ->orderByDesc('PP.prpu_pk')
                     ->get();
@@ -111,7 +113,8 @@ class ProviderPurchaseController extends ApiResponseController
 
                         'PM.pame_name',
 
-                        'S.stor_name'
+                        'S.stor_name',
+                        DB::raw('(SELECT COUNT(*) AS Cant FROM provider_returns WHERE prre_status = 2 AND prpu_fk = PP.prpu_pk) AS cantreturn') //Cantidad de Devoluciones
                     )
                     ->where('S.stor_pk', '=', $vStore)
                     ->orderByDesc('PP.prpu_pk')

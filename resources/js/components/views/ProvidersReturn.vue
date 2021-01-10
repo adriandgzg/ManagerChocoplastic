@@ -295,11 +295,8 @@ export default {
                 this.normal('Notificación', "Debe seleccionar un motivo de devolución", "error");
                 return;
             }
-
             this.messageQuestion = '¿Está seguro de finalizar la devolución?';
-
             this.dialogQuestion = true
-
         },
         guardaFinalizar() {
             this.editadoSale.prre_pk = this.saleHeader.prre_pk;
@@ -412,7 +409,6 @@ export default {
         },
 
         borrar(item) {
-
             this.editado = Object.assign({}, item)
             this.dialogQuestionDelete = true
         },

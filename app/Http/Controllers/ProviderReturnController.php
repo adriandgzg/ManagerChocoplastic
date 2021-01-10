@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Throwable;
 use Validator;
+use App\ProviderDebt;
 use App\ProviderReturn;
 use App\ProviderPayment;
 use App\ProductInventory;
@@ -12,9 +13,9 @@ use App\ProviderPurchase;
 use Illuminate\Http\Request;
 use App\ProviderReturnDetail;
 use App\ProviderPurchaseDetail;
+use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Constraint\IsFalse;
 use App\Http\Controllers\api\ApiResponseController;
-use App\ProviderDebt;
 
 class ProviderReturnController extends ApiResponseController
 {
@@ -27,40 +28,85 @@ class ProviderReturnController extends ApiResponseController
     {
         try 
         {
-            $vProviderReturns = DB::table('provider_returns AS PR')
-                ->join('provider_purchases AS PP', 'PP.prpu_pk', '=', 'PR.prpu_fk')
-                ->join('providers AS P', 'P.prov_pk', '=', 'PR.prov_fk')
-                ->join('stores AS S', 'S.stor_pk', '=', 'PR.stor_fk')
-                ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'PR.remo_fk')
-                ->select(
-                    'PR.prre_pk',
-                    'PR.prre_observation',
-                    'PR.prre_status',
-                    DB::raw('
-                        (CASE 
-                            WHEN PR.prre_status = 0 THEN "Cancelada" 
-                            WHEN PR.prre_status = 1 THEN "Pendiente" 
-                            WHEN PR.prre_status = 2 THEN "Finalizada" 
-                            ELSE "" END
-                        ) AS prre_status_description'),
-                    'PR.created_at',
-            
-                    'PP.prpu_pk',
-                    'PP.prpu_identifier',
+            $vStore = Auth::user()->store_id;
+            $vrole_id = Auth::user()->role_id;
 
-                    'P.prov_pk',
-                    'P.prov_identifier',
-                    'P.prov_name',
-                    'P.prov_rfc',                           
+            if($vrole_id == 1)
+            {
+                $vProviderReturns = DB::table('provider_returns AS PR')
+                    ->join('provider_purchases AS PP', 'PP.prpu_pk', '=', 'PR.prpu_fk')
+                    ->join('providers AS P', 'P.prov_pk', '=', 'PR.prov_fk')
+                    ->join('stores AS S', 'S.stor_pk', '=', 'PR.stor_fk')
+                    ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'PR.remo_fk')
+                    ->select(
+                        'PR.prre_pk',
+                        'PR.prre_observation',
+                        'PR.prre_status',
+                        DB::raw('
+                            (CASE 
+                                WHEN PR.prre_status = 0 THEN "Cancelada" 
+                                WHEN PR.prre_status = 1 THEN "Pendiente" 
+                                WHEN PR.prre_status = 2 THEN "Finalizada" 
+                                ELSE "" END
+                            ) AS prre_status_description'),
+                        'PR.created_at',
+                
+                        'PP.prpu_pk',
+                        'PP.prpu_identifier',
 
-                    'S.stor_pk',
-                    'S.stor_name',
+                        'P.prov_pk',
+                        'P.prov_identifier',
+                        'P.prov_name',
+                        'P.prov_rfc',                           
 
-                    'RM.remo_pk',
-                    'RM.remo_description',
-                )
-                ->orderByDesc('PR.prre_pk')
-                ->get();
+                        'S.stor_pk',
+                        'S.stor_name',
+
+                        'RM.remo_pk',
+                        'RM.remo_description',
+                    )
+                    ->orderByDesc('PR.prre_pk')
+                    ->get();
+            }
+            else
+            {
+                $vProviderReturns = DB::table('provider_returns AS PR')
+                    ->join('provider_purchases AS PP', 'PP.prpu_pk', '=', 'PR.prpu_fk')
+                    ->join('providers AS P', 'P.prov_pk', '=', 'PR.prov_fk')
+                    ->join('stores AS S', 'S.stor_pk', '=', 'PR.stor_fk')
+                    ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'PR.remo_fk')
+                    ->select(
+                        'PR.prre_pk',
+                        'PR.prre_observation',
+                        'PR.prre_status',
+                        DB::raw('
+                            (CASE 
+                                WHEN PR.prre_status = 0 THEN "Cancelada" 
+                                WHEN PR.prre_status = 1 THEN "Pendiente" 
+                                WHEN PR.prre_status = 2 THEN "Finalizada" 
+                                ELSE "" END
+                            ) AS prre_status_description'),
+                        'PR.created_at',
+                
+                        'PP.prpu_pk',
+                        'PP.prpu_identifier',
+
+                        'P.prov_pk',
+                        'P.prov_identifier',
+                        'P.prov_name',
+                        'P.prov_rfc',                           
+
+                        'S.stor_pk',
+                        'S.stor_name',
+
+                        'RM.remo_pk',
+                        'RM.remo_description',
+                    )
+                    ->where('S.stor_pk','=',$vStore)
+                    ->orderByDesc('PR.prre_pk')
+                    ->get();
+            }
+           
     
             return $this->dbResponse($vProviderReturns, 200, null, 'Lista de Devoluciones de Proveedores');
           
@@ -308,7 +354,7 @@ class ProviderReturnController extends ApiResponseController
                     'PR.created_at',
             
                     'PP.prpu_pk',
-                    'PP.prpu_identifier',
+                    'PP.prpu_identifier', 
 
                     'P.prov_pk',
                     'P.prov_identifier',

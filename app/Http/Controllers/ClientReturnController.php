@@ -13,6 +13,7 @@ use App\ClientSaleDetail;
 use App\ProductInventory;
 use App\ClientReturnDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
 
 class ClientReturnController extends ApiResponseController
@@ -26,41 +27,85 @@ class ClientReturnController extends ApiResponseController
     {
         try {
 
-            $vClientReturns = DB::table('client_returns AS CR')
-                        ->join('client_sales AS CS', 'CS.clsa_pk', '=', 'CR.clsa_fk')
-                        ->join('clients AS C', 'C.clie_pk', '=', 'CR.clie_fk')
-                        ->join('stores AS S', 'S.stor_pk', '=', 'CR.stor_fk')
-                        ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'CR.remo_fk')
-                        ->select(
-                            'CR.clre_pk',
-                            'CR.clre_observation',
-                            'CR.clre_status',
-                            DB::raw('
-                                (CASE 
-                                    WHEN CR.clre_status = 0 THEN "Cancelada" 
-                                    WHEN CR.clre_status = 1 THEN "Pendiente" 
-                                    WHEN CR.clre_status = 2 THEN "Finalizada" 
-                                    ELSE "" END
-                                ) AS clre_status_description'),
-                            'CR.created_at',
-                    
-                            'CS.clsa_pk',
-                            'CS.clsa_identifier',
+            $vStore = Auth::user()->store_id;
+            $vrole_id = Auth::user()->role_id;
 
-                            'C.clie_pk',
-                            'C.clie_identifier',
-                            'C.clie_name',
-                            'C.clie_rfc',                           
+            if($vrole_id == 1)
+            {
 
-                            'S.stor_pk',
-                            'S.stor_name',
+                $vClientReturns = DB::table('client_returns AS CR')
+                ->join('client_sales AS CS', 'CS.clsa_pk', '=', 'CR.clsa_fk')
+                ->join('clients AS C', 'C.clie_pk', '=', 'CR.clie_fk')
+                ->join('stores AS S', 'S.stor_pk', '=', 'CR.stor_fk')
+                ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'CR.remo_fk')
+                ->select(
+                    'CR.clre_pk',
+                    'CR.clre_observation',
+                    'CR.clre_status',
+                    DB::raw('
+                        (CASE 
+                            WHEN CR.clre_status = 0 THEN "Cancelada" 
+                            WHEN CR.clre_status = 1 THEN "Pendiente" 
+                            WHEN CR.clre_status = 2 THEN "Finalizada" 
+                            ELSE "" END
+                        ) AS clre_status_description'),
+                    'CR.created_at',
+            
+                    'CS.clsa_pk',
+                    'CS.clsa_identifier',
 
-                            'RM.remo_pk',
-                            'RM.remo_description',
-                        )
-                        //->where('CR.clre_status', '<>', 0)
-                        ->orderByDesc('CR.clre_pk')
-                        ->get();
+                    'C.clie_pk',
+                    'C.clie_identifier',
+                    'C.clie_name',
+                    'C.clie_rfc',                           
+
+                    'S.stor_pk',
+                    'S.stor_name',
+
+                    'RM.remo_pk',
+                    'RM.remo_description',
+                )
+                ->orderByDesc('CR.clre_pk')
+                ->get();
+            }
+            else
+            {
+                $vClientReturns = DB::table('client_returns AS CR')
+                ->join('client_sales AS CS', 'CS.clsa_pk', '=', 'CR.clsa_fk')
+                ->join('clients AS C', 'C.clie_pk', '=', 'CR.clie_fk')
+                ->join('stores AS S', 'S.stor_pk', '=', 'CR.stor_fk')
+                ->leftjoin('return_motives AS RM', 'RM.remo_pk', '=', 'CR.remo_fk')
+                ->select(
+                    'CR.clre_pk',
+                    'CR.clre_observation',
+                    'CR.clre_status',
+                    DB::raw('
+                        (CASE 
+                            WHEN CR.clre_status = 0 THEN "Cancelada" 
+                            WHEN CR.clre_status = 1 THEN "Pendiente" 
+                            WHEN CR.clre_status = 2 THEN "Finalizada" 
+                            ELSE "" END
+                        ) AS clre_status_description'),
+                    'CR.created_at',
+            
+                    'CS.clsa_pk',
+                    'CS.clsa_identifier',
+
+                    'C.clie_pk',
+                    'C.clie_identifier',
+                    'C.clie_name',
+                    'C.clie_rfc',                           
+
+                    'S.stor_pk',
+                    'S.stor_name',
+
+                    'RM.remo_pk',
+                    'RM.remo_description',
+                )
+                ->where('S.stor_pk','=',$vStore)
+                ->orderByDesc('CR.clre_pk')
+                ->get();
+            }
             
             return $this->dbResponse($vClientReturns, 200, null, 'Lista de Devoluciones de Clientes');
           

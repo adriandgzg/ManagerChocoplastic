@@ -33,7 +33,7 @@
                         </v-col>
                     </template>
                     <template v-slot:item.status="{ item }">                            
-                            <v-chip v-if="item.prre_status == 'Pendiente'" color="gray" dark>  {{item.prre_status_description}}  </v-chip>
+                            <v-chip v-if="item.prre_status_description == 'Pendiente'" color="red" dark>  {{item.prre_status_description}}  </v-chip>
                             <v-chip v-else color="green" dark>{{item.prre_status_description}}</v-chip>                        
                     </template>
 
@@ -41,7 +41,7 @@
                    
                      <template v-slot:item.action="{ item }">   
                          
-                        <v-btn class="mr-2" fab dark small color="pink"  v-if="item.prre_status == 'Pendiente'"
+                        <v-btn class="mr-2" fab dark small color="pink"  v-if="item.clre_status_description == 'Pendiente'"
                                :href="'/providersreturn/'+item.prpu_pk" title="Devolución">
                             <v-icon dark>mdi-arrow-left-bold-circle</v-icon>
                         </v-btn>  
@@ -64,9 +64,8 @@ export default {
     return {
          headers: [
                     {
-                        text: 'ID',
-                        value: 'prpu_identifier',
-                        width: '10%'
+                        text: 'Compra',
+                        value: 'prpu_identifier'
                     },                     
                     {
                         text: 'Proveedor',
@@ -94,8 +93,7 @@ export default {
                     },
                     {
                         text: '',
-                        value: 'action',
-                        width: '20%'
+                        value: 'action'
                     },
 
          ],

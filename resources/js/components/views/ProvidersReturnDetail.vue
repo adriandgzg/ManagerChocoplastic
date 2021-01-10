@@ -31,7 +31,7 @@
                             <v-col cols="4">
                                 <v-card-text class="category d-inline-flex font-weight-light">
                                     <v-label>
-                                        <h4>Cliente:</h4> {{saleHeader.prov_name}}
+                                        <h4>Proveedor:</h4> {{saleHeader.prov_name}}
                                     </v-label>
                                 </v-card-text>
                             </v-col>
@@ -50,6 +50,7 @@
                                 </v-card-text>
                             </v-col>
                         </v-row>
+
                         <v-row>
                             <v-col cols="4">
                                 <v-card-text class="category d-inline-flex font-weight-light">
@@ -58,7 +59,14 @@
                                     </v-label>
                                 </v-card-text>
                             </v-col>
-                            <v-col cols="8">
+                            <v-col cols="4">
+                                <v-card-text class="category d-inline-flex font-weight-light">
+                                    <v-label>
+                                        <h4>Estatus:</h4> {{saleHeader.prre_status_description}}
+                                    </v-label>
+                                </v-card-text>
+                            </v-col>
+                            <v-col cols="4">
                                 <v-card-text class="category d-inline-flex font-weight-light">
                                     <v-label>
                                         <h4>Observaciones:</h4> {{saleHeader.prre_observation}}
