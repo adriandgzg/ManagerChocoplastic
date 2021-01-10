@@ -109,7 +109,7 @@ class ClientController extends Controller
 
     public function update(Request $request)
     {        
-        \DB::update("update clients set"
+        \DB::update("UPDATE clients SET"
         . "   clie_name = '" . $request->clie_name 
         . "', feen_fk = " . $request->feen_fk
         . ",  clie_identifier  = '" .  $request->clie_identifier
@@ -121,12 +121,12 @@ class ClientController extends Controller
         . "', clie_cp = '" .  $request->clie_cp
         . "', clie_city = '" .  $request->clie_city
         . "', clie_status = " .  $request->clie_status
-        . " where clie_pk = ". $request->clie_pk);
+        . " WHERE clie_pk = ". $request->clie_pk);
 
     }
 
     public function delete(Request $request)
     { 
-        \DB::update("update clients set clie_status = '0' where clie_pk = ". $request->clie_pk );
+        \DB::update("UPDATE clients SET clie_status = 0 WHERE clie_pk = ". $request->clie_pk );
     }
 }

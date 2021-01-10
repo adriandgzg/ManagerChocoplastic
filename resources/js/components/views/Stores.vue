@@ -96,6 +96,10 @@
                                           hide-details></v-text-field>
                         </v-col>
                     </template>
+                    <template v-slot:item.stor_main="{ item }">                            
+                            <v-chip v-if="item.stor_main == 1" color="green" dark>  Si  </v-chip>
+                            <v-chip v-else color="red" dark>No</v-chip>                        
+                    </template>
                     <template v-slot:item.status="{ item }">                            
                             <v-chip v-if="item.stor_status == 1" color="green" dark>  Activo  </v-chip>
                             <v-chip v-else color="red" dark>Inactivo</v-chip>                        
@@ -139,7 +143,7 @@ export default {
                         value: 'stor_addres'
                     }, 
                     {
-                        text: 'Principal',
+                        text: 'Matriz',
                         value: 'stor_main'
                     }, 
                     {
@@ -291,9 +295,8 @@ export default {
 
     delete: function () {
         axios.put('/store/delete', this.editado).then(response => {
-            
+            this.snackbar = true
             this.textMsg = "¡Eliminado correctamente!";
-            this.normal('Notificación', this.textMsg,"error");
             this.getStores();
         });
     },

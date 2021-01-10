@@ -101,6 +101,6 @@ class StoreController extends ApiResponseController
 
     public function delete(Request $request)
     { 
-        \DB::update("update stores set store_status = '0' where stor_pk = ". $request->stor_pk );
+        \DB::update("UPDATE stores SET stor_status = 0 WHERE stor_pk = ". $request->stor_pk );
     }
 }

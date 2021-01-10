@@ -5,7 +5,11 @@
         <v-card color="white">
           <v-card-text>
             Cargando
-            <v-progress-linear indeterminate color="green" class="mb-0"></v-progress-linear>
+            <v-progress-linear
+              indeterminate
+              color="green"
+              class="mb-0"
+            ></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -15,8 +19,15 @@
           <v-card-text>¿Está seguro de borrar el registro?</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="dialogQuestionDelete = false">Cancelar</v-btn>
-            <v-btn color="green darken-1" text @click="guardaBorrar">Continuar</v-btn>
+            <v-btn
+              color="green darken-1"
+              text
+              @click="dialogQuestionDelete = false"
+              >Cancelar</v-btn
+            >
+            <v-btn color="green darken-1" text @click="guardaBorrar"
+              >Continuar</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -105,13 +116,19 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue-grey" class="ma-2 white--text" @click="cancelar">Cancelar</v-btn>
+              <v-btn
+                color="blue-grey"
+                class="ma-2 white--text"
+                @click="cancelar"
+                >Cancelar</v-btn
+              >
               <v-btn
                 :disabled="!validProvider"
                 color="teal accent-4"
                 class="ma-2 white--text"
                 @click="guardar"
-              >Guardar</v-btn>
+                >Guardar</v-btn
+              >
             </v-card-actions>
           </v-form>
         </v-card>
@@ -131,7 +148,14 @@
                 <v-system-bar color="indigo darken-2" dark></v-system-bar>
                 <v-toolbar flat color="indigo">
                   <template v-slot:extension>
-                    <v-btn fab color="cyan accent-2" bottom left absolute @click="dialog = !dialog">
+                    <v-btn
+                      fab
+                      color="cyan accent-2"
+                      bottom
+                      left
+                      absolute
+                      @click="dialog = !dialog"
+                    >
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
                   </template>
@@ -150,17 +174,35 @@
                 </v-col>
               </template>
               <template v-slot:item.clde_amount_outstanding="{ item }">
-                <v-label>${{formatMoney(item.clde_amount_outstanding)}}</v-label>
+                <v-label
+                  >${{ formatMoney(item.clde_amount_outstanding) }}</v-label
+                >
               </template>
               <template v-slot:item.status="{ item }">
-                <v-chip v-if="item.clie_status == 1" color="green" dark>Activo</v-chip>
+                <v-chip v-if="item.clie_status == 1" color="green" dark
+                  >Activo</v-chip
+                >
                 <v-chip v-else color="red" dark>Inactivo</v-chip>
               </template>
               <template v-slot:item.action="{ item }">
-                <v-btn class="mr-2" fab dark small color="cyan" @click="edita(item)">
+                <v-btn
+                  class="mr-2"
+                  fab
+                  dark
+                  small
+                  color="cyan"
+                  @click="edita(item)"
+                >
                   <v-icon dark>mdi-pencil</v-icon>
                 </v-btn>
-                <v-btn class="mr-2" fab dark small color="error" @click="borrar(item)">
+                <v-btn
+                  class="mr-2"
+                  fab
+                  dark
+                  small
+                  color="error"
+                  @click="borrar(item)"
+                >
                   <v-icon dark>mdi-delete</v-icon>
                 </v-btn>
               </template>
@@ -185,7 +227,7 @@ export default {
         {
           text: "Inden",
           value: "clie_identifier",
-          width: "10%"
+          width: "10%",
         },
         {
           text: "Nombre",
@@ -333,29 +375,29 @@ export default {
       this.dialog = true;
     },
     guardar() {
-      this.editado.feen_fk = this.select.feen_pk;
-
       if (this.estado == true) this.editado.clie_status = 1;
       else this.editado.clie_status = 0;
 
       if (this.editedIndex > -1) {
+        this.editado.feen_fk = this.select;
         this.editar();
       } else {
+        this.editado.feen_fk = this.select.feen_pk;
         this.alta();
       }
       this.cancelar();
     },
     alta: function () {
       axios.post("/clients/add", this.editado).then((response) => {
-        this.snackbar = true;
-        this.textMsg = "¡Alta exitosa!";
+        this.textMsg = "Guardado Correctamente!";
+        this.normal("Notificación", this.textMsg, "success");
         this.getClients();
       });
     },
     editar: function () {
       axios.put("/clients/update", this.editado).then((response) => {
-        this.snackbar = true;
-        this.textMsg = "¡Actualización Exitosa!";
+        this.textMsg = "Modificado Correctamente!";
+        this.normal("Notificación", this.textMsg, "success");
         this.getClients();
       });
     },
@@ -373,8 +415,8 @@ export default {
 
     delete: function () {
       axios.put("/clients/delete", this.editado).then((response) => {
-        this.textMsg = "¡Eliminado correctamente!";
-        this.normal("Notificación", this.textMsg, "error");
+        this.textMsg = "¡Eliminado Correctamente!";
+        this.normal("Notificación", this.textMsg, "success");
         this.getClients();
       });
     },
