@@ -252,7 +252,12 @@ Route::post('password/reset', 'Auth\Api\ResetPasswordController@reset')->name('p
 Route::get('/home', 'HomeController@index');
 Route::get('/logout','Auth\LoginController@logout');
 
-Route::get('/', 'Auth\LoginController@login'); 
+Route::get('/', function(){
+  return redirect('/login');
+});
+Route::get('/login', function(){
+  return view('auth.login');
+});
 
 Route::group(['middleware' => 'auth'], function () {
 
