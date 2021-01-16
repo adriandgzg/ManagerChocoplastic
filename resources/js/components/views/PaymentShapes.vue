@@ -229,7 +229,7 @@ export default {
         });
     },
     editar: function () {
-        axios.put('/paymentshapes/update', this.editado).then(response => {
+        axios.post('/paymentshapes/update', this.editado).then(response => {
             this.snackbar = true
             this.textMsg = '¡Actualización Exitosa!'
             this.getPayments();
@@ -248,7 +248,7 @@ export default {
             },
 
     delete: function () {
-        axios.put('/paymentshapes/delete', this.editado).then(response => {
+        axios.post('/paymentshapes/delete', this.editado).then(response => {
             this.snackbar = true
             this.textMsg = "¡Eliminado correctamente!";
             this.getPayments();

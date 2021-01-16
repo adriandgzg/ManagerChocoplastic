@@ -227,7 +227,7 @@ export default {
         });
     },
     editar: function () {
-        axios.put('/entities/update', this.editado).then(response => {
+        axios.post('/entities/update', this.editado).then(response => {
             this.snackbar = true
             this.textMsg = '¡Actualización Exitosa!'
             this.getEntities();
@@ -246,7 +246,7 @@ export default {
             },
 
     delete: function () {
-        axios.put('/entities/delete', this.editado).then(response => {
+        axios.post('/entities/delete', this.editado).then(response => {
             
             this.textMsg = "¡Eliminado correctamente!";
             this.normal('Notificación', this.textMsg,"success");

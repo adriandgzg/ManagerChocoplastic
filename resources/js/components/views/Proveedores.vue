@@ -395,7 +395,7 @@ export default {
       });
     },
     editar: function () {
-      axios.put("/providers/update", this.editadoProveedor).then((response) => {
+      axios.post("/providers/update", this.editadoProveedor).then((response) => {
         this.snackbar = true;
         this.textMsg = "¡Actualización Exitosa!";
         this.getProviders();
@@ -414,7 +414,7 @@ export default {
     },
 
     delete: function () {
-      axios.put("/providers/delete", this.editadoProveedor).then((response) => {
+      axios.post("/providers/delete", this.editadoProveedor).then((response) => {
         this.snackbar = true;
         this.textMsg = "¡Eliminado correctamente!";
         this.getProviders();

@@ -23,64 +23,64 @@ Route::get('/rolUser/{idUser}', 'AdminController@rolUser');
 Route::get('/providerlist', 'ProviderController@ProvidersList'); 
 Route::get('/providers', 'ProviderController@index'); 
 Route::post('/providers/add', 'ProviderController@add');
-Route::put('/providers/update', 'ProviderController@update');
-Route::put('/providers/delete', 'ProviderController@delete');
+Route::post('/providers/update', 'ProviderController@update');
+Route::post('/providers/delete', 'ProviderController@delete');
 
 Route::get('/clientlist', 'ClientController@ClientsList'); 
 Route::get('/clientsget', 'ClientController@Clients');
 Route::post('/clients/add', 'ClientController@add');
-Route::put('/clients/update', 'ClientController@update'); 
-Route::put('/clients/delete', 'ClientController@delete');
+Route::post('/clients/update', 'ClientController@update'); 
+Route::post('/clients/delete', 'ClientController@delete');
 Route::get('/clients/genders', 'ClientController@Genders');
 
 Route::get('/storelist', 'StoreController@StoresList');
 Route::get('/storeget', 'StoreController@Stores'); 
 Route::post('/store/add', 'StoreController@add');
-Route::put('/store/update', 'StoreController@update');
-Route::put('/store/delete', 'StoreController@delete');
+Route::post('/store/update', 'StoreController@update');
+Route::post('/store/delete', 'StoreController@delete');
 
 Route::get('/categorieslist', 'ProductCategoryController@CategoriesList');
 Route::get('/categories', 'ProductCategoryController@Categories');
 Route::post('/categories/add', 'ProductCategoryController@add');
-Route::put('/categories/update', 'ProductCategoryController@update');
-Route::put('/categories/delete', 'ProductCategoryController@delete');
+Route::post('/categories/update', 'ProductCategoryController@update');
+Route::post('/categories/delete', 'ProductCategoryController@delete');
 
 
 Route::get('/measurementsList', 'MeasurementController@MeasurementsList');
 Route::get('/measurements', 'MeasurementController@Measurements');
 Route::post('/measurements/add', 'MeasurementController@add');
-Route::put('/measurements/update', 'MeasurementController@update');
-Route::put('/measurements/delete', 'MeasurementController@delete');
+Route::post('/measurements/update', 'MeasurementController@update');
+Route::post('/measurements/delete', 'MeasurementController@delete');
 
 Route::get('/entitiesList', 'FederalEntityController@EntitiesList');
 Route::post('/entities/add', 'FederalEntityController@add');
-Route::put('/entities/update', 'FederalEntityController@update');
-Route::put('/entities/delete', 'FederalEntityController@delete');
+Route::post('/entities/update', 'FederalEntityController@update');
+Route::post('/entities/delete', 'FederalEntityController@delete');
 
 Route::get('/paymentmethodsList', 'PaymentMethodController@PaymentMethodsList');
 Route::get('/paymentmethodsget', 'PaymentMethodController@PaymentMethods');
 Route::get('/paymentmethodsshow/{id}', 'PaymentMethodController@PaymentMethodsShow');
 Route::post('/paymentmethods/add', 'PaymentMethodController@add');
-Route::put('/paymentmethods/update', 'PaymentMethodController@update');
-Route::put('/paymentmethods/delete', 'PaymentMethodController@delete');
+Route::post('/paymentmethods/update', 'PaymentMethodController@update');
+Route::post('/paymentmethods/delete', 'PaymentMethodController@delete');
 
 Route::get('/paymentshapesList', 'PaymentShapeController@PaymentShapesList');
 Route::get('/paymentshapesget', 'PaymentShapeController@PaymentShapes');
 Route::post('/paymentshapes/add', 'PaymentShapeController@add'); 
-Route::put('/paymentshapes/update', 'PaymentShapeController@update');
-Route::put('/paymentshapes/delete', 'PaymentShapeController@delete');
+Route::post('/paymentshapes/update', 'PaymentShapeController@update');
+Route::post('/paymentshapes/delete', 'PaymentShapeController@delete');
 
 Route::get('/returnmotivesList', 'ReturnMotiveController@ReturnMotivesList');
 Route::post('/returnmotives/add', 'ReturnMotiveController@add'); 
-Route::put('/returnmotives/update', 'ReturnMotiveController@update');
-Route::put('/returnmotives/delete', 'ReturnMotiveController@delete');
+Route::post('/returnmotives/update', 'ReturnMotiveController@update');
+Route::post('/returnmotives/delete', 'ReturnMotiveController@delete');
 
 Route::get('/productList', 'ProductController@ProductList');
 Route::get('/product/measurements/{prod_pk}', 'ProductController@ProductMeasurements');
 Route::get('/product/search', 'ProductController@ProductSearch');
 Route::post('/product/add', 'ProductController@add');
-Route::put('/product/update', 'ProductController@update');
-Route::put('/product/delete', 'ProductController@delete');
+Route::post('/product/update', 'ProductController@update');
+Route::post('/product/delete', 'ProductController@delete');
 
 Route::get('/products/derived/{prod_main_pk}', 'ProductController@derived'); //Productos Derivado
 Route::post('/products/derived', 'ProductController@storederived'); //Guardar Productos Derivado
@@ -265,15 +265,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/users', 'AdminController@users'); 
     Route::get('/usuarioBusiness/{id}', 'AdminController@usuarioBusiness');    
     Route::post('/admin/add', 'AdminController@addAdministrator');
-    Route::put('/admin/update', 'AdminController@updateAdministrator');
-    Route::put('/admin/updateBusiness', 'AdminController@updateBusinessAdministrator');
+    Route::post('/admin/update', 'AdminController@updateAdministrator');
+    Route::post('/admin/updateBusiness', 'AdminController@updateBusinessAdministrator');
     Route::get('/listUsers', 'AdminController@listUsers');
     Route::post('/admins/{admin}/permissions', 'AdminController@permissions');
     Route::post('/admins/{admin}/role', 'AdminController@role');
     Route::post('/roles/{role}/permissions', 'RoleController@permissions');
     Route::get('/roles', 'RoleController@index');
     Route::get('/permissions', 'PermissionController@index');
-    Route::put('/user/updateStatus', 'AdminController@updateStatus');
+    Route::post('/user/updateStatus', 'AdminController@updateStatus');
 });
 
 

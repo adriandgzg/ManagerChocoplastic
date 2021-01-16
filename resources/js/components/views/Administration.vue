@@ -450,7 +450,7 @@ export default {
             });
         },
         editarAdmin: function () {
-            axios.put('/admin/update', this.editado).then(response => {
+            axios.post('/admin/update', this.editado).then(response => {
                 this.normal('Notificación', '¡Actualizado correctamente!', "success");
                 this.getUsers();
             });
@@ -461,7 +461,7 @@ export default {
             else
                 this.editadoBusiness.idBusiness = 0
 
-            axios.put('/admin/updateBusiness', this.editadoBusiness).then(response => {
+            axios.post('/admin/updateBusiness', this.editadoBusiness).then(response => {
                 this.normal('Notificación', '¡Actualizado correctamente!', "success");
                 this.getUsers();
             });
@@ -472,7 +472,7 @@ export default {
                 this.editado.verified = 1;
             else
                 this.editado.verified = 0;
-            axios.put('/admin/update', this.editado)
+            axios.post('/admin/update', this.editado)
                 .then(response => {
                     if (response.status == 200) {
                         this.normal('Notificación', '¡Actualizado correctamente!', "success");

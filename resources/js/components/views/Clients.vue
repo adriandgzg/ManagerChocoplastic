@@ -395,7 +395,7 @@ export default {
       });
     },
     editar: function () {
-      axios.put("/clients/update", this.editado).then((response) => {
+      axios.post("/clients/update", this.editado).then((response) => {
         this.textMsg = "Modificado Correctamente!";
         this.normal("Notificación", this.textMsg, "success");
         this.getClients();
@@ -414,7 +414,7 @@ export default {
     },
 
     delete: function () {
-      axios.put("/clients/delete", this.editado).then((response) => {
+      axios.post("/clients/delete", this.editado).then((response) => {
         this.textMsg = "¡Eliminado Correctamente!";
         this.normal("Notificación", this.textMsg, "success");
         this.getClients();

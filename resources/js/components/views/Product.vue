@@ -630,7 +630,7 @@ export default {
         },
 
         editar: function () {
-            axios.put('/product/update', this.editado).then(response => {
+            axios.post('/product/update', this.editado).then(response => {
                     console.log(response)
                     if(response.data.status.code == 501) {
                         this.normal('Detalle de validación', 'El campo identificador ya ha sido registrado.', "error");
@@ -665,7 +665,7 @@ export default {
         },
 
         delete: function () {
-            axios.put('/product/delete', this.editado).then(response => {
+            axios.post('/product/delete', this.editado).then(response => {
                 console.log(response)
                 this.textMsg = "¡Eliminado correctamente!";
                 this.normal('Notificación', this.textMsg, "success");

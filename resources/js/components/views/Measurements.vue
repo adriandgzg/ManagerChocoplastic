@@ -290,7 +290,7 @@ export default {
       });
     },
     editar: function () {
-      axios.put("/measurements/update", this.editado).then((response) => {
+      axios.post("/measurements/update", this.editado).then((response) => {
         this.dialogSuccess = true;
         this.textMsg = "¡Actualización Exitosa!";
         this.getMeasurements();
@@ -309,7 +309,7 @@ export default {
     },
 
     delete: function () {
-      axios.put("/measurements/delete", this.editado).then((response) => {
+      axios.post("/measurements/delete", this.editado).then((response) => {
         this.dialogSuccess = true;
         this.textMsg = "¡Eliminado correctamente!";
         this.getMeasurements();

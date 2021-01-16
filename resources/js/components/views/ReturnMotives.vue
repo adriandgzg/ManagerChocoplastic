@@ -228,7 +228,7 @@ export default {
         });
     },
     editar: function () {
-        axios.put('/returnmotives/update', this.editado).then(response => {
+        axios.post('/returnmotives/update', this.editado).then(response => {
             this.snackbar = true
             this.textMsg = '¡Actualización Exitosa!'
             this.getPayments();
@@ -247,7 +247,7 @@ export default {
             },
 
     delete: function () {
-        axios.put('/returnmotives/delete', this.editado).then(response => {
+        axios.post('/returnmotives/delete', this.editado).then(response => {
             this.snackbar = true
             this.textMsg = "¡Eliminado correctamente!";
             this.getPayments();

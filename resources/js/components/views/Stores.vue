@@ -275,7 +275,7 @@ export default {
         });
     },
     editar: function () {
-        axios.put('/store/update', this.editado).then(response => {
+        axios.post('/store/update', this.editado).then(response => {
             this.snackbar = true
             this.textMsg = '¡Actualización Exitosa!'
             this.getStores();
@@ -294,7 +294,7 @@ export default {
             },
 
     delete: function () {
-        axios.put('/store/delete', this.editado).then(response => {
+        axios.post('/store/delete', this.editado).then(response => {
             this.snackbar = true
             this.textMsg = "¡Eliminado correctamente!";
             this.getStores();

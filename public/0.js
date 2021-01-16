@@ -469,7 +469,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     editarAdmin: function editarAdmin() {
       var _this12 = this;
 
-      axios.put('/admin/update', this.editado).then(function (response) {
+      axios.post('/admin/update', this.editado).then(function (response) {
         _this12.normal('Notificación', '¡Actualizado correctamente!', "success");
 
         _this12.getUsers();
@@ -479,7 +479,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this13 = this;
 
       if (this.editadoBusiness.checkB) this.editadoBusiness.idBusiness = this.selectStore.stor_pk;else this.editadoBusiness.idBusiness = 0;
-      axios.put('/admin/updateBusiness', this.editadoBusiness).then(function (response) {
+      axios.post('/admin/updateBusiness', this.editadoBusiness).then(function (response) {
         _this13.normal('Notificación', '¡Actualizado correctamente!', "success");
 
         _this13.getUsers();
@@ -490,7 +490,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.editado = Object.assign({}, item);
       if (this.editado.verified == 0) this.editado.verified = 1;else this.editado.verified = 0;
-      axios.put('/admin/update', this.editado).then(function (response) {
+      axios.post('/admin/update', this.editado).then(function (response) {
         if (response.status == 200) {
           _this14.normal('Notificación', '¡Actualizado correctamente!', "success");
 

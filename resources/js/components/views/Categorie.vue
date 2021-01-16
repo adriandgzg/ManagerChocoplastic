@@ -230,7 +230,7 @@ export default {
             });
         },
         editar: function () {
-            axios.put('/categories/update', this.editado).then(response => {
+            axios.post('/categories/update', this.editado).then(response => {
                 this.snackbar = true
                 this.textMsg = '¡Actualización Exitosa!'
                 this.getCategories();
@@ -248,7 +248,7 @@ export default {
         },
 
         delete: function () {
-            axios.put('/categories/delete', this.editado).then(response => {
+            axios.post('/categories/delete', this.editado).then(response => {
 
                 this.textMsg = "¡Eliminado correctamente!";
                 this.getCategories();
