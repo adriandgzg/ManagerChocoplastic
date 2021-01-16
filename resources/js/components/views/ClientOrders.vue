@@ -196,7 +196,7 @@ export default {
                 .then(response => {
                     setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {
-                        console.log(response.data)
+                        //console.log(response.data)
                         this.categories = response.data.data;
                     } else {
                         this.normal('Notificación', response.data.status.message, "error");
