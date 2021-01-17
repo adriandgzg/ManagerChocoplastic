@@ -187,7 +187,17 @@ export default {
           setTimeout(function(){newWin.print(); },500);
           setTimeout(function (){ newWin.close(); }, 10000);
           return true;
-        }
+        },
+        normal(Title, Description, Type) {
+            this.notice = new CripNotice({
+                title: Title,
+                description: Description,
+                className: "open-normal",
+                closable: true,
+                duration: 3,
+                type: Type,
+            })            
+          },  
     },
     computed: {
         ...mapGetters('auth', ['can'])
