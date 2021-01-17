@@ -173,14 +173,26 @@ export default {
           {
             to: "/orders",
             icon: "mdi-cart",
-            text: "Pedidos",
+            text: "Pedidos del día",
             access: "orders",
+          },
+          {
+            to: "/ordersday",
+            icon: "mdi-cart",
+            text: "Pedidos",
+            access: "ordersday",
           },
           {
             to: "/sales",
             icon: "mdi-cart",
-            text: "Venta",
+            text: "Ventas del día", 
             access: "sales",
+          },
+           {
+            to: "/salesday",
+            icon: "mdi-cart",
+            text: "Ventas",
+            access: "salesday",
           },
           {
             to: "/clientdebts",

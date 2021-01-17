@@ -192,7 +192,7 @@ export default {
         getCategories() {
             this.loading = true
             axios
-                .get("/clientorders")
+                .get("/clientorders/day")
                 .then(response => {
                     setTimeout(() => (this.loading = false), 500)
                     if (response.data.data != null) {

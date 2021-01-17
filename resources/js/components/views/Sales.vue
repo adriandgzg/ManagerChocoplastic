@@ -225,7 +225,7 @@ export default {
     getSales() {
       this.loading = true;
       axios
-        .get("/clientsales")
+        .get("/clientsales/day")
         .then((response) => {
           setTimeout(() => (this.loading = false), 500);
           if (response.data.data != null) {

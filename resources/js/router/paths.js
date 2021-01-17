@@ -76,13 +76,23 @@ export default [{
     },
     {
         path: '/sales',
-        name: 'Ventas',
+        name: 'Ventas del día',
         view: 'Sales'
     },
     {
+        path: '/salesday',
+        name: 'Ventas',
+        view: 'SalesDay'
+    },
+    {
         path: '/orders',
-        name: 'Pedidos',
+        name: 'Pedidos del día',
         view: 'ClientOrders'
+    },
+    {
+        path: '/ordersday',
+        name: 'Pedidos',
+        view: 'ClientOrdersDay'
     },
     {
         path: '/inventory',

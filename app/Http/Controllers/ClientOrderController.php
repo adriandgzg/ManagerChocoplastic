@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\api\ApiResponseController;
 use App\Product;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
+
 
 class ClientOrderController extends ApiResponseController
 {
@@ -59,6 +62,73 @@ class ClientOrderController extends ApiResponseController
                     'S.stor_name'
                 )
                 ->where('S.stor_pk', '=', $vStore)
+                ->orderByDesc('CO.clor_pk')
+                ->get();
+
+
+            }
+           
+            return response()->json([
+                'code' => 200,
+                'success' => true,
+                'message' => 'Pedidos de los clientes',
+                'data' =>  $vClientOrders
+            ], 200);
+            
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'success' => false,
+                'message' => $e
+            ], 200);
+        }
+    }
+
+
+
+    public function indexday()
+    {
+
+        try 
+        {
+            $vStore = Auth::user()->store_id;
+            $vrole_id = Auth::user()->role_id;
+
+            $vCurrentDate = Carbon::now();
+            $vCurrentDate->format('Y-m-d');
+
+
+            if($vrole_id == 1)
+            {
+                $vClientOrders = DB::table('client_orders AS CO')
+                ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
+                ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
+                ->select(
+                    'CO.clor_pk',
+                    'CO.clor_identifier',
+                    'CO.created_at',
+                    'CO.clor_status',
+                    'S.stor_name'
+                )
+                ->whereDate('CO.created_at', '=', $vCurrentDate)
+                ->orderByDesc('CO.clor_pk')
+                ->get();
+
+            }
+            else
+            {
+                $vClientOrders = DB::table('client_orders AS CO')
+                ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
+                ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
+                ->select(
+                    'CO.clor_pk',
+                    'CO.clor_identifier',
+                    'CO.created_at',
+                    'CO.clor_status',
+                    'S.stor_name'
+                )
+                ->where('S.stor_pk', '=', $vStore)
+                ->whereDate('CO.created_at', '=', $vCurrentDate)
                 ->orderByDesc('CO.clor_pk')
                 ->get();
 

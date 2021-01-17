@@ -20,14 +20,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
+use Carbon\Carbon;
 
-class ClientSaleController extends ApiResponseController
+class ClientSaleController extends ApiResponseController 
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
     public function index()
     {
         try 
@@ -105,6 +109,111 @@ class ClientSaleController extends ApiResponseController
                     ->where('S.stor_pk', '=', $vStore)
                     ->get();
 
+            }
+
+            return response()->json([
+                'code' => 200,
+                'success' => true,
+                'message' => 'Ventas de los clientes',
+                'data' =>  $vClientSales
+            ], 200);
+            
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'success' => false,
+                'message' => $e
+            ], 200);
+        }        
+    }
+
+
+
+
+    public function indexday()
+    {
+        try 
+        {
+            $vStore = Auth::user()->store_id;
+            $vrole_id = Auth::user()->role_id;
+
+            $vCurrentDate = Carbon::now();
+            $vCurrentDate->format('Y-m-d');
+
+
+            if($vrole_id == 1)
+            {
+
+                $vClientSales = DB::table('client_sales AS CS')
+                    ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
+                    ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
+                    ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
+                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
+                    ->select(
+                        'CS.clsa_pk',
+                        'CS.clsa_identifier',
+                        'CS.clor_fk AS clor_pk',
+                        DB::raw('(CASE 
+                            WHEN CS.clsa_status = 0 THEN "Pendiente" 
+                            WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
+                            WHEN CS.clsa_status = 3 THEN "Pagado" 
+                            ELSE "" END) AS clsa_status'),
+                        'CS.created_at',
+
+                        'CO.clor_identifier',
+
+                        'C.clie_pk',
+                        'C.clie_identifier',
+                        'C.clie_name',
+                        'C.clie_rfc',
+
+                        'PM.pame_pk',
+                        'PM.pame_name',
+
+                        'S.stor_pk',
+                        'S.stor_name',
+                        DB::raw('(SELECT COUNT(*) AS Cant FROM client_returns WHERE clre_status = 2 AND clsa_fk = CS.clsa_pk) AS cantreturn') //Cantidad de Devoluciones
+                    )
+                    ->whereDate('CS.created_at', '=', $vCurrentDate)
+                    ->orderByDesc('CS.clsa_pk')
+                    ->get();
+            }
+            else
+            {
+                $vClientSales = DB::table('client_sales AS CS')
+                    ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
+                    ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
+                    ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
+                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
+                    ->select(
+                        'CS.clsa_pk',
+                        'CS.clsa_identifier',
+                        'CS.clor_fk AS clor_pk',
+                        DB::raw('(CASE 
+                            WHEN CS.clsa_status = 0 THEN "Pendiente" 
+                            WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
+                            WHEN CS.clsa_status = 3 THEN "Pagado" 
+                            ELSE "" END) AS clsa_status'),
+                        'CS.created_at',
+
+                        'CO.clor_identifier',
+
+                        'C.clie_pk',
+                        'C.clie_identifier',
+                        'C.clie_name',
+                        'C.clie_rfc',
+
+                        'PM.pame_pk',
+                        'PM.pame_name',
+
+                        'S.stor_pk',
+                        'S.stor_name',
+                        DB::raw('(SELECT COUNT(*) AS Cant FROM client_returns WHERE clre_status = 2 AND clsa_fk = CS.clsa_pk) AS cantreturn') //Cantidad de Devoluciones
+                    )
+                    ->where('S.stor_pk', '=', $vStore)
+                    ->whereDate('CS.created_at', '=', $vCurrentDate)
+                    ->orderByDesc('CS.clsa_pk')
+                    ->get();
             }
 
             return response()->json([
