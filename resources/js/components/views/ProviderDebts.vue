@@ -326,7 +326,7 @@ export default {
             
                         setTimeout(function () {
                         newWin.close();
-                        }, 40000);
+                        }, 50000);
 
 
                         this.textMsg = "¡Actualizado correctamente!";

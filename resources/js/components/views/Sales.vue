@@ -244,10 +244,10 @@ export default {
       var newWin = window.open(url, "Imprimir orden", "height=400,width=600");
       setTimeout(function () {
         newWin.print();
-      }, 500);
+      }, 1000);
       setTimeout(function () {
         newWin.close();
-      }, 10000);
+      }, 50000);
       return true;
     },
     normal(Title, Description, Type) {
