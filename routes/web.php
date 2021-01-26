@@ -257,9 +257,9 @@ Route::get('/logout','Auth\LoginController@logout');
 Route::get('/', function(){
   return redirect('/login');
 })->name('login');
-Route::get('/login', function(){
-  return view('auth.login');
-})->name('loginn');
+//Route::get('/login', function(){
+  //return view('auth.login');
+//})->name('loginn');
 
 Route::group(['middleware' => 'auth'], function () {
 
