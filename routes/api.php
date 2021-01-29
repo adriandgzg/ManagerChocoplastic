@@ -34,6 +34,8 @@ Route::middleware('auth:api')->group( function(){
 
     Route::get('/product/categories', 'ProductCategoryController@index'); //Lista de Categorias 
     Route::get('/products/{prca_fk}', 'ProductController@index'); //Lista de Producto filtados por sucursal y categoria
+    Route::get('/products2/{prca_fk}', 'ProductController@index2'); //Lista de Producto filtados por sucursal y categoria
+    Route::get('/products3/{prca_fk}', 'ProductController@index3'); //Lista de Producto filtados por sucursal y categoria
     Route::get('/product/frequents', 'ProductFrequentController@index'); //Lista de Producto Frecuentes
     Route::get('/products/search/{isSKU}/{text}', 'ProductController@search'); //Busqueda de Productos
     
