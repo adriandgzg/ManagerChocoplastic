@@ -77,9 +77,13 @@ class ClientPaymentController extends ApiResponseController
                 $vpayment_total = ClientPayment::where('clde_fk', '=', $vclde_fk)->where('clpa_status', '=', 1)->sum('clpa_amount'); //Monto total de pagos
 
                 $vdebt_total =  $vclde_amount - $vpayment_total;
+				
+				$vMontoAbono = round($vclpa_amount, 2);
+				$vMontoDeudaPendiente = round($vdebt_total, 2);
+				
 
                 //Validar que el monto pendiente de la deuda sea mayor o igual que el pago
-                if($vclpa_amount <= $vdebt_total)
+                if($vMontoAbono <= $vMontoDeudaPendiente)
                 {
                     //Insertar Pago del cliente
                     $vCPC = new ClientPayment();        

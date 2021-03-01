@@ -70,10 +70,13 @@ class ProviderPaymentController extends ApiResponseController
                 $vprde_amount = $vProvDebt->prde_amount; //Montos total de deuda
                 $vpayment_total = ProviderPayment::where('prde_fk', '=', $vprde_fk)->where('prpa_status', '=', 1)->sum('prpa_amount'); //Monto total de pagos
 
-                $vdebt_total =  $vprde_amount - $vpayment_total;
+                $vdebt_total =  floatval($vprde_amount) - floatval($vpayment_total);
+					
+				$vMontoAbono = round($vprpa_amount, 2);
+				$vMontoDeudaPendiente = round($vdebt_total, 2);
 
                 //Validar que el monto pendiente de la deuda sea mayor o igual que el pago
-                if($vprpa_amount <= $vdebt_total)
+                if($vMontoAbono <= $vMontoDeudaPendiente)
                 {
                     //Insertar Pago del Proveedor
                     $vPP = new ProviderPayment();        
@@ -127,7 +130,7 @@ class ProviderPaymentController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
+            return $this->dbResponse(null, 500, $vTh->getMessage(), 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
