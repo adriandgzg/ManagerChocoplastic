@@ -378,7 +378,7 @@ class ProductController extends ApiResponseController
 
 
 
-    public function ProductList(){ 
+    public function ProductList(){  
 
         $vProducts = DB::table('products AS P')
                     ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
@@ -390,6 +390,7 @@ class ProductController extends ApiResponseController
                         'P.meas_fk_input', 
                         'P.meas_fk_output', 
                         'P.prod_identifier', 
+                        DB::raw("CONCAT(P.prod_identifier, ' ',P.prod_name) AS prod_name_identifier"),
                         'P.prod_name', 
                         'P.prod_description', 
                         'P.prod_image', 

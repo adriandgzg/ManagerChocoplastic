@@ -208,6 +208,19 @@ export default {
           },
         ],
       },
+      {
+        icon: "account_circle",
+        text: "Reportes",
+        access: "reports",
+        submenu: [
+          {
+            to: "/reportinventorymovements",
+            icon: "mdi-cart",
+            text: "Movimientos de Inventario por Producto",
+            access: "reportinventorymovements",
+          },
+        ],
+      },
     ],
     submenu: [
       {

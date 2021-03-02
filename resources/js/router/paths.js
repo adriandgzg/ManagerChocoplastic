@@ -230,4 +230,9 @@ export default [{
         name: 'Cajas',
         view: 'BoxCuts'
     },
+    {
+        path: '/reportinventorymovements',
+        name: 'Movimientos de Inventario por Producto',
+        view: 'ReportInventoryMovements'
+    },
 ]
