@@ -658,7 +658,7 @@ class ProviderPurchaseController extends ApiResponseController
                     //Buscar Producto en el Inventario 
                     $vPI = ProductInventory::where('prod_fk', '=', $vprod_pk)
                         ->where('prin_status', '=', 1)
-                        ->where('stor_fk', '=', $vPP->stor_fk)
+                        ->where('stor_fk', '=', 1)
                         ->first();
 
                     if ($vPI) 
@@ -669,8 +669,7 @@ class ProviderPurchaseController extends ApiResponseController
                         //Modificar Producto Inventario
                         $vPIU = ProductInventory::find($vprin_pk);
                         $vPIU->prin_stock = $vprin_stock + $vCantOutput;
-                        $vPIU->save();
-                        
+                        $vPIU->save();                        
                     } 
                     else 
                     {
