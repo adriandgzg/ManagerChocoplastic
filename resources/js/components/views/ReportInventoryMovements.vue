@@ -211,11 +211,17 @@ export default {
         this.select_stores = "";
       }
 
-      /*if (this.start_date == "" || this.end_date == "") {
+      if (this.start_date != "" && this.end_date == "") {
         this.alert = true;
-        this.textMsg = "Seleccionar Fecha Inicio y Fecha Fin";
+        this.textMsg = "Seleccionar Fecha Fin";
         return;
-      }*/
+      }
+
+      if (this.end_date != "" && this.start_date == "") {
+        this.alert = true;
+        this.textMsg = "Seleccionar Fecha Inicio";
+        return;
+      }
 
       window.open(
         //"http://3.217.161.164:777/?pRep=1&pProd_PK=1&pStor_PK=&pDateStart=&pDateEnd=http://52.90.189.143:8000/SMR/?pRep=1&pDateStart=" +
