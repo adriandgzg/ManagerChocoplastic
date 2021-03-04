@@ -35,7 +35,7 @@
             <v-col>
               <v-form v-model="valid" ref="form">
                 <v-card-text class="category d-inline-flex font-weight-light">
-                  <v-select
+                  <v-combobox
                     v-model="select_products"
                     :items="products"
                     item-text="prod_name_identifier"
@@ -44,7 +44,7 @@
                     chips
                     label="Producto"
                     placeholder="Seleccionar Producto"
-                  ></v-select>
+                  ></v-combobox>
                 </v-card-text>
               </v-form>
             </v-col>
@@ -126,7 +126,7 @@ export default {
       alert: false,
       valid: false,
       select_stores: 0,
-      select_products: 0,
+      select_products: '',
       start_date: "",
       end_date: "",
       stores: [],
