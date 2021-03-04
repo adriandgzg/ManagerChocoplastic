@@ -147,9 +147,7 @@ export default {
 
           if (this.users.store_id > 0) {
             this.enabledStore = true;
-            this.select_stores = this.stores.find(
-              (item) => item.stor_pk == this.users.store_id 
-            );
+            this.select_stores = this.users.store_id;
           } else this.enabledStore = false;
         })
         .catch((e) => {
@@ -187,9 +185,9 @@ export default {
         this.textMsg = "Seleccionar Producto";
         return;
       }
-      if(this.select_stores.stor_pk == 0)
+      if(this.select_stores == 0)
       {
-        this.select_stores.stor_pk = "";
+        this.select_stores = "";
       }
 
       if (this.start_date != "" && this.end_date == "") {
@@ -209,7 +207,7 @@ export default {
         "http://3.217.161.164:777/?pRep=1&pProd_PK=" +
           this.select_products +
           "&pStor_PK=" +
-          this.select_stores.stor_pk +
+          this.select_stores +
           "&pDateStart=" +
           this.start_date +
           "&pDateEnd=" +
