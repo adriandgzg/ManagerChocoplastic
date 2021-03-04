@@ -147,7 +147,7 @@ export default {
 
           if (this.users.store_id > 0) {
             this.enabledStore = true;
-            this.SelectSucursal = this.stores.find(
+            this.select_stores = this.stores.find(
               (item) => item.stor_pk == this.users.store_id 
             );
           } else this.enabledStore = false;
@@ -181,25 +181,6 @@ export default {
 
     GenerarReporte() {
       axios;
-      /*console.log("this.select_reportes");
-      if (this.select_reportes <= 0) {
-        this.alert = true;
-        this.textMsg = "Seleccionar Reporte";
-        return;
-      }
-      console.log(this.start_date > this.end_date);
-      if (this.start_date > this.end_date) {
-        this.alert = true;
-        this.textMsg =
-          "Fecha Inicio no puede ser menor a la Fecha Fin";
-        return;
-      }
-      if (this.select_stores == "" || this.select_stores == "0") {
-        this.alert = true;
-        this.textMsg = "Seleccionar Sucursal";
-        return;
-      }
-*/
 
       if (this.select_products == "" || this.select_products == "0") {
         this.alert = true;
