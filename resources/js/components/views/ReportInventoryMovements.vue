@@ -148,7 +148,7 @@ export default {
           if (this.users.store_id > 0) {
             this.enabledStore = true;
             this.SelectSucursal = this.stores.find(
-              (item) => item.stor_pk == this.users.store_id
+              (item) => item.stor_pk == this.users.store_id 
             );
           } else this.enabledStore = false;
         })
@@ -232,7 +232,9 @@ export default {
           "&pDateStart=" +
           this.start_date +
           "&pDateEnd=" +
-          this.end_date,
+          this.end_date +
+          "&pUser_PK=" +
+          this.users.id,
         "_blank"
       );
     },
