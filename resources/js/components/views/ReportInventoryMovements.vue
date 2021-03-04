@@ -187,9 +187,9 @@ export default {
         this.textMsg = "Seleccionar Producto";
         return;
       }
-      if(this.SelectSucursal.stor_pk == 0)
+      if(this.select_stores.stor_pk == 0)
       {
-        this.SelectSucursal.stor_pk = "";
+        this.select_stores.stor_pk = "";
       }
 
       if (this.start_date != "" && this.end_date == "") {
@@ -209,7 +209,7 @@ export default {
         "http://3.217.161.164:777/?pRep=1&pProd_PK=" +
           this.select_products +
           "&pStor_PK=" +
-          this.SelectSucursal.stor_pk +
+          this.select_stores.stor_pk +
           "&pDateStart=" +
           this.start_date +
           "&pDateEnd=" +
