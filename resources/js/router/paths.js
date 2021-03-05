@@ -235,4 +235,9 @@ export default [{
         name: 'Movimientos de Inventario por Producto',
         view: 'ReportInventoryMovements'
     },
+    {
+        path: '/reportinventorystore',
+        name: 'Inventario por Sucursal',
+        view: 'ReportInventoryStore'
+    },
 ]

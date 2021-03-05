@@ -219,6 +219,12 @@ export default {
             text: "Movimientos de Inventario por Producto",
             access: "reportinventorymovements",
           },
+          {
+            to: "/reportinventorystore",
+            icon: "mdi-cart",
+            text: "Inventario por Sucursal",
+            access: "reportinventorystore",
+          },
         ],
       },
     ],
