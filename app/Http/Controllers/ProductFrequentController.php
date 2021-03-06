@@ -22,7 +22,7 @@ class ProductFrequentController extends ApiResponseController
     {
         try 
         {
-            //Sucursal al que pertenece el Usuario App
+            //Sucursal al que pertenece el Usuario App 
             $vStore_PK = Auth::user()->stor_fk;
 
             $vProducts = 
@@ -45,16 +45,16 @@ class ProductFrequentController extends ApiResponseController
                     'P.prod_minimumpurchase AS MinimumPurchase',
                     'P.prod_bulk AS Bulk',
                     'PI.prin_stock AS Stock',
-                    //DB::raw("PI.prin_stock * P.prod_packingquantity AS Stock"),
                     'PC.prca_name AS Category',
                     'MO.meas_name AS Measurement',
-                    'SPI.stor_name AS Store'
+                    'S.stor_name AS Store'
                 )
                 ->where('P.prod_status', '=', 1)
                 ->where('PI.prin_status', '=', 1)
                 ->where('PF.prfr_status', '=', 1)
                 ->where('PI.stor_fk', '=', $vStore_PK)
                 ->where('PF.stor_fk', '=', $vStore_PK)
+                ->whereNull('P.prod_main_pk')
                 ->orderBy('P.prod_pk')
                 ->get();
             
@@ -63,6 +63,51 @@ class ProductFrequentController extends ApiResponseController
             //Recorrido de productos principales
             foreach($vProducts AS $vP)
             {
+                //Consultar Suma de Cantidad Preventa (Pedidos Pendientes)
+                $vSumclod_quantity =  DB::table('client_orders AS CO')
+                    ->join('client_order_details AS COD', 'CO.clor_pk', '=', 'COD.clor_fk')
+                    ->join('products AS P', 'COD.prod_fk', '=', 'P.prod_pk')
+                    ->where('CO.stor_fk', '=', $vStore_PK)
+                    ->where('CO.clor_status', '=', 1)
+                    ->where('COD.clod_status', '=', 1)
+                    ->where('COD.prod_fk', '=', $vP->PK_Product)
+                    ->whereNull('P.prod_main_pk')
+                    ->sum('COD.clod_quantity');
+                
+                $vStockApp = $vP->Stock - $vSumclod_quantity;
+
+                //Busqueda de productos variantes
+                $vProdVariats = 
+                    DB::table('products AS P')
+                        ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                        ->select(
+                            'P.prod_pk AS PK_Product',
+                            'P.prod_saleprice AS RetailPrice',
+                            'P.prod_bulk AS Bulk',
+                            DB::raw("$vStockApp / P.prod_fact_convert AS Stock"),
+                            'MO.meas_name AS Measurement'
+                        )
+                        ->where('prod_status', '=', 1) 
+                        ->where('P.prod_main_pk', '=', $vP->PK_Product)
+                        ->orderBy('P.prod_pk');
+
+                $vProdFirstVariat = 
+                    DB::table('products AS P')
+                        ->select(
+                            'P.prod_pk AS PK_Product',
+                            'P.prod_saleprice AS RetailPrice',
+                            'P.prod_bulk AS Bulk',
+                            DB::raw("$vStockApp AS Stock"),
+                            DB::raw("'$vP->Measurement' AS Measurement")
+                        )
+                        ->where('prod_status', '=', 1) 
+                        ->where('P.prod_pk', '=', $vP->PK_Product)
+                        ->orderBy('P.prod_pk')
+                        ->union($vProdVariats)
+                        ->get();
+
+
+                /*
                 //Busqueda de productos variantes
                 $vProdVariats = 
                     DB::table('products AS P')
@@ -107,7 +152,7 @@ class ProductFrequentController extends ApiResponseController
                     ->where('COD.prod_fk', '=', $vP->PK_Product)
                     ->whereNull('P.prod_main_pk')
                     ->sum('COD.clod_quantity');
-                        
+                    */    
                 //Lista final de productos con los variantes 
                 $vPP = array(
                     "PK_Product" => $vP->PK_Product,
@@ -118,7 +163,7 @@ class ProductFrequentController extends ApiResponseController
                     "RetailPrice" => $vP->RetailPrice,
                     "WholesalePrice" => $vP->WholesalePrice,
                     "MinimumPurchase" => $vP->MinimumPurchase,
-                    "Stock" => $vP->Stock - $vSumclod_quantity,
+                    "Stock" => $vStockApp,
                     "Category" => $vP->Category,
                     "Measurement" => $vP->Measurement,
                     "Store" => $vP->Store,

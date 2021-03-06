@@ -19,7 +19,7 @@ class ProductController extends ApiResponseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(int $prca_fk)
+    /*public function index(int $prca_fk)
     {
         try 
         {
@@ -136,10 +136,10 @@ class ProductController extends ApiResponseController
         {
             return $this->dbResponse(null, 500, $e, null);
         }
-    }
+    }*/
 
 
-    public function index2(int $prca_fk)
+    public function index(int $prca_fk)
     {
         try 
         {
@@ -210,20 +210,20 @@ class ProductController extends ApiResponseController
                         ->where('P.prod_main_pk', '=', $vP->PK_Product)
                         ->orderBy('P.prod_pk');
 
-                    $vProdFirstVariat = 
-                        DB::table('products AS P')
-                            ->select(
-                                'P.prod_pk AS PK_Product',
-                                'P.prod_saleprice AS RetailPrice',
-                                'P.prod_bulk AS Bulk',
-                                DB::raw("$vStockApp AS Stock"),
-                                DB::raw("'$vP->Measurement' AS Measurement")
-                            )
-                            ->where('prod_status', '=', 1) 
-                            ->where('P.prod_pk', '=', $vP->PK_Product)
-                            ->orderBy('P.prod_pk')
-                            ->union($vProdVariats)
-                            ->get();
+                $vProdFirstVariat = 
+                    DB::table('products AS P')
+                        ->select(
+                            'P.prod_pk AS PK_Product',
+                            'P.prod_saleprice AS RetailPrice',
+                            'P.prod_bulk AS Bulk',
+                            DB::raw("$vStockApp AS Stock"),
+                            DB::raw("'$vP->Measurement' AS Measurement")
+                        )
+                        ->where('prod_status', '=', 1) 
+                        ->where('P.prod_pk', '=', $vP->PK_Product)
+                        ->orderBy('P.prod_pk')
+                        ->union($vProdVariats)
+                        ->get();
 
                     
                 //Lista final de productos con los variantes 
@@ -256,7 +256,7 @@ class ProductController extends ApiResponseController
     }
 
 
-    public function index3(int $prca_fk)
+    /*public function index3(int $prca_fk)
     {
         try 
         {
@@ -374,7 +374,7 @@ class ProductController extends ApiResponseController
         {
             return $this->dbResponse(null, 500, $vTh->getMessage(), null);
         }
-    }
+    }*/
 
 
 
@@ -741,7 +741,7 @@ class ProductController extends ApiResponseController
 
 
 
-
+ 
 
 
     public function search(int $isSKU, string $vText)
@@ -770,7 +770,6 @@ class ProductController extends ApiResponseController
                         'P.prod_minimumpurchase AS MinimumPurchase',
                         'P.prod_bulk AS Bulk',
                         'PI.prin_stock AS Stock',
-                        //DB::raw("PI.prin_stock * P.prod_packingquantity AS Stock"),
                         'PC.prca_name AS Category',
                         'MO.meas_name AS Measurement',
                         'S.stor_name AS Store'
@@ -787,7 +786,50 @@ class ProductController extends ApiResponseController
                 //Recorrido de productos principales
                 foreach($vProducts AS $vP)
                 {
+                    //Consultar Suma de Cantidad Preventa (Pedidos Pendientes)
+                    $vSumclod_quantity =  DB::table('client_orders AS CO')
+                        ->join('client_order_details AS COD', 'CO.clor_pk', '=', 'COD.clor_fk')
+                        ->join('products AS P', 'COD.prod_fk', '=', 'P.prod_pk')
+                        ->where('CO.stor_fk', '=', $vStore_PK)
+                        ->where('CO.clor_status', '=', 1)
+                        ->where('COD.clod_status', '=', 1)
+                        ->where('COD.prod_fk', '=', $vP->PK_Product)
+                        ->whereNull('P.prod_main_pk')
+                        ->sum('COD.clod_quantity');
+                
+                    $vStockApp = $vP->Stock - $vSumclod_quantity;
+
                     //Busqueda de productos variantes
+                    $vProdVariats = 
+                        DB::table('products AS P')
+                            ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                            ->select(
+                                'P.prod_pk AS PK_Product',
+                                'P.prod_saleprice AS RetailPrice',
+                                'P.prod_bulk AS Bulk',
+                                DB::raw("$vStockApp / P.prod_fact_convert AS Stock"),
+                                'MO.meas_name AS Measurement'
+                            )
+                            ->where('prod_status', '=', 1) 
+                            ->where('P.prod_main_pk', '=', $vP->PK_Product)
+                            ->orderBy('P.prod_pk');
+
+                    $vProdFirstVariat = 
+                        DB::table('products AS P')
+                            ->select(
+                                'P.prod_pk AS PK_Product',
+                                'P.prod_saleprice AS RetailPrice',
+                                'P.prod_bulk AS Bulk',
+                                DB::raw("$vStockApp AS Stock"),
+                                DB::raw("'$vP->Measurement' AS Measurement")
+                            )
+                            ->where('prod_status', '=', 1) 
+                            ->where('P.prod_pk', '=', $vP->PK_Product)
+                            ->orderBy('P.prod_pk')
+                            ->union($vProdVariats)
+                            ->get();
+
+                        /*//Busqueda de productos variantes
                     $vProdVariats = 
                         DB::table('products AS P')
                             ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
@@ -830,7 +872,7 @@ class ProductController extends ApiResponseController
                     ->where('clod_status', '=', 1)
                     ->where('COD.prod_fk', '=', $vP->PK_Product)
                     ->whereNull('P.prod_main_pk')
-                    ->sum('COD.clod_quantity');
+                    ->sum('COD.clod_quantity');*/
                         
                     //Lista final de productos con los variantes 
                     $vPP = array(
@@ -842,7 +884,7 @@ class ProductController extends ApiResponseController
                         "RetailPrice" => $vP->RetailPrice,
                         "WholesalePrice" => $vP->WholesalePrice,
                         "MinimumPurchase" => $vP->MinimumPurchase,
-                        "Stock" => $vP->Stock - $vSumclod_quantity,
+                        "Stock" => $vStockApp,
                         "Category" => $vP->Category,
                         "Measurement" => $vP->Measurement,
                         "Store" => $vP->Store,
@@ -873,7 +915,6 @@ class ProductController extends ApiResponseController
                         'P.prod_minimumpurchase AS MinimumPurchase',
                         'P.prod_bulk AS Bulk',
                         'PI.prin_stock AS Stock',
-                        //DB::raw("PI.prin_stock * P.prod_packingquantity AS Stock"),
                         'PC.prca_name AS Category',
                         'MO.meas_name AS Measurement',
                         'S.stor_name AS Store'
@@ -896,39 +937,86 @@ class ProductController extends ApiResponseController
                 //Recorrido de productos principales
                 foreach($vProducts AS $vP)
                 {
+                    //Consultar Suma de Cantidad Preventa (Pedidos Pendientes)
+                    $vSumclod_quantity =  DB::table('client_orders AS CO')
+                        ->join('client_order_details AS COD', 'CO.clor_pk', '=', 'COD.clor_fk')
+                        ->join('products AS P', 'COD.prod_fk', '=', 'P.prod_pk')
+                        ->where('CO.stor_fk', '=', $vStore_PK)
+                        ->where('CO.clor_status', '=', 1)
+                        ->where('COD.clod_status', '=', 1)
+                        ->where('COD.prod_fk', '=', $vP->PK_Product)
+                        ->whereNull('P.prod_main_pk')
+                        ->sum('COD.clod_quantity');
+                
+                    $vStockApp = $vP->Stock - $vSumclod_quantity;
+
                     //Busqueda de productos variantes
                     $vProdVariats = 
                         DB::table('products AS P')
-                            ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
                             ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
                             ->select(
                                 'P.prod_pk AS PK_Product',
                                 'P.prod_saleprice AS RetailPrice',
                                 'P.prod_bulk AS Bulk',
-                                DB::raw("$vP->Stock / P.prod_fact_convert  AS Stock"),
+                                DB::raw("$vStockApp / P.prod_fact_convert AS Stock"),
                                 'MO.meas_name AS Measurement'
                             )
-                        ->where('prod_status', '=', 1)
-                        ->where('P.prod_main_pk', '=', $vP->PK_Product)
-                        ->orderBy('P.prod_pk');
+                            ->where('prod_status', '=', 1) 
+                            ->where('P.prod_main_pk', '=', $vP->PK_Product)
+                            ->orderBy('P.prod_pk');
 
                     $vProdFirstVariat = 
                         DB::table('products AS P')
-                            ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
-                            ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
                             ->select(
                                 'P.prod_pk AS PK_Product',
                                 'P.prod_saleprice AS RetailPrice',
                                 'P.prod_bulk AS Bulk',
-                                DB::raw("$vP->Stock AS Stock"),
-                                'MO.meas_name AS Measurement'
+                                DB::raw("$vStockApp AS Stock"),
+                                DB::raw("'$vP->Measurement' AS Measurement")
                             )
                             ->where('prod_status', '=', 1) 
                             ->where('P.prod_pk', '=', $vP->PK_Product)
                             ->orderBy('P.prod_pk')
                             ->union($vProdVariats)
                             ->get();
-                        
+
+
+
+
+                                /*
+                                //Busqueda de productos variantes
+                                $vProdVariats = 
+                                    DB::table('products AS P')
+                                        ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                                        ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                                        ->select(
+                                            'P.prod_pk AS PK_Product',
+                                            'P.prod_saleprice AS RetailPrice',
+                                            'P.prod_bulk AS Bulk',
+                                            DB::raw("$vP->Stock / P.prod_fact_convert  AS Stock"),
+                                            'MO.meas_name AS Measurement'
+                                        )
+                                    ->where('prod_status', '=', 1)
+                                    ->where('P.prod_main_pk', '=', $vP->PK_Product)
+                                    ->orderBy('P.prod_pk');
+
+                                $vProdFirstVariat = 
+                                    DB::table('products AS P')
+                                        ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+                                        ->join('measurements AS MO', 'P.meas_fk_output', '=', 'MO.meas_pk')
+                                        ->select(
+                                            'P.prod_pk AS PK_Product',
+                                            'P.prod_saleprice AS RetailPrice',
+                                            'P.prod_bulk AS Bulk',
+                                            DB::raw("$vP->Stock AS Stock"),
+                                            'MO.meas_name AS Measurement'
+                                        )
+                                        ->where('prod_status', '=', 1) 
+                                        ->where('P.prod_pk', '=', $vP->PK_Product)
+                                        ->orderBy('P.prod_pk')
+                                        ->union($vProdVariats)
+                                        ->get();
+                        */
                     //Lista final de productos con los variantes 
                     $vPP = array(
                         "PK_Product" => $vP->PK_Product,
@@ -939,7 +1027,7 @@ class ProductController extends ApiResponseController
                         "RetailPrice" => $vP->RetailPrice,
                         "WholesalePrice" => $vP->WholesalePrice,
                         "MinimumPurchase" => $vP->MinimumPurchase,
-                        "Stock" => $vP->Stock,
+                        "Stock" => $vStockApp,
                         "Category" => $vP->Category,
                         "Measurement" => $vP->Measurement,
                         "Store" => $vP->Store,
