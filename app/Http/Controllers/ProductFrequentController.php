@@ -47,7 +47,7 @@ class ProductFrequentController extends ApiResponseController
                     'PI.prin_stock AS Stock',
                     'PC.prca_name AS Category',
                     'MO.meas_name AS Measurement',
-                    'S.stor_name AS Store'
+                    'SPF.stor_name AS Store'
                 )
                 ->where('P.prod_status', '=', 1)
                 ->where('PI.prin_status', '=', 1)
@@ -177,7 +177,7 @@ class ProductFrequentController extends ApiResponseController
         } 
         catch (Throwable $vTh) 
         {
-            return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
+            return $this->dbResponse(null, 500, $vTh->getMessage(), 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
