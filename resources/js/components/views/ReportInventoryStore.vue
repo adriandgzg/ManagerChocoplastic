@@ -131,7 +131,9 @@ export default {
 
       if(this.select_stores == 0)
       {
-        this.select_stores = "";
+        this.alert = true;
+        this.textMsg = "Seleccionar Sucursal";
+        return;
       }
 
       if(this.select_products.prod_pk === undefined){
@@ -144,6 +146,7 @@ export default {
 
       window.open(
         "http://3.217.161.164:777/?pRep=2&pProd_PK=" +
+        //"http://localhost:12345/?pRep=2&pProd_PK=" +
           vprod_pk +
           "&pStor_PK=" +
           this.select_stores +

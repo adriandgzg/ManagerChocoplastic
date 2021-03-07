@@ -203,8 +203,8 @@ export default {
       }
 
       window.open(
-        //"http://3.217.161.164:777/?pRep=1&pProd_PK=1&pStor_PK=&pDateStart=&pDateEnd=http://52.90.189.143:8000/SMR/?pRep=1&pDateStart=" +
         "http://3.217.161.164:777/?pRep=1&pProd_PK=" +
+        //"http://localhost:12345/?pRep=1&pProd_PK=" +
           this.select_products.prod_identifier +
           "&pStor_PK=" +
           this.select_stores +
