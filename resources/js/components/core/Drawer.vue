@@ -225,6 +225,12 @@ export default {
             text: "Inventario por Sucursal",
             access: "reportinventorystore",
           },
+          {
+            to: "/reportclientcatalog",
+            icon: "mdi-cart",
+            text: "Catálogo Cliente",
+            access: "reportclientcatalog",
+          },
         ],
       },
     ],

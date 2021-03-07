@@ -240,4 +240,9 @@ export default [{
         name: 'Inventario por Sucursal',
         view: 'ReportInventoryStore'
     },
+    {
+        path: '/reportclientcatalog',
+        name: 'Catálogo Cliente',
+        view: 'ReportCientCatalog'
+    },
 ]
