@@ -231,6 +231,12 @@ export default {
             text: "Catálogo Cliente",
             access: "reportclientcatalog",
           },
+          {
+            to: "/reportclientdebt",
+            icon: "mdi-cart",
+            text: "Cuentas por Cobrar",
+            access: "reportclientdebt",
+          },
         ],
       },
     ],

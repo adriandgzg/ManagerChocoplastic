@@ -245,4 +245,9 @@ export default [{
         name: 'Catálogo Cliente',
         view: 'ReportCientCatalog'
     },
+    {
+        path: '/reportclientdebt',
+        name: 'Cuentas por Cobrar',
+        view: 'ReportClientDebt'
+    },
 ]

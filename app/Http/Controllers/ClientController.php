@@ -26,6 +26,7 @@ class ClientController extends Controller
             'C.feen_fk',
             'C.clie_identifier',
             'C.clie_name',
+            DB::raw("CONCAT(C.clie_identifier, ' ' ,C.clie_name) AS clie_name_identifier"),
             'C.clie_rfc',
             'C.clie_phone',
             'C.clie_email',
