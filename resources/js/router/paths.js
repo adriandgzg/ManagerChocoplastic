@@ -250,4 +250,9 @@ export default [{
         name: 'Cuentas por Cobrar',
         view: 'ReportClientDebt'
     },
+    {
+        path: '/reportclientpayment',
+        name: 'Bitácora de Abonos',
+        view: 'ReportClientPayment'
+    },
 ]

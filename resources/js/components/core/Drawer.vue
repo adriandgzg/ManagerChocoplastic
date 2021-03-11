@@ -237,6 +237,12 @@ export default {
             text: "Cuentas por Cobrar",
             access: "reportclientdebt",
           },
+          {
+            to: "/reportclientpayment",
+            icon: "mdi-cart",
+            text: "Bitácora de Abonos",
+            access: "reportclientpayment",
+          },
         ],
       },
     ],
