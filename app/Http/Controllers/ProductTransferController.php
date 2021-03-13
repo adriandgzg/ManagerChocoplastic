@@ -376,7 +376,7 @@ class ProductTransferController extends ApiResponseController
                         //Producto NO Encontrado, NO se puede Transpasar
                         $vVal_Dev = false;
 
-                        $vProdSel = Product::where('prod_fk', '=', $vprod_fk)->first();
+                        $vProdSel = Product::where('prod_pk', '=', $vprod_fk)->first();
 
                         $vprod_identifier = $vProdSel->prod_identifier; //Identificador Producto
                         $vprod_name = $vProdSel->prod_name; //Descripcion Producto
