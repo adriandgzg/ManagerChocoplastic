@@ -134,6 +134,9 @@ class ClientSaleController extends ApiResponseController
     {
         try 
         {
+            ini_set("memory_limit", "-1");
+
+
             $vStore = Auth::user()->store_id;
             $vrole_id = Auth::user()->role_id;
 
@@ -238,6 +241,8 @@ class ClientSaleController extends ApiResponseController
 
         try 
         {
+            ini_set("memory_limit", "-1");
+
             $vInput = $vR->all();
 
             //Asignacion de variables
