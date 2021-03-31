@@ -99,7 +99,7 @@ Route::post('/client/orders/destroy', 'ClientOrderController@destroy'); //Cancel
 
 Route::get('/clientsales', 'ClientSaleController@index'); ////Lista de Ventas (Cliente)
 Route::get('/clientsales/day', 'ClientSaleController@indexday'); ////Lista de Ventas del dia (Cliente)
-Route::get('/clientsales/day', 'ClientSaleController@indexday'); ////Lista de Ventas filtrado (Cliente)
+Route::post('/clientsales/filtered', 'ClientSaleController@indexfiltered'); ////Lista de Ventas filtrado (Cliente)
 Route::get('/client/sales/{clsa_pk}', 'ClientSaleController@show'); //Detalle de Venta (Cliente)   
 Route::get('/client/sales/report/{clsa_pk}', 'ClientSaleController@showreport'); //Detalle de Venta (Cliente)   Reporte
 Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente) 

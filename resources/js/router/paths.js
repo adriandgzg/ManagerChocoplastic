@@ -85,6 +85,11 @@ export default [{
         view: 'SalesDay'
     },
     {
+        path: '/salesfiltered',
+        name: 'Ventas (Filtro)',
+        view: 'ClientSalesFiltered'
+    },
+    {
         path: '/orders',
         name: 'Pedidos del día',
         view: 'ClientOrders'

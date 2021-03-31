@@ -179,12 +179,6 @@ class ClientOrderController extends ApiResponseController
                 $vStore = Auth::user()->store_id;
             }
 
-            $vConditionDate = ($vStart_date <> "" ? true : false);
-            $vConditionAll = ($vStatus == -1 ? true : false);
-            $vCondition0 = ($vStatus == 0 ? true : false);
-            $vCondition1 = ($vStatus == 1 ? true : false);
-            $vCondition2 = ($vStatus == 2 ? true : false);
-
             $vClientOrders = DB::table('client_orders AS CO')
                     ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
                     ->select(
@@ -200,16 +194,16 @@ class ClientOrderController extends ApiResponseController
                         ELSE "" END) AS clor_status_description')
                     )
                     ->where('S.stor_pk', '=', $vStore)
-                    ->when($vConditionAll, function ($vQuery) {
+                    ->when($vStatus == -1, function ($vQuery) {
                         $vQuery->whereIn('CO.clor_status', array(0, 1, 2));
                     })
-                    ->when($vCondition0, function ($vQuery) {
+                    ->when($vStatus == 0, function ($vQuery) {
                         $vQuery->where('CO.clor_status', '=', 0);
                     })
-                    ->when($vCondition1, function ($vQuery) {
+                    ->when($vStatus == 1, function ($vQuery) {
                         $vQuery->where('CO.clor_status', '=', 1);
                     })
-                    ->when($vCondition2, function ($vQuery) {
+                    ->when($vStatus == 2, function ($vQuery) {
                         $vQuery->where('CO.clor_status', '=', 2);
                     })
                     ->when($vStart_date <> "", function ($vQuery) use ($vStart_date, $vEnd_date) {

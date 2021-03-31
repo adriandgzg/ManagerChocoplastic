@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
-use Carbon\Carbon;
+use Carbon\Carbon; 
 
 class ClientSaleController extends ApiResponseController 
 {
@@ -130,8 +130,6 @@ class ClientSaleController extends ApiResponseController
     }
 
 
-
-
     public function indexday()
     {
         try 
@@ -232,6 +230,97 @@ class ClientSaleController extends ApiResponseController
                 'message' => $e
             ], 200);
         }        
+    }
+
+
+    public function indexfiltered(Request $vR)
+    {
+
+        try 
+        {
+            $vInput = $vR->all();
+
+            //Asignacion de variables
+            $vStor_pk = $vInput['stor_pk'];
+            $vClie_pk = $vInput['clie_pk'];
+            $vPame_pk = $vInput['pame_pk'];
+            $vStatus = $vInput['clor_status'];
+            $vStart_date = $vInput['start_date'];
+            $vEnd_date = $vInput['end_date'];
+
+            $vRole_id = Auth::user()->role_id;
+
+            if($vRole_id == 1)
+            {
+                $vStore = $vStor_pk;
+            }
+            else
+            {
+                $vStore = Auth::user()->store_id;
+            }
+
+            $vClientSales = DB::table('client_sales AS CS')
+                ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
+                ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
+                ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
+                ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
+                ->select(
+                    'CS.clsa_pk',
+                    'CS.clsa_identifier',
+                    'CS.clor_fk AS clor_pk',
+                    'CS.clsa_status',
+                    DB::raw('(CASE 
+                        WHEN CS.clsa_status = 0 THEN "Pendiente" 
+                        WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
+                        WHEN CS.clsa_status = 3 THEN "Pagado" 
+                        ELSE "" END) AS clsa_status_description'),
+                    'CS.created_at',
+
+                    'CO.clor_identifier',
+
+                    'C.clie_pk',
+                    'C.clie_identifier',
+                    'C.clie_name',
+                    'C.clie_rfc',
+
+                    'PM.pame_pk',
+                    'PM.pame_name',
+
+                    'S.stor_pk',
+                    'S.stor_name',
+                    DB::raw('(SELECT COUNT(*) AS Cant FROM client_returns WHERE clre_status = 2 AND clsa_fk = CS.clsa_pk) AS cantreturn') //Cantidad de Devoluciones
+                )
+                ->where('S.stor_pk', '=', $vStore)
+                ->when($vStatus == -1, function ($vQuery) {
+                    $vQuery->whereIn('CS.clsa_status', array(0, 2, 3));
+                })
+                ->when($vStatus == 0, function ($vQuery) {
+                    $vQuery->where('CS.clsa_status', '=', 0);
+                })
+                ->when($vStatus == 2, function ($vQuery) {
+                    $vQuery->where('CS.clsa_status', '=', 2);
+                })
+                ->when($vStatus == 3, function ($vQuery) {
+                    $vQuery->where('CS.clsa_status', '=', 3);
+                })
+                ->when($vClie_pk <> -1, function ($vQuery) use ($vClie_pk) {
+                    $vQuery->where('C.clie_pk', '=', $vClie_pk);
+                })
+                ->when($vPame_pk <> -1, function ($vQuery) use ($vPame_pk) {
+                    $vQuery->where('PM.Pame_pk', '=', $vPame_pk);
+                })
+                ->when($vStart_date <> "", function ($vQuery) use ($vStart_date, $vEnd_date) {
+                    $vQuery->whereBetween('CS.created_at', [$vStart_date.' 00:00:00', $vEnd_date.' 23:59:59']);
+                })
+                ->orderByDesc('CS.clsa_pk')
+                ->get();
+
+            return $this->dbResponse($vClientSales, 200, null, 'Ventas filtrado');
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh->getMessage(), 'Detalle Interno, informar al Administrador del Sistema.');
+        }
     }
 
     /**
