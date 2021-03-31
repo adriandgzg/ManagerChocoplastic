@@ -92,12 +92,14 @@ Route::post('/products/derived/destroy', 'ProductController@destroyderived'); //
 
 Route::get('/clientorders', 'ClientOrderController@index'); //Lista de Pedidos (Cliente)
 Route::get('/clientorders/day', 'ClientOrderController@indexday'); //Lista de Pedidos del dia (Cliente) 
+Route::post('/clientorders/filtered', 'ClientOrderController@indexfiltered'); //Lista de Pedidos filtrado (Cliente) 
 Route::get('/client/orders/{clor_pk}', 'ClientOrderController@showmanager'); //Detalle de Pedidos (Cliente) 
 Route::post('/client/orders/destroy', 'ClientOrderController@destroy'); //Cancelar Pedido (Cliente)
 
 
 Route::get('/clientsales', 'ClientSaleController@index'); ////Lista de Ventas (Cliente)
 Route::get('/clientsales/day', 'ClientSaleController@indexday'); ////Lista de Ventas del dia (Cliente)
+Route::get('/clientsales/day', 'ClientSaleController@indexday'); ////Lista de Ventas filtrado (Cliente)
 Route::get('/client/sales/{clsa_pk}', 'ClientSaleController@show'); //Detalle de Venta (Cliente)   
 Route::get('/client/sales/report/{clsa_pk}', 'ClientSaleController@showreport'); //Detalle de Venta (Cliente)   Reporte
 Route::post('/clientsales', 'ClientSaleController@store'); //Convertir Pedido a Venta (Cliente) 

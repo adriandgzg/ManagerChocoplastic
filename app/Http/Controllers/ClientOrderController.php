@@ -153,6 +153,82 @@ class ClientOrderController extends ApiResponseController
         }
     }
 
+
+    public function indexfiltered(Request $vR)
+    {
+
+        try 
+        {
+            $vInput = $vR->all();
+
+            //Asignacion de variables
+            $vStor_pk = $vInput['stor_pk'];
+            $vStatus = $vInput['clor_status'];
+            $vStart_date = $vInput['start_date'];
+            $vEnd_date = $vInput['end_date'];
+
+            $vRole_id = Auth::user()->role_id;
+
+
+            if($vRole_id == 1)
+            {
+                $vStore = $vStor_pk;
+            }
+            else
+            {
+                $vStore = Auth::user()->store_id;
+            }
+
+            $vConditionDate = ($vStart_date <> "" ? true : false);
+            $vConditionAll = ($vStatus == -1 ? true : false);
+            $vCondition0 = ($vStatus == 0 ? true : false);
+            $vCondition1 = ($vStatus == 1 ? true : false);
+            $vCondition2 = ($vStatus == 2 ? true : false);
+
+            $vClientOrders = DB::table('client_orders AS CO')
+                    ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
+                    ->select(
+                        'CO.clor_pk',
+                        'CO.clor_identifier',
+                        'CO.created_at',
+                        'CO.clor_status',
+                        'S.stor_name',
+                        DB::raw('(CASE 
+                        WHEN CO.clor_status = 1 THEN "Pendiente" 
+                        WHEN CO.clor_status = 2 THEN "Procesado" 
+                        WHEN CO.clor_status = 0 THEN "Cancelado" 
+                        ELSE "" END) AS clor_status_description')
+                    )
+                    ->where('S.stor_pk', '=', $vStore)
+                    ->when($vConditionAll, function ($vQuery) {
+                        $vQuery->whereIn('CO.clor_status', array(0, 1, 2));
+                    })
+                    ->when($vCondition0, function ($vQuery) {
+                        $vQuery->where('CO.clor_status', '=', 0);
+                    })
+                    ->when($vCondition1, function ($vQuery) {
+                        $vQuery->where('CO.clor_status', '=', 1);
+                    })
+                    ->when($vCondition2, function ($vQuery) {
+                        $vQuery->where('CO.clor_status', '=', 2);
+                    })
+                    ->when($vStart_date <> "", function ($vQuery) use ($vStart_date, $vEnd_date) {
+                        $vQuery->whereBetween('CO.created_at', [$vStart_date.' 00:00:00', $vEnd_date.' 23:59:59']);
+                    })
+                    ->orderByDesc('CO.clor_pk')
+                    ->get();
+
+                    
+
+            return $this->dbResponse($vClientOrders, 200, null, 'Pedidos de los clientes filtrado');
+        } 
+        catch (Throwable $vTh) 
+        {
+            return $this->dbResponse(null, 500, $vTh->getMessage(), 'Detalle Interno, informar al Administrador del Sistema.');
+        }
+    }
+
+
     public function clientorders()
     {
         try {

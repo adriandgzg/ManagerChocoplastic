@@ -183,6 +183,12 @@ export default {
             access: "ordersday",
           },
           {
+            to: "/ordersfiltered",
+            icon: "mdi-cart",
+            text: "Pedidos (Filtro)",
+            access: "ordersfiltered",
+          },
+          {
             to: "/sales",
             icon: "mdi-cart",
             text: "Ventas del día", 
@@ -234,7 +240,7 @@ export default {
           {
             to: "/reportclientdebt",
             icon: "mdi-cart",
-            text: "Cuentas por Cobrar",
+            text: "Reporte Cuentas por Cobrar",
             access: "reportclientdebt",
           },
           {

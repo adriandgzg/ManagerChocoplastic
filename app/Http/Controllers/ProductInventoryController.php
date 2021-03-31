@@ -239,38 +239,38 @@ class ProductInventoryController extends ApiResponseController
             {
                 $vStore = Auth::user()->store_id;
             }
-    
-                $vPI = DB::table('product_inventories AS PI')
-                ->join('products AS P', 'P.prod_pk', '=', 'PI.prod_fk')
-                ->join('measurements AS M', 'M.meas_pk', '=', 'PI.meas_fk_output')
-                ->join('stores AS S', 'S.stor_pk', '=', 'PI.stor_fk')
-                ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
-                ->select(
-                    'PI.prin_pk',
-                    'PI.prin_stock',
-                    'PI.updated_at',
 
-                    'P.prod_pk',
-                    'P.prod_identifier',
-                    'P.prod_name',
-                    'P.prod_description',
-                    'P.prod_image',
-                    'P.prod_bulk',
+            $vPI = DB::table('product_inventories AS PI')
+            ->join('products AS P', 'P.prod_pk', '=', 'PI.prod_fk')
+            ->join('measurements AS M', 'M.meas_pk', '=', 'PI.meas_fk_output')
+            ->join('stores AS S', 'S.stor_pk', '=', 'PI.stor_fk')
+            ->join('product_categories AS PC', 'P.prca_fk', '=', 'PC.prca_pk')
+            ->select(
+                'PI.prin_pk',
+                'PI.prin_stock',
+                'PI.updated_at',
 
-                    'M.meas_pk',
-                    'M.meas_name',
+                'P.prod_pk',
+                'P.prod_identifier',
+                'P.prod_name',
+                'P.prod_description',
+                'P.prod_image',
+                'P.prod_bulk',
 
-                    'PC.prca_pk',
-                    'PC.prca_name',
+                'M.meas_pk',
+                'M.meas_name',
 
-                    'S.stor_pk',
-                    'S.stor_name'
-                )
-                ->where('PI.prin_status', '=', 1)
-                ->whereNull('P.prod_main_pk')
-                ->where('S.stor_pk', '=', $vStore)
-                ->orderByDesc('PI.prin_pk')
-                ->get();
+                'PC.prca_pk',
+                'PC.prca_name',
+
+                'S.stor_pk',
+                'S.stor_name'
+            )
+            ->where('PI.prin_status', '=', 1)
+            ->whereNull('P.prod_main_pk')
+            ->where('S.stor_pk', '=', $vStore)
+            ->orderByDesc('PI.prin_pk')
+            ->get();
 
 
 

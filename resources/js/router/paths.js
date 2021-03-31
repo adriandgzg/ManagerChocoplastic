@@ -95,6 +95,11 @@ export default [{
         view: 'ClientOrdersDay'
     },
     {
+        path: '/ordersfiltered',
+        name: 'Pedidos (Filtro)',
+        view: 'ClientOrdersFiltered'
+    },
+    {
         path: '/inventory',
         name: 'Inventario',
         view: 'Inventory'
@@ -247,7 +252,7 @@ export default [{
     },
     {
         path: '/reportclientdebt',
-        name: 'Cuentas por Cobrar',
+        name: 'Reporte Cuentas por Cobrar',
         view: 'ReportClientDebt'
     },
     {
