@@ -228,7 +228,7 @@ export default {
           {
             to: "/reportinventorymovements",
             icon: "mdi-cart",
-            text: "Movimientos de Inventario por Producto",
+            text: "Kardex",
             access: "reportinventorymovements",
           },
           {
@@ -254,6 +254,24 @@ export default {
             icon: "mdi-cart",
             text: "Bitácora de Abonos",
             access: "reportclientpayment",
+          },
+          {
+            to: "/reportprovidercatalog",
+            icon: "mdi-cart",
+            text: "Catálogo Proveedor ",
+            access: "reportprovidercatalog",
+          },
+          {
+            to: "/reportproviderdebt",
+            icon: "mdi-cart",
+            text: "Cuentas por Pagar ",
+            access: "reportproviderdebt",
+          },
+          {
+            to: "/reportproviderpayment",
+            icon: "mdi-cart",
+            text: "Bitácora de Pagos ",
+            access: "reportproviderpayment",
           },
         ],
       },

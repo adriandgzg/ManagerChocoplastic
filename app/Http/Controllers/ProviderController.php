@@ -33,7 +33,7 @@ class ProviderController extends Controller
         ], 200);
     }
 
-    
+     
 
     public function ProvidersList(){
         $provider = DB::table('providers AS P')
@@ -42,6 +42,7 @@ class ProviderController extends Controller
             'P.prov_pk',
             'P.feen_fk',
             'P.prov_identifier',
+            DB::raw("CONCAT(P.prov_identifier, ' - ', P.prov_name) AS prov_name_identifier"),
             'P.prov_name',
             'P.prov_rfc',
             'P.prov_phone',

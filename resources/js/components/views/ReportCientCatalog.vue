@@ -58,7 +58,9 @@ export default {
       axios;
 
       window.open(
-        "http://3.217.161.164:777/?pRep=3",
+        "http://3.217.161.164:777/?pRep=3" +
+        "&pUser_PK=" +
+         this.users.id,
         "_blank"
       );
     },
@@ -76,4 +78,4 @@ export default {
     }
   },
 };
-</script>
+</script> 

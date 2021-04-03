@@ -242,7 +242,7 @@ export default [{
     },
     {
         path: '/reportinventorymovements',
-        name: 'Movimientos de Inventario por Producto',
+        name: 'Kardex',
         view: 'ReportInventoryMovements'
     },
     {
@@ -257,12 +257,27 @@ export default [{
     },
     {
         path: '/reportclientdebt',
-        name: 'Reporte Cuentas por Cobrar',
+        name: 'Cuentas por Cobrar',
         view: 'ReportClientDebt'
     },
     {
         path: '/reportclientpayment',
         name: 'Bitácora de Abonos',
         view: 'ReportClientPayment'
+    },
+    {
+        path: '/reportprovidercatalog',
+        name: 'Catálogo Proveedor',
+        view: 'ReportProviderCatalog'
+    },
+    {
+        path: '/reportproviderdebt',
+        name: 'Cuentas por Pagar ',
+        view: 'ReportProviderDebt'
+    },
+    {
+        path: '/reportproviderpayment',
+        name: 'Bitácora de Pagos',
+        view: 'ReportProviderPayment'
     },
 ]
