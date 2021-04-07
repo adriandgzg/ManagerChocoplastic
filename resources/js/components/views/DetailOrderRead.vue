@@ -142,7 +142,7 @@
                     </tr>
                     <tr>
                         <td>Total IVA</td>
-                        <td> ${{formatMoney(iva)}}</td>
+                        <td> ${{formatMoney(this.iva)}}</td>
                         <td />
                     </tr>
                     <tr>
@@ -178,7 +178,7 @@
                     </tr>
                     <tr>
                         <td>Total IVA</td>
-                        <td> ${{formatMoney(iva)}}</td>
+                        <td> ${{formatMoney(this.iva)}}</td>
                         <td />
                     </tr>
                     <tr>
