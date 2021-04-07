@@ -217,6 +217,7 @@ export default {
             subtotal: 0,
             total: 0,
             iva: 0,
+            ieps: 0,
             efectivo: 0,
             tarjeta: 0,
             textMsg: "",
@@ -398,7 +399,7 @@ export default {
                 if (this.desserts[i].prod_ieps == 1)
                     this.ieps = this.ieps + ((importe / (1 + (this.desserts[i].syst_ieps / 100))) * (this.desserts[i].syst_ieps / 100));
             }
-            
+
             this.total = this.subtotal;
         },
         getClients() {
