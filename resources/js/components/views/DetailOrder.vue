@@ -143,8 +143,17 @@
                                     <td />
                                     <td />
                                     <td />
-                                    <td>I.V.A.</td>
+                                    <td>IVA</td>
                                     <td>${{formatMoney(iva)}}</td>
+                                    <td />
+                                </tr>
+                                <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td>IEPS</td>
+                                    <td>${{formatMoney(ieps)}}</td>
                                     <td />
                                 </tr>
                             </tbody>
@@ -216,7 +225,7 @@
                         <td />
                     </tr>
                     <tr>
-                        <td>Total I.V.A.</td>
+                        <td>Total IVA</td>
                         <td> ${{formatMoney(iva)}}</td>
                         <td />
                     </tr>
@@ -291,7 +300,7 @@
                         <td />
                     </tr>
                     <tr>
-                        <td>Total I.V.A.</td>
+                        <td>Total IVA</td>
                         <td> ${{formatMoney(iva)}}</td>
                         <td />
                     </tr>
@@ -364,6 +373,7 @@ export default {
             total: 0,
             cambio: 0,
             iva: 0,
+            ieps: 0,
             efectivo: 0,
             tarjeta: 0,
             monto: 0,
@@ -550,9 +560,6 @@ export default {
                     return;
                 } 
             }
-
-
-
             this.messageQuestion = '¿Desea finalizar la Venta?';
             this.dialogQuestion = true
         },
@@ -688,16 +695,24 @@ export default {
             console.log('Efectivo: ' + this.efectivo + ' Total: ' + this.total + ' Cambio: ' + this.cambio)
         },
         getTotal() {
+            this.iva = 0;
+            this.ieps = 0;
             this.subtotal = 0
-            this.subtotal = 0;
             this.descuento = 0;
             for (var i = 0; i < this.desserts.length; i++) {
                 //this.subtotal = this.subtotal + (this.desserts[i].clsd_price * this.desserts[i].clsd_quantity);
                 var importe = this.desserts[i].clsd_price * this.desserts[i].clsd_quantity;
                 var importeDescuento = (importe * (1 - this.desserts[i].clsd_discountrate / 100));
                 this.subtotal = this.subtotal + importeDescuento;
+                
+                if (this.desserts[i].prod_iva == 1)
+                    this.iva = this.iva + ((importeDescuento / (1 + (this.desserts[i].syst_iva / 100))) * (this.desserts[i].syst_iva / 100));
+                if (this.desserts[i].prod_ieps == 1)
+                    this.ieps = this.ieps + ((importeDescuento / (1 + (this.desserts[i].syst_ieps / 100))) * (this.desserts[i].syst_ieps / 100));
             }
-            this.total = this.subtotal + this.iva;
+
+
+            this.total = this.subtotal;
         },
         getEfectivo() {
             this.efectivo = 0;

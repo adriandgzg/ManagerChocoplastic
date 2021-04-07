@@ -245,7 +245,7 @@ export default {
                 this.subtotal = this.subtotal + (this.desserts[i].clod_price * this.desserts[i].clod_quantity);
                 var importe = this.desserts[i].clod_price * this.desserts[i].clod_quantity;
 
-                 if (this.desserts[i].prod_iva == 1)
+                if (this.desserts[i].prod_iva == 1)
                     this.iva = this.iva + ((importe / (1 + (this.desserts[i].syst_iva / 100))) * (this.desserts[i].syst_iva / 100));
                 if (this.desserts[i].prod_ieps == 1)
                     this.ieps = this.ieps + ((importe / (1 + (this.desserts[i].syst_ieps / 100))) * (this.desserts[i].syst_ieps / 100));

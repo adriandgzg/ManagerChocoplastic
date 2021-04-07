@@ -368,6 +368,10 @@ class ClientSaleController extends ApiResponseController
             //Asignacion de variables
             $vclor_pk = $vInput['clor_pk'];
 
+            //Consultar Tabla de Configuración
+            $vSys = DB::table('systems AS S')->select('S.syst_iva','S.syst_ieps')->first();
+
+
             $vClientOrder = ClientOrder::where('clor_pk', '=', $vclor_pk)->where('clor_status', '=', 1)->first();
 
             if($vClientOrder)
@@ -456,6 +460,9 @@ class ClientSaleController extends ApiResponseController
                         'P.prod_pk',
                         'P.prod_identifier',
                         'P.prod_name',
+                        'P.prod_iva',
+                        'P.prod_ieps',
+
                         'M.meas_pk',
                         'M.meas_name',
                         'M.meas_abbreviation',
@@ -464,7 +471,10 @@ class ClientSaleController extends ApiResponseController
                         'CSD.clsd_discountrate',
                         'CSD.clsd_ieps',
                         'CSD.clsd_iva',
-                        'CSD.clsd_status'
+                        'CSD.clsd_status',
+
+                        DB::raw("$vSys->syst_iva AS syst_iva"),
+                        DB::raw("$vSys->syst_ieps AS syst_ieps")
                     )
                     ->where('clsa_fk', '=', $vclsa_pk)
                     ->where('clsd_status', '=', 1)
@@ -520,9 +530,13 @@ class ClientSaleController extends ApiResponseController
                     ->select(
                         'CSD.clsd_pk',
                         'CSD.clsa_fk',
+
                         'P.prod_pk',
                         'P.prod_identifier',
                         'P.prod_name',
+                        'P.prod_iva',
+                        'P.prod_ieps',
+
                         'M.meas_pk',
                         'M.meas_name',
                         'M.meas_abbreviation',
@@ -531,7 +545,10 @@ class ClientSaleController extends ApiResponseController
                         'CSD.clsd_discountrate',
                         'CSD.clsd_ieps',
                         'CSD.clsd_iva',
-                        'CSD.clsd_status'
+                        'CSD.clsd_status',
+
+                        DB::raw("$vSys->syst_iva AS syst_iva"),
+                        DB::raw("$vSys->syst_ieps AS syst_ieps")
                     )
                     ->where('clsa_fk', '=', $vClientSale->clsa_pk)
                     ->where('clsd_status', '=', 1)
@@ -575,6 +592,10 @@ class ClientSaleController extends ApiResponseController
             if ($vclsa_pk == '' || $vclsa_pk == 0) {
                 return $this->dbResponse(null, 500, null, 'PK Obligatorio');
             }
+
+            //Consultar Tabla de Configuración
+            $vSys = DB::table('systems AS S')->select('S.syst_iva','S.syst_ieps')->first();
+
 
             $vCS = DB::table('client_sales AS CS')
                 ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
@@ -623,6 +644,8 @@ class ClientSaleController extends ApiResponseController
                         'P.prod_pk',
                         'P.prod_identifier',
                         'P.prod_name',
+                        'P.prod_iva',
+                        'P.prod_ieps',
 
                         'M.meas_pk',
                         'M.meas_name',
@@ -630,7 +653,10 @@ class ClientSaleController extends ApiResponseController
 
                         'CSD.clsd_quantity',
                         'CSD.clsd_price',
-                        'CSD.clsd_discountrate'
+                        'CSD.clsd_discountrate',
+
+                        DB::raw("$vSys->syst_iva AS syst_iva"),
+                        DB::raw("$vSys->syst_ieps AS syst_ieps")
                         //'CSD.clsd_ieps',
                         //'CSD.clsd_iva'
                     )
