@@ -93,8 +93,17 @@
                                     <td />
                                     <td />
                                     <td />
-                                    <td>I.V.A.</td>
-                                    <td>${{formatMoney(iva)}}</td>
+                                    <td>IVA</td>
+                                    <td>${{formatMoney(this.iva)}}</td>
+                                    <td />
+                                </tr>
+                                <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td>IEPS</td>
+                                    <td>${{formatMoney(this.ieps)}}</td>
                                     <td />
                                 </tr>
                             </tbody>
@@ -132,7 +141,7 @@
                         <td />
                     </tr>
                     <tr>
-                        <td>Total I.V.A.</td>
+                        <td>Total IVA</td>
                         <td> ${{formatMoney(iva)}}</td>
                         <td />
                     </tr>
@@ -168,7 +177,7 @@
                         <td />
                     </tr>
                     <tr>
-                        <td>Total I.V.A.</td>
+                        <td>Total IVA</td>
                         <td> ${{formatMoney(iva)}}</td>
                         <td />
                     </tr>
@@ -378,13 +387,19 @@ export default {
                 })
         },
         getTotal() {
-
+            this.iva = 0;
+            this.ieps = 0;
             for (var i = 0; i < this.desserts.length; i++) {
                 this.subtotal = this.subtotal + (this.desserts[i].clod_price * this.desserts[i].clod_quantity);
-            }
-            //this.iva =  this.subtotal * 0.16;
+                var importe = this.desserts[i].clod_price * this.desserts[i].clod_quantity;
 
-            this.total = this.subtotal + this.iva;
+                 if (this.desserts[i].prod_iva == 1)
+                    this.iva = this.iva + ((importe / (1 + (this.desserts[i].syst_iva / 100))) * (this.desserts[i].syst_iva / 100));
+                if (this.desserts[i].prod_ieps == 1)
+                    this.ieps = this.ieps + ((importe / (1 + (this.desserts[i].syst_ieps / 100))) * (this.desserts[i].syst_ieps / 100));
+            }
+            
+            this.total = this.subtotal;
         },
         getClients() {
             axios.get("/clientsget")
