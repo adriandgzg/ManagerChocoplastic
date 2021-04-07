@@ -94,7 +94,7 @@
                                     <td />
                                     <td />
                                     <td>IVA</td>
-                                    <td>${{formatMoney(this.iva)}}</td>
+                                    <td>${{formatMoney(iva)}}</td>
                                     <td />
                                 </tr>
                                 <tr>
@@ -103,7 +103,7 @@
                                     <td />
                                     <td />
                                     <td>IEPS</td>
-                                    <td>${{formatMoney(this.ieps)}}</td>
+                                    <td>${{formatMoney(ieps)}}</td>
                                     <td />
                                 </tr>
                             </tbody>
