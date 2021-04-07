@@ -696,6 +696,10 @@ class ClientSaleController extends ApiResponseController
                 return $this->dbResponse(null, 500, null, 'PK Obligatorio');
             }
 
+            //Consultar Tabla de Configuración
+            $vSys = DB::table('systems AS S')->select('S.syst_iva','S.syst_ieps')->first();
+
+
             $vCS = DB::table('client_sales AS CS')
                 //->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
                 ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
@@ -754,6 +758,8 @@ class ClientSaleController extends ApiResponseController
                         'P.prod_pk',
                         'P.prod_identifier',
                         'P.prod_name',
+                        'P.prod_iva',
+                        'P.prod_ieps',
 
                         'M.meas_pk',
                         'M.meas_name',
@@ -761,9 +767,10 @@ class ClientSaleController extends ApiResponseController
 
                         'CSD.clsd_quantity',
                         'CSD.clsd_price',
-                        'CSD.clsd_discountrate'
-                        //'CSD.clsd_ieps',
-                        //'CSD.clsd_iva'
+                        'CSD.clsd_discountrate',
+
+                        DB::raw("$vSys->syst_iva AS syst_iva"),
+                        DB::raw("$vSys->syst_ieps AS syst_ieps")
                     )
                     ->where('CSD.clsa_fk', '=', $vclsa_pk)
                     ->where('clsd_status', '=', 1)
@@ -1119,10 +1126,14 @@ class ClientSaleController extends ApiResponseController
         try 
         {
             $total = 0;
+            $iva = 0;
+            $ieps = 0;
             
             //Asignacion de variables
             $vclsa_pk = $clsa_pk;
 
+            //Consultar Tabla de Configuración
+            $vSys = DB::table('systems AS S')->select('S.syst_iva','S.syst_ieps')->first();
 
             if ($vclsa_pk == '' || $vclsa_pk == 0) {
                 return $this->dbResponse(null, 500, null, 'PK Obligatorio');
@@ -1169,9 +1180,12 @@ class ClientSaleController extends ApiResponseController
                 ->join('measurements AS M', 'M.meas_pk', '=', 'CSD.meas_fk')
                 ->select(
                     'CSD.clsd_pk',
+
                     'P.prod_pk',
                     'P.prod_identifier',
                     'P.prod_name',
+                    'P.prod_iva',
+                    'P.prod_ieps',
 
                     'M.meas_pk',
                     'M.meas_name',
@@ -1179,7 +1193,11 @@ class ClientSaleController extends ApiResponseController
 
                     'CSD.clsd_quantity',
                     'CSD.clsd_price',
-                    'CSD.clsd_discountrate'
+                    'CSD.clsd_discountrate',
+                    
+                    DB::raw("$vSys->syst_iva AS syst_iva"),
+                    DB::raw("$vSys->syst_ieps AS syst_ieps")
+
                 )
                 ->where('CSD.clsa_fk', '=', $vclsa_pk)
                 ->where('clsd_status', '=', 1)
@@ -1262,6 +1280,17 @@ class ClientSaleController extends ApiResponseController
                     $vImporte = ($product->clsd_quantity * $product->clsd_price)  * (1 - ($product->clsd_discountrate / 100));
                     $vDescuento = ($product->clsd_quantity * $product->clsd_price)  * (($product->clsd_discountrate / 100));
                     $disprice = $disprice + $vDescuento;
+
+                    if($product->prod_iva == 1)
+                    {
+                        $iva = $iva + (($vDescuento / (1 + ($product->syst_iva / 100))) * ($product->syst_iva / 100));
+                    }
+
+                    if($product->prod_ieps == 1)
+                    {
+                        $ieps = $ieps + (($vDescuento / (1 + ($product->syst_ieps / 100))) * ($product->syst_ieps / 100));
+                    }
+
                     $pdf->SetFont('Arial', 'B', 7);
                     $total = $total + $price;
                     $pdf->Cell(28, $lineHeigth, substr(utf8_decode($product->prod_name), 0, 50), '', '0');
@@ -1291,12 +1320,12 @@ class ClientSaleController extends ApiResponseController
 
                 $pdf->Cell(47, $lineHeigth, '', '', '0','L');
                 $pdf->Cell(10, $lineHeigth, 'IEPS', '', '0','L');
-                $pdf->Cell(17, $lineHeigth, "$" . number_format(0, 2), '', '0','R');
+                $pdf->Cell(17, $lineHeigth, "$" . number_format($iva, 2), '', '0','R');
                 $pdf->Ln(3);
 
                 $pdf->Cell(47, $lineHeigth, '', '', '0','L');
                 $pdf->Cell(10, $lineHeigth, 'IVA', '', '0','L');
-                $pdf->Cell(17, $lineHeigth, "$" . number_format(0, 2), '', '0','R');
+                $pdf->Cell(17, $lineHeigth, "$" . number_format($ieps, 2), '', '0','R');
                 $pdf->Ln(3);
 
                 $pdf->Cell(47, $lineHeigth, '', '', '0','L');
