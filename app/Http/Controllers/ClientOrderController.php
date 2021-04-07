@@ -469,7 +469,10 @@ class ClientOrderController extends ApiResponseController
 
         try {
             //Asignacion de variables
-           $vclor_pk = $clor_pk;
+            $vclor_pk = $clor_pk;
+
+            //Consultar Tabla de Configuración
+            $vSys = DB::table('systems AS S')->select('S.syst_iva','S.syst_ieps')->first();
 
             $vClientOrder = DB::table('client_orders AS CO') 
                 ->leftjoin('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
@@ -505,6 +508,8 @@ class ClientOrderController extends ApiResponseController
                         'P.prod_pk',
                         'P.prod_identifier',
                         'P.prod_name',
+                        'P.prod_iva',
+                        'P.prod_ieps',
                         
                         'M.meas_pk',
                         'M.meas_name',
@@ -512,8 +517,10 @@ class ClientOrderController extends ApiResponseController
                         'PC.prca_name',
                         
                         'COD.clod_quantity',
-                        'COD.clod_price'
-                    )
+                        'COD.clod_price',
+                        DB::raw("$vSys->syst_iva AS syst_iva"),
+                        DB::raw("$vSys->syst_ieps AS syst_ieps")
+                    ) 
                     ->where('COD.clor_fk', '=', $vclor_pk)
                     ->where('COD.clod_status', '=', 1)
                     ->get();
