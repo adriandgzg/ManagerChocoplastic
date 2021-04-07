@@ -622,10 +622,9 @@ export default {
 
                 this.subtotal = this.subtotal + (importeDescuento);
                 if (this.desserts[i].prod_iva == 1)
-                    this.iva = this.iva + ((importeDescuento  / (1 + (this.desserts[i].syst_iva / 100))) * (this.desserts[i].syst_iva / 100));
+                    this.iva = this.iva + ((importeDescuento / (1 + (this.desserts[i].syst_iva / 100))) * (this.desserts[i].syst_iva / 100));
                 if (this.desserts[i].prod_ieps == 1)
-                    this.ieps = this.ieps + ((importeDescuento) * (this.desserts[i].syst_ieps / 100));
-
+                    this.ieps = this.ieps + ((importeDescuento / (1 + (this.desserts[i].syst_ieps / 100))) * (this.desserts[i].syst_ieps / 100));
             }
 
             this.total = this.subtotal;
