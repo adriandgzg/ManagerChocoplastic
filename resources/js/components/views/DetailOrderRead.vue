@@ -124,72 +124,8 @@
             </v-col>
         </v-row>
 
-        <!-- Dialog -->
 
-        <v-dialog v-model="dialogcredito" max-width="500">
-            <v-card>
-                <v-card-title>Crédito:</v-card-title>
-                <v-card-text>
-                    <span class="subheading font-weight-bold">Forma de Pago:</span>
-                    <v-text-field label="Efectivo: " prefix="$" type="number" v-model="efectivo"></v-text-field>
-                    <v-text-field label="Transferencia: " v-model="tarjeta" prefix="$" type="number"></v-text-field>
-
-                    <br />
-                    <tr>
-                        <td>Subtotal</td>
-                        <td> ${{formatMoney(subtotal)}}</td>
-                        <td />
-                    </tr>
-                    <tr>
-                        <td>Total IVA</td>
-                        <td> ${{formatMoney(this.iva)}}</td>
-                        <td />
-                    </tr>
-                    <tr>
-                        <td>Total</td>
-                        <td> ${{formatMoney(total)}}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Crédito</td>
-                        <td> ${{formatMoney(total - efectivo - tarjeta) }}</td>
-                    </tr>
-
-                    <v-btn @click="dialogcredito = !dialogcredito">Cancelar</v-btn>
-                    <v-btn @click="finalizarVenta" color="warning">Confirmar</v-btn>
-                </v-card-text>
-            </v-card>
-        </v-dialog>
-
-        <v-dialog v-model="dialogcontado" max-width="500">
-            <v-card>
-                <v-card-title>Contado</v-card-title>
-
-                <v-card-text>
-                    <span class="subheading font-weight-bold">Forma de Pago:</span>
-
-                    <v-text-field label="Efectivo: " v-model="efectivo" required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
-                    <v-text-field label="Transferencia: " v-model="tarjeta" required :rules="minNumberRules" prefix="$" type="number"></v-text-field>
-
-                    <br />
-                    <tr>
-                        <td>Subtotal</td>
-                        <td> ${{formatMoney(subtotal)}}</td>
-                        <td />
-                    </tr>
-                    <tr>
-                        <td>Total IVA</td>
-                        <td> ${{formatMoney(this.iva)}}</td>
-                        <td />
-                    </tr>
-                    <tr>
-                        <td>Total</td>
-                        <td> ${{formatMoney(total)}}</td>
-                    </tr>
-                    <v-btn @click="dialogcontado = !dialogcontado">Cancelar</v-btn>
-                    <v-btn @click="finalizarVenta" color="success">Confirmar</v-btn>
-                </v-card-text>
-            </v-card>
-        </v-dialog>
+  
     </v-container>
 </v-app>
 </template>
@@ -252,9 +188,9 @@ export default {
     created() {
 
         this.createsale();
-        this.getClients();
-        this.getPaymentShow();
-        this.getStores();
+        //this.getClients();
+        //this.getPaymentShow();
+        //this.getStores();
     },
 
     methods: {
@@ -279,92 +215,7 @@ export default {
             let val = (value / 1).toFixed(2).replace(',', '.')
             return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         },
-        onQuantityChange(item) {
-            this.editado = Object.assign({}, item)
-            axios.post('/client_sale_details/update', this.editado)
-                .then(response => {
-                    this.textMsg = "¡Actualizado correctamente!";
-                    console.log("¡Actualizado correctamente!")
-                    this.getTotal();
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                })
-
-        },
-        onChangeClient() {
-            if (this.selectClient.clie_pk == 1) {
-                console.log('getPaymentShow')
-                this.getPaymentShow()
-            } else {
-                console.log('getPayment')
-                this.getPayment()
-            }
-        },
-        finalizar() {
-            console.log(this.selectClient);
-            this.efectivo = 0;
-            this.tarjeta = 0;
-
-            if (this.selectClient == '' || this.selectClient == null) {
-                this.normal('Alerta', 'Debe seleccionar un cliente', "error");
-                return;
-            }
-
-            if (this.selectpame == '' || this.selectpame == null) {
-                this.normal('Alerta', 'Debe seleccionar un método de pago', "error");
-                return;
-            }
-
-            if (this.selectStore == '' || this.selectStore == null) {
-                this.normal('Alerta', 'Debe seleccionar una sucursal', "error");
-                return;
-            }
-
-            this.editadoSale.clsa_pk = this.saleHeader.clsa_pk;
-            this.editadoSale.clie_fk = this.selectClient.clie_pk;
-            this.editadoSale.pame_fk = this.selectpame.pame_pk;
-            this.editadoSale.stor_fk = this.selectStore.stor_pk;
-
-            if (this.editadoSale.pame_fk == 1)
-                this.dialogcontado = true;
-            else
-                this.dialogcredito = true;
-
-        },
-        finalizarVenta() {
-            console.log((this.total + '-' + (this.efectivo + this.tarjeta)));
-            if (this.editadoSale.pame_fk == 1)
-                if ((this.total - this.efectivo - this.tarjeta) == 0) {
-
-                }
-            else {
-                this.normal('Notificación', 'Los montos de pago deben ser igual al total', "success");
-                return;
-            }
-            var r = confirm("¿Está seguro de finalizar la venta?");
-            if (r == true) {
-                this.editadoSale.clde_amount = this.total
-                this.editadoSale.clpa_amount_cash = this.efectivo
-                this.editadoSale.clpa_amount_transfer = this.tarjeta
-                axios.post('/clientsales/update', this.editadoSale)
-                    .then(response => {
-                        console.log(response)
-                        if (response.data.code == 200) {
-
-                            this.textMsg = "¡Actualizado correctamente!";
-                            this.normal('Notificación', '¡Actualizado correctamente!', "success");
-                            this.$router.push('/sales');
-                        } else {
-                            this.normal('Notificación', response.data.message, "error");
-                        }
-
-                    })
-                    .catch(e => {
-                        this.errors.push(e)
-                    })
-            }
-        },
+   
         createsale() {
             this.loading = true
             axios.get('/client/orders/' + this.clor_pk + '')
@@ -402,80 +253,7 @@ export default {
 
             this.total = this.subtotal;
         },
-        getClients() {
-            axios.get("/clientsget")
-                .then(response => {
-                    this.clients = response.data.data;
-                    this.selectClient = this.clients[0];
-
-                })
-                .catch(e => {
-                    console.log(e);
-                });
-
-        },
-        getPayment() {
-            axios
-                .get("/paymentmethodsget")
-                .then(response => {
-                    this.payments = response.data.data;
-                })
-                .catch(e => {
-                    console.log(e);
-                });
-        },
-        getPaymentShow() {
-            axios
-                .get("/paymentmethodsshow/1")
-                .then(response => {
-                    this.payments = response.data.data;
-                })
-                .catch(e => {
-                    console.log(e);
-                });
-        },
-        getStores() {
-            axios.get("/storeget")
-                .then(response => {
-                    this.stores = response.data.data;
-                })
-                .catch(e => {
-                    console.log(e);
-                });
-
-        },
-
-        borrar(item) {
-
-            this.editado = Object.assign({}, item)
-            var r = confirm("¿Está seguro de borrar el registro?");
-            if (r == true) {
-                this.editado.clod_pk = item.clod_pk;
-                this.delete()
-            }
-        },
-
-        delete: function () {
-
-            axios.post('/client_sale_details/destroy', this.editado).then(response => {
-                this.textMsg = "¡Eliminado correctamente!";
-                this.normal('Notificación', this.textMsg, "success");
-                this.createsale();
-            });
-        },
-
-        actualizar(item) {
-
-            this.editado = Object.assign({}, item)
-            axios.post('/client_sale_details/update', this.editado)
-                .then(response => {
-                    this.textMsg = "¡Actualizado correctamente!";
-                    this.normal('Notificación', this.textMsg, "success");
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                })
-        },
+       
         normal(Title, Description, Type) {
             this.notice = new CripNotice({
                 title: Title,
