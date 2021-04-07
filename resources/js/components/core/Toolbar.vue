@@ -273,8 +273,19 @@ export default {
     created() {
         this.getUser();
         this.obtenerCaja();
-        console.log(new Date().toISOString());
-        this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' + this.formatHour(new Date().toISOString().substr(11, 15));
+        //console.log('la hora:' + new Date().toISOString());
+        //this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' + this.formatHour(new Date().toISOString().substr(11, 15));
+        //var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -5);
+        //this.dateFormatted = this.formatDate(localISOTime.toISOString().substr(0, 10)) + ' ' + this.formatHour(localISOTime.toISOString().substr(11, 15));
+        //console.log('la hora buena:' + this.dateFormatted);  
+        
+        //var localISOTimex = this.formatDate((new Date(Date.now() - tzoffset)).toISOString().substr(0, 10));
+
+        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+        var localISOTime = this.formatDate((new Date(Date.now() - tzoffset)).toISOString().substr(0, 10)) + ' ' + this.formatHour((new Date(Date.now() - tzoffset)).toISOString().substr(11, 15));
+        this.dateFormatted = localISOTime;
+
+        console.log('la hora:' + this.dateFormatted);  
 
     },
 
@@ -358,13 +369,13 @@ export default {
         },
         abrirCaja() {
             this.dialogCaja = true
-            this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' +
-                this.formatHour(new Date().toISOString().substr(11, 15));
+            //this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' +
+              //  this.formatHour(new Date().toISOString().substr(11, 15));
         },
         cerrarCaja() {
             this.dialogCerrarCaja = true
-            this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' +
-                this.formatHour(new Date().toISOString().substr(11, 15));
+            //this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' +
+              //  this.formatHour(new Date().toISOString().substr(11, 15));
 
             axios
                 .get("/box/cuts/" + this.editadoBox.bocu_pk)
@@ -378,8 +389,8 @@ export default {
         },
         retirarCaja() {
             this.dialogDrawals = true
-            this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' +
-                this.formatHour(new Date().toISOString().substr(11, 15));
+            //this.dateFormatted = this.formatDate(new Date().toISOString().substr(0, 10)) + ' ' +
+              //  this.formatHour(new Date().toISOString().substr(11, 15));
             this.editadoDrawals.bocu_fk = this.editadoBox.bocu_pk;
         },
 
