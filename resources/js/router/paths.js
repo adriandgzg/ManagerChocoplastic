@@ -257,7 +257,7 @@ export default [{
     },
     {
         path: '/reportclientdebt',
-        name: 'Cuentas por Cobrar',
+        name: 'Cuentas por Cobrar ',
         view: 'ReportClientDebt'
     },
     {
@@ -279,5 +279,26 @@ export default [{
         path: '/reportproviderpayment',
         name: 'Bitácora de Pagos',
         view: 'ReportProviderPayment'
+    },
+
+    {
+        path: '/reportproviderpurchaseorder',
+        name: 'Órdenes de Compra ',
+        view: 'ReportProviderPurchaseOrder'
+    },
+    {
+        path: '/reportproviderpurchase',
+        name: 'Compras ',
+        view: 'ReportProviderPurchase'
+    },
+    {
+        path: '/reportclientreturndetail',
+        name: 'Devoluciones ',
+        view: 'ReportClientReturnDetail'
+    },
+    {
+        path: '/reportclientorder',
+        name: 'Pedidos ',
+        view: 'ReportClientOrder'
     },
 ]
