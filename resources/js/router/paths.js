@@ -301,4 +301,15 @@ export default [{
         name: 'Pedidos ',
         view: 'ReportClientOrder'
     },
+
+    {
+        path: '/reportproductcatalog',
+        name: 'Catálogo Producto',
+        view: 'ReportProductCatalog'
+    },
+    {
+        path: '/reportproductvariation',
+        name: 'Producto Variaciones',
+        view: 'ReportProductVariation'
+    },
 ]

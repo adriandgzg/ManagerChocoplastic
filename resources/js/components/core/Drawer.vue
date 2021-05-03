@@ -297,6 +297,18 @@ export default {
             text: "Pedidos ",
             access: "reportclientorder",
           },
+          {
+            to: "/reportproductcatalog",
+            icon: "mdi-cart",
+            text: "Catálogo Producto",
+            access: "reportproductcatalog",
+          },
+          {
+            to: "/reportproductvariation", 
+            icon: "mdi-cart",
+            text: "Producto Variaciones ",
+            access: "reportproductvariation",
+          },
         ],
       },
     ],

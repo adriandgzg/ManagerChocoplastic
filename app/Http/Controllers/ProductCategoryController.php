@@ -19,7 +19,6 @@ class ProductCategoryController extends ApiResponseController
     {
         
         try {
-            //Asignación de variable
 
             $vPC = ProductCategory::where('prca_status', '=', 1)
                     ->select('prca_pk AS PK_Category', 'prca_name AS Category')
@@ -33,7 +32,7 @@ class ProductCategoryController extends ApiResponseController
     }
 
     public function CategoriesList(){
-        $stores = DB::table('product_categories AS P')
+        $stores = DB::table('product_categories AS P')->where('P.prca_status', '=', 1)
         ->get();
         
         
