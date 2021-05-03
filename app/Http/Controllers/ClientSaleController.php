@@ -1126,8 +1126,7 @@ class ClientSaleController extends ApiResponseController
         try 
         {
             $total = 0;
-            $iva = 0;
-            $ieps = 0;
+            
             
             //Asignacion de variables
             $vclsa_pk = $clsa_pk;
@@ -1274,21 +1273,23 @@ class ClientSaleController extends ApiResponseController
                 $pdf->Ln();
                 $disprice = 0;
                 $total = 0;
+                $iva = 0;
+                $ieps = 0;
                 foreach ($vCSD as $product) {
                     $pdf->SetFont('Arial', 'B', 7);
                     $price = $product->clsd_quantity * $product->clsd_price;  
                     $vImporte = ($product->clsd_quantity * $product->clsd_price)  * (1 - ($product->clsd_discountrate / 100));
-                    $vDescuento = ($product->clsd_quantity * $product->clsd_price)  * (($product->clsd_discountrate / 100));
+                    $vDescuento = ($product->clsd_quantity * $product->clsd_price) * (($product->clsd_discountrate / 100));
                     $disprice = $disprice + $vDescuento;
 
                     if($product->prod_iva == 1)
                     {
-                        $iva = $iva + (($vDescuento / (1 + ($product->syst_iva / 100))) * ($product->syst_iva / 100));
+                        $iva = $iva + (($vImporte / (1 + ($product->syst_iva / 100))) * ($product->syst_iva / 100));
                     }
 
                     if($product->prod_ieps == 1)
                     {
-                        $ieps = $ieps + (($vDescuento / (1 + ($product->syst_ieps / 100))) * ($product->syst_ieps / 100));
+                        $ieps = $ieps + (($vImporte / (1 + ($product->syst_ieps / 100))) * ($product->syst_ieps / 100));
                     }
 
                     $pdf->SetFont('Arial', 'B', 7);
@@ -1319,12 +1320,12 @@ class ClientSaleController extends ApiResponseController
                 $pdf->Ln(3);
 
                 $pdf->Cell(47, $lineHeigth, '', '', '0','L');
-                $pdf->Cell(10, $lineHeigth, 'IEPS', '', '0','L');
+                $pdf->Cell(10, $lineHeigth, 'IVA', '', '0','L');
                 $pdf->Cell(17, $lineHeigth, "$" . number_format($iva, 2), '', '0','R');
                 $pdf->Ln(3);
 
                 $pdf->Cell(47, $lineHeigth, '', '', '0','L');
-                $pdf->Cell(10, $lineHeigth, 'IVA', '', '0','L');
+                $pdf->Cell(10, $lineHeigth, 'IEPS', '', '0','L');
                 $pdf->Cell(17, $lineHeigth, "$" . number_format($ieps, 2), '', '0','R');
                 $pdf->Ln(3);
 
