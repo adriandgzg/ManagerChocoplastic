@@ -89,7 +89,7 @@
                     </v-form>
                 </v-card>
                 <v-card justify="end">
-                    <v-btn :disabled="!valid" dark color="success" @click="finalizar">FINALIZAR</v-btn>
+                    <v-btn :disabled="!valid" dark color="success" @click="finalizar">FINALIZAR(F8)</v-btn>
                 </v-card>
             </v-col>
         </v-row>
@@ -181,7 +181,7 @@
                 <v-card-title>Crédito:</v-card-title>
                 <v-card-text>
                     <v-row>
-                        <v-btn @click="abrirPago()" color="warning">Agregar pago</v-btn>
+                        <v-btn @click="abrirPago()" color="warning">Agregar pago(F9)</v-btn>
                     </v-row>
                     <v-row>
                         <v-col>
@@ -250,7 +250,7 @@
 
                 <v-card-text>
                     <v-row>
-                        <v-btn @click="abrirPago()" color="warning">Agregar pago</v-btn>
+                        <v-btn @click="abrirPago()" color="warning">Agregar pago(F9)</v-btn>
                     </v-row>
                     <v-row>
                         <v-col>
@@ -436,6 +436,40 @@ export default {
         };
     },
     created() {
+
+        window.addEventListener('keydown', (e) => {
+            console.log(e.key);
+            switch(e.key){
+                case 'F8':
+                    this.finalizar();
+                    break;
+                case 'F9':
+                        if(this.dialogcredito || this.dialogcontado){
+                            this.abrirPago();
+                        }
+                    break;
+                case 'Enter':
+                    if(this.dialogPago && this.validPago){
+                        this.agregarPago();
+                    }
+                    else{
+                        if(!this.dialogPago && (this.dialogcredito || this.dialogcontado)){
+                            this.finalizarVenta();
+                        }
+                        else
+                        {
+                            
+                        }
+                    }
+                    break;
+
+                
+            }
+    //   if (e.key == 'Escape') {
+    //     this.dialogCaja = !this.dialogCaja;
+    //   }
+    });
+
         this.createsale();
         this.getClients();
         this.getPaymentShow();

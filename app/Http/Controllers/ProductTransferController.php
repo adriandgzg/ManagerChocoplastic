@@ -621,6 +621,7 @@ class ProductTransferController extends ApiResponseController
                 }
 
                 $pdf->Ln(10);
+                $contador = 0;
                 foreach ($vPTD as $product) 
                 {
                     $pdf->SetFont('Arial', 'B', 10);
@@ -631,9 +632,12 @@ class ProductTransferController extends ApiResponseController
                     $pdf->Cell(65, $lineHeigth, $product->prtd_quantity, '', '0','C');         
                     $pdf->Cell(65, $lineHeigth, $product->meas_abbreviation, '', '0','C');
                     $pdf->Ln(3);
+                    $contador = $contador + 1;
                 }
                 
-                $pdf->SetY(-80);
+                
+
+                //$pdf->SetY(-80);
                 $pdf->Ln(20);                
                 $pdf->SetFont('Arial', 'B', 10);
                 $pdf->Cell(100, $lineHeigth, utf8_decode(('Entrega de Bodega' )), '0', '0', 'C');       

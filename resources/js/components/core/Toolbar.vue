@@ -177,7 +177,8 @@
                 <v-btn v-if="!boxEnabled" color="#e3ae10" class="ma-2 white--text" @click="retirarCaja">
                     Retiro de Caja
                     <v-icon right dark>mdi-inbox-arrow-up</v-icon>
-                </v-btn>
+                </v-btn>               
+               
                 <v-btn v-if="boxEnabled" color="#4F33FF" class="ma-2 white--text" @click="abrirCaja">
                     Abrir Caja
                     <v-icon right dark>mdi-inbox-arrow-down</v-icon>
@@ -271,6 +272,7 @@ export default {
     },
 
     created() {
+        
         this.getUser();
         this.obtenerCaja();
         //console.log('la hora:' + new Date().toISOString());
@@ -470,7 +472,7 @@ export default {
         },
 
         guardarRetiro() {
-
+            this.validDrawals = false;
             axios.post('/cash/withdrawals', this.editadoDrawals)
                 .then(response => {
                     console.log(response)
@@ -493,6 +495,7 @@ export default {
                 .catch(e => {
                     //this.errors.push(e)
                     console.log(e)
+                    this.validDrawals = true;
                 })
         },
         normal(Title, Description, Type) {
