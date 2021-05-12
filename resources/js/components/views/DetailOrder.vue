@@ -453,15 +453,22 @@ export default {
                         this.agregarPago();
                     }
                     else{
-                        if(!this.dialogPago && (this.dialogcredito || this.dialogcontado)){
+                        if(!this.dialogPago && !this.dialogQuestion && (this.dialogcredito || this.dialogcontado)){
                             this.finalizarVenta();
                         }
                         else
                         {
-                            
+                          if(this.dialogQuestion) {
+                              this.guardaFinalizar();
+                          } 
                         }
                     }
                     break;
+                    case "Escape":
+                        if(this.dialogQuestion){
+                            this.dialogQuestion = false;
+                        }
+                        break;
 
                 
             }

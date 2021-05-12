@@ -1206,7 +1206,7 @@ class ClientSaleController extends ApiResponseController
 
                 
                 if($vCount <5)
-                $vHeight =130;
+                    $vHeight =140;
                 else
                     if ($vCount <15)
                         $vHeight = $vCount * 18;

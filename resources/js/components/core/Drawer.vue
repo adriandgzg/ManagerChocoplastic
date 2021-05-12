@@ -6,7 +6,7 @@
     width="300"
     :src="background"
   >
-    <v-img :gradient="sidebarOverlayGradiant" height="100%">
+    <v-img  height="100%">
       <v-list dense nav>
         <v-list-item>
           <v-list-item-avatar color="white">
