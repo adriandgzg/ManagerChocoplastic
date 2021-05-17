@@ -309,4 +309,20 @@ class AdminController extends Controller
 
         
     }
+
+
+
+
+    public function saleman()
+    {
+    
+        $vUsers = \DB::select("SELECT id, CONCAT(phone_number, ' - ', name) AS user FROM users ORDER BY phone_number"); 
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Lista de vendedores',
+            'data' =>$vUsers,
+        ], 200);
+    }
+
 }

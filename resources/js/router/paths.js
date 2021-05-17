@@ -301,7 +301,16 @@ export default [{
         name: 'Pedidos ',
         view: 'ReportClientOrder'
     },
-
+    {
+        path: '/reportclientsale',
+        name: 'Ventas  ',
+        view: 'ReportClientSale'
+    },
+    {
+        path: '/reportclientsaleman',
+        name: 'Vendedores',
+        view: 'ReportClientSaleMan'
+    },
     {
         path: '/reportproductcatalog',
         name: 'Catálogo Producto',

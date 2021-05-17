@@ -40,7 +40,7 @@
                     filled
                     chips
                     label="Sucursal"
-                    placeholder="Selecciona Sucursal"
+                    placeholder="Seleccionar Sucursal"
                     :disabled="enabledStore"
                   ></v-select>
                 </v-card-text>

@@ -298,6 +298,18 @@ export default {
             access: "reportclientorder",
           },
           {
+            to: "/reportclientsale",
+            icon: "mdi-cart",
+            text: "Ventas",
+            access: "reportclientsale",
+          },
+          {
+            to: "/reportclientsaleman", 
+            icon: "mdi-cart",
+            text: "Vendedores",
+            access: "reportclientsaleman",
+          },
+          {
             to: "/reportproductcatalog",
             icon: "mdi-cart",
             text: "Catálogo Producto",

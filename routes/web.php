@@ -18,6 +18,7 @@ Route::post('/user/update', 'Auth\Api\LoginController@update');
 Route::post('/user/password/change', 'Auth\Api\LoginController@passwordchange');
 Route::get('/entitieslist', 'FederalEntityController@EntitiesList');
 Route::get('/listUser', 'AdminController@listUser');
+Route::get('/saleman', 'AdminController@saleman');
 Route::get('/rolUser/{idUser}', 'AdminController@rolUser');
 
 Route::get('/providerlist', 'ProviderController@ProvidersList'); 
@@ -31,7 +32,7 @@ Route::get('/clientsget', 'ClientController@Clients');
 Route::post('/clients/add', 'ClientController@add');
 Route::post('/clients/update', 'ClientController@update'); 
 Route::post('/clients/delete', 'ClientController@delete');
-Route::get('/clients/genders', 'ClientController@Genders');
+Route::get('/clients/genders', 'ClientController@Genders'); 
 
 Route::get('/storelist', 'StoreController@StoresList');
 Route::get('/storeget', 'StoreController@Stores'); 
@@ -271,7 +272,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/admin/add', 'AdminController@addAdministrator');
     Route::post('/admin/update', 'AdminController@updateAdministrator');
     Route::post('/admin/updateBusiness', 'AdminController@updateBusinessAdministrator');
-    Route::get('/listUsers', 'AdminController@listUsers');
+    Route::get('/listUsers', 'AdminController@listUsers'); 
     Route::post('/admins/{admin}/permissions', 'AdminController@permissions');
     Route::post('/admins/{admin}/role', 'AdminController@role');
     Route::post('/roles/{role}/permissions', 'RoleController@permissions');
