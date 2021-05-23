@@ -44,6 +44,7 @@ class BoxCutController extends ApiResponseController
             {
                 $vBox = DB::table('box_cuts AS BC')
                     ->join('stores AS S', 'S.stor_pk', '=', 'BC.stor_fk')
+                    ->join('admins AS A', 'A.id', '=', 'BC.admi_fk')
                     ->select(
                         'BC.bocu_pk',
                         DB::raw('(CASE 
@@ -56,6 +57,7 @@ class BoxCutController extends ApiResponseController
                         'BC.bocu_endamount',
                         'BC.bocu_observation',
                         'BC.created_at',
+                        'A.name AS user_name',
                         DB::raw('CONCAT(S.stor_identifier, "-", S.stor_name) AS stor_name')
                     )
                     ->orderByDesc('BC.bocu_pk')

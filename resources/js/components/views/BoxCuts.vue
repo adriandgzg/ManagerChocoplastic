@@ -79,6 +79,10 @@ export default {
                     text: 'Sucursal',
                     value: 'stor_name'
                 },
+                 {
+                    text: 'Personal',
+                    value: 'user_name'
+                },
                 {
                     text: 'Fecha Apertura',
                     value: 'bocu_startdate'
