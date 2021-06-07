@@ -969,12 +969,26 @@ class ClientSaleController extends ApiResponseController
 
                         if($vCPM_Sel)
                         {
-                            $vcpam_amount_new = $vCPM_Sel->cpam_amount - $vclpa_amount_change;
+                            /*$vcpam_amount_new = $vCPM_Sel->cpam_amount - $vclpa_amount_change;
                             //Modificar el cambio
                             DB::table('client_payment_amounts')
                             ->where('clsa_fk', '=', $vclsa_pk)
                             ->where('pash_fk', '=', 1)
                             ->update(['cpam_amount' => $vcpam_amount_new]);
+
+                            vclpa_amount_change*/
+
+                            //Insertar Cambio en Negativo
+                            $vCPA = new ClientPaymentAmount();        
+                            $vCPA->clie_fk = $vclie_fk;
+                            $vCPA->clsa_fk = $vclsa_pk;
+                            $vCPA->pash_fk = 6;
+                            $vCPA->cpam_amount = $vclpa_amount_change * -1;
+                            $vCPA->cpam_reference = 'Cambio';
+                            $vCPA->bocu_fk = $vbocu_fk;
+                            $vCPA->save();
+                            
+
                         }
                     } 
                     else 
