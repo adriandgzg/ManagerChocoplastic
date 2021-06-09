@@ -227,7 +227,9 @@ class BoxCutController extends ApiResponseController
                                 FROM client_payment_amounts AS CPA 
                                 INNER JOIN client_sales AS CS ON CS.clsa_pk = CPA.clsa_fk
                                 WHERE CPA.cpam_status = 1 AND CPA.bocu_fk = BC.bocu_pk AND CPA.pash_fk = 1 AND CS.pame_fk = 1
-                                +
+                            )
+                            +
+                            (
                                 SELECT SUM(CPA.cpam_amount) AS totalcambio
                                 FROM client_payment_amounts AS CPA 
                                 INNER JOIN client_sales AS CS ON CS.clsa_pk = CPA.clsa_fk
