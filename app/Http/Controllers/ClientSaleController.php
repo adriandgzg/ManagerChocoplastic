@@ -979,16 +979,18 @@ class ClientSaleController extends ApiResponseController
                             vclpa_amount_change*/
 
                             //Insertar Cambio en Negativo
-                            $vCPA = new ClientPaymentAmount();        
-                            $vCPA->clie_fk = $vclie_fk;
-                            $vCPA->clsa_fk = $vclsa_pk;
-                            $vCPA->pash_fk = 6;
-                            $vCPA->cpam_amount = $vclpa_amount_change * -1;
-                            $vCPA->cpam_reference = 'Cambio';
-                            $vCPA->bocu_fk = $vbocu_fk;
-                            $vCPA->save();
-                            
 
+                            if($vclpa_amount_change > 0)
+                            {
+                                $vCPA = new ClientPaymentAmount();        
+                                $vCPA->clie_fk = $vclie_fk;
+                                $vCPA->clsa_fk = $vclsa_pk;
+                                $vCPA->pash_fk = 6;
+                                $vCPA->cpam_amount = $vclpa_amount_change * -1;
+                                $vCPA->cpam_reference = 'Cambio';
+                                $vCPA->bocu_fk = $vbocu_fk;
+                                $vCPA->save(); 
+                            }
                         }
                     } 
                     else 
