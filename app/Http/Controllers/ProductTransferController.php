@@ -276,12 +276,12 @@ class ProductTransferController extends ApiResponseController
                 $vPTU->prtr_status = 2;
                 $vPTU->save();
 
-                //////////////////  Insertar Log  //////////////////
-                $this->getstorelog('product_transfers', $vprtr_pk, 2);
-
                 //Modificar Folio del Traspaso
                 DB::table('systems')
                 ->update(['syst_transfer' =>  $vsyst_transfer + 1]);
+
+                //////////////////  Insertar Log  //////////////////
+                $this->getstorelog('product_transfers', $vprtr_pk, 2);
 
                 return $this->dbResponse($vprtr_pk, 200, null, 'Traspaso Guardado Correctamente');
             }

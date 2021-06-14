@@ -952,12 +952,12 @@ class ClientSaleController extends ApiResponseController
                     $vCSU->clsa_identifier = $vclsa_identifier;
                     $vCSU->save();
 
+                    //Modificar Folio del Venta
+                    DB::table('systems')
+                    ->update(['syst_clie_sale' =>  $vsyst_clie_sale + 1]);
+
                     //////////////////  Inserción de Log  //////////////////
                     $this->getstorelog('client_sales', $vclsa_pk, 2);
-
-                     //Modificar Folio del Venta
-                     DB::table('systems')
-                     ->update(['syst_clie_sale' =>  $vsyst_clie_sale + 1]);
  
 
                     if ($vpame_fk == 1) 
@@ -1081,9 +1081,6 @@ class ClientSaleController extends ApiResponseController
                         $vPIU = ProductInventory::find($vprin_pk);
                         $vPIU->prin_stock = $vprin_stock - $vclsd_quantity;
                         $vPIU->save();
-
-                        $vSQL = '';//'SQL: ' . $vPIU->toSql();
-                        $vBinding = ''; //'Binding: ' . $vPIU->getBindings();
 
 
                         //////////////////  Inserción de Log  //////////////////
