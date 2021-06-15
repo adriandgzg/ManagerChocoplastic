@@ -944,6 +944,22 @@ class ClientSaleController extends ApiResponseController
                     $vsyst_clie_sale = $vSystem->syst_clie_sale;
                     $vclsa_identifier =  "Ven_" . $vsyst_clie_sale;
 
+
+                    //Consultar si existe el folio de la venta
+                    $vCSExistSel = ClientSale::where('clsa_identifier', '=', $vclsa_identifier)->first();
+
+                    if($vCSExistSel)
+                    {
+                        //Modificar Folio del Venta
+                        DB::table('systems')
+                        ->update(['syst_clie_sale' =>  $vsyst_clie_sale + 1]);
+
+                        //Buscar el folio consecutivo
+                        $vSystem = System::select('syst_clie_sale')->first();
+                        $vsyst_clie_sale = $vSystem->syst_clie_sale;
+                        $vclsa_identifier =  "Ven_" . $vsyst_clie_sale;
+                    }
+
                     //Modificar Venta (Finalizar)
                     $vCSU = ClientSale::find($vclsa_pk);
                     $vCSU->clsa_status = $vclsa_status;
@@ -958,7 +974,7 @@ class ClientSaleController extends ApiResponseController
 
                     //////////////////  Inserción de Log  //////////////////
                     $this->getstorelog('client_sales', $vclsa_pk, 2);
- 
+
 
                     if ($vpame_fk == 1) 
                     {
