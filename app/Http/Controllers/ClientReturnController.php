@@ -506,7 +506,7 @@ class ClientReturnController extends ApiResponseController
                             ->where('stor_fk', '=', $vClientReturn->stor_fk)
                             ->first();
 
-                        $vclrd_quantity = $vP->clsd_quantity * $vSelProd->prod_fact_convert;
+                        $vclrd_quantity = $vP->clrd_quantity * $vSelProd->prod_fact_convert;
                     }
 
                     $vprin_pk = $vPI->prin_pk; //Llave primaria del Inventario
