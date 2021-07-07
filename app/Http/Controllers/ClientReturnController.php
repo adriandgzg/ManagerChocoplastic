@@ -15,6 +15,7 @@ use App\ClientReturnDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiResponseController;
+use App\Product;
 
 class ClientReturnController extends ApiResponseController
 { 
@@ -263,6 +264,10 @@ class ClientReturnController extends ApiResponseController
                     ->where('CRD.clre_fk', '=', $vClientReturns->clre_pk)
                     ->where('CRD.clrd_status', '=', 1)
                     ->get();
+
+
+
+
                     
                 $vData =
                     [
@@ -467,8 +472,10 @@ class ClientReturnController extends ApiResponseController
 
 
                 /////////////////////////////////Anexo de Inventario
+
+                //Consultar Detallado de Devolución
                 $vPPD = DB::table('client_return_details AS CRD')
-                    ->select('prod_fk','meas_fk','clrd_quantity')
+                    ->select('prod_fk','clrd_quantity')
                     ->where('CRD.clre_fk', '=', $vclre_pk)
                     ->where('CRD.clrd_status', '=', 1)
                     ->get();
@@ -476,36 +483,43 @@ class ClientReturnController extends ApiResponseController
                 foreach($vPPD as $vP)
                 {
                     $vprod_pk = $vP->prod_fk; //Llave primaria de producto
-                    $vmeas_fk = $vP->meas_fk; //Llave foranea de la unidad de medida de salida
-                    $vclrd_quantity = $vP->clrd_quantity; //Catidad de la devolución
 
-                    //Buscar Producto en el Inventario 
-                    $vPI = ProductInventory::where('prod_fk', '=', $vprod_pk)
-                        ->where('prin_status', '=', 1)
-                        ->where('stor_fk', '=', $vClientReturn->stor_fk)
-                        ->first();
+                    //Consultar Producto
+                    $vSelProd = Product::where('prod_pk', '=', $vprod_pk)->first();
 
-                    if ($vPI) 
+                    //Validar si es un producto principal o un derivado
+                    if($vSelProd->prod_main_pk == NULL)
                     {
-                        $vprin_pk = $vPI->prin_pk; //Llave primaria del Inventario
-                        $vprin_stock = $vPI->prin_stock; //Stock actual
-
-                        //Modificar Producto Inventario
-                        $vPIU = ProductInventory::find($vprin_pk);
-                        $vPIU->prin_stock = $vprin_stock + $vclrd_quantity;
-                        $vPIU->save();
-                    } 
-                    else 
-                    {
-                        //Insertar Producto Inventario
-                        $vPI = new ProductInventory();        
-                        $vPI->prod_fk = $vprod_pk;
-                        $vPI->meas_fk_output = $vmeas_fk;
-                        $vPI->prin_stock = $vclrd_quantity;
-                        $vPI->stor_fk = 1; //Todo alta de inventario por compra es a matriz
-                        $vPI->save();
+                        //Buscar Producto en el Inventario 
+                        $vPI = ProductInventory::where('prod_fk', '=', $vprod_pk)
+                            ->where('prin_status', '=', 1)
+                            ->where('stor_fk', '=', $vClientReturn->stor_fk)
+                            ->first();
+                        $vclrd_quantity = $vP->clrd_quantity; //Catidad de la devolución
                     }
+                    else                    
+                    {
+                        //Buscar el Producto en el Inventario de la Sucursal || Producto Principal
+                        $vPI = ProductInventory::join('products AS P', 'P.prod_pk', '=', 'prod_fk')
+                            ->where('prod_fk', '=', $vSelProd->prod_main_pk)
+                            ->where('prin_status', '=', 1)
+                            ->where('stor_fk', '=', $vClientReturn->stor_fk)
+                            ->first();
+
+                        $vclrd_quantity = $vP->clsd_quantity * $vSelProd->prod_fact_convert;
+                    }
+
+                    $vprin_pk = $vPI->prin_pk; //Llave primaria del Inventario
+                    $vprin_stock = $vPI->prin_stock; //Stock actual
+
+                    //Modificar Producto Inventario
+                    $vPIU = ProductInventory::find($vprin_pk);
+                    $vPIU->prin_stock = $vprin_stock + $vclrd_quantity;
+                    $vPIU->save();
+
                 }
+
+
                 return $this->dbResponse($vclre_pk, 200, null, 'Devolución Finalizada Correctamente');
             }
             else
