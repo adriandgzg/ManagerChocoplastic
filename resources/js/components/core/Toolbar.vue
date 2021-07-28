@@ -215,7 +215,7 @@ export default {
         dateFormatted: '',
         boxEnabled: false,
         boxDrawals: false,
-        CancelarVentas: false,
+        CancelarVentas: true,
 
         editadoBox: {
             admi_fk: 0,
