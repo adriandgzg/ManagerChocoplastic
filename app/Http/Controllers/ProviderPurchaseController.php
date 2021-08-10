@@ -678,7 +678,7 @@ class ProviderPurchaseController extends ApiResponseController
                         $vPI->prod_fk = $vprod_pk;
                         $vPI->meas_fk_output = $vmeas_fk_output;
                         $vPI->prin_stock = $vCantOutput;
-                        $vPI->stor_fk = config('app.parent_store'); //Todo alta de inventario por compra es a matriz
+                        $vPI->stor_fk = config('app.parent_store'); //Toda alta de inventario por compra es a matriz
                         $vPI->save();
                     }
                 }
