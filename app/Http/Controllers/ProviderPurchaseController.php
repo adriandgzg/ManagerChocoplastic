@@ -658,7 +658,7 @@ class ProviderPurchaseController extends ApiResponseController
                     //Buscar Producto en el Inventario 
                     $vPI = ProductInventory::where('prod_fk', '=', $vprod_pk)
                         ->where('prin_status', '=', 1)
-                        ->where('stor_fk', '=', 1)
+                        ->where('stor_fk', '=', config('app.parent_store'))
                         ->first();
 
                     if ($vPI) 

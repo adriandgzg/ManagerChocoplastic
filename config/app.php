@@ -14,7 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-    'parent store' => env('PARENT_STORE_ID', 1),
+    'parent_store' => env('PARENT_STORE_ID', 1),
 
     /*
     |--------------------------------------------------------------------------
