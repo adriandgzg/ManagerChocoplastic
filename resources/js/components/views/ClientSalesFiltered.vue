@@ -27,9 +27,12 @@
             <v-data-table
               :headers="headers"
               :items="data_order"
-              :search="search"
               sort-by="id"
               class="elevation-3"
+              :footer-props="footerProps"
+              :loading="loading"
+              :options.sync="options"
+              :server-items-length="total"
             >
               <template v-slot:top>
                 <v-system-bar color="indigo darken-2" dark></v-system-bar>
@@ -178,9 +181,9 @@
                   <td style="font-weight: 600 !important">
                     {{ props.item.clsa_identifier }}
                   </td>
-                  <td>{{ props.item.clor_identifier }}</td>
-                  <td>{{ props.item.clie_name }}</td>
-                  <td>{{ props.item.stor_name }}</td>
+                  <td>{{props.item.client_order!=null? props.item.client_order.clor_identifier: '' }}</td>
+                  <td>{{ props.item.client.clie_name }}</td>
+                  <td>{{ props.item.store.stor_name }}</td>
                   <td>{{ props.item.pame_name }}</td>
                   <td>{{ props.item.created_at }}</td>
                   <td>
@@ -283,15 +286,15 @@ export default {
         },
         {
           text: "Pedido",
-          value: "clor_identifier",
+          value: "client_order.clor_identifier",
         },
         {
           text: "Cliente",
-          value: "clie_name",
+          value: "client.clie_name",
         },
         {
           text: "Sucursal",
-          value: "stor_name",
+          value: "store.stor_name",
         },
         {
           text: "Método Pago",
@@ -346,14 +349,22 @@ export default {
       },
       boxEnabled: false,
       select_status: "",
-      start_date: "",
-      end_date: "",
+      start_date: new Date().toISOString().substr(0, 10),
+      end_date: new Date().toISOString().substr(0, 10),
       data_status: [
         { name_status: "Mostrar Todo", pk_status: -1 },
         { name_status: "Pendiente", pk_status: 0 },
         { name_status: "En Proceso de Pago", pk_status: 2 },
         { name_status: "Pagado", pk_status: 3 },
       ],
+
+       options: {},
+       pagination: {
+          current: 1,
+          total: 0
+       },
+       footerProps: {'items-per-page-options': [10, 20, 100]},
+       total: 0,
     };
   },
   created() {
@@ -459,12 +470,18 @@ export default {
         var vPayment = this.selectpame.pame_pk;
       }
 
+       const {sortBy, sortDesc, page, itemsPerPage} = this.options
       this.data_filter.stor_pk = this.SelectSucursal.stor_pk;
       this.data_filter.clor_status = vStatus;
       this.data_filter.start_date = this.start_date;
       this.data_filter.end_date = this.end_date;
       this.data_filter.clie_pk = vClient;
-      this.data_filter.pame_pk = vPayment;
+       this.data_filter.pame_pk = vPayment;
+       this.data_filter.itemsPerPage = itemsPerPage;
+       this.data_filter.page = page;
+       this.data_filter.sortBy = sortBy;
+       this.data_filter.sortDesc = sortDesc;
+       this.data_filter.search = this.search;
 
       if (this.start_date != "" && this.end_date == "") {
         this.normal("Fecha Fin", "Seleccionar Fecha Fin", "warning");
@@ -475,35 +492,21 @@ export default {
         this.normal("Fecha Inicio", "Seleccionar Fecha Inicio", "warning");
         return false;
       }
-
-      // console.log(
-      //   "data_filter.stor_pk: " +
-      //     this.data_filter.stor_pk +
-      //     "_____ data_filter.clor_status: " +
-      //     this.data_filter.clor_status +
-      //     "_____ data_filter.start_date: " +
-      //     this.data_filter.start_date +
-      //     "_____ data_filter.end_date: " +
-      //     this.data_filter.end_date +
-      //     "_____ data_filter.clie_pk: " +
-      //     this.data_filter.clie_pk +
-      //     "_____ data_filter.pame_pk: " +
-      //     this.data_filter.pame_pk
-      // );
       this.loading = true;
-
       axios
         .post("/clientsales/filtered", this.data_filter)
         .then((response) => {
-          setTimeout(() => (this.loading = false), 500);
+           this.loading = false
           if (response.data.data != null) {
-            this.data_order = response.data.data;
+            this.data_order = response.data.data.data;
+            this.total = response.data.data.total
           } else {
             this.normal("Notificación", response.data.status.message, "error");
-            console.log("Detalle: " + response.data.status.technicaldetail);
           }
         })
         .catch((e) => {
+
+           this.loading = false;
           this.normal("Notificación", e, "error");
         });
     },
@@ -532,5 +535,14 @@ export default {
   computed: {
     ...mapGetters("auth", ["can"]),
   },
+   watch:{
+
+      options: {
+         handler() {
+            this.getSaleFilter()
+         },
+         deep: true,
+      }
+   }
 };
 </script>
