@@ -316,16 +316,11 @@ export default {
             }
         },
         isNumberValid: function (evt) {
-            console.log('key ' + evt.key + ' (' + evt.keyCode + ')');
             evt = (evt) ? evt : window.event;
             var charCode = (evt.which) ? evt.which : evt.keyCode;
-            console.log(charCode + '-->ñprim')
-            //if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
             if ((charCode > 47 && charCode < 58) || (charCode > 95 && charCode < 106) || charCode == 8 || charCode == 190 || charCode == 110) {
-                // console.log(charCode + '--> true');
                 return true;
             } else {
-                // console.log(charCode + '-->000');
                 evt.preventDefault();
 
             }
@@ -343,14 +338,17 @@ export default {
             return `${year}:${month}`
         },
         getUser() {
-            axios
-                .get("/listUser")
-                .then(response => {
-                    this.user = response.data.data;
-                })
-                .catch(e => {
-                    console.log(e);
-                });
+           if(this.$store.getters['auth/user']==null) {
+              axios
+                  .get("/listUser")
+                  .then(async response => {
+                     this.user = response.data.data;
+                     this.$store.commit('auth/updateUser', this.user)
+                  })
+                  .catch(e => {
+                     console.log(e);
+                  });
+           }
         },
         obtenerCaja() {
             axios

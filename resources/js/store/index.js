@@ -3,7 +3,11 @@ import Vuex from 'vuex'
 import snackbar from './modules/snackbar'
 import app from './modules/app'
 import auth from './modules/auth'
+import VuexPersistence from 'vuex-persist'
 
+const vuexLocal = new VuexPersistence({
+    storage: window.localStorage
+})
 
 Vue.use(Vuex);
 
@@ -15,5 +19,6 @@ export default new Vuex.Store({
         snackbar,
         auth
     },
-    strict: debug
+    strict: debug,
+    plugins: [vuexLocal.plugin]
 })

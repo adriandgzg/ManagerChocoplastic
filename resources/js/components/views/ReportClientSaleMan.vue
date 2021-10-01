@@ -147,14 +147,7 @@ export default {
   methods: {
    
     getUsers() {
-      axios
-        .get("/listUser")
-        .then((response) => {
-          this.users = response.data.data;
-        })
-        .catch((e) => {
-          this.errors.push(e);
-        });
+       this.users = this.$store.getters['auth/user']
     },
     getFilterClear() {
       this.start_date = "";

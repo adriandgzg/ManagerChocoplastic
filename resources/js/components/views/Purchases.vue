@@ -443,22 +443,16 @@ export default {
 
     methods: {
         getUsers() {
-            axios.get('/listUser')
-                .then(response => {
-                    this.users = response.data.data
 
-                    if (this.users.store_id > 0) {
-                        this.enabledStore = true
 
-                    } else
-                        this.enabledStore = false
+           this.users = this.$store.getters['auth/user']
 
-                    console.log('this.enabledStore');
-                    console.log(this.enabledStore);
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                })
+           if (this.users.store_id > 0) {
+               this.enabledStore = true
+
+           } else {
+              this.enabledStore = false
+           }
         },
         formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
             try {

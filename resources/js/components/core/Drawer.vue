@@ -461,7 +461,7 @@ export default {
   }),
   computed: {
     ...mapState("app", ["image", "color"]),
-    ...mapGetters("auth", ["can"]),
+    ...mapGetters("auth", ["can", "user"]),
     inputValue: {
       get() {
         return this.$store.state.app.drawer;
@@ -489,16 +489,20 @@ export default {
   beforeDestroy() {},
   methods: {
     getUser() {
-      axios
-        .get("/listUser")
-        .then((response) => {
-          this.userDrawer = response.data.data;
-          console.log(this.userDrawer);
-          this.getRol(this.userDrawer.id);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+       if(this.$store.getters['auth/user']==null){
+          axios
+              .get("/listUser")
+              .then(response => {
+                 this.$store.commit('auth/updateUser', response.data.data)
+                 this.getRol(this.$store.getters['auth/user'].id);
+              })
+              .catch(e => {
+                 console.log(e);
+              });
+       }else{
+          this.getRol(this.$store.getters['auth/user'].id);
+       }
+
     },
     getRol(id) {
       axios

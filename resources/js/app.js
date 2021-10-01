@@ -23,7 +23,7 @@ import {mapGetters, mapMutations, mapState} from 'vuex'
 import withSnackbar from './mixins/withSnackbar'
 //TODO: clean files import authorization from './mixins/authorization'
 
-// Sync store with router
+//Sync store with router
 //sync(store, router)
 
 Vue.use(VueInternationalization);
@@ -32,7 +32,6 @@ const i18n = new VueInternationalization({
     locale: 'es',
     messages: Locale
 });
-
 
 
 /**

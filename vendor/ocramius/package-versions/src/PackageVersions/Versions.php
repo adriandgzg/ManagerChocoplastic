@@ -96,6 +96,7 @@ final class Versions
   'symfony/var-dumper' => 'v4.4.8@c587e04ce5d1aa62d534a038f574d9a709e814cf',
   'tijsverkoyen/css-to-inline-styles' => '2.2.2@dda2ee426acd6d801d5b7fd1001cde9b5f790e15',
   'vlucas/phpdotenv' => 'v3.6.4@10d3f853fdf1f3a6b3c7ea0c4620d2f699713db5',
+  'barryvdh/laravel-debugbar' => 'v3.6.2@70b89754913fd89fef16d0170a91dbc2a5cd633a',
   'barryvdh/laravel-ide-helper' => 'v2.7.0@5f677edc14bdcfdcac36633e6eea71b2728a4dbc',
   'barryvdh/reflection-docblock' => 'v2.0.6@6b69015d83d3daf9004a71a89f26e27d27ef6a16',
   'composer/ca-bundle' => '1.2.7@95c63ab2117a72f48f5a55da9740a3273d45b7fd',
@@ -117,6 +118,7 @@ final class Versions
   'jakub-onderka/php-console-highlighter' => 'v0.4@9f7a229a69d52506914b4bc61bfdb199d90c5547',
   'justinrainbow/json-schema' => '5.2.9@44c6787311242a979fa15c704327c20e7221a0e4',
   'martinlindhe/laravel-vue-i18n-generator' => '0.1.46@ddc52890f0204dff64d25e30c3473332904c6138',
+  'maximebf/debugbar' => 'v1.17.1@0a3532556be0145603f8a9de23e76dc28eed7054',
   'mockery/mockery' => '1.4.0@6c6a7c533469873deacf998237e7649fc6b36223',
   'myclabs/deep-copy' => '1.9.5@b2c28789e80a97badd14145fda39b545d83ca3ef',
   'nunomaduro/collision' => 'v3.0.1@af42d339fe2742295a54f6fdd42aaa6f8c4aca68',
@@ -150,7 +152,7 @@ final class Versions
   'symfony/filesystem' => 'v5.0.8@7cd0dafc4353a0f62e307df90b48466379c8cc91',
   'theseer/tokenizer' => '1.1.3@11336f6f84e16a720dae9d8e6ed5019efa85a0f9',
   'webmozart/assert' => '1.8.0@ab2cb0b3b559010b75981b1bdce728da3ee90ad6',
-  'laravel/laravel' => 'dev-master@2c354d807814a9a2fa43e57e1b59a3490c8419b5',
+  'laravel/laravel' => 'dev-master@1f74d3851b9ab88da7547b0d1edc27acd9678948',
 );
 
     private function __construct()

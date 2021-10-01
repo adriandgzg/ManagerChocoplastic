@@ -274,13 +274,7 @@ export default {
                 })
         },
         getUser() {
-            axios.get('/listUser')
-                .then(response => {
-                    this.user = response.data.data
-                })
-                .catch(e => {
-                    console.log(e);
-                })
+           this.user = this.$store.getters['auth/user']
         },
         getBusiness(idStore) {
 

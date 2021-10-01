@@ -160,20 +160,14 @@ export default {
 
 
         getUsers() {
-            axios.get('/listUser')
-                .then(response => {
-                    this.users = response.data.data
 
-                    if (this.users.store_id > 0) {
-                        this.enabledStore = true
-                        this.SelectSucursal = this.stores.find(item => item.stor_pk == this.users.store_id)
-                    } else
-                        this.enabledStore = false
-
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                })
+           this.users = this.$store.getters['auth/user']
+           if (this.users.store_id > 0) {
+              this.enabledStore = true;
+              this.SelectSucursal = this.stores.find( (item) => item.stor_pk == this.users.store_id );
+           } else {
+              this.enabledStore = false;
+           }
         },
         getSales() {
 

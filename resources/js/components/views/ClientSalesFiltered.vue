@@ -397,21 +397,14 @@ export default {
         });
     },
     getUsers() {
-      axios
-        .get("/listUser")
-        .then((response) => {
-          this.users = response.data.data;
 
-          if (this.users.store_id > 0) {
-            this.enabledStore = true;
-            this.SelectSucursal = this.stores.find(
-              (item) => item.stor_pk == this.users.store_id
-            );
-          } else this.enabledStore = false;
-        })
-        .catch((e) => {
-          this.errors.push(e);
-        });
+       this.users = this.$store.getters['auth/user']
+       if (this.users.store_id > 0) {
+          this.enabledStore = true;
+          this.SelectSucursal = this.stores.find( (item) => item.stor_pk == this.users.store_id );
+       } else {
+          this.enabledStore = false;
+       }
     },
     obtenerCaja() {
       axios
@@ -483,20 +476,20 @@ export default {
         return false;
       }
 
-      console.log(
-        "data_filter.stor_pk: " +
-          this.data_filter.stor_pk +
-          "_____ data_filter.clor_status: " +
-          this.data_filter.clor_status +
-          "_____ data_filter.start_date: " +
-          this.data_filter.start_date +
-          "_____ data_filter.end_date: " +
-          this.data_filter.end_date +
-          "_____ data_filter.clie_pk: " +
-          this.data_filter.clie_pk +
-          "_____ data_filter.pame_pk: " +
-          this.data_filter.pame_pk
-      );
+      // console.log(
+      //   "data_filter.stor_pk: " +
+      //     this.data_filter.stor_pk +
+      //     "_____ data_filter.clor_status: " +
+      //     this.data_filter.clor_status +
+      //     "_____ data_filter.start_date: " +
+      //     this.data_filter.start_date +
+      //     "_____ data_filter.end_date: " +
+      //     this.data_filter.end_date +
+      //     "_____ data_filter.clie_pk: " +
+      //     this.data_filter.clie_pk +
+      //     "_____ data_filter.pame_pk: " +
+      //     this.data_filter.pame_pk
+      // );
       this.loading = true;
 
       axios

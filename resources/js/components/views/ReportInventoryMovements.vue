@@ -140,19 +140,13 @@ export default {
   },
   methods: {
     getUsers() {
-      axios
-        .get("/listUser")
-        .then((response) => {
-          this.users = response.data.data;
-
-          if (this.users.store_id > 0) {
-            this.enabledStore = true;
-            this.select_stores = this.users.store_id;
-          } else this.enabledStore = false;
-        })
-        .catch((e) => {
-          this.errors.push(e);
-        });
+       this.users = this.$store.getters['auth/user']
+       if (this.users.store_id > 0) {
+          this.enabledStore = true;
+          this.select_stores = this.users.store_id;
+       } else {
+          this.enabledStore = false;
+       }
     },
 
     getStores() {
