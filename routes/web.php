@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
- 
+
 /****** CHOCOPLASTIC ROUTES *************/
 
 Route::post('signup', 'Auth\Api\LoginController@signup');
@@ -21,21 +21,21 @@ Route::get('/listUser', 'AdminController@listUser');
 Route::get('/saleman', 'AdminController@saleman');
 Route::get('/rolUser/{idUser}', 'AdminController@rolUser');
 
-Route::get('/providerlist', 'ProviderController@ProvidersList'); 
-Route::get('/providers', 'ProviderController@index'); 
+Route::get('/providerlist', 'ProviderController@ProvidersList');
+Route::get('/providers', 'ProviderController@index');
 Route::post('/providers/add', 'ProviderController@add');
 Route::post('/providers/update', 'ProviderController@update');
 Route::post('/providers/delete', 'ProviderController@delete');
 
-Route::get('/clientlist', 'ClientController@ClientsList'); 
+Route::get('/clientlist', 'ClientController@ClientsList');
 Route::get('/clientsget', 'ClientController@Clients');
 Route::post('/clients/add', 'ClientController@add');
-Route::post('/clients/update', 'ClientController@update'); 
+Route::post('/clients/update', 'ClientController@update');
 Route::post('/clients/delete', 'ClientController@delete');
-Route::get('/clients/genders', 'ClientController@Genders'); 
+Route::get('/clients/genders', 'ClientController@Genders');
 
 Route::get('/storelist', 'StoreController@StoresList');
-Route::get('/storeget', 'StoreController@Stores'); 
+Route::get('/storeget', 'StoreController@Stores');
 Route::post('/store/add', 'StoreController@add');
 Route::post('/store/update', 'StoreController@update');
 Route::post('/store/delete', 'StoreController@delete');
@@ -67,12 +67,12 @@ Route::post('/paymentmethods/delete', 'PaymentMethodController@delete');
 
 Route::get('/paymentshapesList', 'PaymentShapeController@PaymentShapesList');
 Route::get('/paymentshapesget', 'PaymentShapeController@PaymentShapes');
-Route::post('/paymentshapes/add', 'PaymentShapeController@add'); 
+Route::post('/paymentshapes/add', 'PaymentShapeController@add');
 Route::post('/paymentshapes/update', 'PaymentShapeController@update');
 Route::post('/paymentshapes/delete', 'PaymentShapeController@delete');
 
 Route::get('/returnmotivesList', 'ReturnMotiveController@ReturnMotivesList');
-Route::post('/returnmotives/add', 'ReturnMotiveController@add'); 
+Route::post('/returnmotives/add', 'ReturnMotiveController@add');
 Route::post('/returnmotives/update', 'ReturnMotiveController@update');
 Route::post('/returnmotives/delete', 'ReturnMotiveController@delete');
 
@@ -87,8 +87,6 @@ Route::get('/products/derived/{prod_main_pk}', 'ProductController@derived'); //P
 Route::post('/products/derived', 'ProductController@storederived'); //Guardar Productos Derivado
 Route::post('/products/derived/update', 'ProductController@updatederived'); //Modificar Productos Derivado
 Route::post('/products/derived/destroy', 'ProductController@destroyderived'); //Eliminar Productos Derivado
-
-
 
 
 Route::get('/clientorders', 'ClientOrderController@index'); //Lista de Pedidos (Cliente)
@@ -112,8 +110,7 @@ Route::post('/client_sale_details/update', 'ClientSaleDetailController@update');
 Route::post('/client_sale_details/destroy', 'ClientSaleDetailController@destroy'); //Venta Producto Eliminar (Cliente)
 
 
-
-Route::get('/client/debts', 'ClientDebtController@index'); //Lista de Deudas (Cliente) 
+Route::get('/client/debts', 'ClientDebtController@index'); //Lista de Deudas (Cliente)
 Route::post('/client/payments', 'ClientPaymentController@store'); //Guardar Pagos (Cliente)
 Route::get('/client/payments/{clde_fk}', 'ClientPaymentController@show'); //Lista de Pagos, filtrado por deuda (Cliente)
 Route::get('/client/payments/report/{clpa_pk}', 'ClientPaymentController@printreport'); //Reporte de Pago Abono (Cliente) 
@@ -126,43 +123,37 @@ Route::get('/provider/payments/{prde_fk}', 'ProviderPaymentController@show'); //
 Route::get('/provider/payments/report/{prpa_pk}', 'ProviderPaymentController@printreport'); //Reporte de Pago Abono (Cliente)  
 
 
-
-
 //CRUD Productos Frecuentes
-Route::get('/product/frequents', 'ProductFrequentController@list'); 
-Route::post('/product/frequents', 'ProductFrequentController@store'); 
-Route::post('/product/frequents/update', 'ProductFrequentController@update'); 
-Route::post('/product/frequents/delete', 'ProductFrequentController@destroy'); 
-
+Route::get('/product/frequents', 'ProductFrequentController@list');
+Route::post('/product/frequents', 'ProductFrequentController@store');
+Route::post('/product/frequents/update', 'ProductFrequentController@update');
+Route::post('/product/frequents/delete', 'ProductFrequentController@destroy');
 
 
 //CRUD Orden de Compra (Proveedor) 
-Route::get('provider/purchase/orders', 'ProviderPurchaseOrderController@index');  
-Route::get('provider/purchase/orders/{prpo_pk}', 'ProviderPurchaseOrderController@show');  
-Route::post('provider/purchase/orders', 'ProviderPurchaseOrderController@store'); 
-Route::post('provider/purchase/orders/destroy', 'ProviderPurchaseOrderController@destroy'); 
+Route::get('provider/purchase/orders', 'ProviderPurchaseOrderController@index');
+Route::get('provider/purchase/orders/{prpo_pk}', 'ProviderPurchaseOrderController@show');
+Route::post('provider/purchase/orders', 'ProviderPurchaseOrderController@store');
+Route::post('provider/purchase/orders/destroy', 'ProviderPurchaseOrderController@destroy');
 
-Route::get('provider/purchase/order/details', 'ProviderPurchaseOrderDetailController@index');  
-Route::post('provider/purchase/order/details', 'ProviderPurchaseOrderDetailController@store'); 
-Route::post('provider/purchase/order/details/update', 'ProviderPurchaseOrderDetailController@update'); 
-Route::post('provider/purchase/order/details/destroy', 'ProviderPurchaseOrderDetailController@destroy'); 
-
+Route::get('provider/purchase/order/details', 'ProviderPurchaseOrderDetailController@index');
+Route::post('provider/purchase/order/details', 'ProviderPurchaseOrderDetailController@store');
+Route::post('provider/purchase/order/details/update', 'ProviderPurchaseOrderDetailController@update');
+Route::post('provider/purchase/order/details/destroy', 'ProviderPurchaseOrderDetailController@destroy');
 
 
 //CRUD Compra
-Route::get('provider/purchases', 'ProviderPurchaseController@index');   
-Route::get('provider/purchases/{prpu_pk}', 'ProviderPurchaseController@show');  
+Route::get('provider/purchases', 'ProviderPurchaseController@index');
+Route::get('provider/purchases/{prpu_pk}', 'ProviderPurchaseController@show');
 Route::post('provider/purchases', 'ProviderPurchaseController@store'); //Convertir Orden de Compra a Compra (Proveedor)
 Route::post('provider/purchases/update', 'ProviderPurchaseController@update'); //Finalizar Compra
 Route::post('provider/purchases/destroy', 'ProviderPurchaseController@destroy'); //Cancelar Compra
 
 Route::get('provider/purchases/print/{prpu_pk}', 'ProviderPurchaseController@printOrder');//Imprimir
 
-Route::post('provider/purchase/details', 'ProviderPurchaseDetailController@store'); 
-Route::post('provider/purchase/details/update', 'ProviderPurchaseDetailController@update'); 
-Route::post('provider/purchase/details/destroy', 'ProviderPurchaseDetailController@destroy'); 
-
- 
+Route::post('provider/purchase/details', 'ProviderPurchaseDetailController@store');
+Route::post('provider/purchase/details/update', 'ProviderPurchaseDetailController@update');
+Route::post('provider/purchase/details/destroy', 'ProviderPurchaseDetailController@destroy');
 
 
 Route::get('return/motives', 'ReturnMotiveController@index');  //Lista de Motivos de Devoluciones
@@ -171,16 +162,16 @@ Route::get('client/returns', 'ClientReturnController@index');  //Listado de Devo
 Route::get('client/returns/{clre_pk}', 'ClientReturnController@show');  //Vista detalle de Devoluciones (Cliente)
 Route::post('client/returns', 'ClientReturnController@store');  //Convertir una venta a Devolución (Cliente)
 Route::post('client/returns/update', 'ClientReturnController@update');  //Finalizar una Devolución (Cliente)
-Route::post('client/return/details/update', 'ClientReturnDetailController@update'); 
-Route::post('client/return/details/destroy', 'ClientReturnDetailController@destroy'); 
+Route::post('client/return/details/update', 'ClientReturnDetailController@update');
+Route::post('client/return/details/destroy', 'ClientReturnDetailController@destroy');
 
 
 Route::get('provider/returns', 'ProviderReturnController@index');  //Listado de Devoluciones (Proveedor)
 Route::get('provider/returns/{prre_pk}', 'ProviderReturnController@show');  //Vista detalle de Devoluciones (Proveedor)
 Route::post('provider/returns', 'ProviderReturnController@store');  //Convertir una venta a Devolución (Proveedor)
 Route::post('provider/returns/update', 'ProviderReturnController@update');  //Finalizar una Devolución (Proveedor)
-Route::post('provider/return/details/update', 'ProviderReturnDetailController@update'); 
-Route::post('provider/return/details/destroy', 'ProviderReturnDetailController@destroy'); 
+Route::post('provider/return/details/update', 'ProviderReturnDetailController@update');
+Route::post('provider/return/details/destroy', 'ProviderReturnDetailController@destroy');
 
 //Corte de caja
 Route::get('/boxcut', 'BoxCutController@index');
@@ -190,56 +181,30 @@ Route::get('/boxcuts', 'BoxCutController@ListBoxCuts'); ////
 Route::get('/box/cuts/{bocu_pk}', 'BoxCutController@show'); //Consultar Box 
 
 
-
-
-
-
-
 //Inventario de Productos
 Route::get('product/inventories', 'ProductInventoryController@index');  //Inventario 
 Route::get('product/inventories/{stor_pk}', 'ProductInventoryController@sucursal');  //Inventario  
 
 
 //CRUD Traspaso
-Route::get('product/transfers', 'ProductTransferController@index');   
-Route::get('product/mytransfers', 'ProductTransferController@mytransfers');   
-Route::get('product/transfers/{prtr_pk}', 'ProductTransferController@show');  
-Route::post('product/transfers', 'ProductTransferController@store'); 
+Route::get('product/transfers', 'ProductTransferController@index');
+Route::get('product/mytransfers', 'ProductTransferController@mytransfers');
+Route::get('product/transfers/{prtr_pk}', 'ProductTransferController@show');
+Route::post('product/transfers', 'ProductTransferController@store');
 Route::post('product/transfers/update', 'ProductTransferController@update'); //Estatus Solicitado
 Route::post('product/transfers/update/finalize', 'ProductTransferController@updatefinalize'); //Estatus Finalizado || Modificar Inventario
-Route::post('product/transfers/destroy', 'ProductTransferController@destroy'); 
+Route::post('product/transfers/destroy', 'ProductTransferController@destroy');
 Route::get('/product/transfers/printTraspaso/{prtr_pk}', 'ProductTransferController@printTraspaso'); //Reporte Traspaso
 
-Route::post('product/transfer/details', 'ProductTransferDetailController@store');  
-Route::post('product/transfer/details/update', 'ProductTransferDetailController@update'); 
-Route::post('product/transfer/details/destroy', 'ProductTransferDetailController@destroy'); 
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
+Route::post('product/transfer/details', 'ProductTransferDetailController@store');
+Route::post('product/transfer/details/update', 'ProductTransferDetailController@update');
+Route::post('product/transfer/details/destroy', 'ProductTransferDetailController@destroy');
 
 
 Route::get('/client/payment/amounts/{clsa_fk}', 'ClientPaymentAmountController@show'); //Listado de montos pagos, filtrado por venta
 Route::post('/client/payment/amounts', 'ClientPaymentAmountController@store'); //Guardar montos pagos (Cliente)
 Route::post('/client/payment/amounts/update', 'ClientPaymentAmountController@update');  //Modificar montos pagos (Cliente)
 Route::post('/client/payment/amounts/destroy', 'ClientPaymentAmountController@destroy');  //Eliminar montos pagos (Cliente)
-
-
-
 
 
 Route::get('/cash/withdrawals/{cawi_pk}', 'CashWithdrawalController@show'); //Consultar Retiro
@@ -255,24 +220,26 @@ Route::get('password/reset/{token}', 'Auth\Api\ResetPasswordController@showReset
 Route::get('password/reset', 'Auth\Api\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\Api\ResetPasswordController@reset')->name('password.reset');;
 Route::get('/home', 'HomeController@index');
-Route::get('/logout','Auth\LoginController@logout');
+Route::get('/logout', 'Auth\LoginController@logout');
 
-Route::get('/', function(){
-  return redirect('/login');
+Route::get('/', function () {
+    return redirect('/login');
 })->name('login');
 //Route::get('/login', function(){
-  //return view('auth.login');
+//return view('auth.login');
 //})->name('loginn');
 
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::get('/auth/user', function() { return Auth::user(); });
-    Route::get('/users', 'AdminController@users'); 
-    Route::get('/usuarioBusiness/{id}', 'AdminController@usuarioBusiness');    
+    Route::get('/auth/user', function () {
+        return Auth::user();
+    });
+    Route::get('/users', 'AdminController@users');
+    Route::get('/usuarioBusiness/{id}', 'AdminController@usuarioBusiness');
     Route::post('/admin/add', 'AdminController@addAdministrator');
     Route::post('/admin/update', 'AdminController@updateAdministrator');
     Route::post('/admin/updateBusiness', 'AdminController@updateBusinessAdministrator');
-    Route::get('/listUsers', 'AdminController@listUsers'); 
+    Route::get('/listUsers', 'AdminController@listUsers');
     Route::post('/admins/{admin}/permissions', 'AdminController@permissions');
     Route::post('/admins/{admin}/role', 'AdminController@role');
     Route::post('/roles/{role}/permissions', 'RoleController@permissions');
@@ -284,7 +251,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('{any}', function () {
     return view('layouts.app');
-})->where('any','^(?!api).*$')->middleware('auth');
+})->where('any', '^(?!api).*$')->middleware('auth');
 
 
 Route::get('/mapachido', 'CoverageController@pintame');

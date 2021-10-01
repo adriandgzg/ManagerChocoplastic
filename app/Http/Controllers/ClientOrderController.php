@@ -16,67 +16,34 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 
-
 class ClientOrderController extends ApiResponseController
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-
-        try 
-        {
-            ini_set("memory_limit", "-1");
-            
-            $vStore = Auth::user()->store_id;
-            $vrole_id = Auth::user()->role_id;
-
-            if($vrole_id == 1)
-            {
-                $vClientOrders = DB::table('client_orders AS CO')
-                ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
-                ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
-                ->select(
-                    'CO.clor_pk',
-                    'CO.clor_identifier',
-                    'CO.created_at',
-                    'CO.clor_status',
-                    'S.stor_name'
-                )
-                //->where('clor_status', '=', 1)
-                ->orderByDesc('CO.clor_pk')
-                ->get();
-
+        try {
+            $user = Auth::user();
+            $orders = ClientOrder::with(['store:stor_pk,stor_name', 'client:clie_pk,clie_name'])
+                ->orderByDesc('clor_pk');
+            if ($user->role_id != 1) {
+                $orders = $orders->where('stor_pk', $user->store_id);
             }
-            else
-            {
-                $vClientOrders = DB::table('client_orders AS CO')
-                ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
-                ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
-                ->select(
-                    'CO.clor_pk',
-                    'CO.clor_identifier',
-                    'CO.created_at',
-                    'CO.clor_status',
-                    'S.stor_name'
-                )
-                ->where('S.stor_pk', '=', $vStore)
-                ->orderByDesc('CO.clor_pk')
-                ->get();
-
-
+            if ($request->search != '') {
+                $orders = $orders->where('clor_identifier', 'LIKE', '%' . $request->search . '%');
             }
-           
+            $orders = $orders->paginate($request->itemsPerPage);
+
             return response()->json([
                 'code' => 200,
                 'success' => true,
                 'message' => 'Pedidos de los clientes',
-                'data' =>  $vClientOrders
+                'data' => $orders
             ], 200);
-            
+
         } catch (Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -87,66 +54,29 @@ class ClientOrderController extends ApiResponseController
     }
 
 
-
-    public function indexday()
+    public function indexday(Request $request)
     {
-
-        try 
-        {
-            ini_set("memory_limit", "-1");
-
-            
-            $vStore = Auth::user()->store_id;
-            $vrole_id = Auth::user()->role_id;
-
-            $vCurrentDate = Carbon::now();
-            $vCurrentDate->format('Y-m-d');
-
-
-            if($vrole_id == 1)
-            {
-                $vClientOrders = DB::table('client_orders AS CO')
-                ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
-                ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
-                ->select(
-                    'CO.clor_pk',
-                    'CO.clor_identifier',
-                    'CO.created_at',
-                    'CO.clor_status',
-                    'S.stor_name'
-                )
-                ->whereDate('CO.created_at', '=', $vCurrentDate)
-                ->orderByDesc('CO.clor_pk')
-                ->get();
-
+        try {
+            $user = Auth::user();
+            $today = date('Y-m-d');
+            $orders = ClientOrder::whereDate('created_at', '=', $today)
+                ->with(['store:stor_pk,stor_name', 'client:clie_pk,clie_name'])
+                ->orderByDesc('clor_pk');
+            if ($user->role_id != 1) {
+                $orders = $orders->where('stor_pk', $user->store_id);
             }
-            else
-            {
-                $vClientOrders = DB::table('client_orders AS CO')
-                ->join('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
-                ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
-                ->select(
-                    'CO.clor_pk',
-                    'CO.clor_identifier',
-                    'CO.created_at',
-                    'CO.clor_status',
-                    'S.stor_name'
-                )
-                ->where('S.stor_pk', '=', $vStore)
-                ->whereDate('CO.created_at', '=', $vCurrentDate)
-                ->orderByDesc('CO.clor_pk')
-                ->get();
-
-
+            if ($request->search != '') {
+                $orders = $orders->where('clor_identifier', 'LIKE', '%' . $request->search . '%');
             }
-           
+            $orders = $orders->paginate($request->itemsPerPage);
+
             return response()->json([
                 'code' => 200,
                 'success' => true,
                 'message' => 'Pedidos de los clientes',
-                'data' =>  $vClientOrders
+                'data' => $orders
             ], 200);
-            
+
         } catch (Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -157,72 +87,32 @@ class ClientOrderController extends ApiResponseController
     }
 
 
-    public function indexfiltered(Request $vR)
+    public function indexfiltered(Request $req)
     {
 
-        try 
-        {
-            ini_set("memory_limit", "-1");
-
-            $vInput = $vR->all();
-
-            //Asignacion de variables
-            $vStor_pk = $vInput['stor_pk'];
-            $vStatus = $vInput['clor_status'];
-            $vStart_date = $vInput['start_date'];
-            $vEnd_date = $vInput['end_date'];
-
-            $vRole_id = Auth::user()->role_id;
-
-
-            if($vRole_id == 1)
-            {
-                $vStore = $vStor_pk;
+        try {
+            $user=Auth::user();
+            $store_id = $user->role_id == 1? $req->stor_pk : $user->store_id;
+            $orders=ClientOrder::with(['store:stor_pk,stor_name']);
+            if ($req->search!=''){
+                $orders=$orders->where('clor_identifier', 'LIKE', '%'.$req->search.'%');
             }
-            else
-            {
-                $vStore = Auth::user()->store_id;
+            $orders=$req->clor_status == -1?
+                $orders->whereIn('clor_status', [0, 1, 2]):
+                $orders->where('clor_status',$req->clor_status);
+            if ($req->start_date !=''){
+                $orders=$orders->whereDate('created_at','>=', $req->start_date );
             }
+            if ($req->end_date !=''){
+                $orders=$orders->whereDate('created_at','<=', $req->end_date );
+            }
+            $orders=$orders
+                ->where('stor_fk',  $store_id)
+                ->orderByDesc('clor_pk')
+                ->paginate($req->itemsPerPage);
 
-            $vClientOrders = DB::table('client_orders AS CO')
-                    ->join('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
-                    ->select(
-                        'CO.clor_pk',
-                        'CO.clor_identifier',
-                        'CO.created_at',
-                        'CO.clor_status',
-                        'S.stor_name',
-                        DB::raw('(CASE 
-                        WHEN CO.clor_status = 1 THEN "Pendiente" 
-                        WHEN CO.clor_status = 2 THEN "Procesado" 
-                        WHEN CO.clor_status = 0 THEN "Cancelado" 
-                        ELSE "" END) AS clor_status_description')
-                    )
-                    ->where('S.stor_pk', '=', $vStore)
-                    ->when($vStatus == -1, function ($vQuery) {
-                        $vQuery->whereIn('CO.clor_status', array(0, 1, 2));
-                    })
-                    ->when($vStatus == 0, function ($vQuery) {
-                        $vQuery->where('CO.clor_status', '=', 0);
-                    })
-                    ->when($vStatus == 1, function ($vQuery) {
-                        $vQuery->where('CO.clor_status', '=', 1);
-                    })
-                    ->when($vStatus == 2, function ($vQuery) {
-                        $vQuery->where('CO.clor_status', '=', 2);
-                    })
-                    ->when($vStart_date <> "", function ($vQuery) use ($vStart_date, $vEnd_date) {
-                        $vQuery->whereBetween('CO.created_at', [$vStart_date.' 00:00:00', $vEnd_date.' 23:59:59']);
-                    })
-                    ->orderByDesc('CO.clor_pk')
-                    ->get();
-
-                    
-
-            return $this->dbResponse($vClientOrders, 200, null, 'Pedidos de los clientes filtrado');
-        } 
-        catch (Throwable $vTh) 
-        {
+            return $this->dbResponse($orders, 200, null, 'Pedidos de los clientes filtrado');
+        } catch (Throwable $vTh) {
             return $this->dbResponse(null, 500, $vTh->getMessage(), 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
@@ -243,11 +133,9 @@ class ClientOrderController extends ApiResponseController
                 ->where('clor_status', '=', 1)
                 ->orderByDesc('CO.created_at')
                 ->get();
-            
+
             return $this->dbResponse($vClientOrders, 200, null, 'Lista de Pedidos');
-        } 
-        catch (Exception $e) 
-        {
+        } catch (Exception $e) {
             return $this->dbResponse(null, 500, $e, null);
         }
     }
@@ -265,7 +153,7 @@ class ClientOrderController extends ApiResponseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -295,44 +183,33 @@ class ClientOrderController extends ApiResponseController
 
             //Modificar Folio del Pedido
             DB::table('systems')
-            ->update(['syst_clie_order' =>  $vsyst_clie_order + 1]);
+                ->update(['syst_clie_order' => $vsyst_clie_order + 1]);
 
 
             //Asignacion de variable de los Productos
             $vCODetail = $request->data;
-            
+
             //Guardar el detallado del pedido (Productos)
-            foreach ($vCODetail as $detail => $cod)
-            {
+            foreach ($vCODetail as $detail => $cod) {
                 $vprod_pk = $cod["PK_Product"]; //PK del Producto
                 $vprod_saleprice = 0;
 
                 //Consultar Producto
-                $vProduct = Product::where('prod_pk','=',$vprod_pk)->first();
-                if($vProduct)
-                {
+                $vProduct = Product::where('prod_pk', '=', $vprod_pk)->first();
+                if ($vProduct) {
                     //Validar Si es o No Producto Padre (Productos derivado NO aplica Precio Mayoreo)
-                    if($vProduct->prod_main_pk == NULL)
-                    {
+                    if ($vProduct->prod_main_pk == NULL) {
                         //Producto Padre
-                        if($cod["Quantity"] >= $vProduct->prod_minimumpurchase)
-                        {
-                            if($vProduct->prod_listprice == 0)
-                            {
+                        if ($cod["Quantity"] >= $vProduct->prod_minimumpurchase) {
+                            if ($vProduct->prod_listprice == 0) {
                                 $vprod_saleprice = $vProduct->prod_saleprice;
-                            }
-                            else
-                            {
+                            } else {
                                 $vprod_saleprice = $vProduct->prod_listprice;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             $vprod_saleprice = $vProduct->prod_saleprice;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         //Producto Derivado
                         $vprod_saleprice = $vProduct->prod_saleprice;
                     }
@@ -350,7 +227,7 @@ class ClientOrderController extends ApiResponseController
                     $vCORDI->clod_iva = 0;
                     $vCORDI->clod_status = 1;
                     $vCORDI->save();
-                    
+
                     //Asignación de PK Pedido Detalle Cliente
                     $vclod_pk = $vCORDI->clod_pk;
 
@@ -358,18 +235,14 @@ class ClientOrderController extends ApiResponseController
                     $this->getstorelog('client_order_details', $vclod_pk, 1);
 
 
-                }
-                else
-                {
+                } else {
                     return $this->dbResponse(null, 500, null, 'Producto NO Encontrado');
                 }
-                
+
             }
-       
+
             return $this->dbResponse("Ped_" . $vsyst_clie_order, 200, null, 'Pedido Guardado Correctamente');
-        } 
-        catch (Throwable $vTh) 
-        {
+        } catch (Throwable $vTh) {
             return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
 
@@ -378,7 +251,7 @@ class ClientOrderController extends ApiResponseController
     /**
      * Display the specified resource.
      *
-     * @param  \App\ClientOrder  $clientOrder
+     * @param \App\ClientOrder $clientOrder
      * @return \Illuminate\Http\Response
      */
     public function show(Request $r)
@@ -400,19 +273,18 @@ class ClientOrderController extends ApiResponseController
 
         try {
             //Asignacion de variables
-           $vclor_pk = $vInput['clor_pk'];
+            $vclor_pk = $vInput['clor_pk'];
 
             $vClientOrder = ClientOrder::where('clor_pk', '=', $vclor_pk)
                 ->select(
                     'clor_pk AS PK_Order',
                     'clor_identifier AS Identifier'
-                    )
+                )
                 ->first();
 
-            if($vClientOrder)
-            { 
+            if ($vClientOrder) {
 
-                $vClientOrderDetail = DB::table('client_order_details AS COD') 
+                $vClientOrderDetail = DB::table('client_order_details AS COD')
                     ->join('products AS P', 'P.prod_pk', '=', 'COD.prod_fk')
                     ->join('measurements AS M', 'M.meas_pk', '=', 'COD.meas_fk')
                     ->join('product_categories AS PC', 'PC.prca_pk', '=', 'P.prca_fk')
@@ -428,41 +300,37 @@ class ClientOrderController extends ApiResponseController
                         //'COD.clod_type AS Type',
                         'COD.clod_quantity AS Quantity',
                         'COD.clod_price AS Price'
-                        //'COD.clod_discountrate',
-                        //'COD.clod_ieps',
-                        //'COD.clod_iva',
-                        //'COD.clod_status'
+                    //'COD.clod_discountrate',
+                    //'COD.clod_ieps',
+                    //'COD.clod_iva',
+                    //'COD.clod_status'
                     )
                     ->where('COD.clor_fk', '=', $vclor_pk)
                     ->where('COD.clod_status', '=', 1)
                     ->get();
-   
 
-                $data = 
-                [
-                    'order' => $vClientOrder, 
-                    'order_details' => $vClientOrderDetail
-                ];
+
+                $data =
+                    [
+                        'order' => $vClientOrder,
+                        'order_details' => $vClientOrderDetail
+                    ];
 
 
                 return $this->dbResponse($data, 200, null, 'Lista de Pedidos');
 
-            }
-            else
-            {
+            } else {
                 return $this->dbResponse(null, 404, null, 'Pedido No Encontrado');
             }
-            
-        }
-        catch (Throwable $vTh) 
-        {
+
+        } catch (Throwable $vTh) {
             return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
 
     public function showmanager($clor_pk)
     {
-       
+
         if ($clor_pk == '' || $clor_pk == 0) {
             return $this->dbResponse(null, 500, null, 'PK Obligatorio');
         }
@@ -472,9 +340,9 @@ class ClientOrderController extends ApiResponseController
             $vclor_pk = $clor_pk;
 
             //Consultar Tabla de Configuración
-            $vSys = DB::table('systems AS S')->select('S.syst_iva','S.syst_ieps')->first();
+            $vSys = DB::table('systems AS S')->select('S.syst_iva', 'S.syst_ieps')->first();
 
-            $vClientOrder = DB::table('client_orders AS CO') 
+            $vClientOrder = DB::table('client_orders AS CO')
                 ->leftjoin('clients AS C', 'C.clie_pk', '=', 'CO.clie_fk')
                 ->leftjoin('stores AS S', 'CO.stor_fk', '=', 'S.stor_pk')
                 ->select(
@@ -485,20 +353,19 @@ class ClientOrderController extends ApiResponseController
                     'C.clie_pk',
                     'C.clie_identifier',
                     'C.clie_name',
-                    'C.clie_rfc',                           
+                    'C.clie_rfc',
 
                     'S.stor_pk',
                     'S.stor_name',
 
                     DB::raw('(SELECT CONCAT(U.phone_number, "-", U.name) AS user FROM logs AS L INNER JOIN users AS U ON L.user_fk = U.id WHERE L.table = "client_orders" AND L.pk_register = CO.clor_pk AND L.operation = 1 LIMIT 1) AS user') //Vededor
-                    )
+                )
                 ->where('CO.clor_pk', '=', $vclor_pk)
                 ->first();
 
-            if($vClientOrder)
-            { 
+            if ($vClientOrder) {
 
-                $vClientOrderDetail = DB::table('client_order_details AS COD') 
+                $vClientOrderDetail = DB::table('client_order_details AS COD')
                     ->join('products AS P', 'P.prod_pk', '=', 'COD.prod_fk')
                     ->join('measurements AS M', 'M.meas_pk', '=', 'COD.meas_fk')
                     ->join('product_categories AS PC', 'PC.prca_pk', '=', 'P.prca_fk')
@@ -510,39 +377,35 @@ class ClientOrderController extends ApiResponseController
                         'P.prod_name',
                         'P.prod_iva',
                         'P.prod_ieps',
-                        
+
                         'M.meas_pk',
                         'M.meas_name',
                         'M.meas_abbreviation',
                         'PC.prca_name',
-                        
+
                         'COD.clod_quantity',
                         'COD.clod_price',
                         DB::raw("$vSys->syst_iva AS syst_iva"),
                         DB::raw("$vSys->syst_ieps AS syst_ieps")
-                    ) 
+                    )
                     ->where('COD.clor_fk', '=', $vclor_pk)
                     ->where('COD.clod_status', '=', 1)
                     ->get();
-   
 
-                $vData = 
-                [
-                    'order' => $vClientOrder, 
-                    'order_details' => $vClientOrderDetail
-                ];
+
+                $vData =
+                    [
+                        'order' => $vClientOrder,
+                        'order_details' => $vClientOrderDetail
+                    ];
 
                 return $this->dbResponse($vData, 200, null, 'Pedido Encontrado');
 
-            }
-            else
-            {
+            } else {
                 return $this->dbResponse(null, 404, null, 'Pedido No Encontrado');
             }
-            
-        } 
-        catch (Throwable $vTh) 
-        {
+
+        } catch (Throwable $vTh) {
             return $this->dbResponse(null, 500, $vTh, 'Detalle Interno, informar al Administrador del Sistema.');
         }
     }
@@ -550,7 +413,7 @@ class ClientOrderController extends ApiResponseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ClientOrder  $clientOrder
+     * @param \App\ClientOrder $clientOrder
      * @return \Illuminate\Http\Response
      */
     public function edit(ClientOrder $clientOrder)
@@ -561,8 +424,8 @@ class ClientOrderController extends ApiResponseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ClientOrder  $clientOrder
+     * @param \Illuminate\Http\Request $request
+     * @param \App\ClientOrder $clientOrder
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, ClientOrder $clientOrder)
@@ -573,7 +436,7 @@ class ClientOrderController extends ApiResponseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ClientOrder  $clientOrder
+     * @param \App\ClientOrder $clientOrder
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $r)
@@ -595,30 +458,27 @@ class ClientOrderController extends ApiResponseController
 
         try {
             //Asignacion de variables
-           $vclor_pk = $vInput['clor_pk'];
+            $vclor_pk = $vInput['clor_pk'];
 
             $vClientOrder = ClientOrder::where('clor_pk', '=', $vclor_pk)->first();
 
-            if($vClientOrder)
-            { 
+            if ($vClientOrder) {
                 //Cancelar Pedido
                 DB::table('client_orders')
-                ->where('clor_pk', '=', $vclor_pk)
-                ->update(['clor_status' =>  0]);
+                    ->where('clor_pk', '=', $vclor_pk)
+                    ->update(['clor_status' => 0]);
 
                 //////////////////  Inserción de Log  //////////////////
                 $this->getstorelog('client_orders', $vclor_pk, 3);
 
-    
+
                 return response()->json([
                     'code' => 200,
                     'success' => true,
                     'message' => 'Pedido Cancelado Correctamente'
                 ], 200);
 
-            }
-            else
-            {
+            } else {
                 return response()->json([
                     'code' => 404,
                     'success' => false,

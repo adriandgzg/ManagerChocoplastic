@@ -55,23 +55,22 @@
         <v-row>
             <v-col>
                 <v-card>
-                    <v-data-table :headers="headers" :items="categories" :search="search" sort-by="id" class="elevation-3">
+                    <v-data-table :headers="headers" :items="categories"
+                                  disable-sort class="elevation-3"
+                                  :footer-props="footerProps"
+                                  :loading="loading"
+                                  :options.sync="options"
+                                  :server-items-length="total"
+                    >
                         <template v-slot:top>
                             <v-system-bar color="indigo darken-2" dark></v-system-bar>
-                            <v-toolbar flat color="indigo">
-
-                                <v-divider class="mx-4" inset vertical></v-divider>
-                                <v-spacer></v-spacer>
-
-                            </v-toolbar>
                             <v-col cols="12" sm="12">
-                                <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
+                                <v-text-field v-model="search" @keyup.enter="getDayOrders" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
                             </v-col>
                         </template>
                         <template v-slot:item.status="{ item }">
-                            <v-chip v-if="item.clor_status == 1" color="green" dark> Pendiente </v-chip>
-                            <v-chip v-if="item.clor_status == 2" color="blue" dark> Procesado </v-chip>
-                            <v-chip v-if="item.clor_status == 0" color="red" dark> Cancelado </v-chip>
+                            <v-chip :color="item.clor_status == 1? 'green' : item.clor_status == 2? 'blue' :'reed'" dark>
+                               {{ item.clor_status_description }} </v-chip>
                         </template>
                         <template v-slot:item.action="{ item }">
 
@@ -104,10 +103,14 @@ export default {
                     text: 'Pedido',
                     value: 'clor_identifier'
                 },
-                {
-                    text: 'Sucursal',
-                    value: 'stor_name'
-                },
+               {
+                  text: 'Sucursal',
+                  value: 'store.stor_name'
+               },
+               {
+                  text: 'Cliente',
+                  value: 'client.clie_name'
+               },
                 {
                     text: 'Fecha',
                     value: 'created_at'
@@ -164,10 +167,16 @@ export default {
             dialogQuestionDelete: false,
             messageQuestion: '',
             boxEnabled: false,
+           options: {},
+           pagination: {
+              current: 1,
+              total: 0
+           },
+           footerProps: {'items-per-page-options': [10, 20, 100]},
+           total: 0,
         };
     },
     created() {
-        this.getCategories();
         this.obtenerCaja();
     },
 
@@ -189,23 +198,28 @@ export default {
                 });
         },
 
-        getCategories() {
-            this.loading = true
-            axios
-                .get("/clientorders")
-                .then(response => {
-                    setTimeout(() => (this.loading = false), 500)
-                    if (response.data.data != null) {
-                        //console.log(response.data)
-                        this.categories = response.data.data;
-                    } else {
-                        this.normal('Notificación', response.data.status.message, "error");
-                    }
-                })
-                .catch(e => {
-                    console.log(e);
-                    this.normal('Notificación', "Error al cargar los datos", "error");
-                });
+        async getDayOrders() {
+           const {sortBy, sortDesc, page, itemsPerPage} = this.options
+           await axios
+               .get("/clientorders" + "?itemsPerPage=" + itemsPerPage + "&page=" + page + "&search=" + this.search)
+
+               .then(response => {
+                  setTimeout(() => (this.loading = false), 500)
+                  if (response.data.data != null) {
+                     this.categories = response.data.data.data;
+                     this.total = response.data.data.total;
+                     if (this.options.page>response.data.data.last_page){
+                        this.options.page=response.data.data.last_page
+                     }
+
+                  } else {
+                     this.normal('Notificación', response.data.status.message, "error");
+                  }
+               })
+               .catch(e => {
+                  console.log(e);
+                  this.normal('Notificación', "Error al cargar los datos", "error");
+               });
         },
 
         cancelar() {
@@ -274,5 +288,13 @@ export default {
             return this.editedIndex === -1 ? 'Nuevo Registro' : 'Editar Registro'
         },
     },
+   watch: {
+      options: {
+         handler() {
+            this.getDayOrders()
+         },
+         deep: true,
+      }
+   }
 };
 </script>

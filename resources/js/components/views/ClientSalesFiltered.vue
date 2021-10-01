@@ -27,7 +27,7 @@
             <v-data-table
               :headers="headers"
               :items="data_order"
-              sort-by="id"
+              disable-sort
               class="elevation-3"
               :footer-props="footerProps"
               :loading="loading"
@@ -36,10 +36,6 @@
             >
               <template v-slot:top>
                 <v-system-bar color="indigo darken-2" dark></v-system-bar>
-                <v-toolbar flat color="indigo">
-                  <v-divider class="mx-4" inset vertical></v-divider>
-                  <v-spacer></v-spacer>
-                </v-toolbar>
                 <v-card-text>
                   <v-row>
                     <v-col cols="6">
@@ -111,7 +107,7 @@
                           <v-text-field
                             v-model="start_date"
                             label="Fecha Inicio"
-                            prepend-icon="event"
+                            append-icon="event"
                             readonly
                             v-on="on"
                           ></v-text-field>
@@ -135,7 +131,7 @@
                           <v-text-field
                             v-model="end_date"
                             label="Fecha Fin"
-                            prepend-icon="event"
+                            append-icon="event"
                             readonly
                             v-on="on"
                           ></v-text-field>
@@ -147,33 +143,33 @@
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col>
+
+                     <v-col cols="12" lg="6">
+                        <v-text-field
+                            autofocus
+                            v-model="search"
+                            append-icon="search"
+                            label="Buscar Venta"
+                            single-line
+                            hint="Número de venta"
+                            @keyup.enter="getSaleFilter"
+                        ></v-text-field>
+                     </v-col>
+
+                    <v-col cols="12" lg="6">
                       <v-btn color="success" class="mr-4" @click="getSaleFilter"
                         >Buscar</v-btn
                       >
-                    </v-col>
-                    <v-col>
                       <v-btn
                         color="blue"
                         class="mr-4"
+                        dark
                         @click="getSaleFilterClear"
                         >Limpiar</v-btn
                       >
                     </v-col>
                   </v-row>
                 </v-card-text>
-                <v-col cols="12" sm="12">
-                  <v-text-field
-                    autofocus
-                    v-model="search"
-                    append-icon="search"
-                    label="Buscar"
-                    single-line
-                    hide-details
-                  ></v-text-field>
-                </v-col>
               </template>
 
               <template v-slot:item="props">
@@ -213,7 +209,7 @@
                       color="pink"
                       v-if="
                         props.item.clsa_status_description != 'Pendiente' &&
-                        props.item.cantreturn == 0 &&
+                        props.item.can_return &&
                         can('clientreturn')
                       "
                       :href="'/clientsreturn/' + props.item.clsa_pk"
@@ -500,6 +496,9 @@ export default {
           if (response.data.data != null) {
             this.data_order = response.data.data.data;
             this.total = response.data.data.total
+             if (this.options.page>response.data.data.last_page){
+                this.options.page=response.data.data.last_page
+             }
           } else {
             this.normal("Notificación", response.data.status.message, "error");
           }

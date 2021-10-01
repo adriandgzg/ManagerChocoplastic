@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class ClientSale extends Model
 {
     protected $primaryKey = 'clsa_pk';
-    Protected $appends = ['clsa_status_description','pame_name'];
-    public function getClsaStatusDescriptionAttribute($value)
+    Protected $appends = ['clsa_status_description','pame_name', 'can_return'];
+    public function getClsaStatusDescriptionAttribute()
     {
         switch ($this->clsa_status){
             case 0: return "Pendiente";
@@ -17,7 +17,7 @@ class ClientSale extends Model
             default: return "";
         }
     }
-    public function getPameNameAttribute($value)
+    public function getPameNameAttribute()
     {
         switch ($this->pame_fk){
             case 1: return "Contado" ;
@@ -25,6 +25,16 @@ class ClientSale extends Model
             case 3: return "Transferencia" ;
             default: return "";
         }
+    }
+    public function getCanReturnAttribute()
+    {
+        $returned= $this->hasMany(ClientReturn::class,'clsa_fk', 'clsa_pk' )
+            ->where('clre_status',2)->first();
+        return $returned==null;
+    }
+    public function clientReturns($value)
+    {
+        return $this->hasMany(ClientReturn::class, 'clsa_fk', 'clsa_pk');
     }
     function client(){
         return $this->belongsTo(Client::class, 'clie_fk', 'clie_pk');

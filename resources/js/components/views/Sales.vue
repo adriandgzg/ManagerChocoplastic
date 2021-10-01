@@ -27,17 +27,15 @@
             <v-data-table
               :headers="headers"
               :items="sales"
-              :search="search"
-              :sort-by="['created_at']"
-              :sort-desc="[true]"
+              disable-sort
               class="elevation-3"
+              :footer-props="footerProps"
+              :loading="loading"
+              :options.sync="options"
+              :server-items-length="total"
             >
               <template v-slot:top>
                 <v-system-bar color="indigo darken-2" dark></v-system-bar>
-                <v-toolbar flat color="indigo">
-                  <v-divider class="mx-4" inset vertical></v-divider>
-                  <v-spacer></v-spacer>
-                </v-toolbar>
                 <v-col cols="12" sm="12">
                   <v-text-field
                     autofocus
@@ -45,20 +43,20 @@
                     append-icon="search"
                     label="Buscar"
                     single-line
-                    hide-details
+                    @keyup.enter="getSales"
                   ></v-text-field>
                 </v-col>
               </template>
               <template v-slot:item.status="{ item }">
                 <v-chip
-                  v-if="item.clsa_status == 'Pendiente'"
+                  v-if="item.clsa_status == '0'"
                   color="gray"
                   dark
                 >
-                  {{ item.clsa_status }}
+                  {{ item.clsa_status_description }}
                 </v-chip>
                 <v-chip v-else color="green" dark>{{
-                  item.clsa_status
+                  item.clsa_status_description
                 }}</v-chip>
               </template>
 
@@ -70,8 +68,8 @@
                   small
                   color="pink"
                   v-if="
-                    item.clsa_status != 'Pendiente' &&
-                    item.cantreturn == 0 &&
+                    item.clsa_status != '0' &&
+                    item.can_return &&
                     can('clientreturn')
                   "
                   :href="'/clientsreturn/' + item.clsa_pk"
@@ -92,7 +90,7 @@
                 </v-btn>
 
                 <v-btn
-                  v-if="item.clsa_status != 'Pendiente'"
+                  v-if="item.clsa_status != '0'"
                   class="mr-2"
                   fab
                   dark
@@ -112,7 +110,7 @@
                   small
                   color="cyan"
                   title="Continuar venta"
-                  v-if="item.clsa_status == 'Pendiente' && boxEnabled != true"
+                  v-if="item.clsa_status == '0' && boxEnabled != true"
                   :href="'/detaiorder/' + item.clor_pk"
                 >
                   <v-icon dark>mdi-cash-register</v-icon>
@@ -140,16 +138,16 @@ export default {
         },
         {
           text: "Pedido",
-          value: "clor_identifier",
+          value: "client_order.clor_identifier",
           width: "10%",
         },
         {
           text: "Cliente",
-          value: "clie_name",
+          value: "client.clie_name",
         },
         {
           text: "Sucursal",
-          value: "stor_name",
+          value: "store.stor_name",
         },
         {
           text: "Método Pago",
@@ -198,10 +196,16 @@ export default {
       dialogQuestion: false,
       dialogQuestionDelete: false,
       messageQuestion: "",
+       options: {},
+       pagination: {
+          current: 1,
+          total: 0
+       },
+       footerProps: {'items-per-page-options': [10, 20, 100]},
+       total: 0,
     };
   },
   created() {
-    this.getSales();
     this.obtenerCaja();
   },
 
@@ -222,23 +226,27 @@ export default {
         });
     },
 
-    getSales() {
-      this.loading = true;
-      axios
-        .get("/clientsales/day")
-        .then((response) => {
-          setTimeout(() => (this.loading = false), 500);
-          if (response.data.data != null) {
-            //console.log(response.data.data)
-            this.sales = response.data.data;
-          } else {
-            this.normal("Notificación", response.data.status.message, "error");
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          this.normal("Notificación", "Error al cargar los datos", "error");
-        });
+    async getSales() {
+       this.loading = true;
+       const {sortBy, sortDesc, page, itemsPerPage} = this.options
+       await axios
+           .get("/clientsales/day" + "?itemsPerPage=" + itemsPerPage + "&page=" + page + "&search=" + this.search)
+           .then((response) => {
+              if (response.data.data != null) {
+                 this.sales = response.data.data.data;
+                 this.total = response.data.data.total;
+                 if (this.options.page>response.data.data.last_page){
+                    this.options.page=response.data.data.last_page
+                 }
+              } else {
+                 this.normal("Notificación", response.data.status.message, "error");
+              }
+           })
+           .catch((e) => {
+              console.log(e);
+              this.normal("Notificación", "Error al cargar los datos", "error");
+           });
+       this.loading = false
     },
     printTicket(url) {
       var newWin = window.open(url, "Imprimir orden", "height=400,width=600");
@@ -264,5 +272,13 @@ export default {
   computed: {
     ...mapGetters("auth", ["can"]),
   },
+   watch: {
+      options: {
+         handler() {
+            this.getSales()
+         },
+         deep: true,
+      }
+   }
 };
 </script>

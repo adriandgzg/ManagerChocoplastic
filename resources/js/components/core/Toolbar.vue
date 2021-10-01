@@ -354,8 +354,6 @@ export default {
             axios
                 .get("/boxcut")
                 .then(response => {
-                    console.log('response.data.data.box')
-                    console.log(response.data.data)
                     if (response.data.data == null) {
                         this.boxEnabled = true
                     } else {

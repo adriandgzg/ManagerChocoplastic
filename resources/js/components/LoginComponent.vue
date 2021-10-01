@@ -124,7 +124,9 @@ export default {
       });
     }
   },
-  created() {}
+  created() {
+     this.$store.commit('auth/updateUser', null);
+  }
 };
 </script>
 

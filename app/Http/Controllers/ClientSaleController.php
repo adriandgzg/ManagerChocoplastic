@@ -31,89 +31,28 @@ class ClientSaleController extends ApiResponseController
      */
 
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            ini_set("memory_limit", "-1");
-
-            $vStore = Auth::user()->store_id;
-            $vrole_id = Auth::user()->role_id;
-
-            if ($vrole_id == 1) {
-
-                $vClientSales = DB::table('client_sales AS CS')
-                    ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
-                    ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
-                    ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
-                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
-                    ->select(
-                        'CS.clsa_pk',
-                        'CS.clsa_identifier',
-                        'CS.clor_fk AS clor_pk',
-                        DB::raw('(CASE 
-                            WHEN CS.clsa_status = 0 THEN "Pendiente" 
-                            WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
-                            WHEN CS.clsa_status = 3 THEN "Pagado" 
-                            ELSE "" END) AS clsa_status'),
-                        'CS.created_at',
-
-                        'CO.clor_identifier',
-
-                        'C.clie_pk',
-                        'C.clie_identifier',
-                        'C.clie_name',
-                        'C.clie_rfc',
-
-                        'PM.pame_pk',
-                        'PM.pame_name',
-
-                        'S.stor_pk',
-                        'S.stor_name',
-                        DB::raw('(SELECT COUNT(*) AS Cant FROM client_returns WHERE clre_status = 2 AND clsa_fk = CS.clsa_pk) AS cantreturn') //Cantidad de Devoluciones
-                    )
-                    ->get();
-            } else {
-                $vClientSales = DB::table('client_sales AS CS')
-                    ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
-                    ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
-                    ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
-                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
-                    ->select(
-                        'CS.clsa_pk',
-                        'CS.clsa_identifier',
-                        'CS.clor_fk AS clor_pk',
-                        DB::raw('(CASE 
-                            WHEN CS.clsa_status = 0 THEN "Pendiente" 
-                            WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
-                            WHEN CS.clsa_status = 3 THEN "Pagado" 
-                            ELSE "" END) AS clsa_status'),
-                        'CS.created_at',
-
-                        'CO.clor_identifier',
-
-                        'C.clie_pk',
-                        'C.clie_identifier',
-                        'C.clie_name',
-                        'C.clie_rfc',
-
-                        'PM.pame_pk',
-                        'PM.pame_name',
-
-                        'S.stor_pk',
-                        'S.stor_name',
-                        DB::raw('(SELECT COUNT(*) AS Cant FROM client_returns WHERE clre_status = 2 AND clsa_fk = CS.clsa_pk) AS cantreturn') //Cantidad de Devoluciones
-                    )
-                    ->where('S.stor_pk', '=', $vStore)
-                    ->get();
-
+            $user = Auth::user();
+            $today = date('Y-m-d');
+            $sales = ClientSale::whereDate('created_at', '=', $today)
+                ->with(['store:stor_pk,stor_name', 'client:clie_pk,clie_name', 'clientOrder:clor_pk,clor_identifier']);
+            if ($user->role_id != 1) {
+                $sales = $sales->where('stor_pk', $user->store_id);
             }
+            if ($request->search != '') {
+                $sales = $sales->where('clsa_identifier', 'LIKE', '%' . $request->search . '%');
+            }
+            $sales = $sales->orderByDesc('clsa_pk')
+                ->paginate($request->itemsPerPage);
 
             return response()->json([
                 'code' => 200,
                 'success' => true,
                 'message' => 'Ventas de los clientes',
-                'data' => $vClientSales
-            ], 200);
+                'data' => $sales
+            ]);
 
         } catch (Exception $e) {
             return response()->json([
@@ -125,104 +64,36 @@ class ClientSaleController extends ApiResponseController
     }
 
 
-    public function indexday()
+    public function indexday(Request $request)
     {
         try {
-            ini_set("memory_limit", "-1");
-
-
-            $vStore = Auth::user()->store_id;
-            $vrole_id = Auth::user()->role_id;
-
-            $vCurrentDate = Carbon::now();
-            $vCurrentDate->format('Y-m-d');
-
-
-            if ($vrole_id == 1) {
-
-                $vClientSales = DB::table('client_sales AS CS')
-                    ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
-                    ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
-                    ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
-                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
-                    ->select(
-                        'CS.clsa_pk',
-                        'CS.clsa_identifier',
-                        'CS.clor_fk AS clor_pk',
-                        DB::raw('(CASE 
-                            WHEN CS.clsa_status = 0 THEN "Pendiente" 
-                            WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
-                            WHEN CS.clsa_status = 3 THEN "Pagado" 
-                            ELSE "" END) AS clsa_status'),
-                        'CS.created_at',
-
-                        'CO.clor_identifier',
-
-                        'C.clie_pk',
-                        'C.clie_identifier',
-                        'C.clie_name',
-                        'C.clie_rfc',
-
-                        'PM.pame_pk',
-                        'PM.pame_name',
-
-                        'S.stor_pk',
-                        'S.stor_name',
-                        DB::raw('(SELECT COUNT(*) AS Cant FROM client_returns WHERE clre_status = 2 AND clsa_fk = CS.clsa_pk) AS cantreturn') //Cantidad de Devoluciones
-                    )
-                    ->whereDate('CS.created_at', '=', $vCurrentDate)
-                    ->orderByDesc('CS.clsa_pk')
-                    ->get();
-            } else {
-                $vClientSales = DB::table('client_sales AS CS')
-                    ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
-                    ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
-                    ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
-                    ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
-                    ->select(
-                        'CS.clsa_pk',
-                        'CS.clsa_identifier',
-                        'CS.clor_fk AS clor_pk',
-                        DB::raw('(CASE 
-                            WHEN CS.clsa_status = 0 THEN "Pendiente" 
-                            WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
-                            WHEN CS.clsa_status = 3 THEN "Pagado" 
-                            ELSE "" END) AS clsa_status'),
-                        'CS.created_at',
-
-                        'CO.clor_identifier',
-
-                        'C.clie_pk',
-                        'C.clie_identifier',
-                        'C.clie_name',
-                        'C.clie_rfc',
-
-                        'PM.pame_pk',
-                        'PM.pame_name',
-
-                        'S.stor_pk',
-                        'S.stor_name',
-                        DB::raw('(SELECT COUNT(*) AS Cant FROM client_returns WHERE clre_status = 2 AND clsa_fk = CS.clsa_pk) AS cantreturn') //Cantidad de Devoluciones
-                    )
-                    ->where('S.stor_pk', '=', $vStore)
-                    ->whereDate('CS.created_at', '=', $vCurrentDate)
-                    ->orderByDesc('CS.clsa_pk')
-                    ->get();
+            $user = Auth::user();
+            $today = date('Y-m-d');
+            $today = "2021-06-14";
+            $sales = ClientSale::whereDate('created_at', '=', $today)
+                ->with(['store:stor_pk,stor_name', 'client:clie_pk,clie_name', 'clientOrder:clor_pk,clor_identifier']);
+            if ($user->role_id != 1) {
+                $sales = $sales->where('stor_pk', $user->store_id);
             }
+            if ($request->search != '') {
+                $sales = $sales->where('clsa_identifier', 'LIKE', '%' . $request->search . '%');
+            }
+            $sales = $sales->orderByDesc('clsa_pk')
+                ->paginate($request->itemsPerPage);
 
             return response()->json([
                 'code' => 200,
                 'success' => true,
                 'message' => 'Ventas de los clientes',
-                'data' => $vClientSales
-            ], 200);
+                'data' => $sales
+            ]);
 
         } catch (Exception $e) {
             return response()->json([
                 'code' => 500,
                 'success' => false,
                 'message' => $e
-            ], 200);
+            ]);
         }
     }
 
@@ -257,58 +128,6 @@ class ClientSaleController extends ApiResponseController
                 ->orderByDesc('clsa_pk')
                 ->paginate($req->itemsPerPage);
 
-            /*$vClientSales = DB::table('client_sales AS CS')
-                ->join('clients AS C', 'C.clie_pk', '=', 'CS.clie_fk')
-                ->join('client_orders AS CO', 'CO.clor_pk', '=', 'CS.clor_fk')
-                ->leftjoin('payment_methods AS PM', 'PM.pame_pk', '=', 'CS.pame_fk')
-                ->leftjoin('stores AS S', 'S.stor_pk', '=', 'CS.stor_fk')
-                ->select(
-                    'CS.clsa_pk',
-                    'CS.clsa_identifier',
-                    'CS.clor_fk AS clor_pk',
-                    'CS.clsa_status',
-                    DB::raw('(CASE 
-                        WHEN CS.clsa_status = 0 THEN "Pendiente" 
-                        WHEN CS.clsa_status = 2 THEN "En Proceso de Pago" 
-                        WHEN CS.clsa_status = 3 THEN "Pagado" 
-                        ELSE "" END) AS clsa_status_description'),
-                    'CS.created_at',
-                    'CO.clor_identifier',
-                    'C.clie_pk',
-                    'C.clie_identifier',
-                    'C.clie_name',
-                    'C.clie_rfc',
-                    'PM.pame_pk',
-                    'PM.pame_name',
-                    'S.stor_pk',
-                    'S.stor_name',
-                    DB::raw('(SELECT COUNT(*) AS Cant FROM client_returns WHERE clre_status = 2 AND clsa_fk = CS.clsa_pk) AS cantreturn') //Cantidad de Devoluciones
-                )
-                ->where('S.stor_pk', '=', $vStore)
-                ->when($vStatus == -1, function ($vQuery) {
-                    $vQuery->whereIn('CS.clsa_status', array(0, 2, 3));
-                })
-                ->when($vStatus == 0, function ($vQuery) {
-                    $vQuery->where('CS.clsa_status', '=', 0);
-                })
-                ->when($vStatus == 2, function ($vQuery) {
-                    $vQuery->where('CS.clsa_status', '=', 2);
-                })
-                ->when($vStatus == 3, function ($vQuery) {
-                    $vQuery->where('CS.clsa_status', '=', 3);
-                })
-                ->when($vClie_pk <> -1, function ($vQuery) use ($vClie_pk) {
-                    $vQuery->where('C.clie_pk', '=', $vClie_pk);
-                })
-                ->when($vPame_pk <> -1, function ($vQuery) use ($vPame_pk) {
-                    $vQuery->where('PM.Pame_pk', '=', $vPame_pk);
-                })
-                ->when($vStart_date <> "", function ($vQuery) use ($vStart_date, $vEnd_date) {
-                    $vQuery->whereBetween('CS.created_at', [$vStart_date.' 00:00:00', $vEnd_date.' 23:59:59']);
-                })
-                ->orderByDesc('CS.clsa_pk')
-                ->get();
-*/
             return $this->dbResponse($sales, 200, null, 'Ventas filtrado');
         } 
         catch (Throwable $vTh) 
