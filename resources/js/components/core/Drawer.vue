@@ -116,7 +116,7 @@
 
         <v-list-item href="/logout">
           <v-list-item-action>
-            <v-icon>mdi-group</v-icon>
+            <v-icon>mdi-exit-run</v-icon>
           </v-list-item-action>
           <v-list-item-title>Salir</v-list-item-title>
         </v-list-item>

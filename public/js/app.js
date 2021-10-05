@@ -31832,7 +31832,7 @@ var render = function() {
                 [
                   _c(
                     "v-list-item-action",
-                    [_c("v-icon", [_vm._v("mdi-group")])],
+                    [_c("v-icon", [_vm._v("mdi-exit-run")])],
                     1
                   ),
                   _vm._v(" "),
