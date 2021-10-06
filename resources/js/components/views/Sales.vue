@@ -111,7 +111,7 @@
                   color="cyan"
                   title="Continuar venta"
                   v-if="item.clsa_status == '0' && boxEnabled != true"
-                  :href="'/detaiorder/' + item.clor_pk"
+                  :href="'/detaiorder/' + item.clor_fk"
                 >
                   <v-icon dark>mdi-cash-register</v-icon>
                 </v-btn>

@@ -242,8 +242,8 @@
                       "
                       title="Imprimir ticket"
                     >
-                      <v-icon dark>mdi-printer</v-icon></v-btn
-                    >
+                      <v-icon dark>mdi-printer</v-icon>
+                    </v-btn>
                     <v-btn
                       class="mr-2"
                       fab
@@ -255,9 +255,8 @@
                         props.item.clsa_status_description == 'Pendiente' &&
                         boxEnabled != true
                       "
-                      :href="'/detaiorder/' + props.item.clor_pk"
-                      ><v-icon dark>mdi-cash-register</v-icon></v-btn
-                    >
+                      :href="'/detaiorder/' + props.item.clor_fk"
+                      ><v-icon dark>mdi-cash-register</v-icon></v-btn>
                   </td>
                 </tr>
               </template>
