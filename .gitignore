@@ -1,2 +1,4 @@
 .env
 /public/*.js
+/vendor/
+/node_modules/
