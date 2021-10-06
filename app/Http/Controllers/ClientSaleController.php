@@ -35,11 +35,9 @@ class ClientSaleController extends ApiResponseController
     {
         try {
             $user = Auth::user();
-            $today = date('Y-m-d');
-            $sales = ClientSale::whereDate('created_at', '=', $today)
-                ->with(['store:stor_pk,stor_name', 'client:clie_pk,clie_name', 'clientOrder:clor_pk,clor_identifier']);
+            $sales = ClientSale::with(['store:stor_pk,stor_name', 'client:clie_pk,clie_name', 'clientOrder:clor_pk,clor_identifier']);
             if ($user->role_id != 1) {
-                $sales = $sales->where('stor_pk', $user->store_id);
+                $sales = $sales->where('stor_fk', $user->store_id);
             }
             if ($request->search != '') {
                 $sales = $sales->where('clsa_identifier', 'LIKE', '%' . $request->search . '%');
@@ -69,11 +67,10 @@ class ClientSaleController extends ApiResponseController
         try {
             $user = Auth::user();
             $today = date('Y-m-d');
-            $today = "2021-06-14";
             $sales = ClientSale::whereDate('created_at', '=', $today)
                 ->with(['store:stor_pk,stor_name', 'client:clie_pk,clie_name', 'clientOrder:clor_pk,clor_identifier']);
             if ($user->role_id != 1) {
-                $sales = $sales->where('stor_pk', $user->store_id);
+                $sales = $sales->where('stor_fk', $user->store_id);
             }
             if ($request->search != '') {
                 $sales = $sales->where('clsa_identifier', 'LIKE', '%' . $request->search . '%');

@@ -30,7 +30,7 @@ class ClientOrderController extends ApiResponseController
             $orders = ClientOrder::with(['store:stor_pk,stor_name', 'client:clie_pk,clie_name'])
                 ->orderByDesc('clor_pk');
             if ($user->role_id != 1) {
-                $orders = $orders->where('stor_pk', $user->store_id);
+                $orders = $orders->where('stor_fk', $user->store_id);
             }
             if ($request->search != '') {
                 $orders = $orders->where('clor_identifier', 'LIKE', '%' . $request->search . '%');
@@ -63,7 +63,7 @@ class ClientOrderController extends ApiResponseController
                 ->with(['store:stor_pk,stor_name', 'client:clie_pk,clie_name'])
                 ->orderByDesc('clor_pk');
             if ($user->role_id != 1) {
-                $orders = $orders->where('stor_pk', $user->store_id);
+                $orders = $orders->where('stor_fk', $user->store_id);
             }
             if ($request->search != '') {
                 $orders = $orders->where('clor_identifier', 'LIKE', '%' . $request->search . '%');
